@@ -1,0 +1,70 @@
+:root {
+  /* =========================
+     IRONAGE COLORS
+  ========================= */
+
+  --black-950: #050505;
+  --black-900: #0a0a0a;
+  --black-800: #111111;
+  --black-700: #181818;
+  --black-600: #222222;
+
+  --gold-500: #d4af37;
+  --gold-400: #ffd700;
+  --gold-600: #b8860b;
+
+  --white: #ffffff;
+  --text-secondary: #999999;
+  --text-muted: #666666;
+
+  /* =========================
+     BORDERS
+  ========================= */
+
+  --border-gold: rgba(212, 175, 55, 0.3);
+  --border-gold-strong: rgba(212, 175, 55, 0.5);
+  --border-dark: #2a2a2a;
+
+  /* =========================
+     RADIUS
+  ========================= */
+
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* =========================
+     SPACING
+  ========================= */
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+
+  /* =========================
+     SHADOWS
+  ========================= */
+
+  --shadow-card:
+    0 20px 60px rgba(0, 0, 0, 0.45);
+
+  --shadow-gold:
+    0 10px 35px rgba(212, 175, 55, 0.28);
+
+  --shadow-gold-strong:
+    0 15px 45px rgba(212, 175, 55, 0.4);
+
+  /* =========================
+     TRANSITIONS
+  ========================= */
+
+  --transition-fast: 0.18s ease;
+  --transition-normal: 0.25s ease;
+}

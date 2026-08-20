@@ -1,0 +1,397 @@
+.complete-screen {
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(212, 175, 55, 0.08),
+      transparent 35%
+    ),
+    #050505;
+
+  color: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 50px 20px 40px;
+
+  text-align: center;
+}
+
+
+/* =========================
+   TROPHY
+========================= */
+
+.complete-glow {
+  width: 110px;
+  height: 110px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 54px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 215, 0, 0.22),
+      rgba(212, 175, 55, 0.03)
+    );
+
+  border: 1px solid rgba(212, 175, 55, 0.55);
+
+  box-shadow:
+    0 0 35px rgba(212, 175, 55, 0.18),
+    inset 0 0 25px rgba(212, 175, 55, 0.08);
+
+  margin-bottom: 28px;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.complete-label {
+  color: #d4af37;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 5px;
+
+  margin: 0 0 14px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.complete-screen h1 {
+  margin: 0;
+
+  font-size: 34px;
+
+  line-height: 1.05;
+
+  letter-spacing: 1px;
+
+  font-weight: 900;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.complete-message {
+  max-width: 320px;
+
+  margin: 18px 0 30px;
+
+  color: #888;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================
+   XP REWARD
+========================= */
+
+.reward-card {
+  width: 100%;
+  max-width: 390px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 22px;
+
+  margin-bottom: 12px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #111111,
+      #090909
+    );
+
+  border: 1px solid
+    rgba(212, 175, 55, 0.28);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+
+.reward-icon {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background: rgba(212, 175, 55, 0.08);
+
+  font-size: 30px;
+}
+
+
+.reward-card strong {
+  display: block;
+
+  color: #ffd700;
+
+  font-size: 26px;
+
+  font-weight: 900;
+}
+
+
+.reward-card small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #777;
+
+  font-size: 12px;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.complete-stats {
+  width: 100%;
+  max-width: 390px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin: 0 0 14px;
+}
+
+
+.complete-stats div {
+  padding: 17px 6px;
+
+  background: #0c0c0c;
+
+  border: 1px solid #1b1b1b;
+
+  border-radius: 16px;
+}
+
+
+.complete-stats strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 19px;
+
+  font-weight: 900;
+}
+
+
+.complete-stats span {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #666;
+
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================
+   CURRENT XP
+========================= */
+
+.xp-result {
+  width: 100%;
+  max-width: 390px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 17px 20px;
+
+  margin-bottom: 22px;
+
+  background: #090909;
+
+  border: 1px solid #1b1b1b;
+
+  border-radius: 16px;
+}
+
+
+.xp-result span {
+  color: #777;
+
+  font-size: 12px;
+}
+
+
+.xp-result strong {
+  color: #ffd700;
+
+  font-size: 18px;
+
+  font-weight: 900;
+}
+
+
+/* =========================
+   MAIN BUTTON
+========================= */
+
+.complete-button {
+  width: 100%;
+  max-width: 390px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffd700 0%,
+      #d4af37 50%,
+      #b8860b 100%
+    );
+
+  color: #050505;
+
+  font-size: 14px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 25px rgba(212, 175, 55, 0.18);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+.complete-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 32px rgba(212, 175, 55, 0.28);
+}
+
+
+.complete-button:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================
+   HOME BUTTON
+========================= */
+
+.home-button {
+  border: none;
+
+  background: transparent;
+
+  color: #666;
+
+  font-size: 13px;
+
+  padding: 12px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease;
+}
+
+
+.home-button:hover {
+  color: #d4af37;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 380px) {
+
+  .complete-screen {
+    padding: 35px 16px 30px;
+  }
+
+  .complete-glow {
+    width: 90px;
+    height: 90px;
+
+    font-size: 44px;
+  }
+
+  .complete-screen h1 {
+    font-size: 29px;
+  }
+
+  .complete-message {
+    font-size: 13px;
+  }
+
+  .reward-card {
+    padding: 18px;
+  }
+
+  .complete-stats {
+    gap: 7px;
+  }
+
+}

@@ -1,0 +1,599 @@
+/* =========================================
+   IRONAGE — PROGRESS
+   Premium Black × Gold
+========================================= */
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 24px;
+}
+
+.progress-label {
+  margin: 0 0 7px;
+
+  color: #d4af37;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 3px;
+}
+
+.progress-header h1 {
+  margin: 0;
+
+  color: #fff;
+
+  font-size: 30px;
+  line-height: 1.05;
+
+  font-weight: 900;
+}
+
+.progress-header > div:first-child > p:last-child {
+  margin: 8px 0 0;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+.progress-level {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 10px 13px;
+
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 13px;
+
+  background: rgba(212, 175, 55, 0.05);
+
+  color: #d4af37;
+
+  font-size: 18px;
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+.progress-level span {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   XP CARD
+========================================= */
+
+.progress-xp-card {
+  padding: 22px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #171717,
+      #090909
+    );
+
+  border: 1px solid rgba(212, 175, 55, 0.28);
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.xp-card-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.xp-card-header span {
+  display: block;
+
+  color: #777;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+.xp-card-header strong {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #ffd700;
+
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.xp-level {
+  padding: 8px 11px;
+
+  border-radius: 10px;
+
+  border: 1px solid rgba(212, 175, 55, 0.3);
+
+  color: #d4af37;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+}
+
+.progress-track {
+  width: 100%;
+  height: 9px;
+
+  margin-top: 20px;
+
+  overflow: hidden;
+
+  background: #222;
+
+  border-radius: 20px;
+}
+
+.progress-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #b8860b,
+      #ffd700
+    );
+
+  box-shadow:
+    0 0 12px rgba(212, 175, 55, 0.25);
+
+  transition: width 0.4s ease;
+}
+
+.xp-bottom {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 9px;
+
+  color: #666;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.progress-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin-top: 14px;
+}
+
+.progress-stat {
+  padding: 16px 8px;
+
+  text-align: center;
+
+  background: #0d0d0d;
+
+  border: 1px solid #1d1d1d;
+
+  border-radius: 18px;
+}
+
+.progress-stat .stat-icon {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 21px;
+}
+
+.progress-stat strong {
+  display: block;
+
+  color: #d4af37;
+
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.progress-stat small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #666;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   ACTIVITY
+========================================= */
+
+.activity-card {
+  margin-top: 28px;
+
+  padding: 20px;
+
+  border-radius: 21px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #1c1c1c;
+}
+
+.section-title {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.section-title span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #d4af37;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+}
+
+.section-title h2 {
+  margin: 0;
+
+  color: #fff;
+
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.section-title > strong {
+  color: #d4af37;
+
+  font-size: 13px;
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+/* =========================================
+   WEEKLY CHART
+========================================= */
+
+.weekly-chart {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 8px;
+
+  height: 170px;
+
+  margin-top: 25px;
+
+  padding-top: 10px;
+}
+
+.chart-column {
+  flex: 1;
+
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: flex-end;
+
+  min-width: 0;
+}
+
+.chart-value {
+  height: 18px;
+
+  color: #d4af37;
+
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.chart-bar {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 28px;
+
+  height: 105px;
+
+  overflow: hidden;
+
+  background: #181818;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: flex-end;
+}
+
+.chart-fill {
+  width: 100%;
+
+  min-height: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffd700,
+      #b8860b
+    );
+
+  border-radius: 8px;
+
+  transition: height 0.4s ease;
+}
+
+.chart-column > span {
+  margin-top: 8px;
+
+  color: #666;
+
+  font-size: 9px;
+  font-weight: 800;
+}
+
+/* =========================================
+   HISTORY
+========================================= */
+
+.recent-section {
+  margin-top: 28px;
+
+  padding-bottom: 20px;
+}
+
+.workout-history {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 9px;
+
+  margin-top: 14px;
+}
+
+.history-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #111,
+      #090909
+    );
+
+  border: 1px solid #1c1c1c;
+}
+
+.history-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: rgba(212, 175, 55, 0.07);
+
+  font-size: 20px;
+}
+
+.history-item > div:nth-child(2) {
+  min-width: 0;
+
+  flex: 1;
+}
+
+.history-item strong {
+  display: block;
+
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.history-item span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #666;
+
+  font-size: 10px;
+}
+
+.history-item b {
+  color: #d4af37;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  white-space: nowrap;
+}
+
+/* =========================================
+   EMPTY HISTORY
+========================================= */
+
+.empty-history {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 35px 20px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #1c1c1c;
+
+  border-radius: 20px;
+}
+
+.empty-history > span {
+  font-size: 34px;
+
+  margin-bottom: 10px;
+}
+
+.empty-history strong {
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.empty-history small {
+  max-width: 260px;
+
+  margin-top: 7px;
+
+  color: #666;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .progress-header h1 {
+    font-size: 27px;
+  }
+
+  .progress-xp-card {
+    padding: 18px;
+  }
+
+  .xp-card-header strong {
+    font-size: 22px;
+  }
+
+  .progress-stat {
+    padding: 14px 6px;
+  }
+
+  .progress-stat strong {
+    font-size: 19px;
+  }
+
+  .activity-card {
+    padding: 17px;
+  }
+
+  .weekly-chart {
+    height: 155px;
+  }
+
+  .chart-bar {
+    max-width: 24px;
+    height: 95px;
+  }
+}
+
+@media (max-width: 380px) {
+  .progress-header {
+    gap: 8px;
+  }
+
+  .progress-header h1 {
+    font-size: 24px;
+  }
+
+  .progress-level {
+    padding: 8px 9px;
+  }
+
+  .progress-xp-card {
+    padding: 16px;
+  }
+
+  .xp-bottom {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .progress-stat {
+    padding: 12px 4px;
+  }
+
+  .progress-stat strong {
+    font-size: 18px;
+  }
+
+  .weekly-chart {
+    gap: 5px;
+  }
+}
