@@ -8,6 +8,7 @@ import progressRoutes from "./routes/progressRoutes.js";
 import premiumRoutes from "./routes/premiumRoutes.js";
 import nutritionRoutes from "./routes/nutritionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import coachRoutes from "./routes/coachRoutes.js";
 
 const app = express();
 
@@ -70,6 +71,8 @@ app.use("/api/nutrition", nutritionRoutes);
 app.use("/api/premium", premiumRoutes);
 
 app.use("/api/ai", aiRoutes);
+
+app.use("/api/coaches", coachRoutes);
 
 /* =========================================================
    API 404

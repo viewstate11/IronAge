@@ -398,6 +398,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  CoachProfile: 'CoachProfile',
+  CoachClient: 'CoachClient',
   WorkoutSession: 'WorkoutSession',
   WorkoutSet: 'WorkoutSet',
   Progress: 'Progress',
@@ -418,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry"
+    modelProps: "user" | "coachProfile" | "coachClient" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -493,6 +495,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    CoachProfile: {
+      payload: Prisma.$CoachProfilePayload<ExtArgs>
+      fields: Prisma.CoachProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CoachProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CoachProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.CoachProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CoachProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>
+        }
+        findMany: {
+          args: Prisma.CoachProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>[]
+        }
+        create: {
+          args: Prisma.CoachProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>
+        }
+        createMany: {
+          args: Prisma.CoachProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CoachProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.CoachProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>
+        }
+        update: {
+          args: Prisma.CoachProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.CoachProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CoachProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CoachProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.CoachProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.CoachProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoachProfile>
+        }
+        groupBy: {
+          args: Prisma.CoachProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoachProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CoachProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoachProfileCountAggregateOutputType> | number
+        }
+      }
+    }
+    CoachClient: {
+      payload: Prisma.$CoachClientPayload<ExtArgs>
+      fields: Prisma.CoachClientFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CoachClientFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CoachClientFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>
+        }
+        findFirst: {
+          args: Prisma.CoachClientFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CoachClientFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>
+        }
+        findMany: {
+          args: Prisma.CoachClientFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>[]
+        }
+        create: {
+          args: Prisma.CoachClientCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>
+        }
+        createMany: {
+          args: Prisma.CoachClientCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CoachClientCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>[]
+        }
+        delete: {
+          args: Prisma.CoachClientDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>
+        }
+        update: {
+          args: Prisma.CoachClientUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>
+        }
+        deleteMany: {
+          args: Prisma.CoachClientDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CoachClientUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CoachClientUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>[]
+        }
+        upsert: {
+          args: Prisma.CoachClientUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachClientPayload>
+        }
+        aggregate: {
+          args: Prisma.CoachClientAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoachClient>
+        }
+        groupBy: {
+          args: Prisma.CoachClientGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoachClientGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CoachClientCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoachClientCountAggregateOutputType> | number
         }
       }
     }
@@ -931,6 +1081,33 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const CoachProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  displayName: 'displayName',
+  bio: 'bio',
+  specialization: 'specialization',
+  photoUrl: 'photoUrl',
+  isVerified: 'isVerified',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoachProfileScalarFieldEnum = (typeof CoachProfileScalarFieldEnum)[keyof typeof CoachProfileScalarFieldEnum]
+
+
+export const CoachClientScalarFieldEnum = {
+  id: 'id',
+  coachId: 'coachId',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoachClientScalarFieldEnum = (typeof CoachClientScalarFieldEnum)[keyof typeof CoachClientScalarFieldEnum]
+
+
 export const WorkoutSessionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1320,6 +1497,8 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  coachProfile?: Prisma.CoachProfileOmit
+  coachClient?: Prisma.CoachClientOmit
   workoutSession?: Prisma.WorkoutSessionOmit
   workoutSet?: Prisma.WorkoutSetOmit
   progress?: Prisma.ProgressOmit

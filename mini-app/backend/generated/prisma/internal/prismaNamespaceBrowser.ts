@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  CoachProfile: 'CoachProfile',
+  CoachClient: 'CoachClient',
   WorkoutSession: 'WorkoutSession',
   WorkoutSet: 'WorkoutSet',
   Progress: 'Progress',
@@ -99,6 +101,33 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const CoachProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  displayName: 'displayName',
+  bio: 'bio',
+  specialization: 'specialization',
+  photoUrl: 'photoUrl',
+  isVerified: 'isVerified',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoachProfileScalarFieldEnum = (typeof CoachProfileScalarFieldEnum)[keyof typeof CoachProfileScalarFieldEnum]
+
+
+export const CoachClientScalarFieldEnum = {
+  id: 'id',
+  coachId: 'coachId',
+  clientId: 'clientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoachClientScalarFieldEnum = (typeof CoachClientScalarFieldEnum)[keyof typeof CoachClientScalarFieldEnum]
 
 
 export const WorkoutSessionScalarFieldEnum = {

@@ -47,6 +47,16 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model CoachProfile
+ * 
+ */
+export type CoachProfile = Prisma.CoachProfileModel
+/**
+ * Model CoachClient
+ * 
+ */
+export type CoachClient = Prisma.CoachClientModel
+/**
  * Model WorkoutSession
  * 
  */
