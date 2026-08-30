@@ -81,3 +81,33 @@ export type NutritionDay = Prisma.NutritionDayModel
  * 
  */
 export type FoodEntry = Prisma.FoodEntryModel
+/**
+ * Model Exercise
+ * 
+ */
+export type Exercise = Prisma.ExerciseModel
+/**
+ * Model TrainingWorkout
+ * 
+ */
+export type TrainingWorkout = Prisma.TrainingWorkoutModel
+/**
+ * Model WorkoutExercise
+ * 
+ */
+export type WorkoutExercise = Prisma.WorkoutExerciseModel
+/**
+ * Model TrainingProgram
+ * 
+ */
+export type TrainingProgram = Prisma.TrainingProgramModel
+/**
+ * Model ProgramWorkout
+ * 
+ */
+export type ProgramWorkout = Prisma.ProgramWorkoutModel
+/**
+ * Model ProgramAssignment
+ * 
+ */
+export type ProgramAssignment = Prisma.ProgramAssignmentModel

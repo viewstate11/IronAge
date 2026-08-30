@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id                  Int              @id @default(autoincrement())
-  telegramId          BigInt?          @unique
+  id                  Int                 @id @default(autoincrement())
+  telegramId          BigInt?             @unique
   username            String?
   firstName           String
   lastName            String?
@@ -19,21 +19,25 @@ model User {
   weight              Float?
   height              Float?
   goal                Goal?
-  onboardingCompleted Boolean          @default(false)
-  level               Int              @default(1)
-  xp                  Int              @default(0)
-  workouts            Int              @default(0)
-  streak              Int              @default(0)
+  onboardingCompleted Boolean             @default(false)
+  level               Int                 @default(1)
+  xp                  Int                 @default(0)
+  workouts            Int                 @default(0)
+  streak              Int                 @default(0)
   premiumPlan         String?
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
-  webId               String?          @unique
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  webId               String?             @unique
   nutritionDays       NutritionDay[]
   progress            Progress[]
   workoutSessions     WorkoutSession[]
   coachProfile        CoachProfile?
-  coachRelationships  CoachClient[]    @relation("CoachUser")
-  clientRelationships CoachClient[]    @relation("ClientUser")
+  coachRelationships  CoachClient[]       @relation("CoachUser")
+  clientRelationships CoachClient[]       @relation("ClientUser")
+  trainingWorkouts    TrainingWorkout[]   @relation("TrainingWorkoutCoach")
+  trainingPrograms    TrainingProgram[]   @relation("TrainingProgramCoach")
+  programAssignments  ProgramAssignment[] @relation("ProgramClient")
+  assignedPrograms    ProgramAssignment[] @relation("ProgramAssignedBy")
 
   @@index([createdAt])
 }
@@ -175,4 +179,126 @@ enum MealType {
   LUNCH
   DINNER
   SNACK
+}
+
+model Exercise {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  name         String
+  description  String?
+  instructions String?
+  muscleGroup  String?
+  equipment    String?
+  demoVideoUrl String?
+  thumbnailUrl String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  workoutExercises WorkoutExercise[]
+
+  @@index([name])
+  @@index([muscleGroup])
+  @@index([isActive])
+}
+
+model TrainingWorkout {
+  id          Int      @id @default(autoincrement())
+  coachId     Int
+  name        String
+  description String?
+  duration    Int?
+  difficulty  String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  coach           User              @relation("TrainingWorkoutCoach", fields: [coachId], references: [id], onDelete: Cascade)
+  exercises       WorkoutExercise[]
+  programWorkouts ProgramWorkout[]
+
+  @@index([coachId])
+  @@index([isActive])
+}
+
+model WorkoutExercise {
+  id             Int      @id @default(autoincrement())
+  workoutId      Int
+  exerciseId     Int
+  position       Int
+  sets           Int?
+  repetitions    Int?
+  minRepetitions Int?
+  maxRepetitions Int?
+  duration       Int?
+  restSeconds    Int?
+  targetWeight   Float?
+  tempo          String?
+  coachNotes     String?
+  coachVideoUrl  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  workout  TrainingWorkout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exercise Exercise        @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  @@unique([workoutId, position])
+  @@index([workoutId])
+  @@index([exerciseId])
+}
+
+model TrainingProgram {
+  id            Int      @id @default(autoincrement())
+  coachId       Int
+  name          String
+  description   String?
+  durationWeeks Int?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  coach       User                @relation("TrainingProgramCoach", fields: [coachId], references: [id], onDelete: Cascade)
+  workouts    ProgramWorkout[]
+  assignments ProgramAssignment[]
+
+  @@index([coachId])
+  @@index([isActive])
+}
+
+model ProgramWorkout {
+  id        Int      @id @default(autoincrement())
+  programId Int
+  workoutId Int
+  week      Int?
+  day       Int?
+  position  Int
+  createdAt DateTime @default(now())
+
+  program TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  workout TrainingWorkout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, position])
+  @@index([programId])
+  @@index([workoutId])
+}
+
+model ProgramAssignment {
+  id         Int       @id @default(autoincrement())
+  programId  Int
+  clientId   Int
+  assignedBy Int
+  startDate  DateTime?
+  endDate    DateTime?
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  program TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  client  User            @relation("ProgramClient", fields: [clientId], references: [id], onDelete: Cascade)
+  coach   User            @relation("ProgramAssignedBy", fields: [assignedBy], references: [id], onDelete: Cascade)
+
+  @@index([programId])
+  @@index([clientId])
+  @@index([assignedBy])
+  @@index([clientId, isActive])
 }

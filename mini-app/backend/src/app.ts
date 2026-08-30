@@ -9,6 +9,10 @@ import premiumRoutes from "./routes/premiumRoutes.js";
 import nutritionRoutes from "./routes/nutritionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import coachRoutes from "./routes/coachRoutes.js";
+import exerciseRoutes from "./routes/exerciseRoutes.js";
+import coachWorkoutRoutes from "./routes/coachWorkoutRoutes.js";
+import coachProgramRoutes from "./routes/coachProgramRoutes.js";
+import myProgramRoutes from "./routes/myProgramRoutes.js";
 
 const app = express();
 
@@ -73,6 +77,14 @@ app.use("/api/premium", premiumRoutes);
 app.use("/api/ai", aiRoutes);
 
 app.use("/api/coaches", coachRoutes);
+
+app.use("/api/exercises", exerciseRoutes);
+
+app.use("/api/coach-workouts", coachWorkoutRoutes);
+
+app.use("/api/coach-programs", coachProgramRoutes);
+
+app.use("/api/my-programs", myProgramRoutes);
 
 /* =========================================================
    API 404

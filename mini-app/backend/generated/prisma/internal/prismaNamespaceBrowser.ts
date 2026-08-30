@@ -58,7 +58,13 @@ export const ModelName = {
   WorkoutSet: 'WorkoutSet',
   Progress: 'Progress',
   NutritionDay: 'NutritionDay',
-  FoodEntry: 'FoodEntry'
+  FoodEntry: 'FoodEntry',
+  Exercise: 'Exercise',
+  TrainingWorkout: 'TrainingWorkout',
+  WorkoutExercise: 'WorkoutExercise',
+  TrainingProgram: 'TrainingProgram',
+  ProgramWorkout: 'ProgramWorkout',
+  ProgramAssignment: 'ProgramAssignment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -203,6 +209,103 @@ export const FoodEntryScalarFieldEnum = {
 } as const
 
 export type FoodEntryScalarFieldEnum = (typeof FoodEntryScalarFieldEnum)[keyof typeof FoodEntryScalarFieldEnum]
+
+
+export const ExerciseScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  instructions: 'instructions',
+  muscleGroup: 'muscleGroup',
+  equipment: 'equipment',
+  demoVideoUrl: 'demoVideoUrl',
+  thumbnailUrl: 'thumbnailUrl',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
+
+
+export const TrainingWorkoutScalarFieldEnum = {
+  id: 'id',
+  coachId: 'coachId',
+  name: 'name',
+  description: 'description',
+  duration: 'duration',
+  difficulty: 'difficulty',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TrainingWorkoutScalarFieldEnum = (typeof TrainingWorkoutScalarFieldEnum)[keyof typeof TrainingWorkoutScalarFieldEnum]
+
+
+export const WorkoutExerciseScalarFieldEnum = {
+  id: 'id',
+  workoutId: 'workoutId',
+  exerciseId: 'exerciseId',
+  position: 'position',
+  sets: 'sets',
+  repetitions: 'repetitions',
+  minRepetitions: 'minRepetitions',
+  maxRepetitions: 'maxRepetitions',
+  duration: 'duration',
+  restSeconds: 'restSeconds',
+  targetWeight: 'targetWeight',
+  tempo: 'tempo',
+  coachNotes: 'coachNotes',
+  coachVideoUrl: 'coachVideoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkoutExerciseScalarFieldEnum = (typeof WorkoutExerciseScalarFieldEnum)[keyof typeof WorkoutExerciseScalarFieldEnum]
+
+
+export const TrainingProgramScalarFieldEnum = {
+  id: 'id',
+  coachId: 'coachId',
+  name: 'name',
+  description: 'description',
+  durationWeeks: 'durationWeeks',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TrainingProgramScalarFieldEnum = (typeof TrainingProgramScalarFieldEnum)[keyof typeof TrainingProgramScalarFieldEnum]
+
+
+export const ProgramWorkoutScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  workoutId: 'workoutId',
+  week: 'week',
+  day: 'day',
+  position: 'position',
+  createdAt: 'createdAt'
+} as const
+
+export type ProgramWorkoutScalarFieldEnum = (typeof ProgramWorkoutScalarFieldEnum)[keyof typeof ProgramWorkoutScalarFieldEnum]
+
+
+export const ProgramAssignmentScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  clientId: 'clientId',
+  assignedBy: 'assignedBy',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramAssignmentScalarFieldEnum = (typeof ProgramAssignmentScalarFieldEnum)[keyof typeof ProgramAssignmentScalarFieldEnum]
 
 
 export const SortOrder = {
