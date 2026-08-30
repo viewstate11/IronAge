@@ -1,90 +1,316 @@
-.welcome{
+/* =========================================
+   IRONAGE
+   WELCOME — LUXURY
+   BLACK × GOLD × WHITE
+========================================= */
 
-min-height:100vh;
+.welcome {
+  position: relative;
 
-background:#050505;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-display:flex;
+  overflow: hidden;
 
-flex-direction:column;
-
-justify-content:center;
-
-align-items:center;
-
-text-align:center;
-
-padding:20px;
-
-color:white;
-
+  background: #050505;
+  color: #ffffff;
 }
 
+/* =========================================
+   PHOTO
+========================================= */
 
-.logo{
+.welcome-photo {
+  position: absolute;
+  inset: 0;
 
-font-size:48px;
+  width: 100%;
+  height: 100%;
 
-font-weight:900;
+  object-fit: cover;
+  object-position: center top;
 
-letter-spacing:5px;
+  transform: scale(1.02);
 
-color:#D4AF37;
+  user-select: none;
+  pointer-events: none;
 
-margin-bottom:40px;
-
-text-shadow:
-
-0 0 20px rgba(212,175,55,0.5);
-
+  z-index: 0;
 }
 
+/* =========================================
+   CINEMATIC BLACK
+========================================= */
 
+.welcome-overlay {
+  position: absolute;
+  inset: 0;
 
-h1{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.82) 0%,
+      rgba(5, 5, 5, 0.30) 27%,
+      rgba(5, 5, 5, 0.20) 45%,
+      rgba(5, 5, 5, 0.68) 68%,
+      rgba(5, 5, 5, 0.98) 100%
+    );
 
-font-size:36px;
-
-line-height:1.2;
-
-font-weight:900;
-
-margin-bottom:20px;
-
+  z-index: 1;
 }
 
+.welcome-vignette {
+  position: absolute;
+  inset: 0;
 
+  background:
+    radial-gradient(
+      circle at center,
+      transparent 30%,
+      rgba(0, 0, 0, 0.72) 100%
+    );
 
-p{
+  z-index: 2;
 
-color:#888;
-
-font-size:18px;
-
-margin-bottom:40px;
-
+  pointer-events: none;
 }
 
+/* =========================================
+   CONTENT
+========================================= */
 
+.welcome-content {
+  position: relative;
 
-button{
+  z-index: 3;
 
-width:280px;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-padding:18px;
+  display: flex;
+  flex-direction: column;
 
-border:none;
+  padding:
+    max(24px, env(safe-area-inset-top))
+    22px
+    max(22px, env(safe-area-inset-bottom));
+}
 
-border-radius:16px;
+/* =========================================
+   HEADER
+========================================= */
 
-background:#D4AF37;
+.welcome-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 
-color:#050505;
+  padding-top: 12px;
+}
 
-font-size:18px;
+.welcome-logo {
+  color: #ffffff;
 
-font-weight:900;
+  font-size: 25px;
+  font-weight: 800;
 
-cursor:pointer;
+  line-height: 1;
 
+  letter-spacing: 0.18em;
+}
+
+.welcome-logo span {
+  color: #d4af37;
+}
+
+.welcome-edition {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: rgba(255, 255, 255, 0.7);
+
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.22em;
+
+  text-transform: uppercase;
+}
+
+.welcome-edition strong {
+  color: #d4af37;
+
+  font-size: 10px;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.welcome-hero {
+  margin-top: auto;
+  margin-bottom: auto;
+
+  padding-top: 90px;
+}
+
+/* =========================================
+   EYEBROW
+========================================= */
+
+.welcome-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 18px;
+
+  color: #d4af37;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.28em;
+
+  text-transform: uppercase;
+}
+
+.gold-line {
+  display: block;
+
+  width: 22px;
+  height: 1px;
+
+  background: #d4af37;
+
+  box-shadow:
+    0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+.welcome-title {
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+
+  font-size: clamp(50px, 15vw, 78px);
+
+  font-weight: 800;
+
+  line-height: 0.86;
+
+  letter-spacing: -0.055em;
+
+  text-transform: uppercase;
+}
+
+.welcome-title span {
+  color: #ffffff;
+}
+
+.welcome-title strong {
+  color: #d4af37;
+
+  font-weight: 800;
+}
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.welcome-description {
+  margin-top: 24px;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 14px;
+
+  font-weight: 400;
+
+  line-height: 1.65;
+
+  letter-spacing: 0.01em;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.welcome-footer {
+  padding-bottom: 8px;
+}
+
+/* =========================================
+   SYSTEM BUTTON AREA
+========================================= */
+
+.welcome-system {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 15px;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.28em;
+
+  text-align: center;
+}
+
+.welcome-system span {
+  width: 18px;
+  height: 1px;
+
+  background: #d4af37;
+
+  opacity: 0.7;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .welcome-content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .welcome-title {
+    font-size: 47px;
+  }
+
+  .welcome-description {
+    font-size: 13px;
+  }
+}
+
+/* =========================================
+   TABLET / DESKTOP
+========================================= */
+
+@media (min-width: 700px) {
+  .welcome-content {
+    width: 100%;
+    max-width: 520px;
+
+    margin: 0 auto;
+  }
+
+  .welcome-title {
+    font-size: 76px;
+  }
 }

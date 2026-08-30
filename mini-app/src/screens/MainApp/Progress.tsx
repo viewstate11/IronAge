@@ -1,3 +1,9 @@
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import "./Progress.css";
 
 import { useUser } from "../../context/UserContext";
@@ -5,150 +11,490 @@ import { useUser } from "../../context/UserContext";
 export default function Progress() {
   const { user } = useUser();
 
-  const XP_PER_LEVEL = 1000;
+  const history = Array.isArray(user.history)
+    ? user.history
+    : [];
 
-  const currentLevelXP = user.xp % XP_PER_LEVEL;
+  /* =========================================================
+     DATE HELPERS
+  ========================================================= */
 
-  const xpProgress = Math.min(
-    (currentLevelXP / XP_PER_LEVEL) * 100,
-    100
-  );
+  const [currentDate, setCurrentDate] =
+    useState(() => new Date());
 
-  // =========================
-  // WEEKLY ACTIVITY
-  // =========================
+  useEffect(() => {
+    const scheduleMidnightRefresh = () => {
+      const now = new Date();
 
-  const weeklyXP = [
-    { day: "ПН", xp: 0 },
-    { day: "ВТ", xp: 0 },
-    { day: "СР", xp: 0 },
-    { day: "ЧТ", xp: 0 },
-    { day: "ПТ", xp: 0 },
-    { day: "СБ", xp: 0 },
-    { day: "НД", xp: 0 },
-  ];
+      const nextMidnight =
+        new Date(now);
 
-  const now = new Date();
+      nextMidnight.setHours(
+        24,
+        0,
+        0,
+        0
+      );
 
-  const startOfToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  );
+      const delay =
+        nextMidnight.getTime() -
+        now.getTime() +
+        1000;
 
-  user.history.forEach((workout) => {
-    const workoutDate = new Date(workout.date);
+      return window.setTimeout(() => {
+        setCurrentDate(
+          new Date()
+        );
+      }, delay);
+    };
 
-    const workoutDay = new Date(
-      workoutDate.getFullYear(),
-      workoutDate.getMonth(),
-      workoutDate.getDate()
+    const timeoutId =
+      scheduleMidnightRefresh();
+
+    return () => {
+      window.clearTimeout(
+        timeoutId
+      );
+    };
+  }, [currentDate]);
+
+  const startOfWeek = useMemo(() => {
+    const day =
+      currentDate.getDay() === 0
+        ? 6
+        : currentDate.getDay() - 1;
+
+    const monday =
+      new Date(currentDate);
+
+    monday.setDate(
+      currentDate.getDate() -
+        day
     );
 
-    const diff =
-      startOfToday.getTime() -
-      workoutDay.getTime();
-
-    const daysAgo = Math.floor(
-      diff / (1000 * 60 * 60 * 24)
+    monday.setHours(
+      0,
+      0,
+      0,
+      0
     );
 
-    if (daysAgo >= 0 && daysAgo < 7) {
-      const dayIndex =
-        (workoutDay.getDay() + 6) % 7;
+    return monday;
+  }, [currentDate]);
 
-      weeklyXP[dayIndex].xp += workout.xp;
-    }
-  });
+  const endOfWeek = useMemo(() => {
+    const sunday = new Date(
+      startOfWeek
+    );
 
-  const totalWeeklyXP = weeklyXP.reduce(
-    (total, item) => total + item.xp,
+    sunday.setDate(
+      startOfWeek.getDate() + 6
+    );
+
+    sunday.setHours(
+      23,
+      59,
+      59,
+      999
+    );
+
+    return sunday;
+  }, [startOfWeek]);
+
+  /* =========================================================
+     WEEKLY WORKOUTS
+  ========================================================= */
+
+  const weeklyWorkouts = useMemo(() => {
+    return history.filter((workout) => {
+      const date = new Date(
+        workout.date
+      );
+
+      return (
+        date >= startOfWeek &&
+        date <= endOfWeek &&
+        workout.completed !== false
+      );
+    });
+  }, [
+    history,
+    startOfWeek,
+    endOfWeek,
+  ]);
+
+  /* =========================================================
+     WEEKLY TARGET
+  ========================================================= */
+
+  const weeklyTarget = 4;
+
+  const weeklyProgress = Math.min(
+    100,
+    Math.round(
+      (weeklyWorkouts.length /
+        weeklyTarget) *
+        100
+    )
+  );
+
+  /* =========================================================
+     TOTAL WORKOUTS
+  ========================================================= */
+
+  const totalWorkouts =
+    history.filter(
+      (workout) =>
+        workout.completed !== false
+    ).length;
+
+  /* =========================================================
+     TOTAL TIME
+  ========================================================= */
+
+  const totalDurationSeconds =
+    history.reduce(
+      (total, workout) => {
+        return (
+          total +
+          Number(
+            workout.duration || 0
+          )
+        );
+      },
+      0
+    );
+
+  const totalHours = Math.floor(
+    totalDurationSeconds / 3600
+  );
+
+  const totalMinutes = Math.floor(
+    (totalDurationSeconds % 3600) /
+      60
+  );
+
+  const formattedTotalTime =
+    totalHours > 0
+      ? `${totalHours}h ${String(
+          totalMinutes
+        ).padStart(2, "0")}m`
+      : `${totalMinutes}m`;
+
+  /* =========================================================
+     TOTAL XP
+  ========================================================= */
+
+  const totalXp = Number(
+    user.xp || 0
+  );
+
+  /* =========================================================
+     XP LEVEL
+  ========================================================= */
+
+  const xpInLevel =
+    totalXp % 1000;
+
+  const xpProgress =
+    Math.min(
+      100,
+      Math.round(
+        (xpInLevel / 1000) * 100
+      )
+    );
+
+  const xpToNextLevel =
+    1000 - xpInLevel;
+
+  /* =========================================================
+     DAILY WORKOUT GRAPH
+  ========================================================= */
+
+  const weeklyChart = useMemo(() => {
+    const days = [
+      {
+        label: "MON",
+        date: 0,
+      },
+      {
+        label: "TUE",
+        date: 1,
+      },
+      {
+        label: "WED",
+        date: 2,
+      },
+      {
+        label: "THU",
+        date: 3,
+      },
+      {
+        label: "FRI",
+        date: 4,
+      },
+      {
+        label: "SAT",
+        date: 5,
+      },
+      {
+        label: "SUN",
+        date: 6,
+      },
+    ];
+
+    return days.map((day) => {
+      const date =
+        new Date(
+          startOfWeek
+        );
+
+      date.setDate(
+        startOfWeek.getDate() +
+          day.date
+      );
+
+      const count =
+        weeklyWorkouts.filter(
+          (workout) => {
+            const workoutDate =
+              new Date(
+                workout.date
+              );
+
+            return (
+              workoutDate.getFullYear() ===
+                date.getFullYear() &&
+              workoutDate.getMonth() ===
+                date.getMonth() &&
+              workoutDate.getDate() ===
+                date.getDate()
+            );
+          }
+        ).length;
+
+      return {
+        ...day,
+        count,
+      };
+    });
+  }, [
+    startOfWeek,
+    weeklyWorkouts,
+  ]);
+
+  const maxChartValue =
+    Math.max(
+      1,
+      ...weeklyChart.map(
+        (day) => day.count
+      )
+    );
+
+  /* =========================================================
+     RECENT WORKOUTS
+  ========================================================= */
+
+  const recentWorkouts =
+    useMemo(() => {
+      return history
+        .filter(
+          (workout) =>
+            workout.completed !== false
+        )
+        .sort(
+          (a, b) =>
+            new Date(
+              b.date
+            ).getTime() -
+            new Date(
+              a.date
+            ).getTime()
+        )
+        .slice(0, 5);
+    }, [history]);
+
+  /* =========================================================
+     SETS
+  ========================================================= */
+
+  /*
+   * Current history items do not necessarily
+   * contain sets. Therefore we safely support
+   * future backend set data without breaking
+   * the current UI.
+   */
+
+  const totalSets = history.reduce(
+    (total, workout) => {
+      const sets = (
+        workout as typeof workout & {
+          sets?: unknown[];
+        }
+      ).sets;
+
+      return (
+        total +
+        (Array.isArray(sets)
+          ? sets.length
+          : 0)
+      );
+    },
     0
   );
 
-  const maxXP = Math.max(
-    ...weeklyXP.map((item) => item.xp),
-    1
-  );
+  /* =========================================================
+     LEVEL
+  ========================================================= */
+
+  const currentLevel =
+    Number(user.level || 1);
+
+  /* =========================================================
+     DATE FORMAT
+  ========================================================= */
+
+  const formatDate = (
+    value: string
+  ) => {
+    const date = new Date(
+      value
+    );
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return "RECENT";
+    }
+
+    return date
+      .toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+        }
+      )
+      .toUpperCase();
+  };
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
-    <div className="progress-page">
+    <main className="progress-page">
 
-      {/* HEADER */}
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
       <header className="progress-header">
 
         <div>
-          <p className="progress-label">
-            IRONAGE PROGRESS
-          </p>
+
+          <span className="progress-eyebrow">
+            IRONAGE / PERFORMANCE
+          </span>
 
           <h1>
-            Твій прогрес
+            YOUR
+            <br />
+            <span>PROGRESS.</span>
           </h1>
 
-          <p>
-            Кожне тренування наближає тебе
-            до кращої версії себе.
-          </p>
         </div>
 
-        <div className="progress-level">
-          ⚔️
+        <div className="progress-level-badge">
 
           <span>
-            LVL {user.level}
+            LEVEL
           </span>
+
+          <strong>
+            {String(
+              currentLevel
+            ).padStart(
+              2,
+              "0"
+            )}
+          </strong>
+
         </div>
 
       </header>
 
 
-      {/* XP */}
+      {/* =====================================================
+          XP CARD
+      ===================================================== */}
 
       <section className="progress-xp-card">
 
-        <div className="xp-card-header">
+        <div className="progress-xp-top">
 
           <div>
+
             <span>
-              ЗАГАЛЬНИЙ ДОСВІД
+              CURRENT LEVEL
             </span>
 
             <strong>
-              {user.xp} XP
+              LEVEL{" "}
+              {String(
+                currentLevel
+              ).padStart(
+                2,
+                "0"
+              )}
             </strong>
+
           </div>
 
-          <div className="xp-level">
-            LEVEL {user.level}
+          <div className="progress-xp-total">
+
+            <span>
+              TOTAL XP
+            </span>
+
+            <strong>
+              {totalXp.toLocaleString()}
+            </strong>
+
           </div>
 
         </div>
 
-        <div className="progress-track">
+        <div className="progress-xp-track">
 
           <div
-            className="progress-fill"
+            className="progress-xp-fill"
             style={{
-              width: `${xpProgress}%`,
+              width: `${Math.max(
+                xpProgress,
+                xpInLevel > 0
+                  ? 3
+                  : 0
+              )}%`,
             }}
           />
 
         </div>
 
-        <div className="xp-bottom">
+        <div className="progress-xp-bottom">
 
           <span>
-            {currentLevelXP} / {XP_PER_LEVEL} XP
+            {xpInLevel.toLocaleString()}
+            {" / 1,000 XP"}
           </span>
 
           <span>
-            {Math.max(
-              XP_PER_LEVEL - currentLevelXP,
-              0
-            )}{" "}
-            XP до наступного рівня
+            {xpToNextLevel ===
+            1000
+              ? "LEVEL UP AHEAD"
+              : `${xpToNextLevel} XP TO NEXT LEVEL`}
           </span>
 
         </div>
@@ -156,14 +502,68 @@ export default function Progress() {
       </section>
 
 
-      {/* STATS */}
+      {/* =====================================================
+          STAT GRID
+      ===================================================== */}
 
-      <section className="progress-stats">
+      <section className="progress-stat-grid">
 
-        <div className="progress-stat">
+        <article className="progress-stat-card">
 
-          <span className="stat-icon">
-            🔥
+          <span>
+            WORKOUTS
+          </span>
+
+          <strong>
+            {totalWorkouts}
+          </strong>
+
+          <small>
+            ALL TIME
+          </small>
+
+        </article>
+
+        <article className="progress-stat-card">
+
+          <span>
+            THIS WEEK
+          </span>
+
+          <strong>
+            {weeklyWorkouts.length}
+            <small className="progress-stat-target">
+              {" / "}
+              {weeklyTarget}
+            </small>
+          </strong>
+
+          <small>
+            TRAINING TARGET
+          </small>
+
+        </article>
+
+        <article className="progress-stat-card">
+
+          <span>
+            TOTAL TIME
+          </span>
+
+          <strong className="progress-stat-time">
+            {formattedTotalTime}
+          </strong>
+
+          <small>
+            TRAINING
+          </small>
+
+        </article>
+
+        <article className="progress-stat-card">
+
+          <span>
+            STREAK
           </span>
 
           <strong>
@@ -171,221 +571,304 @@ export default function Progress() {
           </strong>
 
           <small>
-            STREAK
+            {user.streak === 1
+              ? "DAY"
+              : "DAYS"}
           </small>
 
-        </div>
-
-
-        <div className="progress-stat">
-
-          <span className="stat-icon">
-            💪
-          </span>
-
-          <strong>
-            {user.workouts}
-          </strong>
-
-          <small>
-            ТРЕНУВАНЬ
-          </small>
-
-        </div>
-
-
-        <div className="progress-stat">
-
-          <span className="stat-icon">
-            ⚔️
-          </span>
-
-          <strong>
-            {user.level}
-          </strong>
-
-          <small>
-            РІВЕНЬ
-          </small>
-
-        </div>
+        </article>
 
       </section>
 
 
-      {/* WEEKLY ACTIVITY */}
+      {/* =====================================================
+          WEEKLY CHART
+      ===================================================== */}
 
-      <section className="activity-card">
+      <section className="progress-section">
 
-        <div className="section-title">
+        <div className="progress-section-heading">
 
           <div>
+
             <span>
-              АКТИВНІСТЬ
+              THIS WEEK
             </span>
 
             <h2>
-              Цього тижня
+              Training Activity
             </h2>
+
           </div>
 
           <strong>
-            {totalWeeklyXP} XP
+            {weeklyProgress}%
           </strong>
 
         </div>
 
+        <div className="progress-chart">
 
-        <div className="weekly-chart">
+          {weeklyChart.map(
+            (day) => {
 
-          {weeklyXP.map((item) => {
+              const height =
+                day.count === 0
+                  ? 4
+                  : Math.max(
+                      12,
+                      Math.round(
+                        (day.count /
+                          maxChartValue) *
+                          100
+                      )
+                    );
 
-            const height =
-              item.xp > 0
-                ? (item.xp / maxXP) * 100
-                : 0;
-
-            return (
-              <div
-                className="chart-column"
-                key={item.day}
-              >
-
-                <div className="chart-value">
-                  {item.xp > 0
-                    ? item.xp
-                    : ""}
-                </div>
-
-                <div className="chart-bar">
-
-                  <div
-                    className="chart-fill"
-                    style={{
-                      height: `${height}%`,
-                    }}
-                  />
-
-                </div>
-
-                <span>
-                  {item.day}
-                </span>
-
-              </div>
-            );
-          })}
-
-        </div>
-
-      </section>
-
-
-      {/* HISTORY */}
-
-      <section className="recent-section">
-
-        <div className="section-title">
-
-          <div>
-            <span>
-              ІСТОРІЯ
-            </span>
-
-            <h2>
-              Останні тренування
-            </h2>
-          </div>
-
-        </div>
-
-
-        <div className="workout-history">
-
-          {user.history.length === 0 ? (
-
-            <div className="empty-history">
-
-              <span>
-                ⚔️
-              </span>
-
-              <strong>
-                Тренувань ще немає
-              </strong>
-
-              <small>
-                Заверши своє перше тренування,
-                і воно з'явиться тут.
-              </small>
-
-            </div>
-
-          ) : (
-
-            user.history
-              .slice(0, 10)
-              .map((workout) => (
-
+              return (
                 <div
-                  className="history-item"
-                  key={workout.id}
+                  key={day.label}
+                  className="progress-chart-day"
                 >
 
-                  <div className="history-icon">
-                    🔥
+                  <div className="progress-chart-value">
+
+                    {day.count > 0
+                      ? day.count
+                      : ""}
+
                   </div>
 
-                  <div>
+                  <div className="progress-chart-column">
+
+                    <div
+                      className={`progress-chart-bar ${
+                        day.count > 0
+                          ? "is-active"
+                          : ""
+                      }`}
+                      style={{
+                        height: `${height}%`,
+                      }}
+                    />
+
+                  </div>
+
+                  <span>
+                    {day.label}
+                  </span>
+
+                </div>
+              );
+            }
+          )}
+
+        </div>
+
+        <div className="progress-week-footer">
+
+          <span>
+            {weeklyWorkouts.length}{" "}
+            WORKOUT
+            {weeklyWorkouts.length ===
+            1
+              ? ""
+              : "S"} COMPLETED
+          </span>
+
+          <span>
+            TARGET{" "}
+            {weeklyTarget}
+          </span>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          PERFORMANCE TOTALS
+      ===================================================== */}
+
+      <section className="progress-performance">
+
+        <div className="progress-section-heading">
+
+          <div>
+
+            <span>
+              PERFORMANCE
+            </span>
+
+            <h2>
+              Training Volume
+            </h2>
+
+          </div>
+
+        </div>
+
+        <div className="progress-performance-grid">
+
+          <div>
+
+            <span>
+              TOTAL SETS
+            </span>
+
+            <strong>
+              {totalSets}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              TOTAL XP
+            </span>
+
+            <strong>
+              {totalXp.toLocaleString()}
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>
+              CURRENT STREAK
+            </span>
+
+            <strong>
+              {user.streak}D
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          RECENT WORKOUTS
+      ===================================================== */}
+
+      <section className="progress-section">
+
+        <div className="progress-section-heading">
+
+          <div>
+
+            <span>
+              HISTORY
+            </span>
+
+            <h2>
+              Recent Workouts
+            </h2>
+
+          </div>
+
+        </div>
+
+        {recentWorkouts.length ===
+        0 ? (
+          <div className="progress-empty">
+
+            <span>
+              NO WORKOUTS YET
+            </span>
+
+            <p>
+              Complete your first
+              workout to start
+              building your
+              performance history.
+            </p>
+
+          </div>
+        ) : (
+          <div className="progress-history">
+
+            {recentWorkouts.map(
+              (workout) => (
+                <article
+                  key={String(
+                    workout.id
+                  )}
+                  className="progress-history-item"
+                >
+
+                  <div className="progress-history-main">
+
+                    <span>
+                      {formatDate(
+                        workout.date
+                      )}
+                    </span>
 
                     <strong>
                       {workout.name}
                     </strong>
 
+                  </div>
+
+                  <div className="progress-history-meta">
+
                     <span>
-                      {workout.duration} хв
+                      {Math.floor(
+                        Number(
+                          workout.duration ||
+                            0
+                        ) / 60
+                      )}{" "}
+                      MIN
                     </span>
+
+                    <strong>
+                      +{workout.xp}
+                      {" XP"}
+                    </strong>
 
                   </div>
 
-                  <b>
-                    +{workout.xp} XP
-                  </b>
+                </article>
+              )
+            )}
 
-                </div>
-
-              ))
-
-          )}
-
-        </div>
+          </div>
+        )}
 
       </section>
 
 
-      {/* MOTIVATION */}
+      {/* =====================================================
+          MINDSET
+      ===================================================== */}
 
-      <section className="motivation-card">
+      <section className="progress-mindset">
 
-        <div className="motivation-icon">
-          ⚔️
-        </div>
+        <span>
+          IRONAGE / MINDSET
+        </span>
 
-        <div>
-
+        <h2>
+          KEEP
+          <br />
           <strong>
-            ПРАВИЛО IRONAGE
+            BUILDING.
           </strong>
+        </h2>
 
-          <p>
-            Результат не з'являється за один день.
-            Але кожен день створює результат.
-          </p>
-
-        </div>
+        <p>
+          Progress is not about
+          perfection. It is about
+          showing up again.
+        </p>
 
       </section>
 
-    </div>
+    </main>
   );
 }

@@ -1,384 +1,1502 @@
-import { useEffect, useState } from "react";
-
-import "./Nutrition.css";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { useUser } from "../../context/UserContext";
 
-type Props = {
-  changeTab: (tab: string) => void;
+import {
+  calculateNutrition,
+  calculateNutritionAdherence,
+} from "../../services/nutritionService";
+
+import {
+  addDays,
+} from "../../services/nutritionStorageService";
+
+import {
+  getNutrition,
+  addNutritionMeal,
+  deleteNutritionMeal,
+  updateNutritionWater,
+} from "../../api/nutrition";
+
+import type {
+  NutritionDay as ApiNutritionDay,
+} from "../../api/nutrition";
+
+import type {
+  FoodEntry,
+  MealType,
+  NutritionDay,
+} from "../../types/nutrition";
+
+import type {
+  Gender,
+  Goal,
+  User as NutritionUser,
+} from "../../types/user";
+
+import "./Nutrition.css";
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const MEAL_LABELS: Record<MealType, string> = {
+  BREAKFAST: "Breakfast",
+  LUNCH: "Lunch",
+  DINNER: "Dinner",
+  SNACK: "Snack",
 };
 
-type Meal = {
-  id: number;
-  name: string;
-  description: string;
-  icon: string;
-  calories: number;
-  protein: number;
-};
+const WATER_TARGET = 2500;
 
-const meals: Meal[] = [
-  {
-    id: 1,
-    name: "Сніданок",
-    description: "Яйця + овочі + джерело білка",
-    icon: "🍳",
-    calories: 500,
-    protein: 35,
-  },
-  {
-    id: 2,
-    name: "Обід",
-    description: "М'ясо або риба + овочі + гарнір",
-    icon: "🥩",
-    calories: 700,
-    protein: 45,
-  },
-  {
-    id: 3,
-    name: "Вечеря",
-    description: "Білок + велика порція овочів",
-    icon: "🥗",
-    calories: 600,
-    protein: 40,
-  },
-];
+/* =========================================================
+   TYPE NORMALIZATION
+========================================================= */
 
-export default function Nutrition({
-  changeTab,
-}: Props) {
-  const { user } = useUser();
+function normalizeGender(
+  value: unknown
+): Gender | null {
+  if (
+    value === "MALE" ||
+    value === "male"
+  ) {
+    return "MALE";
+  }
 
-  const caloriesTarget = Math.round(
-    user.weight * 30
+  if (
+    value === "FEMALE" ||
+    value === "female"
+  ) {
+    return "FEMALE";
+  }
+
+  if (
+    value === "OTHER" ||
+    value === "other"
+  ) {
+    return "OTHER";
+  }
+
+  return null;
+}
+
+function normalizeGoal(
+  value: unknown
+): Goal | null {
+  if (
+    typeof value !== "string"
+  ) {
+    return null;
+  }
+
+  const normalized =
+    value.toUpperCase();
+
+  const goals: Goal[] = [
+    "MUSCLE",
+    "LOSE_WEIGHT",
+    "MAINTAIN",
+    "ENDURANCE",
+    "STRENGTH",
+    "FITNESS",
+  ];
+
+  return goals.includes(
+    normalized as Goal
+  )
+    ? (normalized as Goal)
+    : null;
+}
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatDate(
+  date: Date
+): string {
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      month: "short",
+      day: "numeric",
+    }
+  );
+}
+
+function getDayLabel(
+  date: Date
+): string {
+  const today =
+    new Date();
+
+  if (
+    today.toDateString() ===
+    date.toDateString()
+  ) {
+    return "TODAY";
+  }
+
+  const yesterday =
+    new Date();
+
+  yesterday.setDate(
+    yesterday.getDate() - 1
   );
 
-  const proteinTarget = Math.round(
-    user.weight * 1.8
-  );
+  if (
+    yesterday.toDateString() ===
+    date.toDateString()
+  ) {
+    return "YESTERDAY";
+  }
 
-  const waterTarget = Math.round(
-    user.weight * 35
-  );
+  return formatDate(
+    date
+  ).toUpperCase();
+}
 
-  const [completedMeals, setCompletedMeals] =
-    useState<number[]>([]);
+function dateToKey(
+  date: Date
+): string {
+  const year =
+    date.getFullYear();
 
-  const [water, setWater] = useState(0);
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
 
-  useEffect(() => {
-    const today = new Date()
-      .toISOString()
-      .slice(0, 10);
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
 
-    const saved = localStorage.getItem(
-      `ironage_nutrition_${today}`
+  return `${year}-${month}-${day}`;
+}
+
+/* =========================================================
+   COMPONENT
+========================================================= */
+
+export default function Nutrition() {
+  const { user } =
+    useUser();
+
+  /* =======================================================
+     NORMALIZE USER
+  ======================================================= */
+
+  const nutritionUser =
+    useMemo<NutritionUser>(
+      () => ({
+        id: Number(
+          user.id
+        ),
+
+        telegramId:
+          String(
+            user.telegramId ?? ""
+          ),
+
+        username:
+          user.username ??
+          null,
+
+        firstName:
+          user.firstName ??
+          "ATHLETE",
+
+        lastName:
+          user.lastName ??
+          null,
+
+        languageCode:
+          user.languageCode ??
+          "uk",
+
+        name:
+          user.name ??
+          "ATHLETE",
+
+        age:
+          user.age ??
+          null,
+
+        gender:
+          normalizeGender(
+            user.gender
+          ),
+
+        weight:
+          user.weight ??
+          null,
+
+        height:
+          user.height ??
+          null,
+
+        goal:
+          normalizeGoal(
+            user.goal
+          ),
+
+        level:
+          Number(
+            user.level ?? 1
+          ),
+
+        xp:
+          Number(
+            user.xp ?? 0
+          ),
+
+        workouts:
+          Number(
+            user.workouts ?? 0
+          ),
+
+        streak:
+          Number(
+            user.streak ?? 0
+          ),
+
+        onboardingCompleted:
+          Boolean(
+            user.onboardingCompleted
+          ),
+
+        history:
+          Array.isArray(
+            user.history
+          )
+            ? user.history
+            : [],
+
+        createdAt:
+          user.createdAt ??
+          new Date().toISOString(),
+
+        updatedAt:
+          user.updatedAt ??
+          new Date().toISOString(),
+      }),
+      [user]
     );
 
-    if (!saved) {
+  /* =======================================================
+     NUTRITION PLAN
+  ======================================================= */
+
+  const plan =
+    useMemo(
+      () =>
+        calculateNutrition(
+          nutritionUser
+        ),
+      [nutritionUser]
+    );
+
+  /* =======================================================
+     DATE
+  ======================================================= */
+
+  const [
+    selectedDate,
+    setSelectedDate,
+  ] = useState<Date>(
+    () => new Date()
+  );
+
+  const [
+    day,
+    setDay,
+  ] = useState<NutritionDay>(
+    () => ({
+      date:
+        dateToKey(
+          new Date()
+        ),
+
+      water: 0,
+
+      meals: [],
+    })
+  );
+
+  const [
+    history,
+    setHistory,
+  ] = useState<NutritionDay[]>(
+    []
+  );
+
+  const [
+    nutritionLoading,
+    setNutritionLoading,
+  ] = useState(false);
+
+  /* =======================================================
+     NORMALIZE API NUTRITION
+  ======================================================= */
+
+  function normalizeNutritionDay(
+    value: ApiNutritionDay
+  ): NutritionDay {
+    return {
+      date:
+        typeof value.date === "string"
+          ? value.date.slice(0, 10)
+          : dateToKey(
+              new Date()
+            ),
+
+      water:
+        Math.max(
+          0,
+          Number(
+            value.water ?? 0
+          )
+        ),
+
+      meals:
+        Array.isArray(
+          value.meals
+        )
+          ? value.meals.map(
+              (
+                item
+              ) => ({
+                id:
+                  Number(
+                    item.id
+                  ),
+
+                nutritionDayId:
+                  Number(
+                    item.nutritionDayId
+                  ),
+
+                name:
+                  item.name,
+
+                meal:
+                  item.meal,
+
+                calories:
+                  Math.max(
+                    0,
+                    Number(
+                      item.calories ?? 0
+                    )
+                  ),
+
+                protein:
+                  Math.max(
+                    0,
+                    Number(
+                      item.protein ?? 0
+                    )
+                  ),
+
+                fat:
+                  Math.max(
+                    0,
+                    Number(
+                      item.fat ?? 0
+                    )
+                  ),
+
+                carbs:
+                  Math.max(
+                    0,
+                    Number(
+                      item.carbs ?? 0
+                    )
+                  ),
+
+                amount:
+                  item.amount ??
+                  undefined,
+
+                unit:
+                  item.unit ??
+                  undefined,
+
+                date:
+                  item.createdAt ??
+                  value.date,
+
+                createdAt:
+                  item.createdAt,
+              })
+            )
+          : [],
+    };
+  }
+
+  /* =======================================================
+     LOAD SELECTED DAY
+  ======================================================= */
+
+  async function loadSelectedNutrition(
+    date: Date
+  ): Promise<void> {
+    try {
+      setNutritionLoading(
+        true
+      );
+
+      const response =
+        await getNutrition(
+          dateToKey(date)
+        );
+
+      const normalized =
+        normalizeNutritionDay(
+          response as ApiNutritionDay
+        );
+
+      setDay(
+        normalized
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Failed to load nutrition:",
+        error
+      );
+    } finally {
+      setNutritionLoading(
+        false
+      );
+    }
+  }
+
+  /* =======================================================
+     LOAD 7 DAY HISTORY
+  ======================================================= */
+
+  async function loadNutritionHistory(): Promise<void> {
+    try {
+      const today =
+        new Date();
+
+      const dates =
+        Array.from(
+          {
+            length: 7,
+          },
+          (
+            _,
+            index
+          ) =>
+            addDays(
+              today,
+              -index
+            )
+        );
+
+      const results =
+        await Promise.all(
+          dates.map(
+            (
+              date
+            ) =>
+              getNutrition(
+                dateToKey(
+                  date
+                )
+              )
+          )
+        );
+
+      setHistory(
+        results.map(
+          (
+            item
+          ) =>
+            normalizeNutritionDay(
+              item as ApiNutritionDay
+            )
+        )
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Failed to load nutrition history:",
+        error
+      );
+
+      setHistory([]);
+    }
+  }
+
+  /* =======================================================
+     INITIAL LOAD / DATE CHANGE
+  ======================================================= */
+
+  useEffect(() => {
+    void loadSelectedNutrition(
+      selectedDate
+    );
+  }, [selectedDate]);
+
+  useEffect(() => {
+    void loadNutritionHistory();
+  }, [day]);
+
+  /* =======================================================
+     FORM
+  ======================================================= */
+
+  const [
+    foodName,
+    setFoodName,
+  ] = useState("");
+
+  const [
+    meal,
+    setMeal,
+  ] = useState<MealType>(
+    "BREAKFAST"
+  );
+
+  const [
+    calories,
+    setCalories,
+  ] = useState("");
+
+  const [
+    protein,
+    setProtein,
+  ] = useState("");
+
+  const [
+    fat,
+    setFat,
+  ] = useState("");
+
+  const [
+    carbs,
+    setCarbs,
+  ] = useState("");
+
+  /* =======================================================
+     TOTALS
+  ======================================================= */
+
+  const totals =
+    useMemo(
+      () =>
+        day.meals.reduce(
+          (
+            total,
+            item
+          ) => ({
+            calories:
+              total.calories +
+              item.calories,
+
+            protein:
+              total.protein +
+              item.protein,
+
+            fat:
+              total.fat +
+              item.fat,
+
+            carbs:
+              total.carbs +
+              item.carbs,
+          }),
+          {
+            calories: 0,
+            protein: 0,
+            fat: 0,
+            carbs: 0,
+          }
+        ),
+      [day.meals]
+    );
+
+  /* =======================================================
+     PROGRESS
+  ======================================================= */
+
+  const calorieProgress =
+    plan.calories > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (totals.calories /
+              plan.calories) *
+              100
+          )
+        )
+      : 0;
+
+  const proteinProgress =
+    plan.protein > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (totals.protein /
+              plan.protein) *
+              100
+          )
+        )
+      : 0;
+
+  const fatProgress =
+    plan.fat > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (totals.fat /
+              plan.fat) *
+              100
+          )
+        )
+      : 0;
+
+  const carbsProgress =
+    plan.carbs > 0
+      ? Math.min(
+          100,
+          Math.round(
+            (totals.carbs /
+              plan.carbs) *
+              100
+          )
+        )
+      : 0;
+
+  const waterProgress =
+    Math.min(
+      100,
+      Math.round(
+        (day.water /
+          WATER_TARGET) *
+          100
+      )
+    );
+
+  const adherence =
+    calculateNutritionAdherence(
+      totals.calories,
+      plan.calories
+    );
+
+  /* =======================================================
+     HISTORY STATS
+  ======================================================= */
+
+  const historyStats =
+    useMemo(() => {
+      if (
+        history.length === 0
+      ) {
+        return {
+          calories: 0,
+          protein: 0,
+          water: 0,
+        };
+      }
+
+      let totalCalories =
+        0;
+
+      let totalProtein =
+        0;
+
+      let totalWater =
+        0;
+
+      history.forEach(
+        (
+          historyDay
+        ) => {
+          historyDay.meals.forEach(
+            (
+              item
+            ) => {
+              totalCalories +=
+                item.calories;
+
+              totalProtein +=
+                item.protein;
+            }
+          );
+
+          totalWater +=
+            historyDay.water;
+        }
+      );
+
+      return {
+        calories:
+          Math.round(
+            totalCalories /
+              history.length
+          ),
+
+        protein:
+          Math.round(
+            totalProtein /
+              history.length
+          ),
+
+        water:
+          Math.round(
+            totalWater /
+              history.length
+          ),
+      };
+    }, [history]);
+
+  /* =======================================================
+     DATE NAVIGATION
+  ======================================================= */
+
+  function changeDay(
+    amount: number
+  ): void {
+    const nextDate =
+      addDays(
+        selectedDate,
+        amount
+      );
+
+    setSelectedDate(
+      nextDate
+    );
+  }
+
+  function goToday(): void {
+    setSelectedDate(
+      new Date()
+    );
+  }
+
+  /* =======================================================
+     ADD FOOD
+  ======================================================= */
+
+  async function handleAddFood(): Promise<void> {
+    if (
+      !foodName.trim()
+    ) {
       return;
     }
 
     try {
-      const data = JSON.parse(saved);
+      setNutritionLoading(
+        true
+      );
 
-      if (Array.isArray(data.completedMeals)) {
-        setCompletedMeals(data.completedMeals);
-      }
+      const created =
+        await addNutritionMeal({
+          date:
+            dateToKey(
+              selectedDate
+            ),
 
-      if (
-        typeof data.water === "number"
-      ) {
-        setWater(data.water);
-      }
-    } catch {
+          name:
+            foodName.trim(),
+
+          meal,
+
+          calories:
+            Math.max(
+              0,
+              Number(
+                calories
+              ) || 0
+            ),
+
+          protein:
+            Math.max(
+              0,
+              Number(
+                protein
+              ) || 0
+            ),
+
+          fat:
+            Math.max(
+              0,
+              Number(
+                fat
+              ) || 0
+            ),
+
+          carbs:
+            Math.max(
+              0,
+              Number(
+                carbs
+              ) || 0
+            ),
+        });
+
+      const newMeal: FoodEntry = {
+        id:
+          Number(
+            created.id
+          ),
+
+        nutritionDayId:
+          Number(
+            created.nutritionDayId
+          ),
+
+        name:
+          created.name,
+
+        meal:
+          created.meal,
+
+        calories:
+          Number(
+            created.calories ?? 0
+          ),
+
+        protein:
+          Number(
+            created.protein ?? 0
+          ),
+
+        fat:
+          Number(
+            created.fat ?? 0
+          ),
+
+        carbs:
+          Number(
+            created.carbs ?? 0
+          ),
+
+        amount:
+          created.amount ??
+          undefined,
+
+        unit:
+          created.unit ??
+          undefined,
+
+        date:
+          created.createdAt ??
+          dateToKey(
+            selectedDate
+          ),
+
+        createdAt:
+          created.createdAt,
+      };
+
+      setDay(
+        (
+          current
+        ) => ({
+          ...current,
+
+          meals: [
+            ...current.meals,
+            newMeal,
+          ],
+        })
+      );
+
+      setFoodName("");
+      setCalories("");
+      setProtein("");
+      setFat("");
+      setCarbs("");
+    } catch (error) {
       console.error(
-        "Failed to load nutrition data"
+        "IRONAGE: Failed to add nutrition meal:",
+        error
+      );
+    } finally {
+      setNutritionLoading(
+        false
       );
     }
-  }, []);
+  }
 
-  useEffect(() => {
-    const today = new Date()
-      .toISOString()
-      .slice(0, 10);
+  /* =======================================================
+     DELETE
+  ======================================================= */
 
-    localStorage.setItem(
-      `ironage_nutrition_${today}`,
-      JSON.stringify({
-        completedMeals,
-        water,
-      })
-    );
-  }, [completedMeals, water]);
+  async function handleDelete(
+    id: number
+  ): Promise<void> {
+    try {
+      setNutritionLoading(
+        true
+      );
 
-  function toggleMeal(id: number) {
-    setCompletedMeals((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter(
-          (mealId) => mealId !== id
+      await deleteNutritionMeal(
+        id
+      );
+
+      setDay(
+        (
+          current
+        ) => ({
+          ...current,
+
+          meals:
+            current.meals.filter(
+              (
+                item
+              ) =>
+                item.id !== id
+            ),
+        })
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Failed to delete nutrition meal:",
+        error
+      );
+    } finally {
+      setNutritionLoading(
+        false
+      );
+    }
+  }
+
+  /* =======================================================
+     WATER
+  ======================================================= */
+
+  async function handleWater(
+    amount: number
+  ): Promise<void> {
+    try {
+      setNutritionLoading(
+        true
+      );
+
+      const newWater =
+        Math.max(
+          0,
+          day.water + amount
         );
-      }
 
-      return [...prev, id];
-    });
+      const updated =
+        await updateNutritionWater({
+          date:
+            dateToKey(
+              selectedDate
+            ),
+
+          water:
+            newWater,
+        });
+
+      setDay(
+        normalizeNutritionDay(
+          updated as ApiNutritionDay
+        )
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Failed to update water:",
+        error
+      );
+    } finally {
+      setNutritionLoading(
+        false
+      );
+    }
   }
 
-  function addWater(amount: number) {
-    setWater((prev) =>
-      Math.min(
-        prev + amount,
-        waterTarget
-      )
+  /* =======================================================
+     SELECT HISTORY DAY
+  ======================================================= */
+
+  function selectHistoryDay(
+    historyDay: NutritionDay
+  ): void {
+    const [
+      year,
+      month,
+      date,
+    ] =
+      historyDay.date
+        .slice(0, 10)
+        .split("-")
+        .map(Number);
+
+    const next =
+      new Date(
+        year,
+        month - 1,
+        date
+      );
+
+    setSelectedDate(
+      next
     );
   }
 
-  const completedCalories =
-    meals
-      .filter((meal) =>
-        completedMeals.includes(meal.id)
-      )
-      .reduce(
-        (total, meal) =>
-          total + meal.calories,
-        0
-      );
-
-  const completedProtein =
-    meals
-      .filter((meal) =>
-        completedMeals.includes(meal.id)
-      )
-      .reduce(
-        (total, meal) =>
-          total + meal.protein,
-        0
-      );
-
-  const calorieProgress = Math.min(
-    (completedCalories /
-      caloriesTarget) *
-      100,
-    100
-  );
-
-  const proteinProgress = Math.min(
-    (completedProtein /
-      proteinTarget) *
-      100,
-    100
-  );
-
-  const waterProgress = Math.min(
-    (water / waterTarget) * 100,
-    100
-  );
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
-    <div className="nutrition-page">
-
-      {/* HEADER */}
+    <main className="nutrition-page">
 
       <header className="nutrition-header">
 
+        <div>
+
+          <div className="nutrition-eyebrow">
+            IRONAGE PROGRAM
+          </div>
+
+          <h1>
+            NUTRITION
+          </h1>
+
+          <p>
+            Fuel your body.
+            <br />
+            Build your strength.
+          </p>
+
+        </div>
+
+        <div className="nutrition-date">
+          {getDayLabel(
+            selectedDate
+          )}
+        </div>
+
+      </header>
+
+      {/* DAY NAVIGATION */}
+
+      <section className="nutrition-day-nav">
+
         <button
           type="button"
-          className="nutrition-back"
           onClick={() =>
-            changeTab("home")
+            changeDay(-1)
           }
         >
           ←
         </button>
 
         <div>
-          <p className="nutrition-label">
-            IRONAGE NUTRITION
-          </p>
 
-          <h1>
-            Харчування
-          </h1>
-        </div>
-
-        <div className="nutrition-icon">
-          🥗
-        </div>
-
-      </header>
-
-
-      {/* HERO */}
-
-      <section className="nutrition-hero">
-
-        <div className="nutrition-hero-icon">
-          ⚡
-        </div>
-
-        <div>
           <strong>
-            Харчування для {user.name}
+            {getDayLabel(
+              selectedDate
+            )}
           </strong>
 
-          <p>
-            Твоя ціль — {user.goal}.
-            Їжа повинна допомагати тобі
-            ставати сильнішим.
-          </p>
-        </div>
-
-      </section>
-
-
-      {/* DAILY TARGET */}
-
-      <section className="nutrition-card">
-
-        <div className="nutrition-card-title">
-
-          <div>
-            <span>
-              ОРІЄНТИР НА ДЕНЬ
-            </span>
-
-            <h2>
-              Основні показники
-            </h2>
-          </div>
-
-          <span className="nutrition-target">
-            🔥
+          <span>
+            {formatDate(
+              selectedDate
+            )}
           </span>
 
         </div>
 
+        <button
+          type="button"
+          onClick={() =>
+            changeDay(1)
+          }
+        >
+          →
+        </button>
 
-        {/* CALORIES */}
+      </section>
 
-        <div className="nutrition-progress-item">
+      <button
+        type="button"
+        className="nutrition-today-button"
+        onClick={
+          goToday
+        }
+      >
+        BACK TO TODAY
+      </button>
 
-          <div className="nutrition-progress-header">
+      {/* CALORIES */}
+
+      <section className="nutrition-calories-card">
+
+        <div className="nutrition-calories-top">
+
+          <div>
 
             <span>
-              Калорії
+              CALORIES
             </span>
 
             <strong>
-              {completedCalories} /{" "}
-              {caloriesTarget} KCAL
+              {Math.round(
+                totals.calories
+              )}
             </strong>
+
+            <small>
+              / {plan.calories} kcal
+            </small>
 
           </div>
 
-          <div className="nutrition-progress-track">
+          <div className="nutrition-calories-percent">
+            {calorieProgress}%
+          </div>
+
+        </div>
+
+        <div className="nutrition-progress">
+
+          <div
+            style={{
+              width:
+                `${calorieProgress}%`,
+            }}
+          />
+
+        </div>
+
+        <div className="nutrition-calories-footer">
+
+          <span>
+            {Math.max(
+              0,
+              plan.calories -
+                totals.calories
+            )}{" "}
+            kcal remaining
+          </span>
+
+          <span>
+            {adherence}% ADHERENCE
+          </span>
+
+        </div>
+
+      </section>
+
+      {/* MACROS */}
+
+      <section className="nutrition-section">
+
+        <div className="nutrition-section-title">
+
+          <span>
+            MACRONUTRIENTS
+          </span>
+
+          <span>
+            DAILY
+          </span>
+
+        </div>
+
+        <div className="nutrition-macros">
+
+          <MacroCard
+            label="PROTEIN"
+            current={
+              Math.round(
+                totals.protein
+              )
+            }
+            target={
+              plan.protein
+            }
+            unit="g"
+            progress={
+              proteinProgress
+            }
+          />
+
+          <MacroCard
+            label="CARBS"
+            current={
+              Math.round(
+                totals.carbs
+              )
+            }
+            target={
+              plan.carbs
+            }
+            unit="g"
+            progress={
+              carbsProgress
+            }
+          />
+
+          <MacroCard
+            label="FAT"
+            current={
+              Math.round(
+                totals.fat
+              )
+            }
+            target={
+              plan.fat
+            }
+            unit="g"
+            progress={
+              fatProgress
+            }
+          />
+
+        </div>
+
+      </section>
+
+      {/* ENGINE */}
+
+      <section className="nutrition-engine-card">
+
+        <div>
+          <span>
+            DAILY TARGET
+          </span>
+
+          <strong>
+            {plan.calories} kcal
+          </strong>
+        </div>
+
+        <div>
+          <span>
+            BMR
+          </span>
+
+          <strong>
+            {plan.bmr} kcal
+          </strong>
+        </div>
+
+        <div>
+          <span>
+            TDEE
+          </span>
+
+          <strong>
+            {plan.tdee} kcal
+          </strong>
+        </div>
+
+      </section>
+
+      {/* WATER */}
+
+      <section className="nutrition-water-card">
+
+        <div>
+
+          <span className="nutrition-water-label">
+            HYDRATION
+          </span>
+
+          <strong>
+            {day.water}
+
+            <small>
+              {" "}
+              / {WATER_TARGET} ml
+            </small>
+          </strong>
+
+          <div className="nutrition-water-progress">
 
             <div
-              className="nutrition-progress-fill"
               style={{
-                width: `${calorieProgress}%`,
+                width:
+                  `${waterProgress}%`,
               }}
             />
 
           </div>
 
         </div>
-
-
-        {/* PROTEIN */}
-
-        <div className="nutrition-progress-item">
-
-          <div className="nutrition-progress-header">
-
-            <span>
-              Білок
-            </span>
-
-            <strong>
-              {completedProtein} /{" "}
-              {proteinTarget} г
-            </strong>
-
-          </div>
-
-          <div className="nutrition-progress-track">
-
-            <div
-              className="nutrition-progress-fill"
-              style={{
-                width: `${proteinProgress}%`,
-              }}
-            />
-
-          </div>
-
-        </div>
-
-
-        {/* WATER */}
-
-        <div className="nutrition-progress-item">
-
-          <div className="nutrition-progress-header">
-
-            <span>
-              Вода
-            </span>
-
-            <strong>
-              {water} / {waterTarget} мл
-            </strong>
-
-          </div>
-
-          <div className="nutrition-progress-track">
-
-            <div
-              className="nutrition-progress-fill"
-              style={{
-                width: `${waterProgress}%`,
-              }}
-            />
-
-          </div>
-
-        </div>
-
 
         <div className="nutrition-water-actions">
 
           <button
             type="button"
             onClick={() =>
-              addWater(250)
+              handleWater(250)
             }
           >
-            +250 мл
+            +250 ML
           </button>
 
           <button
             type="button"
             onClick={() =>
-              addWater(500)
+              handleWater(500)
             }
           >
-            +500 мл
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              setWater(0)
-            }
-          >
-            Скинути
+            +500 ML
           </button>
 
         </div>
 
       </section>
 
+      {/* ADD FOOD */}
+
+      <section className="nutrition-section">
+
+        <div className="nutrition-section-title">
+
+          <span>
+            ADD FOOD
+          </span>
+
+        </div>
+
+        <div className="nutrition-form">
+
+          <input
+            value={
+              foodName
+            }
+            onChange={(
+              event
+            ) =>
+              setFoodName(
+                event.target.value
+              )
+            }
+            placeholder="Food name"
+          />
+
+          <select
+            value={
+              meal
+            }
+            onChange={(
+              event
+            ) =>
+              setMeal(
+                event.target
+                  .value as MealType
+              )
+            }
+          >
+
+            {Object.entries(
+              MEAL_LABELS
+            ).map(
+              ([
+                value,
+                label,
+              ]) => (
+                <option
+                  key={
+                    value
+                  }
+                  value={
+                    value
+                  }
+                >
+                  {label}
+                </option>
+              )
+            )}
+
+          </select>
+
+          <div className="nutrition-input-grid">
+
+            <input
+              type="number"
+              min="0"
+              value={
+                calories
+              }
+              onChange={(
+                event
+              ) =>
+                setCalories(
+                  event.target.value
+                )
+              }
+              placeholder="Calories"
+            />
+
+            <input
+              type="number"
+              min="0"
+              value={
+                protein
+              }
+              onChange={(
+                event
+              ) =>
+                setProtein(
+                  event.target.value
+                )
+              }
+              placeholder="Protein g"
+            />
+
+            <input
+              type="number"
+              min="0"
+              value={
+                fat
+              }
+              onChange={(
+                event
+              ) =>
+                setFat(
+                  event.target.value
+                )
+              }
+              placeholder="Fat g"
+            />
+
+            <input
+              type="number"
+              min="0"
+              value={
+                carbs
+              }
+              onChange={(
+                event
+              ) =>
+                setCarbs(
+                  event.target.value
+                )
+              }
+              placeholder="Carbs g"
+            />
+
+          </div>
+
+          <button
+            type="button"
+            className="nutrition-add-button"
+            onClick={
+              handleAddFood
+            }
+          >
+            ADD FOOD
+          </button>
+
+        </div>
+
+      </section>
 
       {/* MEALS */}
 
@@ -386,147 +1504,395 @@ export default function Nutrition({
 
         <div className="nutrition-section-title">
 
+          <span>
+            TODAY'S MEALS
+          </span>
+
+          <span>
+            {day.meals.length}
+          </span>
+
+        </div>
+
+        <div className="nutrition-meals">
+
+          {day.meals.length === 0 && (
+            <div className="nutrition-empty">
+              No meals added yet.
+            </div>
+          )}
+
+          {day.meals.map(
+            (
+              item
+            ) => (
+              <FoodRow
+                key={
+                  item.id
+                }
+                item={
+                  item
+                }
+                onDelete={
+                  handleDelete
+                }
+              />
+            )
+          )}
+
+        </div>
+
+      </section>
+
+      {/* HISTORY */}
+
+      <section className="nutrition-section">
+
+        <div className="nutrition-section-title">
+
+          <span>
+            7 DAY HISTORY
+          </span>
+
+          <span>
+            AVERAGE
+          </span>
+
+        </div>
+
+        <div className="nutrition-history">
+
+          {history.map(
+            (
+              historyDay
+            ) => (
+              <HistoryRow
+                key={
+                  historyDay.date
+                }
+                day={
+                  historyDay
+                }
+                targetCalories={
+                  plan.calories
+                }
+                onSelect={() =>
+                  selectHistoryDay(
+                    historyDay
+                  )
+                }
+              />
+            )
+          )}
+
+        </div>
+
+        <div className="nutrition-history-average">
+
           <div>
+
             <span>
-              СЬОГОДНІ
+              AVG CALORIES
             </span>
 
-            <h2>
-              Прийоми їжі
-            </h2>
+            <strong>
+              {
+                historyStats.calories
+              }
+            </strong>
+
           </div>
-
-          <strong>
-            {completedMeals.length}/
-            {meals.length}
-          </strong>
-
-        </div>
-
-
-        <div className="meal-list">
-
-          {meals.map((meal) => {
-
-            const completed =
-              completedMeals.includes(
-                meal.id
-              );
-
-            return (
-              <button
-                type="button"
-                key={meal.id}
-                className={`meal-card ${
-                  completed
-                    ? "meal-completed"
-                    : ""
-                }`}
-                onClick={() =>
-                  toggleMeal(meal.id)
-                }
-              >
-
-                <div className="meal-icon">
-                  {completed
-                    ? "✓"
-                    : meal.icon}
-                </div>
-
-                <div className="meal-info">
-
-                  <strong>
-                    {meal.name}
-                  </strong>
-
-                  <p>
-                    {meal.description}
-                  </p>
-
-                  <small>
-                    {meal.calories} kcal •{" "}
-                    {meal.protein} г білка
-                  </small>
-
-                </div>
-
-                <span>
-                  {completed
-                    ? "ГОТОВО"
-                    : "ВИКОНАТИ"}
-                </span>
-
-              </button>
-            );
-          })}
-
-        </div>
-
-      </section>
-
-
-      {/* DAILY RESULT */}
-
-      {completedMeals.length ===
-        meals.length && (
-
-        <section className="nutrition-success">
 
           <div>
-            🏆
+
+            <span>
+              AVG PROTEIN
+            </span>
+
+            <strong>
+              {
+                historyStats.protein
+              }g
+            </strong>
+
           </div>
 
-          <strong>
-            ХАРЧУВАННЯ ВИКОНАНО
-          </strong>
+          <div>
 
-          <p>
-            Ти виконав усі заплановані
-            прийоми їжі сьогодні.
-          </p>
+            <span>
+              AVG WATER
+            </span>
 
-        </section>
+            <strong>
+              {
+                historyStats.water
+              } ml
+            </strong>
 
-      )}
-
-
-      {/* RULE */}
-
-      <section className="nutrition-rule">
-
-        <div className="nutrition-rule-icon">
-          ⚔️
-        </div>
-
-        <div>
-
-          <strong>
-            ПРАВИЛО IRONAGE
-          </strong>
-
-          <p>
-            Не шукай ідеальну дієту.
-            Створи харчування, якого
-            зможеш дотримуватися щодня.
-          </p>
+          </div>
 
         </div>
 
       </section>
 
+    </main>
+  );
+}
 
-      {/* AI BUTTON */}
+/* =========================================================
+   MACRO CARD
+========================================================= */
+
+function MacroCard({
+  label,
+  current,
+  target,
+  unit,
+  progress,
+}: {
+  label: string;
+  current: number;
+  target: number;
+  unit: string;
+  progress: number;
+}) {
+  return (
+    <div className="nutrition-macro-card">
+
+      <span>
+        {label}
+      </span>
+
+      <strong>
+        {current}
+
+        <small>
+          / {target}
+          {unit}
+        </small>
+      </strong>
+
+      <div className="nutrition-macro-bar">
+
+        <div
+          style={{
+            width:
+              `${progress}%`,
+          }}
+        />
+
+      </div>
+
+    </div>
+  );
+}
+
+/* =========================================================
+   FOOD ROW
+========================================================= */
+
+function FoodRow({
+  item,
+  onDelete,
+}: {
+  item: FoodEntry;
+  onDelete: (
+    id: number
+  ) => void;
+}) {
+  return (
+    <article className="nutrition-food-row">
+
+      <div>
+
+        <strong>
+          {item.name}
+        </strong>
+
+        <span>
+          {
+            MEAL_LABELS[
+              item.meal
+            ]
+          }
+        </span>
+
+      </div>
+
+      <div className="nutrition-food-values">
+
+        <strong>
+          {Math.round(
+            item.calories
+          )}
+
+          <small>
+            {" "}
+            kcal
+          </small>
+        </strong>
+
+        <span>
+          P {Math.round(
+            item.protein
+          )}g
+        </span>
+
+        <span>
+          C {Math.round(
+            item.carbs
+          )}g
+        </span>
+
+        <span>
+          F {Math.round(
+            item.fat
+          )}g
+        </span>
+
+      </div>
 
       <button
         type="button"
-        className="nutrition-ai-button"
+        className="nutrition-delete"
         onClick={() =>
-          changeTab("ai")
+          onDelete(
+            item.id
+          )
+        }
+        aria-label={
+          `Delete ${item.name}`
         }
       >
-        ⚡ ЗАПИТАТИ AI TRAINER
+        ×
       </button>
 
-    </div>
+    </article>
+  );
+}
+
+/* =========================================================
+   HISTORY ROW
+========================================================= */
+
+function HistoryRow({
+  day,
+  targetCalories,
+  onSelect,
+}: {
+  day: NutritionDay;
+  targetCalories: number;
+  onSelect: () => void;
+}) {
+  const calories =
+    day.meals.reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        item.calories,
+      0
+    );
+
+  const protein =
+    day.meals.reduce(
+      (
+        total,
+        item
+      ) =>
+        total +
+        item.protein,
+      0
+    );
+
+  const adherence =
+    calculateNutritionAdherence(
+      calories,
+      targetCalories
+    );
+
+  const [
+    year,
+    month,
+    date,
+  ] =
+    day.date
+      .split("-")
+      .map(Number);
+
+  const parsedDate =
+    new Date(
+      year,
+      month - 1,
+      date
+    );
+
+  return (
+    <button
+      type="button"
+      className="nutrition-history-row"
+      onClick={
+        onSelect
+      }
+    >
+
+      <div>
+
+        <strong>
+          {getDayLabel(
+            parsedDate
+          )}
+        </strong>
+
+        <span>
+          {formatDate(
+            parsedDate
+          )}
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          {Math.round(
+            calories
+          )}
+        </strong>
+
+        <span>
+          kcal
+        </span>
+
+      </div>
+
+      <div>
+
+        <strong>
+          {Math.round(
+            protein
+          )}g
+        </strong>
+
+        <span>
+          protein
+        </span>
+
+      </div>
+
+      <div className="nutrition-history-adherence">
+
+        <strong>
+          {adherence}%
+        </strong>
+
+        <span>
+          target
+        </span>
+
+      </div>
+
+    </button>
   );
 }

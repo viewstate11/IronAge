@@ -1,94 +1,103 @@
-import { useState } from "react";
-
-import { useUser } from "../../../context/UserContext";
-
-import "../Onboarding.css";
-
-
-interface Props {
+type Props = {
+  value: number;
+  onChange: (value: number) => void;
   next: () => void;
-}
+};
 
-
-export default function HeightStep({ next }: Props) {
-
-  const { setUser } = useUser();
-
-  const [height, setHeight] = useState("");
-
-
-  const handleNext = () => {
-
-    const value = Number(height);
-
-    if (!value || value < 120 || value > 230) {
-      return;
-    }
-
-
-    localStorage.setItem(
-      "height",
-      String(value)
-    );
-
-
-    setUser((prev) => ({
-      ...prev,
-      height: value,
-    }));
-
-
-    next();
-
+export default function HeightStep({
+  value,
+  onChange,
+  next,
+}: Props) {
+  const decrease = () => {
+    onChange(Math.max(120, value - 1));
   };
 
+  const increase = () => {
+    onChange(Math.min(230, value + 1));
+  };
 
   return (
+    <section className="onboarding-step">
 
-    <div className="step">
+      <div className="onboarding-step-content">
 
-      <h1>
-        Який у тебе зріст?
-      </h1>
+        <div className="onboarding-eyebrow">
+          BODY METRICS
+        </div>
 
+        <h1 className="onboarding-title">
+          HOW
+          <strong>TALL ARE YOU?</strong>
+        </h1>
 
-      <p>
-        Вкажи свій зріст у сантиметрах
-      </p>
+        <p className="onboarding-description">
+          Your height helps us calculate your
+          ideal training and nutrition targets.
+        </p>
 
+        <div className="height-selector">
 
-      <input
-        className="input"
-        type="number"
-        min="120"
-        max="230"
-        placeholder="Наприклад: 180"
-        value={height}
-        onChange={(e) =>
-          setHeight(e.target.value)
-        }
-      />
+          <button
+            type="button"
+            className="height-control"
+            onClick={decrease}
+            aria-label="Decrease height"
+          >
+            −
+          </button>
 
+          <div className="height-value">
+            <strong>{value}</strong>
+            <span>CM</span>
+          </div>
 
-      <span className="unit">
-        см
-      </span>
+          <button
+            type="button"
+            className="height-control"
+            onClick={increase}
+            aria-label="Increase height"
+          >
+            +
+          </button>
 
+        </div>
 
-      <button
-        className="button"
-        disabled={
-          !height ||
-          Number(height) < 120 ||
-          Number(height) > 230
-        }
-        onClick={handleNext}
-      >
-        ДАЛІ
-      </button>
+        <div className="height-scale">
+          <span>120</span>
 
-    </div>
+          <div className="height-scale-line">
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
 
+          <span>230</span>
+        </div>
+
+      </div>
+
+      <div className="onboarding-step-bottom">
+
+        <button
+          type="button"
+          className="onboarding-button"
+          onClick={next}
+        >
+          <span>CONTINUE</span>
+          <strong>→</strong>
+        </button>
+
+        <div className="onboarding-footer">
+          IRONAGE ATHLETE SYSTEM
+        </div>
+
+      </div>
+
+    </section>
   );
-
 }

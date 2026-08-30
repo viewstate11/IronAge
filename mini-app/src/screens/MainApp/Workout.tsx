@@ -1,232 +1,391 @@
+import { useMemo } from "react";
+
+import { useUser } from "../../context/UserContext";
+
+import {
+  workoutPrograms,
+} from "../../services/workoutService";
+
 import "./Workout.css";
 
-import { getWorkoutProgram } from "../../services/workoutService";
+import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
 type Props = {
-  changeTab: (tab: string) => void;
-  startWorkout?: (workoutId: string) => void;
+  changeTab: (nextTab: string) => void;
+  startWorkout: (workoutId: string) => void;
 };
 
-const workouts = [
+/* =========================================================
+   WORKOUT PRESENTATION DATA
+========================================================= */
+
+const workoutMeta: Record<
+  string,
   {
-    id: "upper",
-    emoji: "💪",
-    title: "Верх тіла",
-    subtitle: "Груди • Спина • Плечі • Руки",
+    meta: string;
+    description: string;
+  }
+> = {
+  upper: {
+    meta: "TODAY / 45 MIN",
+    description:
+      "Chest • Shoulders • Arms",
   },
-  {
-    id: "legs",
-    emoji: "🦵",
-    title: "Ноги",
-    subtitle: "Квадрицепс • Сідниці • Ікри",
+
+  lower: {
+    meta: "48 MIN",
+    description:
+      "Legs • Glutes • Core",
   },
-  {
-    id: "abs",
-    emoji: "🔥",
-    title: "Прес",
-    subtitle: "Кор • Прес • Стабілізація",
+
+  full: {
+    meta: "52 MIN",
+    description:
+      "Strength • Power • Conditioning",
   },
-  {
-    id: "cardio",
-    emoji: "🏃",
-    title: "Кардіо",
-    subtitle: "Витривалість • Спалювання калорій",
-  },
-];
+};
+
+/* =========================================================
+   COMPONENT
+========================================================= */
 
 export default function Workout({
-  changeTab,
   startWorkout,
 }: Props) {
-  const handleStartWorkout = (workoutId: string) => {
-    if (startWorkout) {
-      startWorkout(workoutId);
-      return;
-    }
+  const { user } = useUser();
 
-    changeTab("session");
-  };
+  /* =======================================================
+     WORKOUT LIST
+  ======================================================= */
+
+  const workouts = useMemo(() => {
+    return workoutPrograms.map(
+      (workout, index) => {
+        const presentation =
+          workoutMeta[workout.id];
+
+        return {
+          ...workout,
+
+          number: String(
+            index + 1
+          ).padStart(2, "0"),
+
+          meta:
+            presentation?.meta ??
+            "WORKOUT",
+
+          description:
+            presentation?.description ??
+            "Strength • Conditioning",
+
+          active:
+            index === 0,
+        };
+      }
+    );
+  }, []);
+
+  /* =======================================================
+     COMPLETED WORKOUTS
+  ======================================================= */
+
+  const completedWorkouts =
+    user.history.length;
+
+  /* =======================================================
+     WEEKLY PROGRESS
+  ======================================================= */
+
+  const weeklyProgress = useMemo(() => {
+    const now = new Date();
+
+    const currentDay =
+      now.getDay() === 0
+        ? 6
+        : now.getDay() - 1;
+
+    const monday =
+      new Date(now);
+
+    monday.setDate(
+      now.getDate() -
+        currentDay
+    );
+
+    monday.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    return user.history.filter(
+      (workout) => {
+        const workoutDate =
+          new Date(
+            workout.date
+          );
+
+        return (
+          !Number.isNaN(
+            workoutDate.getTime()
+          ) &&
+          workoutDate >= monday
+        );
+      }
+    ).length;
+  }, [user.history]);
+
+  /* =======================================================
+     WEEKLY TARGET
+  ======================================================= */
+
+  const weeklyTarget = 4;
+
+  /* =======================================================
+     PROGRESS
+  ======================================================= */
+
+  const progress =
+    Math.min(
+      100,
+      Math.round(
+        (weeklyProgress /
+          weeklyTarget) *
+          100
+      )
+    );
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
-    <div className="workout-screen">
+    <main className="workout-page">
 
-      {/* HEADER */}
+      {/* =================================================
+          HERO
+      ================================================= */}
 
-      <header className="workout-header">
+      <section className="workout-hero">
 
-        <div>
-          <p className="workout-label">
-            IRONAGE PROGRAM
-          </p>
+        <img
+          src={vasylPhoto}
+          alt="IRONAGE athlete"
+          className="workout-hero-image"
+        />
 
-          <h1>
-            Тренування
-          </h1>
+        <div className="workout-hero-overlay" />
 
-          <p>
-            Обери тренування та починай роботу.
-          </p>
-        </div>
+        <div className="workout-hero-content">
 
-      </header>
+          <div className="workout-top">
 
+            <div>
 
-      {/* TODAY */}
+              <span className="workout-eyebrow">
+                IRONAGE PROGRAM
+              </span>
 
-      <section className="workout-today">
+              <h1>
+                YOUR
+                <br />
+                <span>
+                  WORKOUTS.
+                </span>
+              </h1>
 
-        <div className="section-heading">
+            </div>
 
-          <div>
-            <p>
-              СЬОГОДНІ
-            </p>
+            <span className="workout-counter">
+              {String(
+                workouts.length
+              ).padStart(2, "0")}{" "}
+              / 12
+            </span>
 
-            <h2>
-              Рекомендовано для тебе
-            </h2>
           </div>
 
-          <span>
-            ⚔️
+          <div className="workout-hero-bottom">
+
+            <div className="workout-status">
+
+              <span className="workout-status-dot" />
+
+              SYSTEM ACTIVE
+
+            </div>
+
+            <p className="workout-intro">
+              Train with purpose.
+              <br />
+              Build something stronger.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =================================================
+          PROGRAM
+      ================================================= */}
+
+      <section className="workout-program">
+
+        <div className="workout-section-heading">
+
+          <div>
+
+            <span className="workout-heading-label">
+              THIS WEEK
+            </span>
+
+            <h2>
+              Training Program
+            </h2>
+
+          </div>
+
+          <span className="workout-week">
+            WEEK 01
           </span>
 
         </div>
 
+        <div className="workout-list">
 
-        <div className="featured-workout">
-
-          <div className="featured-icon">
-            💪
-          </div>
-
-          <div className="featured-content">
-
-            <span>
-              IRONAGE PROGRAM
-            </span>
-
-            <h3>
-              Верх тіла
-            </h3>
-
-            <p>
-              Сила та м'язова витривалість
-            </p>
-
-            <small>
-              20 хв • 4 вправи
-            </small>
-
-          </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              handleStartWorkout("upper")
-            }
-          >
-            ▶
-          </button>
-
-        </div>
-
-      </section>
-
-
-      {/* ALL WORKOUTS */}
-
-      <section className="workout-list">
-
-        <div className="section-heading">
-
-          <div>
-            <p>
-              IRONAGE
-            </p>
-
-            <h2>
-              Всі тренування
-            </h2>
-          </div>
-
-        </div>
-
-
-        <div className="workout-grid">
-
-          {workouts.map((workout) => {
-
-            const program =
-              getWorkoutProgram(workout.id);
-
-            return (
+          {workouts.map(
+            (workout) => (
               <button
-                type="button"
-                className="workout-card"
                 key={workout.id}
+                type="button"
+                className={`workout-card ${
+                  workout.active
+                    ? "workout-card-active"
+                    : ""
+                }`}
                 onClick={() =>
-                  handleStartWorkout(workout.id)
+                  startWorkout(
+                    workout.id
+                  )
                 }
               >
 
-                <span className="workout-card-icon">
-                  {workout.emoji}
-                </span>
+                <div className="workout-card-number">
+                  {workout.number}
+                </div>
 
-                <div className="workout-card-content">
-
-                  <strong>
-                    {workout.title}
-                  </strong>
-
-                  <small>
-                    {workout.subtitle}
-                  </small>
+                <div className="workout-card-info">
 
                   <span>
-                    {program.duration} хв •{" "}
-                    {program.exercises.length} вправ
+                    {workout.meta}
                   </span>
+
+                  <h3>
+                    {workout.title}
+                  </h3>
+
+                  <p>
+                    {workout.description}
+                  </p>
 
                 </div>
 
-                <span className="workout-arrow">
+                <div className="workout-card-arrow">
                   →
-                </span>
+                </div>
 
               </button>
-            );
-          })}
+            )
+          )}
 
         </div>
 
       </section>
 
+      {/* =================================================
+          WEEKLY PROGRESS
+      ================================================= */}
 
-      {/* MOTIVATION */}
+      <section className="workout-progress">
 
-      <section className="workout-motivation">
+        <div className="workout-progress-header">
 
-        <span>
-          ⚔️
-        </span>
-
-        <div>
+          <span>
+            WEEKLY PROGRESS
+          </span>
 
           <strong>
-            ПРАВИЛО IRONAGE
+            {weeklyProgress} /{" "}
+            {weeklyTarget}
           </strong>
 
-          <p>
-            Не шукай ідеальний момент.
-            Почни зараз.
-          </p>
+        </div>
+
+        <div className="workout-progress-bar">
+
+          <div
+            className="workout-progress-fill"
+            style={{
+              width: `${Math.max(
+                progress,
+                weeklyProgress > 0
+                  ? 3
+                  : 0
+              )}%`,
+            }}
+          />
+
+        </div>
+
+        <div className="workout-progress-footer">
+
+          <span>
+            {completedWorkouts === 0
+              ? "START YOUR JOURNEY"
+              : `${completedWorkouts} WORKOUT${
+                  completedWorkouts === 1
+                    ? ""
+                    : "S"
+                } COMPLETED`}
+          </span>
+
+          <span>
+            {progress}%
+          </span>
 
         </div>
 
       </section>
 
-    </div>
+      {/* =================================================
+          QUOTE
+      ================================================= */}
+
+      <section className="workout-quote">
+
+        <span>
+          IRONAGE / MINDSET
+        </span>
+
+        <h2>
+          NO
+          <strong>
+            EXCUSES.
+          </strong>
+        </h2>
+
+        <p>
+          Discipline creates the
+          version of you that others
+          cannot stop.
+        </p>
+
+      </section>
+
+    </main>
   );
 }

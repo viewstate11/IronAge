@@ -1,0 +1,246 @@
+/* =========================================
+   IRONAGE — SCREEN PRIMITIVES
+========================================= */
+
+.screen {
+  position: relative;
+
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  padding:
+    max(24px, env(safe-area-inset-top))
+    var(--page-padding-x)
+    var(--page-padding-bottom);
+
+  overflow-x: hidden;
+
+  background: var(--ia-black);
+  color: var(--ia-white);
+}
+
+/* =========================================
+   SCREEN HEADER
+========================================= */
+
+.screen-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: var(--space-4);
+}
+
+.screen-header span:first-child {
+  display: block;
+
+  color: var(--ia-gold);
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.2em;
+}
+
+.screen-header h1 {
+  margin-top: 7px;
+
+  color: var(--ia-white);
+
+  font-size: 32px;
+  font-weight: 800;
+
+  line-height: 1;
+
+  letter-spacing: -0.05em;
+}
+
+.screen-index {
+  color: var(--ia-white-40);
+
+  font-family: var(--font-display);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.screen-description {
+  margin-bottom: 28px;
+
+  color: var(--ia-white-40);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+/* =========================================
+   COMMON CONTAINER
+========================================= */
+
+.screen-container {
+  width: 100%;
+  max-width: var(--content-max-width);
+
+  margin: 0 auto;
+}
+
+/* =========================================
+   GOLD EYEBROW
+========================================= */
+
+.ia-eyebrow {
+  color: var(--ia-gold);
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 0.22em;
+}
+
+/* =========================================
+   GOLD DIVIDER
+========================================= */
+
+.ia-divider {
+  width: 100%;
+  height: 1px;
+
+  background: var(--ia-gold-border-soft);
+}
+
+/* =========================================
+   COMMON CARD
+========================================= */
+
+.ia-card {
+  border: 1px solid var(--ia-border);
+
+  border-radius: var(--radius-md);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.025),
+      rgba(255, 255, 255, 0.01)
+    );
+
+  box-shadow: var(--shadow-card);
+}
+
+/* =========================================
+   GOLD CARD
+========================================= */
+
+.ia-card-gold {
+  border-color: var(--ia-gold-border);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.10),
+      rgba(5, 5, 5, 0.85)
+    );
+}
+
+/* =========================================
+   GOLD BUTTON
+========================================= */
+
+.ia-button-gold {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 52px;
+
+  padding:
+    0 var(--space-5);
+
+  border: 1px solid var(--ia-gold);
+
+  border-radius: var(--radius-md);
+
+  background: var(--ia-gold);
+
+  color: var(--ia-black);
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.15em;
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.ia-button-gold:active {
+  transform: scale(0.985);
+}
+
+.ia-button-gold:hover {
+  box-shadow: var(--shadow-gold);
+}
+
+/* =========================================
+   GHOST BUTTON
+========================================= */
+
+.ia-button-ghost {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+
+  padding:
+    0 var(--space-5);
+
+  border: 1px solid var(--ia-border-strong);
+
+  border-radius: var(--radius-md);
+
+  background: transparent;
+
+  color: var(--ia-white-60);
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.14em;
+
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.ia-button-ghost:hover {
+  border-color: var(--ia-gold-border);
+
+  color: var(--ia-white);
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

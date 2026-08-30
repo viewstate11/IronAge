@@ -1,8 +1,18 @@
 import { useState } from "react";
 
-import uaImage from "../../assets/vasyl-ua.jpg";
-
 import "./Onboarding.css";
+
+import vasylPhoto from "../../assets/vasyl-ua.jpg";
+
+import {
+  useUser,
+  type ProfileData,
+} from "../../context/UserContext";
+
+import type {
+  Gender,
+  Goal,
+} from "../../types/user";
 
 import NameStep from "./steps/NameStep";
 import AgeStep from "./steps/AgeStep";
@@ -12,124 +22,638 @@ import WeightStep from "./steps/WeightStep";
 import GoalStep from "./steps/GoalStep";
 import FinishStep from "./steps/FinishStep";
 
+/* =========================================================
+   TYPE HELPERS
+========================================================= */
 
-type Props = {
-  finish: () => void;
-};
+/*
+ * Gender у types/user.ts використовує:
+ * MALE | FEMALE | OTHER
+ */
 
+function normalizeGender(
+  value: unknown
+): Gender {
+  if (
+    value === "MALE" ||
+    value === "male"
+  ) {
+    return "MALE";
+  }
 
-export default function Onboarding({
-  finish,
-}: Props) {
+  if (
+    value === "FEMALE" ||
+    value === "female"
+  ) {
+    return "FEMALE";
+  }
 
-  const [step, setStep] = useState(0);
+  return "OTHER";
+}
 
+/*
+ * Goal:
+ *
+ * Тут ми НЕ вигадуємо значення Goal.
+ *
+ * Якщо значення вже є string,
+ * перевіряємо його через список значень,
+ * які реально використовуються в application.
+ *
+ * Fallback — перше безпечне значення
+ * через cast, щоб не ламати API.
+ */
+
+function normalizeGoal(
+  value: unknown
+): Goal {
+  if (typeof value !== "string") {
+    return "MUSCLE";
+  }
+
+  const normalized = value.toUpperCase();
+
+  switch (normalized) {
+    case "MUSCLE":
+    case "BUILD_MUSCLE":
+      return "MUSCLE";
+
+    case "LOSE_WEIGHT":
+    case "FAT":
+    case "LOSE_FAT":
+      return "LOSE_WEIGHT";
+
+    case "MAINTAIN":
+      return "MAINTAIN";
+
+    case "ENDURANCE":
+      return "ENDURANCE";
+
+    case "STRENGTH":
+    case "GET_STRONGER":
+      return "STRENGTH";
+
+    case "FITNESS":
+    case "IMPROVE_FITNESS":
+      return "FITNESS";
+
+    default:
+      return "MUSCLE";
+  }
+}
+
+/* =========================================================
+   COMPONENT
+========================================================= */
+
+export default function Onboarding() {
+  const {
+    user,
+    completeOnboarding,
+  } = useUser();
+
+  const [step, setStep] =
+    useState<number>(0);
+
+  const [saving, setSaving] =
+    useState<boolean>(false);
+
+  const [error, setError] =
+    useState<string>("");
+
+  /* =======================================================
+     PROFILE STATE
+  ======================================================= */
+
+  const [profile, setProfile] =
+    useState<ProfileData>({
+      name:
+        user.name ||
+        user.firstName ||
+        "",
+
+      age:
+        typeof user.age === "number"
+          ? user.age
+          : 0,
+
+      gender:
+        normalizeGender(
+          user.gender
+        ),
+
+      height:
+        typeof user.height === "number"
+          ? user.height
+          : 180,
+
+      weight:
+        typeof user.weight === "number"
+          ? user.weight
+          : 80,
+
+      goal:
+        normalizeGoal(
+          user.goal
+        ),
+    });
+
+  /* =======================================================
+     NEXT
+  ======================================================= */
+
+  const next = (): void => {
+    setError("");
+
+    setStep(
+      (current) =>
+        Math.min(
+          current + 1,
+          6
+        )
+    );
+  };
+
+  /* =======================================================
+     PREVIOUS
+  ======================================================= */
+
+  const previous = (): void => {
+    setError("");
+
+    setStep(
+      (current) =>
+        Math.max(
+          current - 1,
+          0
+        )
+    );
+  };
+
+  /* =======================================================
+     UPDATE PROFILE
+  ======================================================= */
+
+  const updateProfile = <
+    K extends keyof ProfileData
+  >(
+    key: K,
+    value: ProfileData[K]
+  ): void => {
+    setProfile(
+      (current) => ({
+        ...current,
+        [key]: value,
+      })
+    );
+
+    setError("");
+  };
+
+  /* =======================================================
+     UPDATE GENDER
+  ======================================================= */
+
+  const updateGender = (
+    value: string
+  ): void => {
+    updateProfile(
+      "gender",
+      normalizeGender(value)
+    );
+  };
+
+  /* =======================================================
+     UPDATE GOAL
+  ======================================================= */
+
+  const updateGoal = (
+    value: string
+  ): void => {
+    updateProfile(
+      "goal",
+      normalizeGoal(value)
+    );
+  };
+
+  /* =======================================================
+     FINISH ONBOARDING
+  ======================================================= */
+
+  const finishOnboarding =
+    async (): Promise<void> => {
+      if (saving) {
+        return;
+      }
+
+      setError("");
+
+      /* -----------------------------------------------
+         NAME
+      ------------------------------------------------ */
+
+      if (
+        !profile.name.trim()
+      ) {
+        setError(
+          "Введи своє ім'я"
+        );
+
+        setStep(0);
+
+        return;
+      }
+
+      /* -----------------------------------------------
+         AGE
+      ------------------------------------------------ */
+
+      if (
+        !profile.age ||
+        profile.age < 13 ||
+        profile.age > 100
+      ) {
+        setError(
+          "Вкажи коректний вік"
+        );
+
+        setStep(1);
+
+        return;
+      }
+
+      /* -----------------------------------------------
+         GENDER
+      ------------------------------------------------ */
+
+      if (
+        !profile.gender
+      ) {
+        setError(
+          "Обери стать"
+        );
+
+        setStep(2);
+
+        return;
+      }
+
+      /* -----------------------------------------------
+         HEIGHT
+      ------------------------------------------------ */
+
+      if (
+        !profile.height ||
+        profile.height < 100 ||
+        profile.height > 250
+      ) {
+        setError(
+          "Вкажи коректний зріст"
+        );
+
+        setStep(3);
+
+        return;
+      }
+
+      /* -----------------------------------------------
+         WEIGHT
+      ------------------------------------------------ */
+
+      if (
+        !profile.weight ||
+        profile.weight < 30 ||
+        profile.weight > 300
+      ) {
+        setError(
+          "Вкажи коректну вагу"
+        );
+
+        setStep(4);
+
+        return;
+      }
+
+      /* -----------------------------------------------
+         GOAL
+      ------------------------------------------------ */
+
+      if (
+        !profile.goal
+      ) {
+        setError(
+          "Обери свою ціль"
+        );
+
+        setStep(5);
+
+        return;
+      }
+
+      /* -----------------------------------------------
+         SAVE
+      ------------------------------------------------ */
+
+      setSaving(true);
+
+      try {
+        const savedUser =
+          await completeOnboarding(
+            profile
+          );
+
+      } catch (err) {
+        console.error(
+          "IRONAGE: Onboarding error",
+          err
+        );
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Не вдалося зберегти профіль"
+        );
+      } finally {
+        setSaving(false);
+      }
+    };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
+    <main className="onboarding">
 
-    <div
-      className="onboarding"
+      <img
+        src={vasylPhoto}
+        alt=""
+        aria-hidden="true"
+        className="onboarding-photo"
+      />
 
-      style={{
-        backgroundImage: `
-          linear-gradient(
-            rgba(5,5,5,0.70),
-            rgba(5,5,5,0.92)
-          ),
-          url(${uaImage})
-        `,
-      }}
-    >
+      <div
+        className="onboarding-overlay"
+      />
 
-      {/* PROGRESS */}
+      <div
+        className="onboarding-vignette"
+      />
 
-      <div className="onboarding-progress">
+      <div className="onboarding-content">
 
-        <span>
-          {step + 1} / 7
-        </span>
+        <header
+          className="onboarding-header"
+        >
+
+          <div className="onboarding-logo">
+            IRON
+            <span>AGE</span>
+          </div>
+
+          <div className="onboarding-counter">
+
+            <span>
+              {String(
+                step + 1
+              ).padStart(
+                2,
+                "0"
+              )}
+            </span>
+
+            <i>/</i>
+
+            07
+
+          </div>
+
+        </header>
+
+        <div className="onboarding-progress">
+
+          <div
+            className="onboarding-progress-fill"
+            style={{
+              width:
+                `${((step + 1) / 7) * 100}%`,
+            }}
+          />
+
+        </div>
+
+        {error && (
+          <div
+            role="alert"
+            style={{
+              marginTop:
+                "16px",
+
+              padding:
+                "14px 16px",
+
+              border:
+                "1px solid rgba(255, 80, 80, 0.45)",
+
+              borderRadius:
+                "10px",
+
+              background:
+                "rgba(255, 50, 50, 0.08)",
+
+              color:
+                "#ff7777",
+
+              fontSize:
+                "14px",
+
+              lineHeight:
+                1.4,
+            }}
+          >
+            {error}
+          </div>
+        )}
+
+        <div className="onboarding-body">
+
+          {step === 0 && (
+            <NameStep
+              value={
+                profile.name
+              }
+              onChange={(
+                value
+              ) =>
+                updateProfile(
+                  "name",
+                  value
+                )
+              }
+              next={next}
+            />
+          )}
+
+          {step === 1 && (
+            <AgeStep
+              value={
+                profile.age
+              }
+              onChange={(
+                value
+              ) =>
+                updateProfile(
+                  "age",
+                  value
+                )
+              }
+              next={next}
+            />
+          )}
+
+          {step === 2 && (
+            <GenderStep
+              value={
+                profile.gender
+              }
+              onChange={(
+                value
+              ) =>
+                updateGender(
+                  value
+                )
+              }
+              next={next}
+            />
+          )}
+
+          {step === 3 && (
+            <HeightStep
+              value={
+                profile.height
+              }
+              onChange={(
+                value
+              ) =>
+                updateProfile(
+                  "height",
+                  value
+                )
+              }
+              next={next}
+            />
+          )}
+
+          {step === 4 && (
+            <WeightStep
+              value={
+                profile.weight
+              }
+              onChange={(
+                value
+              ) =>
+                updateProfile(
+                  "weight",
+                  value
+                )
+              }
+              next={next}
+            />
+          )}
+
+          {step === 5 && (
+            <GoalStep
+              value={
+                profile.goal
+              }
+              onChange={(
+                value
+              ) =>
+                updateGoal(
+                  value
+                )
+              }
+              next={next}
+            />
+          )}
+
+          {step === 6 && (
+            <FinishStep
+              finish={
+                finishOnboarding
+              }
+            />
+          )}
+
+        </div>
+
+        {saving && (
+          <div
+            role="status"
+            aria-live="polite"
+            style={{
+              textAlign:
+                "center",
+
+              marginTop:
+                "16px",
+
+              fontSize:
+                "14px",
+
+              color:
+                "#D4AF37",
+
+              opacity:
+                0.9,
+            }}
+          >
+            ЗБЕРІГАЄМО ПРОФІЛЬ...
+          </div>
+        )}
+
+        {step > 0 &&
+          !saving && (
+            <button
+              type="button"
+              onClick={
+                previous
+              }
+              style={{
+                marginTop:
+                  "16px",
+
+                width:
+                  "100%",
+
+                background:
+                  "transparent",
+
+                border:
+                  "1px solid rgba(212, 175, 55, 0.25)",
+
+                color:
+                  "rgba(255,255,255,0.7)",
+
+                borderRadius:
+                  "10px",
+
+                padding:
+                  "12px 16px",
+
+                cursor:
+                  "pointer",
+
+                fontSize:
+                  "14px",
+              }}
+            >
+              НАЗАД
+            </button>
+          )}
 
       </div>
 
-
-      {/* NAME */}
-
-      {step === 0 && (
-
-        <NameStep
-          next={() => setStep(1)}
-        />
-
-      )}
-
-
-      {/* AGE */}
-
-      {step === 1 && (
-
-        <AgeStep
-          next={() => setStep(2)}
-        />
-
-      )}
-
-
-      {/* GENDER */}
-
-      {step === 2 && (
-
-        <GenderStep
-          next={() => setStep(3)}
-        />
-
-      )}
-
-
-      {/* HEIGHT */}
-
-      {step === 3 && (
-
-        <HeightStep
-          next={() => setStep(4)}
-        />
-
-      )}
-
-
-      {/* WEIGHT */}
-
-      {step === 4 && (
-
-        <WeightStep
-          next={() => setStep(5)}
-        />
-
-      )}
-
-
-      {/* GOAL */}
-
-      {step === 5 && (
-
-        <GoalStep
-          next={() => setStep(6)}
-        />
-
-      )}
-
-
-      {/* FINISH */}
-
-      {step === 6 && (
-
-        <FinishStep
-          finish={finish}
-        />
-
-      )}
-
-    </div>
-
+    </main>
   );
-
 }

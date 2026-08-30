@@ -1,25 +1,15 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+
+import { useUser } from "../../context/UserContext";
 
 import "./Dashboard.css";
 
-import { useUser } from "../../context/UserContext";
-import { getWorkoutProgram } from "../../services/workoutService";
+import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
 type Props = {
-  changeTab: (tab: string) => void;
-  startWorkout?: (workoutId: string) => void;
+  changeTab: (nextTab: string) => void;
+  startWorkout: (workoutId: string) => void;
 };
-
-type ActiveWorkout = {
-  workoutId: string;
-  exercise: number;
-  set: number;
-  startedAt: string;
-  updatedAt: string;
-};
-
-const ACTIVE_WORKOUT_KEY =
-  "ironage_active_workout";
 
 export default function Dashboard({
   changeTab,
@@ -27,583 +17,346 @@ export default function Dashboard({
 }: Props) {
   const { user } = useUser();
 
-  const [activeWorkout, setActiveWorkout] =
-    useState<ActiveWorkout | null>(null);
-
   /*
-   * --------------------------------------------------
-   * CHECK ACTIVE WORKOUT
-   * --------------------------------------------------
+   * USER
    */
 
-  useEffect(() => {
-    try {
-      const saved =
-        localStorage.getItem(
-          ACTIVE_WORKOUT_KEY
-        );
-
-      if (!saved) {
-        setActiveWorkout(null);
-        return;
-      }
-
-      const parsed =
-        JSON.parse(saved) as ActiveWorkout;
-
-      if (!parsed.workoutId) {
-        setActiveWorkout(null);
-        return;
-      }
-
-      setActiveWorkout(parsed);
-    } catch (error) {
-      console.error(
-        "IRONAGE active workout error:",
-        error
-      );
-
-      setActiveWorkout(null);
-    }
-  }, []);
+  const displayName =
+    user.name?.trim() || "ATHLETE";
 
   /*
-   * --------------------------------------------------
-   * TODAY WORKOUT
-   * --------------------------------------------------
-   */
-
-  const todayWorkout =
-    getWorkoutProgram("upper");
-
-  /*
-   * --------------------------------------------------
    * XP
-   * --------------------------------------------------
    */
 
-  const XP_PER_LEVEL = 1000;
+  const xpInLevel =
+    user.xp % 1000;
 
-  const currentLevelXP =
-    user.xp % XP_PER_LEVEL;
-
-  const xpProgress = Math.min(
-    (currentLevelXP / XP_PER_LEVEL) * 100,
-    100
-  );
+  const xpProgress =
+    (xpInLevel / 1000) * 100;
 
   /*
-   * --------------------------------------------------
-   * START WORKOUT
-   * --------------------------------------------------
+   * LAST WORKOUT
    */
 
-  const handleStartWorkout = () => {
-    if (startWorkout) {
-      startWorkout(todayWorkout.id);
-      return;
+  const lastWorkout = useMemo(() => {
+    if (!user.history.length) {
+      return null;
     }
 
-    changeTab("workout");
-  };
+    return user.history[0];
+  }, [user.history]);
 
   /*
-   * --------------------------------------------------
-   * RESUME WORKOUT
-   * --------------------------------------------------
+   * TODAY STATUS
    */
 
-  const handleResumeWorkout = () => {
-    if (!activeWorkout) {
-      return;
-    }
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0, 10);
 
-    if (startWorkout) {
-      startWorkout(
-        activeWorkout.workoutId
-      );
-
-      return;
-    }
-
-    changeTab("session");
-  };
-
-  /*
-   * --------------------------------------------------
-   * ACTIVE WORKOUT DATA
-   * --------------------------------------------------
-   */
-
-  let activeProgram = null;
-  let activeExercise = null;
-
-  if (activeWorkout) {
-    try {
-      activeProgram =
-        getWorkoutProgram(
-          activeWorkout.workoutId
-        );
-
-      activeExercise =
-        activeProgram.exercises[
-          activeWorkout.exercise
-        ];
-    } catch {
-      activeProgram = null;
-      activeExercise = null;
-    }
-  }
+  const trainedToday =
+    user.history.some((workout) =>
+      workout.date.startsWith(today)
+    );
 
   return (
-    <div className="dashboard">
+    <main className="dashboard">
 
-      {/* HEADER */}
+      {/* =================================
+          HERO
+      ================================= */}
 
-      <header className="dashboard-header">
+      <section className="dashboard-hero">
 
-        <div>
+        <img
+          src={vasylPhoto}
+          alt="IRONAGE athlete"
+          className="dashboard-hero-image"
+        />
 
-          <p className="dashboard-label">
-            IRONAGE
-          </p>
+        <div className="dashboard-hero-overlay" />
 
-          <h1>
-            Привіт,{" "}
-            <span>{user.name}</span> 👋
-          </h1>
+        <div className="dashboard-hero-content">
 
-          <p className="dashboard-subtitle">
-            Час ставати сильнішим.
-          </p>
+          {/* HEADER */}
 
-        </div>
+          <header className="dashboard-header">
 
-        <button
-          type="button"
-          className="dashboard-avatar"
-          onClick={() =>
-            changeTab("profile")
-          }
-          aria-label="Відкрити профіль"
-        >
-          {user.name
-            ? user.name
-                .charAt(0)
-                .toUpperCase()
-            : "V"}
-        </button>
+            <div>
 
-      </header>
+              <div className="dashboard-logo">
+                IRON<span>AGE</span>
+              </div>
+
+              <div className="dashboard-edition">
+                ATHLETE SYSTEM / 01
+              </div>
+
+            </div>
+
+            <button
+              className="dashboard-avatar"
+              onClick={() =>
+                changeTab("profile")
+              }
+              type="button"
+              aria-label="Open profile"
+            >
+              <img
+                src={vasylPhoto}
+                alt={displayName}
+              />
+            </button>
+
+          </header>
 
 
-      {/* LEVEL */}
+          {/* HERO COPY */}
 
-      <section className="level-card">
+          <div className="dashboard-hero-copy">
 
-        <div className="level-top">
-
-          <div>
-
-            <span className="level-caption">
-              ТВОЄ ЗВАННЯ
+            <span className="dashboard-eyebrow">
+              {trainedToday
+                ? "MISSION COMPLETE"
+                : "WELCOME BACK"}
             </span>
 
-            <strong>
-              ⚔️ IRON LVL {user.level}
-            </strong>
+            <h1>
+
+              {displayName.toUpperCase()}
+
+              <br />
+
+              <strong>
+                BUILD.
+              </strong>
+
+            </h1>
+
+            <p>
+              Discipline today.
+              <br />
+              Strength tomorrow.
+            </p>
 
           </div>
 
-          <span className="level-xp">
-            {currentLevelXP} /{" "}
-            {XP_PER_LEVEL} XP
-          </span>
+
+          {/* START */}
+
+          <button
+            className="dashboard-start"
+            type="button"
+            onClick={() =>
+              startWorkout("upper")
+            }
+          >
+
+            <span>
+              {trainedToday
+                ? "TRAIN AGAIN"
+                : "START TODAY'S WORKOUT"}
+            </span>
+
+            <strong>
+              →
+            </strong>
+
+          </button>
 
         </div>
-
-
-        <div className="xp-track">
-
-          <div
-            className="xp-fill"
-            style={{
-              width: `${xpProgress}%`,
-            }}
-          />
-
-        </div>
-
-
-        <p className="level-message">
-
-          {XP_PER_LEVEL -
-            currentLevelXP}{" "}
-          XP до наступного рівня
-
-        </p>
 
       </section>
 
 
-      {/* STATS */}
+      {/* =================================
+          USER STATS
+      ================================= */}
 
-      <section className="stats-grid">
+      <section className="dashboard-stats">
 
-        <div className="stat-card">
+        <div className="dashboard-stat">
 
-          <span className="stat-icon">
-            🔥
+          <span>
+            STREAK
           </span>
 
           <strong>
-            {user.streak}
+            {String(
+              user.streak
+            ).padStart(2, "0")}
           </strong>
 
-          <span>
-            Днів streak
-          </span>
+          <small>
+            DAYS
+          </small>
 
         </div>
 
 
-        <div className="stat-card">
+        <div className="dashboard-stat">
 
-          <span className="stat-icon">
-            💪
+          <span>
+            LEVEL
           </span>
 
           <strong>
-            {user.workouts}
+            {String(
+              user.level
+            ).padStart(2, "0")}
           </strong>
 
-          <span>
-            Тренувань
-          </span>
+          <small>
+            CURRENT
+          </small>
 
         </div>
 
 
-        <div className="stat-card">
-
-          <span className="stat-icon">
-            ⚡
-          </span>
-
-          <strong>
-            {user.xp}
-          </strong>
+        <div className="dashboard-stat">
 
           <span>
             XP
           </span>
 
+          <strong>
+            {user.xp.toLocaleString()}
+          </strong>
+
+          <small>
+            POINTS
+          </small>
+
         </div>
 
       </section>
 
 
-      {/* RESUME WORKOUT */}
+      {/* =================================
+          XP PROGRESS
+      ================================= */}
 
-      {activeProgram &&
-        activeExercise && (
-          <section className="resume-section">
+      <section className="dashboard-section">
 
-            <div className="section-heading">
-
-              <div>
-
-                <p>
-                  ТРЕНУВАННЯ НЕ ЗАВЕРШЕНО
-                </p>
-
-                <h2>
-                  Продовжити
-                </h2>
-
-              </div>
-
-              <span className="section-icon">
-                ⚔️
-              </span>
-
-            </div>
-
-
-            <div className="resume-card">
-
-              <div className="resume-icon">
-                💪
-              </div>
-
-
-              <div className="resume-info">
-
-                <span>
-                  IRONAGE PROGRAM
-                </span>
-
-                <h3>
-                  {activeProgram.name}
-                </h3>
-
-                <p>
-                  Вправа{" "}
-                  {activeWorkout!.exercise + 1}
-                  {" / "}
-                  {activeProgram.exercises.length}
-                </p>
-
-                <small>
-                  {activeExercise.name}
-                  {" • "}
-                  Підхід{" "}
-                  {activeWorkout!.set}
-                  {" / "}
-                  {activeExercise.sets}
-                </small>
-
-              </div>
-
-
-              <button
-                type="button"
-                className="resume-button"
-                onClick={
-                  handleResumeWorkout
-                }
-              >
-                →
-              </button>
-
-            </div>
-
-          </section>
-        )}
-
-
-      {/* TODAY WORKOUT */}
-
-      <section className="today-section">
-
-        <div className="section-heading">
+        <div className="dashboard-section-heading">
 
           <div>
 
-            <p>
-              СЬОГОДНІ
-            </p>
-
-            <h2>
-              Твоє тренування
-            </h2>
-
-          </div>
-
-          <span className="section-icon">
-            🔥
-          </span>
-
-        </div>
-
-
-        <div className="today-card">
-
-          <div className="today-icon">
-            💪
-          </div>
-
-
-          <div className="today-info">
-
-            <span className="today-label">
-              IRONAGE PROGRAM
+            <span>
+              ATHLETE LEVEL
             </span>
 
-            <h3>
-              {todayWorkout.name}
-            </h3>
-
-            <p>
-              {todayWorkout.duration} хв
-              {" • "}
-              {todayWorkout.exercises.length}
-              {" вправ"}
-            </p>
+            <h2>
+              Level {user.level}
+            </h2>
 
           </div>
 
-
-          <button
-            className="today-start"
-            onClick={
-              handleStartWorkout
-            }
-            type="button"
-            aria-label="Почати тренування"
+          <strong
+            style={{
+              color: "#D4AF37",
+              fontSize: "8px",
+              letterSpacing: "0.12em",
+            }}
           >
-            ▶
-          </button>
+            {xpInLevel} / 1000 XP
+          </strong>
+
+        </div>
+
+
+        <div
+          style={{
+            width: "100%",
+            height: "4px",
+            background:
+              "rgba(255,255,255,0.10)",
+            overflow: "hidden",
+          }}
+        >
+
+          <div
+            style={{
+              width: `${Math.max(
+                3,
+                xpProgress
+              )}%`,
+              height: "100%",
+              background: "#D4AF37",
+              boxShadow:
+                "0 0 14px rgba(212,175,55,0.65)",
+              transition:
+                "width 300ms ease",
+            }}
+          />
 
         </div>
 
       </section>
 
 
-      {/* QUICK ACTIONS */}
+      {/* =================================
+          TODAY'S MISSION
+      ================================= */}
 
-      <section className="quick-section">
+      <section className="dashboard-section">
 
-        <div className="section-heading">
+        <div className="dashboard-section-heading">
 
           <div>
 
-            <p>
-              ШВИДКИЙ ДОСТУП
-            </p>
+            <span>
+              YOUR PROGRAM
+            </span>
 
             <h2>
-              IRONAGE
+              Today's Mission
             </h2>
 
           </div>
 
-        </div>
-
-
-        <div className="quick-grid">
-
           <button
             type="button"
-            className="quick-card"
             onClick={() =>
               changeTab("workout")
             }
           >
-
-            <span>
-              🏋️
-            </span>
-
-            <strong>
-              Тренування
-            </strong>
-
-            <small>
-              Почати зараз
-            </small>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="quick-card"
-            onClick={() =>
-              changeTab("progress")
-            }
-          >
-
-            <span>
-              📈
-            </span>
-
-            <strong>
-              Прогрес
-            </strong>
-
-            <small>
-              Подивитися результати
-            </small>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="quick-card"
-            onClick={() =>
-              changeTab("ai")
-            }
-          >
-
-            <span>
-              ⚔️
-            </span>
-
-            <strong>
-              AI Trainer
-            </strong>
-
-            <small>
-              Твій персональний тренер
-            </small>
-
-          </button>
-
-
-          <button
-            type="button"
-            className="quick-card"
-            onClick={() =>
-              changeTab("profile")
-            }
-          >
-
-            <span>
-              👤
-            </span>
-
-            <strong>
-              Профіль
-            </strong>
-
-            <small>
-              Твої дані
-            </small>
-
+            VIEW ALL
           </button>
 
         </div>
 
-      </section>
-
-
-      {/* AI TRAINER */}
-
-      <section className="ai-trainer-section">
 
         <button
           type="button"
-          className="ai-trainer-card"
+          className="dashboard-mission"
           onClick={() =>
-            changeTab("ai")
+            startWorkout("upper")
           }
         >
 
-          <div className="ai-trainer-icon">
-            ⚔️
+          <div className="mission-number">
+            01
           </div>
 
-          <div className="ai-trainer-content">
+          <div className="mission-info">
 
             <span>
-              IRONAGE AI
+              IRONAGE / PROGRAM
             </span>
 
-            <strong>
-              Твій AI Trainer
-            </strong>
+            <h3>
+              UPPER BODY
+            </h3>
 
             <p>
-              Персональні поради щодо
-              тренувань, харчування та
-              дисципліни.
+              Chest • Shoulders • Arms
             </p>
 
           </div>
 
-          <div className="ai-trainer-arrow">
+          <div className="mission-arrow">
             →
           </div>
 
@@ -612,29 +365,162 @@ export default function Dashboard({
       </section>
 
 
-      {/* MOTIVATION */}
+      {/* =================================
+          LAST WORKOUT
+      ================================= */}
 
-      <section className="motivation-card">
+      {lastWorkout && (
+        <section className="dashboard-section">
 
-        <div className="motivation-icon">
-          ⚔️
-        </div>
+          <div className="dashboard-section-heading">
 
-        <div>
+            <div>
+
+              <span>
+                TRAINING HISTORY
+              </span>
+
+              <h2>
+                Last Workout
+              </h2>
+
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                changeTab("progress")
+              }
+            >
+              PROGRESS
+            </button>
+
+          </div>
+
+
+          <div
+            className="dashboard-mission"
+            style={{
+              cursor: "default",
+            }}
+          >
+
+            <div className="mission-number">
+              ✓
+            </div>
+
+            <div className="mission-info">
+
+              <span>
+                COMPLETED
+              </span>
+
+              <h3>
+                {lastWorkout.name}
+              </h3>
+
+              <p>
+                {lastWorkout.duration} min
+                {" • "}
+                +{lastWorkout.xp} XP
+              </p>
+
+            </div>
+
+            <div className="mission-arrow">
+              →
+            </div>
+
+          </div>
+
+        </section>
+      )}
+
+
+      {/* =================================
+          DAILY QUOTE
+      ================================= */}
+
+      <section className="dashboard-quote">
+
+        <div className="quote-accent" />
+
+        <p>
+          THE BODY ACHIEVES
+          <br />
+          WHAT THE MIND
+          <br />
 
           <strong>
-            ПРАВИЛО IRONAGE
+            REFUSES TO GIVE UP ON.
           </strong>
+        </p>
 
-          <p>
-            Не чекай мотивації.
-            Створи дисципліну.
-          </p>
-
-        </div>
+        <span>
+          IRONAGE PRINCIPLE / 001
+        </span>
 
       </section>
 
-    </div>
+
+      {/* =================================
+          QUICK ACCESS
+      ================================= */}
+
+      <section className="dashboard-quick">
+
+        <button
+          type="button"
+          onClick={() =>
+            changeTab("progress")
+          }
+        >
+          <span>
+            PROGRESS
+          </span>
+
+          <strong>
+            →
+          </strong>
+
+        </button>
+
+
+        <button
+          type="button"
+          onClick={() =>
+            changeTab("nutrition")
+          }
+        >
+          <span>
+            NUTRITION
+          </span>
+
+          <strong>
+            →
+          </strong>
+
+        </button>
+
+
+        <button
+          type="button"
+          onClick={() =>
+            changeTab("ai")
+          }
+        >
+          <span>
+            AI TRAINER
+          </span>
+
+          <strong>
+            →
+          </strong>
+
+        </button>
+
+      </section>
+
+    </main>
   );
 }

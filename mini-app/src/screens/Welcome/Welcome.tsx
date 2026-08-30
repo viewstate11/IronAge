@@ -1,53 +1,92 @@
+import { useEffect } from "react";
 import "./Welcome.css";
 
+import vasylPhoto from "../../assets/vasyl-ua.jpg";
+import LuxuryButton from "../../components/ui/LuxuryButton";
 
-interface Props{
+type Props = {
+  start: () => void;
+};
 
-start:()=>void;
+export default function Welcome({ start }: Props) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-}
+  return (
+    <main className="welcome">
+      {/* PHOTO */}
 
+      <img
+        src={vasylPhoto}
+        alt=""
+        aria-hidden="true"
+        className="welcome-photo"
+      />
 
-export default function Welcome({start}:Props){
+      {/* BLACK CINEMATIC OVERLAY */}
 
+      <div className="welcome-overlay" />
 
-return (
+      <div className="welcome-vignette" />
 
-<div className="welcome">
+      {/* CONTENT */}
 
+      <div className="welcome-content">
 
-<div className="logo">
+        {/* TOP */}
 
-IRONAGE
+        <header className="welcome-header">
+          <div className="welcome-logo">
+            IRON<span>AGE</span>
+          </div>
 
-</div>
+          <div className="welcome-edition">
+            ATHLETE SYSTEM
+            <strong>01</strong>
+          </div>
+        </header>
 
+        {/* HERO */}
 
-<h1>
+        <section className="welcome-hero">
 
-Стань кращою
-<br/>
-версією себе
+          <div className="welcome-eyebrow">
+            <span className="gold-line" />
+            BUILD YOURSELF
+            <span className="gold-line" />
+          </div>
 
-</h1>
+          <h1 className="welcome-title">
+            <span>BECOME</span>
+            <strong>UNSTOPPABLE.</strong>
+          </h1>
 
+          <p className="welcome-description">
+            Discipline is not a moment.
+            <br />
+            It is a lifestyle.
+          </p>
 
-<p>
+        </section>
 
-Твій персональний фітнес-додаток
+        {/* BOTTOM */}
 
-</p>
+        <footer className="welcome-footer">
 
+          <LuxuryButton onClick={start}>
+            ENTER IRONAGE
+          </LuxuryButton>
 
-<button onClick={start}>
+          <div className="welcome-system">
+            <span />
+            PREMIUM FITNESS SYSTEM
+            <span />
+          </div>
 
-ПОЧАТИ
+        </footer>
 
-</button>
-
-
-</div>
-
-)
-
+      </div>
+    </main>
+  );
 }

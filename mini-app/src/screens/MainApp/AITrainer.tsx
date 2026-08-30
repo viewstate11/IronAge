@@ -1,431 +1,616 @@
-import { useEffect, useState } from "react";
+import {
+  useMemo,
+  useState,
+  type FormEvent,
+} from "react";
+
+import {
+  useUser,
+  type User as ContextUser,
+} from "../../context/UserContext";
+
+import type {
+  User as AppUser,
+} from "../../types/user";
+
+import { buildAIUserContext } from "../../services/ai/aiContext";
+import { getAITrainerResponse } from "../../services/aiService";
 
 import "./AITrainer.css";
+import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
-import { useUser } from "../../context/UserContext";
+/* =========================================================
+   TYPES
+========================================================= */
 
 type Props = {
-  changeTab: (tab: string) => void;
+  changeTab: (nextTab: string) => void;
 };
 
-type Message = {
-  id: number;
-  sender: "ai" | "user";
-  text: string;
+type CoachMode =
+  | "workout"
+  | "nutrition"
+  | "recovery";
+
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
 };
 
-const CHAT_STORAGE_KEY = "ironage_ai_chat";
+/* =========================================================
+   USER ADAPTER
+========================================================= */
+
+/*
+ * UserContext has a wider frontend User type.
+ *
+ * AI services expect the canonical AppUser type
+ * from src/types/user.ts.
+ *
+ * The important incompatibility here is:
+ *
+ * ContextUser.id -> string | number
+ * AppUser.id     -> number
+ *
+ * We normalize the ID before passing the user
+ * into AI services.
+ */
+
+function toAIUser(
+  user: ContextUser
+): AppUser {
+  return {
+    ...user,
+    id: Number(user.id),
+  } as AppUser;
+}
+
+/* =========================================================
+   COMPONENT
+========================================================= */
 
 export default function AITrainer({
   changeTab,
 }: Props) {
-  const { user } = useUser();
+  const {
+    user,
+    loading,
+  } = useUser();
 
-  const [message, setMessage] = useState("");
+  /* =======================================================
+     STATE
+  ======================================================= */
 
-  const [loading, setLoading] = useState(false);
+  const [mode, setMode] =
+    useState<CoachMode>("workout");
 
-  const [messages, setMessages] = useState<Message[]>(() => {
-    try {
-      const saved = localStorage.getItem(
-        CHAT_STORAGE_KEY
-      );
+  const [question, setQuestion] =
+    useState<string>("");
 
-      if (saved) {
-        const parsed = JSON.parse(saved);
+  const [answer, setAnswer] =
+    useState<string | null>(null);
 
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
+  const [isLoading, setIsLoading] =
+    useState<boolean>(false);
+
+  const [chatHistory, setChatHistory] =
+    useState<ChatMessage[]>([]);
+
+  /* =======================================================
+     AI USER
+  ======================================================= */
+
+  const aiUser =
+    useMemo<AppUser>(
+      () => toAIUser(user),
+      [user]
+    );
+
+  /* =======================================================
+     USER DATA
+  ======================================================= */
+
+  const completedWorkouts =
+    user.workouts;
+
+  const currentStreak =
+    user.streak;
+
+  const currentLevel =
+    user.level;
+
+  const goal =
+    user.goal ??
+    "general fitness";
+
+  /* =======================================================
+     AI CONTEXT
+  ======================================================= */
+
+  const aiContext =
+    useMemo(
+      () =>
+        buildAIUserContext(
+          aiUser
+        ),
+      [aiUser]
+    );
+
+  /* =======================================================
+     COACH MESSAGE
+  ======================================================= */
+
+  const coachMessage =
+    useMemo(() => {
+      if (currentStreak >= 10) {
+        return `You're on a ${currentStreak}-day streak. That's serious discipline. Today we keep the momentum going.`;
       }
-    } catch (error) {
-      console.error(
-        "IRONAGE AI chat load error:",
-        error
-      );
-    }
 
-    return [
-      {
-        id: 1,
-        sender: "ai",
-        text: `Привіт, ${user.name}! ⚔️
+      if (currentStreak >= 5) {
+        return `You're building a ${currentStreak}-day streak. Stay consistent today and keep moving forward.`;
+      }
 
-Я твій IRONAGE AI Trainer.
+      if (completedWorkouts > 0) {
+        return `You've already completed ${completedWorkouts} workouts. Keep building your strength and consistency.`;
+      }
 
-Твоя ціль:
-${user.goal}
-
-Рівень: ${user.level}
-XP: ${user.xp}
-Streak: ${user.streak} днів
-Тренувань: ${user.workouts}
-
-Я готовий допомогти тобі тренуватися,
-харчуватися та ставати сильнішим.`,
-      },
-    ];
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        CHAT_STORAGE_KEY,
-        JSON.stringify(messages)
-      );
-    } catch (error) {
-      console.error(
-        "IRONAGE AI chat save error:",
-        error
-      );
-    }
-  }, [messages]);
-
-  const sendMessage = async (
-    customMessage?: string
-  ) => {
-    const text = (
-      customMessage ?? message
-    ).trim();
-
-    if (!text || loading) {
-      return;
-    }
-
-    const userMessage: Message = {
-      id: Date.now(),
-      sender: "user",
-      text,
-    };
-
-    setMessages((prev) => [
-      ...prev,
-      userMessage,
+      return "You're building your foundation. The goal is simple: train consistently and become stronger every day.";
+    }, [
+      currentStreak,
+      completedWorkouts,
     ]);
 
-    setMessage("");
-    setLoading(true);
+  /* =======================================================
+     MODE RESPONSE
+  ======================================================= */
 
-    try {
-      const response = await fetch(
-        "http://localhost:3001/api/ai",
-        {
-          method: "POST",
+  const getModeResponse = (
+    selectedMode: CoachMode
+  ): string => {
+    switch (selectedMode) {
+      case "workout":
+        return `Based on your current level ${currentLevel} and goal "${goal}", I'd recommend completing today's workout with controlled reps, strong technique and consistent intensity.`;
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+      case "nutrition":
+        return `Your nutrition should support your goal "${goal}". Prioritize enough protein, quality food, hydration and a consistent calorie intake.`;
 
-body: JSON.stringify({
-  user: {
-    name: user.name,
-    age: user.age,
-    gender: user.gender,
-    weight: user.weight,
-    height: user.height,
-    goal: user.goal,
-    level: user.level,
-    xp: user.xp,
-    workouts: user.workouts,
-    streak: user.streak,
+      case "recovery":
+        return "Recovery is part of the program. Focus on quality sleep, hydration and giving your muscles enough time to recover between hard sessions.";
 
-    history: user.history,
-  },
-
-  message: text,
-
-  history: messages
-    .slice(-10)
-    .map((item) => ({
-      role:
-        item.sender === "ai"
-          ? "assistant"
-          : "user",
-
-      content: item.text,
-    })),
-}),
-
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          `HTTP ${response.status}`
-        );
-      }
-
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(
-          data.error ||
-            "IRONAGE AI server error"
-        );
-      }
-
-      const aiMessage: Message = {
-        id: Date.now() + 1,
-        sender: "ai",
-        text:
-          data.message ||
-          "⚔️ Не вдалося сформувати відповідь.",
-      };
-
-      setMessages((prev) => [
-        ...prev,
-        aiMessage,
-      ]);
-    } catch (error) {
-      console.error(
-        "IRONAGE AI connection error:",
-        error
-      );
-
-      const errorMessage: Message = {
-        id: Date.now() + 1,
-        sender: "ai",
-        text: `⚠️ IRONAGE AI зараз недоступний.
-
-Перевір, чи запущений локальний сервер:
-
-npm run server`,
-      };
-
-      setMessages((prev) => [
-        ...prev,
-        errorMessage,
-      ]);
-    } finally {
-      setLoading(false);
+      default:
+        return "Stay consistent and keep moving forward.";
     }
   };
 
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (
-      event.key === "Enter" &&
-      !event.shiftKey
-    ) {
-      event.preventDefault();
+  /* =======================================================
+     QUICK ACTION
+  ======================================================= */
 
-      sendMessage();
-    }
-  };
+  const handleCoachAction = (
+    selectedMode: CoachMode
+  ): void => {
+    setMode(selectedMode);
 
-  const askQuestion = (
-    question: string
-  ) => {
-    sendMessage(question);
-  };
-
-  const clearChat = () => {
-    const initialMessage: Message = {
-      id: Date.now(),
-      sender: "ai",
-      text: `Чат очищено. ⚔️
-
-Привіт, ${user.name}!
-
-Я знову готовий допомагати тобі
-ставати сильнішим.`,
-    };
-
-    setMessages([initialMessage]);
-
-    localStorage.setItem(
-      CHAT_STORAGE_KEY,
-      JSON.stringify([initialMessage])
+    setAnswer(
+      getModeResponse(
+        selectedMode
+      )
     );
   };
 
+  /* =======================================================
+     ASK COACH
+  ======================================================= */
+
+  const askCoach =
+    async (): Promise<void> => {
+      const trimmedQuestion =
+        question.trim();
+
+      if (
+        !trimmedQuestion ||
+        isLoading
+      ) {
+        return;
+      }
+
+      setIsLoading(true);
+
+      try {
+        const response =
+          await getAITrainerResponse(
+            aiUser,
+            trimmedQuestion,
+            chatHistory
+          );
+
+        setAnswer(response);
+
+        setChatHistory(
+          (
+            previous: ChatMessage[]
+          ) => [
+            ...previous,
+
+            {
+              role: "user",
+              content:
+                trimmedQuestion,
+            },
+
+            {
+              role: "assistant",
+              content: response,
+            },
+          ]
+        );
+
+        setQuestion("");
+      } catch (error) {
+        console.error(
+          "IRONAGE AI ERROR:",
+          error
+        );
+
+        setAnswer(
+          "IRONAGE AI is temporarily unavailable. Please try again."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+  /* =======================================================
+     START WORKOUT
+  ======================================================= */
+
+  const startWorkout =
+    (): void => {
+      changeTab("workout");
+    };
+
+  /* =======================================================
+     FORM SUBMIT
+  ======================================================= */
+
+  const handleSubmit = (
+    event: FormEvent<HTMLFormElement>
+  ): void => {
+    event.preventDefault();
+
+    void askCoach();
+  };
+
+  /* =======================================================
+     LOADING STATE
+  ======================================================= */
+
+  if (loading) {
+    return (
+      <main className="ai-page">
+
+        <img
+          src={vasylPhoto}
+          alt="IRONAGE athlete"
+          className="ai-background"
+        />
+
+        <div className="ai-overlay" />
+
+        <section className="ai-coach-card">
+
+          <div className="ai-message">
+
+            <span className="ai-message-label">
+              IRONAGE AI
+            </span>
+
+            <p>
+              Loading your athlete profile...
+            </p>
+
+          </div>
+
+        </section>
+
+      </main>
+    );
+  }
+
+  /* =======================================================
+     UI
+  ======================================================= */
+
   return (
-    <div className="ai-trainer-page">
+    <main className="ai-page">
+
+      {/* BACKGROUND */}
+
+      <img
+        src={vasylPhoto}
+        alt="IRONAGE athlete"
+        className="ai-background"
+      />
+
+      <div className="ai-overlay" />
 
       {/* HEADER */}
 
       <header className="ai-header">
 
-        <button
-          type="button"
-          className="ai-back"
-          onClick={() => changeTab("home")}
-          aria-label="Назад"
-        >
-          ←
-        </button>
-
         <div>
-          <p className="ai-label">
-            IRONAGE AI
-          </p>
+
+          <span className="ai-eyebrow">
+            IRONAGE / INTELLIGENCE
+          </span>
 
           <h1>
-            AI Trainer
+            AI
+            <span> TRAINER.</span>
           </h1>
+
         </div>
 
-        <div
-          className={`ai-status ${
-            loading ? "loading" : ""
-          }`}
-        >
-          ●
+        <div className="ai-status">
+
+          <i />
+
+          ONLINE
+
         </div>
 
       </header>
 
-      {/* HERO */}
+      {/* COACH CARD */}
 
-      <section className="ai-hero">
+      <section className="ai-coach-card">
 
-        <div className="ai-avatar">
-          ⚔️
+        <div className="ai-coach-top">
+
+          <div className="ai-avatar">
+
+            <div className="ai-avatar-ring">
+              IA
+            </div>
+
+          </div>
+
+          <div>
+
+            <span>
+              YOUR PERSONAL COACH
+            </span>
+
+            <h2>
+              IRONAGE AI
+            </h2>
+
+          </div>
+
         </div>
 
-        <div>
-          <strong>
-            Твій персональний тренер
-          </strong>
+        <div className="ai-message">
+
+          <span className="ai-message-label">
+            COACH
+          </span>
 
           <p>
-            Аналізую твої цілі, прогрес
-            та допомагаю тримати дисципліну.
+            {coachMessage}
           </p>
+
+          {answer && (
+            <p>
+              {answer}
+            </p>
+          )}
+
         </div>
+
+        <button
+          type="button"
+          className="ai-workout-button"
+          onClick={startWorkout}
+        >
+
+          <span>
+            START RECOMMENDED WORKOUT
+          </span>
+
+          <strong>
+            →
+          </strong>
+
+        </button>
 
       </section>
 
-      {/* QUICK QUESTIONS */}
+      {/* QUICK ACTIONS */}
 
-      <div className="ai-quick">
+      <section className="ai-section">
 
-        <button
-          type="button"
-          onClick={() =>
-            askQuestion(
-              "Що мені тренувати сьогодні?"
-            )
-          }
-          disabled={loading}
-        >
-          🏋️ Тренування
-        </button>
+        <div className="ai-section-title">
 
-        <button
-          type="button"
-          onClick={() =>
-            askQuestion(
-              "Що мені їсти сьогодні?"
-            )
-          }
-          disabled={loading}
-        >
-          🥗 Харчування
-        </button>
+          <span>
+            QUICK COACH
+          </span>
 
-        <button
-          type="button"
-          onClick={() =>
-            askQuestion(
-              "Як мені стати сильнішим?"
-            )
-          }
-          disabled={loading}
-        >
-          ⚡ Порада
-        </button>
+          <h2>
+            What do you need?
+          </h2>
 
-      </div>
+        </div>
+
+        <div className="ai-actions">
+
+          <button
+            type="button"
+            onClick={() =>
+              handleCoachAction(
+                "workout"
+              )
+            }
+          >
+
+            <span className="ai-action-number">
+              01
+            </span>
+
+            <div>
+
+              <strong>
+                CREATE WORKOUT
+              </strong>
+
+              <small>
+                Build today's session
+              </small>
+
+            </div>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              handleCoachAction(
+                "nutrition"
+              )
+            }
+          >
+
+            <span className="ai-action-number">
+              02
+            </span>
+
+            <div>
+
+              <strong>
+                NUTRITION ADVICE
+              </strong>
+
+              <small>
+                Improve today's meals
+              </small>
+
+            </div>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              handleCoachAction(
+                "recovery"
+              )
+            }
+          >
+
+            <span className="ai-action-number">
+              03
+            </span>
+
+            <div>
+
+              <strong>
+                RECOVERY
+              </strong>
+
+              <small>
+                Sleep & recovery tips
+              </small>
+
+            </div>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+        </div>
+
+      </section>
 
       {/* CHAT */}
 
       <section className="ai-chat">
 
-        {messages.map((item) => (
+        <div className="ai-chat-header">
 
-          <div
-            key={item.id}
-            className={`ai-message ${
-              item.sender === "user"
-                ? "user-message"
-                : "trainer-message"
-            }`}
-          >
+          <div>
 
-            {item.sender === "ai" && (
-              <span className="message-icon">
-                ⚔️
-              </span>
-            )}
-
-            <div className="message-bubble">
-              {item.text}
-            </div>
-
-          </div>
-
-        ))}
-
-        {/* LOADING */}
-
-        {loading && (
-          <div className="ai-message trainer-message">
-
-            <span className="message-icon">
-              ⚔️
+            <span>
+              ASK IRONAGE AI
             </span>
 
-            <div className="message-bubble">
-              IRONAGE AI думає...
-            </div>
+            <h2>
+              Your next move.
+            </h2>
 
           </div>
-        )}
+
+          <div className="ai-pulse" />
+
+        </div>
+
+        <form
+          className="ai-input"
+          onSubmit={handleSubmit}
+        >
+
+          <input
+            type="text"
+            value={question}
+            onChange={(event) =>
+              setQuestion(
+                event.target.value
+              )
+            }
+            placeholder={
+              isLoading
+                ? "IRONAGE AI is thinking..."
+                : "Ask your coach anything..."
+            }
+            aria-label="Ask IRONAGE AI"
+            disabled={isLoading}
+          />
+
+          <button
+            type="submit"
+            aria-label="Ask coach"
+            disabled={
+              isLoading ||
+              !question.trim()
+            }
+          >
+            {isLoading
+              ? "..."
+              : "→"}
+          </button>
+
+        </form>
 
       </section>
 
-      {/* INPUT */}
+      {/* FOOTER */}
 
-      <div className="ai-input-wrapper">
+      <footer className="ai-footer">
 
-        <input
-          type="text"
-          value={message}
-          onChange={(event) =>
-            setMessage(event.target.value)
-          }
-          onKeyDown={handleKeyDown}
-          placeholder="Напиши своє питання..."
-          disabled={loading}
-        />
+        <span>
+          POWERED BY IRONAGE INTELLIGENCE
+        </span>
 
-        <button
-          type="button"
-          onClick={() => sendMessage()}
-          disabled={
-            loading ||
-            !message.trim()
-          }
-          aria-label="Надіслати"
-        >
-          ➤
-        </button>
+      </footer>
 
-      </div>
-
-      {/* CLEAR CHAT */}
-
-      <button
-        type="button"
-        className="ai-clear-button"
-        onClick={clearChat}
-        disabled={loading}
-      >
-        Очистити чат
-      </button>
-
-    </div>
+    </main>
   );
 }

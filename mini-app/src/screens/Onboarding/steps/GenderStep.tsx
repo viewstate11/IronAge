@@ -1,96 +1,81 @@
-import { useState } from "react";
-
-import { useUser } from "../../../context/UserContext";
-
-import "../Onboarding.css";
-
-
-interface Props {
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
   next: () => void;
-}
+};
 
-
-export default function GenderStep({ next }: Props) {
-
-  const { setUser } = useUser();
-
-  const [gender, setGender] = useState("");
-
-
-  const handleNext = () => {
-
-    if (!gender) return;
-
-    localStorage.setItem(
-      "gender",
-      gender
-    );
-
-    setUser((prev) => ({
-      ...prev,
-      gender,
-    }));
-
-    next();
-  };
-
-
+export default function GenderStep({
+  value,
+  onChange,
+  next,
+}: Props) {
   return (
-    <div className="step">
+    <section className="onboarding-step">
 
-      <h1>
-        Обери стать
-      </h1>
+      <div className="onboarding-step-content">
 
-      <p>
-        Це допоможе персоналізувати програму
-      </p>
+        <div className="onboarding-eyebrow">
+          YOUR PROFILE
+        </div>
 
+        <h1 className="onboarding-title">
+          CHOOSE
+          <strong>YOUR PATH.</strong>
+        </h1>
 
-      <div className="gender-options">
+        <p className="onboarding-description">
+          Select your profile so IRONAGE can
+          personalize your training experience.
+        </p>
 
-        <button
-          type="button"
-          className={
-            gender === "Чоловік"
-              ? "gender-option selected"
-              : "gender-option"
-          }
-          onClick={() =>
-            setGender("Чоловік")
-          }
-        >
-          👨
-          <span>Чоловік</span>
-        </button>
+        <div className="gender-options">
 
+          <button
+            type="button"
+            className={`gender-option ${
+              value === "MALE" ? "active" : ""
+            }`}
+            onClick={() => onChange("MALE")}
+          >
+            <span className="gender-number">01</span>
+            <span className="gender-name">MALE</span>
+            <span className="gender-arrow">→</span>
+          </button>
 
-        <button
-          type="button"
-          className={
-            gender === "Жінка"
-              ? "gender-option selected"
-              : "gender-option"
-          }
-          onClick={() =>
-            setGender("Жінка")
-          }
-        >
-          👩
-          <span>Жінка</span>
-        </button>
+          <button
+            type="button"
+            className={`gender-option ${
+              value === "FEMALE" ? "active" : ""
+            }`}
+            onClick={() => onChange("FEMALE")}
+          >
+            <span className="gender-number">02</span>
+            <span className="gender-name">FEMALE</span>
+            <span className="gender-arrow">→</span>
+          </button>
+
+        </div>
 
       </div>
 
+      <div className="onboarding-step-bottom">
 
-      <button
-        className="button"
-        disabled={!gender}
-        onClick={handleNext}
-      >
-        ДАЛІ
-      </button>
+        <button
+          type="button"
+          className="onboarding-button"
+          disabled={!value}
+          onClick={next}
+        >
+          <span>CONTINUE</span>
+          <strong>→</strong>
+        </button>
 
-    </div>
+        <div className="onboarding-footer">
+          IRONAGE ATHLETE SYSTEM
+        </div>
+
+      </div>
+
+    </section>
   );
 }

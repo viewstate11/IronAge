@@ -8,8 +8,41 @@ export default defineConfig({
     tailwindcss(),
   ],
 
+  resolve: {
+    extensions: [
+      ".js",
+      ".ts",
+      ".jsx",
+      ".tsx",
+    ],
+  },
+
   server: {
     host: "0.0.0.0",
+    port: 5173,
+    strictPort: true,
+
     allowedHosts: true,
+
+    proxy: {
+      "/api": {
+        target: "http://localhost:5050",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+
+  preview: {
+    host: "0.0.0.0",
+    port: 4173,
+
+    proxy: {
+      "/api": {
+        target: "http://localhost:5050",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });

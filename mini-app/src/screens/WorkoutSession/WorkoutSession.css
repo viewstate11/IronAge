@@ -1,174 +1,814 @@
-.session{
+/* =========================================
+   IRONAGE WORKOUT SESSION
+   BLACK × GOLD × WHITE
+========================================= */
 
-min-height:100vh;
+.session-page {
+  position: relative;
 
-background:#050505;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-color:white;
+  overflow: hidden;
 
-padding:25px;
+  background: #050505;
 
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
+  color: #ffffff;
 }
 
 
+/* =========================================
+   BACKGROUND PHOTO
+========================================= */
 
-.session-avatar{
+.session-background {
+  position: absolute;
 
-width:90px;
+  inset: 0;
 
-height:90px;
+  width: 100%;
+  height: 100%;
 
-border-radius:50%;
+  object-fit: cover;
+  object-position: center;
 
-object-fit:cover;
+  opacity: 0.20;
 
-border:3px solid #D4AF37;
+  filter:
+    grayscale(100%)
+    contrast(1.15);
 
+  pointer-events: none;
 }
 
 
+/* =========================================
+   OVERLAY
+========================================= */
 
-.level{
+.session-overlay {
+  position: absolute;
 
-margin-top:15px;
+  inset: 0;
 
-color:#D4AF37;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.94) 0%,
+      rgba(5, 5, 5, 0.76) 32%,
+      rgba(5, 5, 5, 0.88) 68%,
+      rgba(5, 5, 5, 0.98) 100%
+    );
 
-font-weight:900;
-
-font-size:18px;
-
+  pointer-events: none;
 }
 
 
+/* =========================================
+   AMBIENT GOLD
+========================================= */
 
-.progress-text{
+.session-glow {
+  position: absolute;
 
-margin-top:30px;
+  top: -180px;
+  left: 50%;
 
-color:#888;
+  width: 420px;
+  height: 420px;
 
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(212, 175, 55, 0.13),
+      transparent 68%
+    );
+
+  pointer-events: none;
 }
 
 
+/* =========================================
+   CONTENT
+========================================= */
 
-.exercise-card{
+.session-content {
+  position: relative;
 
-margin-top:25px;
+  z-index: 2;
 
-width:100%;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-max-width:400px;
+  display: flex;
 
-background:#111;
+  flex-direction: column;
 
-border:1px solid #D4AF37;
+  padding:
+    max(20px, env(safe-area-inset-top))
+    18px
+    max(22px, env(safe-area-inset-bottom));
 
-border-radius:30px;
-
-padding:30px;
-
-text-align:center;
-
+  box-sizing: border-box;
 }
 
 
+/* =========================================
+   HEADER
+========================================= */
 
-.emoji{
+.session-header {
+  display: grid;
 
-font-size:80px;
+  grid-template-columns: 42px 1fr 70px;
 
+  align-items: center;
+
+  gap: 10px;
 }
 
 
+.session-close {
+  width: 40px;
+  height: 40px;
 
-.exercise-card h1{
+  display: flex;
 
-font-size:32px;
+  align-items: center;
+  justify-content: center;
 
+  border:
+    1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color:
+    rgba(255, 255, 255, 0.80);
+
+  font-size: 25px;
+  font-weight: 300;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 150ms ease,
+    background 150ms ease;
 }
 
 
+.session-close:active {
+  transform: scale(0.94);
 
-.exercise-card h2{
-
-font-size:45px;
-
-color:#D4AF37;
-
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
 
+.session-header-center {
+  display: flex;
 
-.exercise-card span{
+  flex-direction: column;
 
-font-size:18px;
+  align-items: center;
 
-color:white;
-
+  min-width: 0;
 }
 
 
+.session-header-center span {
+  color: #d4af37;
 
-.progress-bar{
+  font-size: 6px;
 
-width:100%;
+  font-weight: 900;
 
-max-width:400px;
-
-height:10px;
-
-background:#222;
-
-border-radius:20px;
-
-margin-top:30px;
-
-overflow:hidden;
-
+  letter-spacing: 0.24em;
 }
 
 
+.session-header-center strong {
+  margin-top: 5px;
 
-.progress-bar div{
+  overflow: hidden;
 
-height:100%;
+  color: #ffffff;
 
-background:#D4AF37;
+  font-family: "Montserrat", sans-serif;
 
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
 }
 
 
+.session-timer {
+  color: #ffffff;
 
-.complete{
+  font-family: "Montserrat", sans-serif;
 
-margin-top:40px;
+  font-size: 11px;
 
-width:100%;
+  font-weight: 800;
 
-max-width:400px;
+  text-align: right;
 
-height:60px;
+  letter-spacing: 0.05em;
 
-border-radius:20px;
-
-border:none;
-
-background:#D4AF37;
-
-font-size:18px;
-
-font-weight:900;
-
+  font-variant-numeric: tabular-nums;
 }
-.complete:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.session-progress {
+  margin-top: 35px;
+}
+
+
+.session-progress-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+
+.session-progress-top span {
+  color:
+    rgba(255, 255, 255, 0.48);
+
+  font-size: 7px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.18em;
+}
+
+
+.session-progress-top strong {
+  color: #d4af37;
+
+  font-size: 8px;
+
+  font-weight: 900;
+}
+
+
+.session-progress-track {
+  width: 100%;
+  height: 3px;
+
+  overflow: hidden;
+
+  background:
+    rgba(255, 255, 255, 0.10);
+}
+
+
+.session-progress-fill {
+  height: 100%;
+
+  background: #d4af37;
+
+  box-shadow:
+    0 0 14px rgba(212, 175, 55, 0.85);
+
+  transition:
+    width 250ms ease;
+}
+
+
+/* =========================================
+   EXERCISE
+========================================= */
+
+.session-exercise {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 35px 0;
+}
+
+
+.session-eyebrow {
+  color: #d4af37;
+
+  font-size: 7px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.25em;
+}
+
+
+.session-exercise h1 {
+  max-width: 100%;
+
+  margin: 17px 0 32px;
+
+  color: #ffffff;
+
+  font-family: "Montserrat", sans-serif;
+
+  font-size:
+    clamp(38px, 11vw, 62px);
+
+  font-weight: 900;
+
+  line-height: 0.90;
+
+  letter-spacing: -0.06em;
+
+  word-break: break-word;
+}
+
+
+/* =========================================
+   REPS
+========================================= */
+
+.session-main-stat {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+.session-main-stat span {
+  color:
+    rgba(255, 255, 255, 0.40);
+
+  font-size: 7px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.22em;
+}
+
+
+.session-main-stat strong {
+  margin-top: 8px;
+
+  color: #d4af37;
+
+  font-family: "Montserrat", sans-serif;
+
+  font-size:
+    clamp(54px, 17vw, 82px);
+
+  font-weight: 900;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.06em;
+
+  text-shadow:
+    0 0 35px rgba(212, 175, 55, 0.18);
+
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================
+   SET
+========================================= */
+
+.session-set {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 28px;
+
+  margin-top: 38px;
+
+  padding: 15px 28px;
+
+  border:
+    1px solid rgba(212, 175, 55, 0.22);
+
+  border-radius: 16px;
+
+  background:
+    rgba(212, 175, 55, 0.035);
+
+  backdrop-filter: blur(8px);
+}
+
+
+.session-set > div:not(.session-set-divider) {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+.session-set span {
+  color:
+    rgba(255, 255, 255, 0.40);
+
+  font-size: 6px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.20em;
+}
+
+
+.session-set strong {
+  margin-top: 5px;
+
+  color: #ffffff;
+
+  font-family: "Montserrat", sans-serif;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+  font-variant-numeric: tabular-nums;
+}
+
+
+.session-set-divider {
+  width: 1px;
+  height: 32px;
+
+  background:
+    rgba(212, 175, 55, 0.25);
+}
+
+
+/* =========================================
+   BOTTOM
+========================================= */
+
+.session-bottom {
+  margin-top: auto;
+}
+
+
+.session-motivation {
+  margin-bottom: 18px;
+}
+
+
+.session-motivation span {
+  color: #d4af37;
+
+  font-size: 6px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.22em;
+}
+
+
+.session-motivation p {
+  margin: 7px 0 0;
+
+  color:
+    rgba(255, 255, 255, 0.50);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   NEXT BUTTON
+========================================= */
+
+.session-next {
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+
+  border:
+    1px solid #d4af37;
+
+  border-radius: 16px;
+
+  background: #d4af37;
+
+  color: #050505;
+
+  font-family: "Montserrat", sans-serif;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 14px 40px
+    rgba(212, 175, 55, 0.20);
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+
+.session-next:active {
+  transform: scale(0.985);
+
+  box-shadow:
+    0 8px 25px
+    rgba(212, 175, 55, 0.15);
+}
+
+
+.session-next span {
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.15em;
+}
+
+
+.session-next strong {
+  font-size: 23px;
+
+  font-weight: 500;
+}
+
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 360px) {
+
+  .session-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .session-progress {
+    margin-top: 28px;
+  }
+
+  .session-exercise {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .session-exercise h1 {
+    font-size: 36px;
+
+    margin-bottom: 25px;
+  }
+
+  .session-main-stat strong {
+    font-size: 58px;
+  }
+
+  .session-set {
+    margin-top: 28px;
+
+    gap: 22px;
+
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .session-next {
+    height: 56px;
+  }
+}
+
+
+/* =========================================
+   SAFE AREA / SHORT PHONES
+========================================= */
+
+@media (max-height: 700px) {
+
+  .session-progress {
+    margin-top: 24px;
+  }
+
+  .session-exercise {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .session-exercise h1 {
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+
+  .session-set {
+    margin-top: 22px;
+  }
+
+  .session-motivation {
+    margin-bottom: 12px;
+  }
+}
+
+/* =========================================
+   EXIT WORKOUT CONFIRMATION
+========================================= */
+
+.session-exit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    rgba(0, 0, 0, 0.78);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+
+.session-exit-modal {
+  width: min(100%, 420px);
+
+  padding: 28px 24px 24px;
+
+  border:
+    1px solid rgba(212, 175, 55, 0.45);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 20, 0.98),
+      rgba(5, 5, 5, 0.98)
+    );
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.65),
+    0 0 40px rgba(212, 175, 55, 0.08);
+
+  text-align: center;
+}
+
+
+.session-exit-eyebrow {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #d4af37;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.22em;
+}
+
+
+.session-exit-modal h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-family:
+    "Montserrat",
+    sans-serif;
+
+  font-size: clamp(26px, 8vw, 38px);
+  font-weight: 900;
+
+  letter-spacing: -0.04em;
+}
+
+
+.session-exit-modal p {
+  margin: 14px auto 0;
+
+  max-width: 280px;
+
+  color:
+    rgba(255, 255, 255, 0.58);
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+
+.session-exit-actions {
+  display: grid;
+
+  gap: 10px;
+
+  margin-top: 26px;
+}
+
+
+.session-exit-actions button {
+  width: 100%;
+  min-height: 54px;
+
+  border-radius: 14px;
+
+  font-family:
+    "Montserrat",
+    sans-serif;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 0.14em;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+
+.session-exit-continue {
+  border:
+    1px solid #d4af37;
+
+  background: #d4af37;
+
+  color: #050505;
+}
+
+
+.session-exit-confirm {
+  border:
+    1px solid rgba(255, 255, 255, 0.14);
+
+  background:
+    rgba(255, 255, 255, 0.04);
+
+  color:
+    rgba(255, 255, 255, 0.72);
+}
+
+
+.session-exit-actions button:active {
+  transform: scale(0.985);
+}
+
+
+@media (max-width: 360px) {
+
+  .session-exit-overlay {
+    padding: 16px;
+  }
+
+  .session-exit-modal {
+    padding:
+      24px 18px 18px;
+  }
+
 }

@@ -1,116 +1,151 @@
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+/* =========================================
+   IRONAGE — GLOBAL FOUNDATION
+========================================= */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 html,
 body,
-#root{
-
-  min-height:100%;
-  width:100%;
-
-  background:#050505;
-  color:#ffffff;
-
-  font-family:Inter, Arial, sans-serif;
-
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-
-
-body{
-
-  overflow-x:hidden;
-
+html {
+  background: var(--ia-black);
 }
 
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
 
+  background:
+    radial-gradient(
+      circle at 50% -15%,
+      rgba(212, 175, 55, 0.08),
+      transparent 35%
+    ),
+    var(--ia-black);
 
-.page{
+  color: var(--ia-white);
 
-  min-height:100vh;
+  font-family: var(--font-body);
 
-  background:#050505;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-  color:white;
+  text-rendering: optimizeLegibility;
 
-  padding:30px 24px;
-
+  overflow-x: hidden;
 }
 
+/* =========================================
+   TYPOGRAPHY
+========================================= */
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 
-.gold{
-
-  color:#D4AF37;
-
+  font-family: var(--font-display);
 }
 
-
-
-.title{
-
-  font-size:42px;
-
-  font-weight:900;
-
-  line-height:1.1;
-
-  margin-top:40px;
-
+p {
+  margin: 0;
 }
 
+/* =========================================
+   FORM ELEMENTS
+========================================= */
 
-
-.subtitle{
-
-  color:#999;
-
-  margin-top:15px;
-
-  font-size:16px;
-
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
+button {
+  border: 0;
+  cursor: pointer;
 
-
-.card{
-
-  background:#111;
-
-  border:1px solid rgba(212,175,55,0.3);
-
-  border-radius:24px;
-
-  padding:24px;
-
-  margin-top:25px;
-
+  -webkit-tap-highlight-color: transparent;
 }
 
+input,
+textarea,
+select {
+  color: inherit;
+}
 
+/* =========================================
+   FOCUS
+========================================= */
 
-.primary-btn{
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--ia-gold);
 
-  width:100%;
+  outline-offset: 3px;
+}
 
-  height:60px;
+/* =========================================
+   IMAGES
+========================================= */
 
-  margin-top:30px;
+img {
+  display: block;
+  max-width: 100%;
+}
 
-  border:none;
+/* =========================================
+   LINKS
+========================================= */
 
-  border-radius:20px;
+a {
+  color: inherit;
+  text-decoration: none;
 
-  background:#D4AF37;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  color:#050505;
+/* =========================================
+   SELECTION
+========================================= */
 
-  font-size:16px;
+::selection {
+  background: var(--ia-gold);
+  color: var(--ia-black);
+}
 
-  font-weight:900;
+/* =========================================
+   SCROLLBAR
+========================================= */
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ia-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ia-gold-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ia-gold);
 }

@@ -1,0 +1,473 @@
+/* =========================================================
+   IRONAGE — LUXURY BUTTON SYSTEM
+   BLACK × GOLD
+========================================================= */
+
+:root {
+  --iron-black: #050505;
+  --iron-black-soft: #0b0b0b;
+  --iron-surface: #111111;
+  --iron-surface-light: #171717;
+
+  --iron-gold: #d4af37;
+  --iron-gold-light: #f4d675;
+  --iron-gold-dark: #8f6f16;
+
+  --iron-white: #ffffff;
+  --iron-muted: rgba(255, 255, 255, 0.52);
+
+  --luxury-radius: 18px;
+}
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.luxury-button {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  min-height: 52px;
+  padding: 0 20px;
+
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: var(--luxury-radius);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.01)
+    ),
+    #0b0b0b;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  cursor: pointer;
+
+  transition:
+    transform 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+
+  -webkit-tap-highlight-color: transparent;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   GOLD LIGHT
+========================================================= */
+
+.luxury-button::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.08) 45%,
+      transparent 70%
+    );
+
+  transform: translateX(-120%);
+
+  transition:
+    transform 550ms ease;
+
+  pointer-events: none;
+}
+
+.luxury-button:hover::before {
+  transform: translateX(120%);
+}
+
+/* =========================================================
+   ICON
+========================================================= */
+
+.luxury-button__icon {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  color: currentColor;
+
+  transition:
+    transform 180ms ease,
+    color 180ms ease,
+    filter 180ms ease;
+}
+
+.luxury-button__icon svg {
+  width: 20px;
+  height: 20px;
+
+  stroke-width: 1.8;
+}
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.luxury-button__label {
+  position: relative;
+  z-index: 2;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.luxury-button--active {
+  color: var(--iron-gold-light);
+
+  border-color:
+    rgba(212, 175, 55, 0.65);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(212, 175, 55, 0.14),
+      rgba(212, 175, 55, 0.035)
+    ),
+    #0b0b0b;
+
+  box-shadow:
+    0 0 0 1px
+      rgba(212, 175, 55, 0.04),
+
+    0 8px 24px
+      rgba(0, 0, 0, 0.35),
+
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.06);
+}
+
+.luxury-button--active
+.luxury-button__icon {
+  color: var(--iron-gold-light);
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(212, 175, 55, 0.45)
+    );
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   ACTIVE GOLD LINE
+========================================================= */
+
+.luxury-button--active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 24%;
+  right: 24%;
+  bottom: 4px;
+
+  height: 2px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--iron-gold),
+      transparent
+    );
+
+  box-shadow:
+    0 0 10px
+      rgba(212, 175, 55, 0.55);
+}
+
+/* =========================================================
+   PRESS
+========================================================= */
+
+.luxury-button:active:not(
+  .luxury-button--disabled
+) {
+  transform: scale(0.96);
+
+  border-color:
+    rgba(212, 175, 55, 0.7);
+}
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+@media (hover: hover) {
+  .luxury-button:hover:not(
+    .luxury-button--disabled
+  ) {
+    color: var(--iron-white);
+
+    border-color:
+      rgba(212, 175, 55, 0.42);
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(212, 175, 55, 0.08),
+        rgba(255, 255, 255, 0.02)
+      ),
+      #0b0b0b;
+
+    box-shadow:
+      0 8px 28px
+        rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* =========================================================
+   DISABLED
+========================================================= */
+
+.luxury-button--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   BOTTOM NAVIGATION
+========================================================= */
+
+.luxury-bottom-nav {
+  position: fixed;
+
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+
+  z-index: 1000;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, 1fr);
+
+  gap: 6px;
+
+  padding: 8px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.16);
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(22, 22, 22, 0.96),
+      rgba(5, 5, 5, 0.98)
+    );
+
+  box-shadow:
+    0 20px 50px
+      rgba(0, 0, 0, 0.65),
+
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.05);
+
+  backdrop-filter:
+    blur(24px);
+
+  -webkit-backdrop-filter:
+    blur(24px);
+}
+
+/* =========================================================
+   NAV BUTTON
+========================================================= */
+
+.luxury-bottom-nav .luxury-button {
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 58px;
+
+  padding:
+    7px 4px;
+
+  border: 0;
+
+  border-radius: 17px;
+
+  background:
+    transparent;
+
+  box-shadow: none;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  font-size: 10px;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+}
+
+.luxury-bottom-nav
+.luxury-button__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.luxury-bottom-nav
+.luxury-button__icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* =========================================================
+   NAV ACTIVE
+========================================================= */
+
+.luxury-bottom-nav
+.luxury-button--active {
+  color:
+    var(--iron-gold-light);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(212, 175, 55, 0.15),
+      rgba(212, 175, 55, 0.035)
+    );
+
+  border: 1px solid
+    rgba(212, 175, 55, 0.18);
+
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.06),
+
+    0 5px 18px
+      rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   NAV ACTIVE ICON
+========================================================= */
+
+.luxury-bottom-nav
+.luxury-button--active
+.luxury-button__icon {
+  color:
+    var(--iron-gold-light);
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(212, 175, 55, 0.55)
+    );
+
+  transform:
+    translateY(-1px);
+}
+
+/* =========================================================
+   NAV ACTIVE LINE
+========================================================= */
+
+.luxury-bottom-nav
+.luxury-button--active::after {
+  left: 30%;
+  right: 30%;
+  bottom: 3px;
+
+  height: 2px;
+}
+
+/* =========================================================
+   IPHONE SAFE AREA
+========================================================= */
+
+@supports (
+  padding-bottom:
+    env(safe-area-inset-bottom)
+) {
+  .luxury-bottom-nav {
+    bottom:
+      calc(
+        10px +
+        env(safe-area-inset-bottom)
+      );
+  }
+}
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+  .luxury-bottom-nav {
+    left: 8px;
+    right: 8px;
+
+    padding: 6px;
+
+    gap: 3px;
+
+    border-radius: 21px;
+  }
+
+  .luxury-bottom-nav
+  .luxury-button {
+    min-height: 55px;
+
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .luxury-button,
+  .luxury-button::before,
+  .luxury-button__icon {
+    transition: none;
+  }
+}

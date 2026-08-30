@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-
 import {
+  hideTelegramBackButton,
   showTelegramBackButton,
 } from "../services/telegramService";
 
@@ -8,14 +8,13 @@ type Props = {
   onBack: () => void;
 };
 
-export default function TelegramBackButton({
-  onBack,
-}: Props) {
+export default function TelegramBackButton({ onBack }: Props) {
   useEffect(() => {
-    const cleanup =
-      showTelegramBackButton(onBack);
+    showTelegramBackButton(onBack);
 
-    return cleanup;
+    return () => {
+      hideTelegramBackButton();
+    };
   }, [onBack]);
 
   return null;

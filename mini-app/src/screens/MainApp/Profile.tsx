@@ -1,462 +1,737 @@
 import { useState } from "react";
 
-import "./Profile.css";
-
 import { useUser } from "../../context/UserContext";
+import type { Goal } from "../../types/user";
 
-export default function Profile() {
-  const { user, setUser } = useUser();
+import "./Profile.css";
+import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
-  const [editing, setEditing] = useState(false);
+type Props = {
+  onOpenPremium?: () => void;
+};
 
-  const [name, setName] = useState(user.name);
-  const [age, setAge] = useState(String(user.age));
-  const [height, setHeight] = useState(String(user.height));
-  const [weight, setWeight] = useState(String(user.weight));
-  const [goal, setGoal] = useState(user.goal);
+type ProfileView =
+  | "main"
+  | "personal"
+  | "goals";
 
-  const levelXP = user.xp % 1000;
+const goals: Array<{
+  id: Goal;
+  title: string;
+  description: string;
+  icon: string;
+}> = [
+  {
+    id: "MUSCLE",
+    title: "BUILD MUSCLE",
+    description: "Increase muscle mass and strength",
+    icon: "M",
+  },
+  {
+    id: "LOSE_WEIGHT",
+    title: "LOSE WEIGHT",
+    description: "Burn fat and build a leaner physique",
+    icon: "↓",
+  },
+  {
+    id: "STRENGTH",
+    title: "STRENGTH",
+    description: "Become stronger and more powerful",
+    icon: "+",
+  },
+  {
+    id: "ENDURANCE",
+    title: "ENDURANCE",
+    description: "Improve stamina and performance",
+    icon: "∞",
+  },
+  {
+    id: "FITNESS",
+    title: "GENERAL FITNESS",
+    description: "Build your complete athletic base",
+    icon: "IA",
+  },
+  {
+    id: "MAINTAIN",
+    title: "MAINTAIN",
+    description: "Stay consistent and maintain progress",
+    icon: "=",
+  },
+];
 
-  const xpProgress = Math.min(
-    (levelXP / 1000) * 100,
-    100
-  );
+export default function Profile({
+  onOpenPremium,
+}: Props) {
+  const { user, updateProfile } = useUser();
 
-  function startEditing() {
-    setName(user.name);
-    setAge(String(user.age));
-    setHeight(String(user.height));
-    setWeight(String(user.weight));
-    setGoal(user.goal);
+  const [view, setView] =
+    useState<ProfileView>("main");
 
-    setEditing(true);
+  const [name, setName] =
+    useState(user.name);
+
+  const [age, setAge] =
+    useState(String(user.age));
+
+  const [weight, setWeight] =
+    useState(String(user.weight));
+
+  const [height, setHeight] =
+    useState(String(user.height));
+
+  const [goal, setGoal] =
+    useState<Goal>(() => {
+      switch (user.goal) {
+        case "MUSCLE":
+        case "LOSE_WEIGHT":
+        case "MAINTAIN":
+        case "ENDURANCE":
+        case "STRENGTH":
+        case "FITNESS":
+          return user.goal;
+
+        default:
+          return "MUSCLE";
+      }
+    });
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const xpInLevel =
+    user.xp % 1000;
+
+  const xpProgress =
+    Math.min(
+      100,
+      (xpInLevel / 1000) * 100
+    );
+
+  const saveProfile = async (
+    nextView: ProfileView = "main"
+  ) => {
+    if (saving) return;
+
+    try {
+      setSaving(true);
+
+      await updateProfile({
+        name:
+          name.trim() ||
+          user.name,
+
+        age: Math.max(
+          13,
+          Number(age) ||
+            user.age ||
+            0
+        ),
+
+        weight: Math.max(
+          30,
+          Number(weight) ||
+            user.weight ||
+            0
+        ),
+
+        height: Math.max(
+          120,
+          Number(height) ||
+            user.height ||
+            0
+        ),
+
+        goal,
+      });
+
+      setView(nextView);
+    } catch (error) {
+      console.error(
+        "IRONAGE: Profile save failed:",
+        error
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const goalLabel =
+    goals.find(
+      (item) => item.id === goal
+    )?.title || "BUILD MUSCLE";
+
+  if (view === "personal") {
+    return (
+      <main className="profile-page profile-subpage">
+        <div className="profile-subcontent">
+
+          <header className="profile-subheader">
+            <button
+              type="button"
+              className="profile-back"
+              onClick={() =>
+                setView("main")
+              }
+              aria-label="Back"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>IRONAGE PROFILE</span>
+              <h1>PERSONAL DATA</h1>
+              <p>
+                BUILD YOUR ATHLETE PROFILE
+              </p>
+            </div>
+          </header>
+
+          <section className="profile-intro-card">
+            <div className="profile-ia-mark">
+              IA
+            </div>
+
+            <div>
+              <span>
+                IRONAGE PRINCIPLE
+              </span>
+
+              <h2>
+                YOUR DATA.
+                <br />
+                YOUR PROGRESS.
+              </h2>
+
+              <p>
+                Accurate data helps
+                IRONAGE personalize your
+                training and track your
+                transformation.
+              </p>
+            </div>
+          </section>
+
+          <div className="profile-section-title">
+            <span />
+            <strong>
+              PERSONAL INFORMATION
+            </strong>
+            <span />
+          </div>
+
+          <section className="profile-data-list">
+
+            <label className="profile-data-card">
+              <div className="profile-data-icon">
+                01
+              </div>
+
+              <div className="profile-data-control">
+                <span>NAME</span>
+
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(event) =>
+                    setName(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Your name"
+                />
+              </div>
+            </label>
+
+            <label className="profile-data-card">
+              <div className="profile-data-icon">
+                02
+              </div>
+
+              <div className="profile-data-control">
+                <span>AGE</span>
+
+                <div className="profile-input-unit">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min="13"
+                    value={age}
+                    onChange={(event) =>
+                      setAge(
+                        event.target.value
+                      )
+                    }
+                  />
+
+                  <b>YEARS</b>
+                </div>
+              </div>
+            </label>
+
+          </section>
+
+          <div className="profile-section-title">
+            <span />
+            <strong>
+              PHYSICAL INFORMATION
+            </strong>
+            <span />
+          </div>
+
+          <section className="profile-physical-grid">
+
+            <label className="profile-metric-card">
+              <span>WEIGHT</span>
+
+              <div>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="30"
+                  value={weight}
+                  onChange={(event) =>
+                    setWeight(
+                      event.target.value
+                    )
+                  }
+                />
+
+                <b>KG</b>
+              </div>
+
+              <small>
+                CURRENT BODY WEIGHT
+              </small>
+            </label>
+
+            <label className="profile-metric-card">
+              <span>HEIGHT</span>
+
+              <div>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min="120"
+                  value={height}
+                  onChange={(event) =>
+                    setHeight(
+                      event.target.value
+                    )
+                  }
+                />
+
+                <b>CM</b>
+              </div>
+
+              <small>
+                ATHLETE HEIGHT
+              </small>
+            </label>
+
+          </section>
+
+          <button
+            type="button"
+            className="profile-gold-button"
+            disabled={saving}
+            onClick={() =>
+              void saveProfile("main")
+            }
+          >
+            <span>
+              {saving
+                ? "SAVING..."
+                : "SAVE PERSONAL DATA"}
+            </span>
+
+            <b>→</b>
+          </button>
+
+        </div>
+      </main>
+    );
   }
 
-  function cancelEditing() {
-    setEditing(false);
+  if (view === "goals") {
+    return (
+      <main className="profile-page profile-subpage">
+        <div className="profile-subcontent">
 
-    setName(user.name);
-    setAge(String(user.age));
-    setHeight(String(user.height));
-    setWeight(String(user.weight));
-    setGoal(user.goal);
-  }
+          <header className="profile-subheader">
+            <button
+              type="button"
+              className="profile-back"
+              onClick={() =>
+                setView("main")
+              }
+              aria-label="Back"
+            >
+              ←
+            </button>
 
-  function saveProfile() {
-    const parsedAge = Number(age);
-    const parsedHeight = Number(height);
-    const parsedWeight = Number(weight);
+            <div>
+              <span>IRONAGE ATHLETE</span>
+              <h1>TRAINING GOALS</h1>
+              <p>
+                WHAT'S YOUR MAIN FOCUS?
+              </p>
+            </div>
+          </header>
 
-    if (!name.trim()) {
-      return;
-    }
+          <section className="profile-goal-hero">
+            <div className="profile-target">
+              ◎
+            </div>
 
-    if (
-      !Number.isFinite(parsedAge) ||
-      parsedAge <= 0
-    ) {
-      return;
-    }
+            <div>
+              <span>YOUR MISSION</span>
 
-    if (
-      !Number.isFinite(parsedHeight) ||
-      parsedHeight <= 0
-    ) {
-      return;
-    }
+              <h2>
+                FOCUS YOUR TRAINING.
+                <br />
+                ACHIEVE MORE.
+              </h2>
 
-    if (
-      !Number.isFinite(parsedWeight) ||
-      parsedWeight <= 0
-    ) {
-      return;
-    }
+              <p>
+                Choose your primary goal.
+                IRONAGE will use it to
+                personalize your training.
+              </p>
+            </div>
+          </section>
 
-    setUser((prev) => ({
-      ...prev,
+          <div className="profile-section-title">
+            <span />
+            <strong>PRIMARY GOAL</strong>
+            <span />
+          </div>
 
-      name: name.trim(),
+          <section className="profile-goals-list">
+            {goals.map((item) => {
+              const active =
+                goal === item.id;
 
-      age: parsedAge,
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`profile-goal-card ${
+                    active
+                      ? "profile-goal-card--active"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setGoal(item.id)
+                  }
+                >
+                  <div className="profile-goal-icon">
+                    {item.icon}
+                  </div>
 
-      height: parsedHeight,
+                  <div className="profile-goal-copy">
+                    <strong>
+                      {item.title}
+                    </strong>
 
-      weight: parsedWeight,
+                    <span>
+                      {item.description}
+                    </span>
+                  </div>
 
-      goal: goal.trim() || prev.goal,
-    }));
+                  <div className="profile-goal-check">
+                    {active ? "✓" : ""}
+                  </div>
+                </button>
+              );
+            })}
+          </section>
 
-    setEditing(false);
+          <div className="profile-goal-note">
+            <span>i</span>
+
+            <p>
+              You can update your training
+              goal anytime from your
+              IRONAGE profile.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="profile-gold-button"
+            disabled={saving}
+            onClick={() =>
+              void saveProfile("main")
+            }
+          >
+            <span>
+              {saving
+                ? "SAVING..."
+                : "SAVE TRAINING GOAL"}
+            </span>
+
+            <b>→</b>
+          </button>
+
+        </div>
+      </main>
+    );
   }
 
   return (
-    <div className="profile-page">
+    <main className="profile-page">
 
-      {/* HEADER */}
+      <img
+        src={vasylPhoto}
+        alt="IRONAGE athlete"
+        className="profile-background"
+      />
 
-      <header className="profile-header">
+      <div className="profile-overlay" />
 
-        <div>
-          <p className="profile-label">
-            IRONAGE PROFILE
-          </p>
+      <div className="profile-content">
 
-          <h1>
-            Мій профіль
-          </h1>
-        </div>
-
-        <div className="profile-level">
-          ⚔️
+        <header className="profile-header">
           <span>
-            LVL {user.level}
+            IRONAGE
           </span>
-        </div>
 
-      </header>
+          <div className="profile-header-mark">
+            IA
+          </div>
+        </header>
 
+        <section className="profile-hero">
 
-      {/* USER */}
+          <div className="profile-avatar">
+            <img
+              src={vasylPhoto}
+              alt="Profile"
+            />
 
-      <section className="profile-card">
-
-        <div className="profile-avatar">
-          {user.name.charAt(0).toUpperCase()}
-        </div>
-
-        <div className="profile-main">
-
-          <h2>
-            {user.name}
-          </h2>
-
-          <p>
-            {user.goal}
-          </p>
-
-        </div>
-
-      </section>
-
-
-      {/* EDIT */}
-
-      {!editing ? (
-
-        <button
-          type="button"
-          className="profile-edit-button"
-          onClick={startEditing}
-        >
-          ✏️ РЕДАГУВАТИ ПРОФІЛЬ
-        </button>
-
-      ) : (
-
-        <section className="profile-edit-card">
-
-          <div className="profile-info-title">
-
-            <span>
-              НАЛАШТУВАННЯ
-            </span>
-
-            <h2>
-              Редагування профілю
-            </h2>
-
+            <div className="profile-level-badge">
+              {String(user.level)
+                .padStart(2, "0")}
+            </div>
           </div>
 
+          <span className="profile-eyebrow">
+            IRONAGE ATHLETE
+          </span>
 
-          <label>
-            Ім'я
+          <h1>
+            {user.name.toUpperCase()}
+          </h1>
 
-            <input
-              type="text"
-              value={name}
-              onChange={(event) =>
-                setName(event.target.value)
-              }
+          <p>
+            DISCIPLINE • STRENGTH • MINDSET
+          </p>
+
+        </section>
+
+        <section className="profile-xp">
+
+          <div className="profile-xp-top">
+            <span>
+              LEVEL{" "}
+              {String(user.level)
+                .padStart(2, "0")}
+            </span>
+
+            <strong>
+              {user.xp.toLocaleString()} XP
+            </strong>
+          </div>
+
+          <div className="profile-xp-track">
+            <div
+              className="profile-xp-fill"
+              style={{
+                width: `${Math.max(
+                  3,
+                  xpProgress
+                )}%`,
+              }}
             />
-          </label>
+          </div>
 
+          <small>
+            {xpInLevel.toLocaleString()}
+            {" / 1,000 XP"}
+          </small>
 
-          <label>
-            Вік
+        </section>
 
-            <input
-              type="number"
-              min="1"
-              value={age}
-              onChange={(event) =>
-                setAge(event.target.value)
-              }
-            />
-          </label>
+        <section className="profile-stats">
 
+          <div>
+            <span>WORKOUTS</span>
+            <strong>
+              {user.workouts}
+            </strong>
+          </div>
 
-          <label>
-            Зріст
+          <div>
+            <span>STREAK</span>
+            <strong>
+              {user.streak}
+            </strong>
+          </div>
 
-            <input
-              type="number"
-              min="1"
-              value={height}
-              onChange={(event) =>
-                setHeight(event.target.value)
-              }
-            />
-          </label>
-
-
-          <label>
-            Вага
-
-            <input
-              type="number"
-              min="1"
-              step="0.1"
-              value={weight}
-              onChange={(event) =>
-                setWeight(event.target.value)
-              }
-            />
-          </label>
-
-
-          <label>
-            Мета
-
-            <input
-              type="text"
-              value={goal}
-              onChange={(event) =>
-                setGoal(event.target.value)
-              }
-            />
-          </label>
-
-
-          <div className="profile-edit-actions">
-
-            <button
-              type="button"
-              className="profile-save-button"
-              onClick={saveProfile}
-            >
-              ✓ ЗБЕРЕГТИ
-            </button>
-
-            <button
-              type="button"
-              className="profile-cancel-button"
-              onClick={cancelEditing}
-            >
-              СКАСУВАТИ
-            </button>
-
+          <div>
+            <span>XP</span>
+            <strong>
+              {user.xp >= 1000
+                ? `${(
+                    user.xp / 1000
+                  ).toFixed(1)}K`
+                : user.xp}
+            </strong>
           </div>
 
         </section>
 
-      )}
-
-
-      {/* STATS */}
-
-      <section className="profile-stats">
-
-        <div className="profile-stat">
-
-          <span>
-            ⚡
-          </span>
-
-          <strong>
-            {user.xp}
-          </strong>
-
-          <small>
-            XP
-          </small>
-
+        <div className="profile-section-title profile-main-title">
+          <span />
+          <strong>ATHLETE PROFILE</strong>
+          <span />
         </div>
 
+        <section className="profile-menu">
 
-        <div className="profile-stat">
+          <button
+            type="button"
+            onClick={() =>
+              setView("personal")
+            }
+          >
+            <div>
+              <span>01</span>
 
+              <section>
+                <strong>
+                  PERSONAL DATA
+                </strong>
+
+                <small>
+                  {user.age} YEARS ·{" "}
+                  {user.weight} KG ·{" "}
+                  {user.height} CM
+                </small>
+              </section>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              setView("goals")
+            }
+          >
+            <div>
+              <span>02</span>
+
+              <section>
+                <strong>
+                  TRAINING GOAL
+                </strong>
+
+                <small>
+                  {goalLabel}
+                </small>
+              </section>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenPremium}
+            disabled={!onOpenPremium}
+          >
+            <div>
+              <span>03</span>
+
+              <section>
+                <strong>
+                  IRONAGE PREMIUM
+                </strong>
+
+                <small>
+                  UNLOCK YOUR FULL POTENTIAL
+                </small>
+              </section>
+            </div>
+
+            <b>
+              {user.premiumPlan || "→"}
+            </b>
+          </button>
+
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+          >
+            <div>
+              <span>04</span>
+
+              <section>
+                <strong>
+                  NOTIFICATIONS
+                </strong>
+
+                <small>
+                  COMING SOON
+                </small>
+              </section>
+            </div>
+
+            <b>SOON</b>
+          </button>
+
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+          >
+            <div>
+              <span>05</span>
+
+              <section>
+                <strong>
+                  SETTINGS
+                </strong>
+
+                <small>
+                  COMING SOON
+                </small>
+              </section>
+            </div>
+
+            <b>SOON</b>
+          </button>
+
+        </section>
+
+        <section className="profile-quote">
           <span>
-            🔥
-          </span>
-
-          <strong>
-            {user.streak}
-          </strong>
-
-          <small>
-            STREAK
-          </small>
-
-        </div>
-
-
-        <div className="profile-stat">
-
-          <span>
-            💪
-          </span>
-
-          <strong>
-            {user.workouts}
-          </strong>
-
-          <small>
-            ТРЕНУВАНЬ
-          </small>
-
-        </div>
-
-      </section>
-
-
-      {/* PERSONAL DATA */}
-
-      <section className="profile-info">
-
-        <div className="profile-info-title">
-
-          <span>
-            ПЕРСОНАЛЬНІ ДАНІ
+            IRONAGE MINDSET
           </span>
 
           <h2>
-            Мої параметри
+            BECOME
+            <br />
+            <strong>
+              UNSTOPPABLE.
+            </strong>
           </h2>
+        </section>
 
-        </div>
-
-
-        <div className="profile-row">
-
-          <span>
-            Ім'я
-          </span>
-
-          <strong>
-            {user.name}
-          </strong>
-
-        </div>
-
-
-        <div className="profile-row">
-
-          <span>
-            Вік
-          </span>
-
-          <strong>
-            {user.age} років
-          </strong>
-
-        </div>
-
-
-        <div className="profile-row">
-
-          <span>
-            Зріст
-          </span>
-
-          <strong>
-            {user.height} см
-          </strong>
-
-        </div>
-
-
-        <div className="profile-row">
-
-          <span>
-            Вага
-          </span>
-
-          <strong>
-            {user.weight} кг
-          </strong>
-
-        </div>
-
-
-        <div className="profile-row">
-
-          <span>
-            Мета
-          </span>
-
-          <strong>
-            {user.goal}
-          </strong>
-
-        </div>
-
-      </section>
-
-
-      {/* XP */}
-
-      <section className="profile-xp">
-
-        <div>
-
-          <span>
-            ПРОГРЕС РІВНЯ
-          </span>
-
-          <strong>
-            {levelXP} / 1000 XP
-          </strong>
-
-        </div>
-
-
-        <div className="profile-xp-track">
-
-          <div
-            className="profile-xp-fill"
-            style={{
-              width: `${xpProgress}%`,
-            }}
-          />
-
-        </div>
-
-      </section>
-
-
-      {/* MOTIVATION */}
-
-      <section className="profile-quote">
-
-        <div className="profile-quote-icon">
-          ⚔️
-        </div>
-
-        <div>
-
-          <strong>
-            IRONAGE MINDSET
-          </strong>
-
-          <p>
-            Дисципліна перемагає мотивацію.
-            Ти вже почав — тепер не зупиняйся.
-          </p>
-
-        </div>
-
-      </section>
-
-    </div>
+      </div>
+    </main>
   );
 }

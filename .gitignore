@@ -22,3 +22,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel
+.env*
+*.xcarchive/
+mini-app.zip
+ironage-cleanup-backup-*/
+mini-app/tsconfig.tsbuildinfo
+mini-app/ios/debug.xcconfig
+mini-app/ios/App/IronAge.xcodeproj.backup-before-capacitor-fix/
+mini-app/.agents/
+mini-app/.claude/
+mini-app/.windsurf/
+**/skills-lock.json
+**/xcuserdata/
+*.xcuserstate

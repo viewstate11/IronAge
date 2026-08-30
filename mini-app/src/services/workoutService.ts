@@ -1,140 +1,121 @@
-import type { WorkoutProgram } from "../types/workout";
+import type {
+  WorkoutProgram,
+} from "../types/workout";
 
-export const workoutPrograms: Record<string, WorkoutProgram> = {
-  upper: {
+/* =========================================================
+   IRONAGE WORKOUT PROGRAMS
+========================================================= */
+
+export const workoutPrograms: WorkoutProgram[] = [
+  {
     id: "upper",
-    name: "Верх тіла",
-    duration: 20,
+    title: "UPPER BODY",
+
     exercises: [
       {
-        name: "Віджимання",
-        emoji: "💪",
+        id: "push-ups",
+        name: "PUSH UPS",
         sets: 4,
-        reps: 15,
+        reps: "15",
       },
       {
-        name: "Підтягування",
-        emoji: "🏋️",
-        sets: 4,
-        reps: 10,
-      },
-      {
-        name: "Бруси",
-        emoji: "🔥",
-        sets: 4,
-        reps: 12,
-      },
-      {
-        name: "Планка",
-        emoji: "🧱",
+        id: "diamond-push-ups",
+        name: "DIAMOND PUSH UPS",
         sets: 3,
-        reps: 60,
+        reps: "12",
+      },
+      {
+        id: "dips",
+        name: "DIPS",
+        sets: 3,
+        reps: "10",
+      },
+      {
+        id: "pike-push-ups",
+        name: "PIKE PUSH UPS",
+        sets: 3,
+        reps: "12",
       },
     ],
   },
 
-  legs: {
-    id: "legs",
-    name: "Ноги",
-    duration: 25,
+  {
+    id: "lower",
+    title: "LOWER BODY",
+
     exercises: [
       {
-        name: "Присідання",
-        emoji: "🦵",
+        id: "squats",
+        name: "SQUATS",
         sets: 4,
-        reps: 15,
+        reps: "15",
       },
       {
-        name: "Випади",
-        emoji: "🔥",
+        id: "lunges",
+        name: "LUNGES",
         sets: 3,
-        reps: 12,
+        reps: "12 / LEG",
       },
       {
-        name: "Ягодичний місток",
-        emoji: "🍑",
+        id: "glute-bridge",
+        name: "GLUTE BRIDGE",
         sets: 3,
-        reps: 15,
+        reps: "15",
       },
       {
-        name: "Підйоми на носки",
-        emoji: "⚡",
-        sets: 3,
-        reps: 20,
+        id: "calf-raises",
+        name: "CALF RAISES",
+        sets: 4,
+        reps: "20",
       },
     ],
   },
 
-  abs: {
-    id: "abs",
-    name: "Прес",
-    duration: 12,
-    exercises: [
-      {
-        name: "Скручування",
-        emoji: "💥",
-        sets: 3,
-        reps: 15,
-      },
-      {
-        name: "Підйом ніг",
-        emoji: "🔥",
-        sets: 3,
-        reps: 12,
-      },
-      {
-        name: "Планка",
-        emoji: "🧱",
-        sets: 3,
-        reps: 45,
-      },
-      {
-        name: "Велосипед",
-        emoji: "🚴",
-        sets: 3,
-        reps: 20,
-      },
-    ],
-  },
+  {
+    id: "full",
+    title: "FULL BODY",
 
-  cardio: {
-    id: "cardio",
-    name: "Кардіо",
-    duration: 15,
     exercises: [
       {
-        name: "Jumping Jacks",
-        emoji: "🏃",
+        id: "burpees",
+        name: "BURPEES",
         sets: 3,
-        reps: 30,
+        reps: "12",
       },
       {
-        name: "Берпі",
-        emoji: "🔥",
+        id: "push-ups",
+        name: "PUSH UPS",
         sets: 3,
-        reps: 10,
+        reps: "15",
       },
       {
-        name: "Mountain Climbers",
-        emoji: "⚡",
+        id: "squats",
+        name: "SQUATS",
         sets: 3,
-        reps: 20,
+        reps: "20",
       },
       {
-        name: "Високі коліна",
-        emoji: "🏃",
+        id: "mountain-climbers",
+        name: "MOUNTAIN CLIMBERS",
         sets: 3,
-        reps: 30,
+        reps: "30",
       },
     ],
   },
-};
+];
+
+/* =========================================================
+   GET WORKOUT
+========================================================= */
 
 export function getWorkoutProgram(
   workoutId: string
 ): WorkoutProgram {
   return (
-    workoutPrograms[workoutId] ??
-    workoutPrograms.upper
+    workoutPrograms.find(
+      (workout) =>
+        workout.id === workoutId
+    ) ??
+    workoutPrograms[0]
   );
 }

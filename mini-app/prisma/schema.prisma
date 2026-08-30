@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../backend/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                  Int              @id @default(autoincrement())
+  telegramId          BigInt?          @unique
+  username            String?
+  firstName           String
+  lastName            String?
+  languageCode        String?
+  age                 Int?
+  gender              Gender?
+  weight              Float?
+  height              Float?
+  goal                Goal?
+  onboardingCompleted Boolean          @default(false)
+  level               Int              @default(1)
+  xp                  Int              @default(0)
+  workouts            Int              @default(0)
+  streak              Int              @default(0)
+  premiumPlan         String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  webId               String?          @unique
+  nutritionDays       NutritionDay[]
+  progress            Progress[]
+  workoutSessions     WorkoutSession[]
+
+  @@index([createdAt])
+}
+
+model WorkoutSession {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  workoutId   String
+  workoutName String
+  duration    Int           @default(0)
+  xp          Int           @default(0)
+  status      WorkoutStatus @default(COMPLETED)
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sets        WorkoutSet[]
+
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+model WorkoutSet {
+  id           Int            @id @default(autoincrement())
+  workoutId    Int
+  exerciseId   String
+  exerciseName String
+  setNumber    Int
+  repetitions  Int?
+  weight       Float?
+  duration     Int?
+  completed    Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  workout      WorkoutSession @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([workoutId])
+}
+
+model Progress {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  weight     Float?
+  bodyFat    Float?
+  muscleMass Float?
+  note       String?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model NutritionDay {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  date      DateTime
+  water     Int         @default(0)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  meals     FoodEntry[]
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model FoodEntry {
+  id             Int          @id @default(autoincrement())
+  nutritionDayId Int
+  name           String
+  meal           MealType
+  calories       Float        @default(0)
+  protein        Float        @default(0)
+  fat            Float        @default(0)
+  carbs          Float        @default(0)
+  amount         Float?
+  unit           String?
+  createdAt      DateTime     @default(now())
+  nutritionDay   NutritionDay @relation(fields: [nutritionDayId], references: [id], onDelete: Cascade)
+
+  @@index([nutritionDayId])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Goal {
+  MUSCLE
+  LOSE_WEIGHT
+  MAINTAIN
+  ENDURANCE
+  STRENGTH
+  FITNESS
+}
+
+enum WorkoutStatus {
+  COMPLETED
+  CANCELED
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}

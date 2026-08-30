@@ -12,7 +12,7 @@ type AIResponse = {
 };
 
 const API_URL =
-  "http://localhost:3001/api/ai";
+  "/api/ai";
 
 export async function getAITrainerResponse(
   user: User,

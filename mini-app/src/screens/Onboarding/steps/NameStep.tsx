@@ -1,78 +1,77 @@
-import { useState } from "react";
-
-import { useUser } from "../../../context/UserContext";
-
-
-interface Props {
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
   next: () => void;
-}
+};
 
-
-export default function NameStep({ next }: Props) {
-
-  const [name, setName] = useState("");
-
-  const { setUser } = useUser();
-
-
+export default function NameStep({
+  value,
+  onChange,
+  next,
+}: Props) {
   const handleNext = () => {
-
-    const cleanName = name.trim();
-
-    if (!cleanName) return;
-
-
-    setUser((prev) => ({
-      ...prev,
-      name: cleanName,
-    }));
-
-
-    localStorage.setItem(
-      "name",
-      cleanName
-    );
-
-
+    if (!value.trim()) return;
     next();
-
   };
 
-
   return (
+    <section className="onboarding-step name-step">
+      <div className="onboarding-step-content">
 
-    <div className="step">
+        <div className="onboarding-eyebrow">
+          <span />
+          LET'S GET STARTED
+          <span />
+        </div>
 
-      <h1>
-        Як тебе звати?
-      </h1>
+        <h1 className="onboarding-title">
+          WHAT'S
+          <br />
+          <strong>YOUR NAME?</strong>
+        </h1>
 
+        <p className="onboarding-description">
+          Your journey starts with one decision.
+          <br />
+          Let's make it count.
+        </p>
 
-      <p>
-        Почнемо створення твого профілю
-      </p>
+        <div className="onboarding-input-wrapper">
+          <label htmlFor="name">
+            YOUR NAME
+          </label>
 
+          <input
+            id="name"
+            type="text"
+            value={value}
+            onChange={(event) =>
+              onChange(event.target.value)
+            }
+            placeholder="Enter your name"
+            autoComplete="name"
+          />
+        </div>
 
-      <input
-        className="input"
-        placeholder="Твоє ім'я"
-        value={name}
-        onChange={(e) =>
-          setName(e.target.value)
-        }
-      />
+      </div>
 
+      <div className="onboarding-step-bottom">
 
-      <button
-        className="button"
-        disabled={!name.trim()}
-        onClick={handleNext}
-      >
-        ДАЛІ
-      </button>
+        <button
+          type="button"
+          className="onboarding-button"
+          onClick={handleNext}
+          disabled={!value.trim()}
+        >
+          <span>CONTINUE</span>
+          <strong>→</strong>
+        </button>
 
-    </div>
+        <p className="onboarding-footer">
+          IRONAGE ATHLETE SYSTEM
+        </p>
 
+      </div>
+    </section>
   );
-
 }

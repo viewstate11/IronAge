@@ -2,223 +2,410 @@ import "./WorkoutComplete.css";
 
 import { useUser } from "../../context/UserContext";
 
-type Props = {
-  changeTab: (tab: string) => void;
+export type WorkoutResult = {
   workoutId: string;
+  workoutTitle: string;
+  durationSeconds: number;
+  exercisesCompleted: number;
+  setsCompleted: number;
+  xp: number;
 };
 
-type WorkoutInfo = {
-  name: string;
-  duration: number;
-  exercises: number;
-  emoji: string;
-};
-
-const workoutData: Record<string, WorkoutInfo> = {
-  upper: {
-    name: "Верх тіла",
-    duration: 20,
-    exercises: 4,
-    emoji: "🔥",
-  },
-
-  legs: {
-    name: "Ноги",
-    duration: 25,
-    exercises: 4,
-    emoji: "🦵",
-  },
-
-  abs: {
-    name: "Прес",
-    duration: 12,
-    exercises: 4,
-    emoji: "💥",
-  },
-
-  cardio: {
-    name: "Кардіо",
-    duration: 15,
-    exercises: 4,
-    emoji: "🏃",
-  },
+type Props = {
+  changeTab: (nextTab: string) => void;
+  workoutId: string;
+  result: WorkoutResult;
 };
 
 export default function WorkoutComplete({
   changeTab,
-  workoutId,
+  result,
 }: Props) {
   const { user } = useUser();
 
-  const workout =
-    workoutData[workoutId] ?? workoutData.upper;
+  /* =========================================================
+     TIME
+  ========================================================= */
 
-  const lastWorkout = user.history[0];
+  const minutes = Math.floor(
+    result.durationSeconds / 60
+  );
+
+  const seconds =
+    result.durationSeconds % 60;
+
+  const formattedTime =
+    `${String(minutes).padStart(2, "0")}:${String(
+      seconds
+    ).padStart(2, "0")}`;
+
+
+  /* =========================================================
+     XP / LEVEL
+  ========================================================= */
+
+  const xpInLevel =
+    user.xp % 1000;
+
+  const xpProgress =
+    Math.min(
+      100,
+      (xpInLevel / 1000) * 100
+    );
+
+  const xpToNextLevel =
+    1000 - xpInLevel;
+
+
+  /* =========================================================
+     NAVIGATION
+  ========================================================= */
+
+  const openProgress = () => {
+    changeTab("progress");
+  };
+
+  const openDashboard = () => {
+    changeTab("home");
+  };
+
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   return (
-    <div className="workout-complete">
+    <main className="complete-page">
 
-      {/* TROPHY */}
+      {/* =====================================================
+          BACKGROUND
+      ===================================================== */}
 
-      <div className="complete-glow">
-        🏆
-      </div>
+      <div
+        className="complete-background"
+        aria-hidden="true"
+      />
 
-      {/* HEADER */}
+      <div
+        className="complete-overlay"
+        aria-hidden="true"
+      />
 
-      <p className="complete-label">
-        IRONAGE
-      </p>
 
-      <h1>
-        ТРЕНУВАННЯ
-        <br />
-        ЗАВЕРШЕНО
-      </h1>
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
 
-      <p className="complete-message">
-        Сильний результат. Ще один крок
-        до твоєї кращої версії.
-      </p>
+      <section className="complete-content">
 
-      {/* WORKOUT */}
 
-      <div className="reward-card">
+        {/* ===================================================
+            HEADER
+        =================================================== */}
 
-        <div className="reward-icon">
-          {workout.emoji}
-        </div>
+        <header className="complete-header">
 
-        <div>
-          <strong>
-            {workout.name}
-          </strong>
+          <div className="complete-brand">
+            IRON
+            <span>AGE</span>
+          </div>
 
-          <small>
-            Тренування виконано
-          </small>
-        </div>
-
-      </div>
-
-      {/* XP */}
-
-      <div className="reward-card">
-
-        <div className="reward-icon">
-          ⚡
-        </div>
-
-        <div>
-          <strong>
-            +250 XP
-          </strong>
-
-          <small>
-            Досвід воїна
-          </small>
-        </div>
-
-      </div>
-
-      {/* STATS */}
-
-      <div className="complete-stats">
-
-        <div>
-          <strong>
-            {workout.duration}
-          </strong>
-
-          <span>
-            ХВИЛИН
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            {workout.exercises}
-          </strong>
-
-          <span>
-            ВПРАВ
-          </span>
-        </div>
-
-        <div>
-          <strong>
-            +250
-          </strong>
-
-          <span>
-            XP
-          </span>
-        </div>
-
-      </div>
-
-      {/* LEVEL */}
-
-      <div className="xp-result">
-
-        <span>
-          Поточний рівень
-        </span>
-
-        <strong>
-          ⚔️ LVL {user.level}
-        </strong>
-
-      </div>
-
-      {/* STREAK */}
-
-      <div className="xp-result">
-
-        <span>
-          Поточний streak
-        </span>
-
-        <strong>
-          🔥 {user.streak}
-        </strong>
-
-      </div>
-
-      {/* LAST WORKOUT */}
-
-      {lastWorkout && (
-        <div className="xp-result">
-
-          <span>
-            Останнє тренування
+          <span className="complete-label">
+            SESSION COMPLETE
           </span>
 
-          <strong>
-            {lastWorkout.name}
-          </strong>
+        </header>
+
+
+        {/* ===================================================
+            MAIN
+        =================================================== */}
+
+        <div className="complete-main">
+
+
+          {/* =================================================
+              SUCCESS CHECK
+          ================================================= */}
+
+          <div
+            className="complete-check"
+            aria-label="Workout completed"
+          >
+            ✓
+          </div>
+
+
+          {/* =================================================
+              EYEBROW
+          ================================================= */}
+
+          <span className="complete-eyebrow">
+            WORKOUT FINISHED
+          </span>
+
+
+          {/* =================================================
+              TITLE
+          ================================================= */}
+
+          <h1>
+            YOU
+            <br />
+            <span>
+              DID IT.
+            </span>
+          </h1>
+
+
+          {/* =================================================
+              DESCRIPTION
+          ================================================= */}
+
+          <p>
+            {result.workoutTitle}
+            <br />
+            Another step forward.
+          </p>
+
+
+          {/* =================================================
+              STATS
+          ================================================= */}
+
+          <div className="complete-stats">
+
+
+            {/* TIME */}
+
+            <div className="complete-stat">
+
+              <span>
+                TIME
+              </span>
+
+              <strong>
+                {formattedTime}
+              </strong>
+
+            </div>
+
+
+            {/* EXERCISES */}
+
+            <div className="complete-stat">
+
+              <span>
+                EXERCISES
+              </span>
+
+              <strong>
+                {String(
+                  result.exercisesCompleted
+                ).padStart(2, "0")}
+              </strong>
+
+            </div>
+
+
+            {/* XP */}
+
+            <div className="complete-stat">
+
+              <span>
+                XP
+              </span>
+
+              <strong>
+                +{result.xp}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          {/* =================================================
+              XP PROGRESS
+          ================================================= */}
+
+          <section className="complete-xp">
+
+            <div className="complete-xp-top">
+
+
+              {/* CURRENT LEVEL */}
+
+              <div>
+
+                <span>
+                  CURRENT LEVEL
+                </span>
+
+                <strong>
+                  LEVEL{" "}
+                  {String(
+                    user.level
+                  ).padStart(2, "0")}
+                </strong>
+
+              </div>
+
+
+              {/* TOTAL XP */}
+
+              <div className="complete-level">
+
+                <span>
+                  TOTAL XP
+                </span>
+
+                <strong>
+                  {user.xp.toLocaleString()}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            {/* XP TRACK */}
+
+            <div className="complete-xp-track">
+
+              <div
+                className="complete-xp-fill"
+                style={{
+                  width: `${
+                    xpProgress > 0
+                      ? Math.max(3, xpProgress)
+                      : 0
+                  }%`,
+                }}
+              />
+
+            </div>
+
+
+            {/* XP META */}
+
+            <div className="complete-xp-bottom">
+
+              <span>
+                {xpInLevel.toLocaleString()}
+                {" / 1,000 XP"}
+              </span>
+
+              <span>
+                {xpToNextLevel === 1000
+                  ? "LEVEL UP AHEAD"
+                  : `${xpToNextLevel} XP TO NEXT LEVEL`}
+              </span>
+
+            </div>
+
+          </section>
+
+
+          {/* =================================================
+              STREAK
+          ================================================= */}
+
+          <section className="complete-streak">
+
+            <div
+              className="complete-streak-icon"
+              aria-hidden="true"
+            >
+              🔥
+            </div>
+
+            <div>
+
+              <span>
+                CURRENT STREAK
+              </span>
+
+              <strong>
+                {user.streak}{" "}
+                {user.streak === 1
+                  ? "DAY"
+                  : "DAYS"}
+              </strong>
+
+            </div>
+
+          </section>
+
+
+          {/* =================================================
+              QUOTE
+          ================================================= */}
+
+          <div className="complete-quote">
+
+            <span>
+              IRONAGE MINDSET
+            </span>
+
+            <p>
+              DISCIPLINE
+              <br />
+              BUILDS
+              <br />
+              <strong>
+                RESULTS.
+              </strong>
+            </p>
+
+          </div>
+
 
         </div>
-      )}
 
-      {/* ACTIONS */}
 
-      <button
-        type="button"
-        className="complete-button"
-        onClick={() => changeTab("progress")}
-      >
-        📈 ПЕРЕГЛЯНУТИ ПРОГРЕС
-      </button>
+        {/* ===================================================
+            FOOTER / NAVIGATION
+        =================================================== */}
 
-      <button
-        type="button"
-        className="home-button"
-        onClick={() => changeTab("home")}
-      >
-        ← На головну
-      </button>
+        <footer className="complete-footer">
 
-    </div>
+
+          {/* VIEW PROGRESS */}
+
+          <button
+            type="button"
+            className="complete-primary"
+            onClick={openProgress}
+          >
+
+            <span>
+              VIEW PROGRESS
+            </span>
+
+            <strong>
+              →
+            </strong>
+
+          </button>
+
+
+          {/* BACK HOME */}
+
+          <button
+            type="button"
+            className="complete-secondary"
+            onClick={openDashboard}
+          >
+            BACK TO DASHBOARD
+          </button>
+
+
+        </footer>
+
+
+      </section>
+
+    </main>
   );
 }

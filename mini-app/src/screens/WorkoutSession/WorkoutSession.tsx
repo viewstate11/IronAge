@@ -9,6 +9,10 @@ import "./WorkoutSession.css";
 
 import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
+import {
+  getWorkoutProgram,
+} from "../../services/workoutService";
+
 import type {
   WorkoutSetResult,
   WorkoutSessionResult,
@@ -20,109 +24,6 @@ type Props = {
   onComplete: (
     result: WorkoutSessionResult
   ) => void | Promise<void>;
-};
-
-const workoutData: Record<
-  string,
-  {
-    title: string;
-    exercises: {
-      id: string;
-      name: string;
-      sets: number;
-      reps: string;
-    }[];
-  }
-> = {
-  upper: {
-    title: "UPPER BODY",
-    exercises: [
-      {
-        id: "push-ups",
-        name: "PUSH UPS",
-        sets: 4,
-        reps: "15",
-      },
-      {
-        id: "diamond-push-ups",
-        name: "DIAMOND PUSH UPS",
-        sets: 3,
-        reps: "12",
-      },
-      {
-        id: "dips",
-        name: "DIPS",
-        sets: 3,
-        reps: "10",
-      },
-      {
-        id: "pike-push-ups",
-        name: "PIKE PUSH UPS",
-        sets: 3,
-        reps: "12",
-      },
-    ],
-  },
-
-  lower: {
-    title: "LOWER BODY",
-    exercises: [
-      {
-        id: "squats",
-        name: "SQUATS",
-        sets: 4,
-        reps: "15",
-      },
-      {
-        id: "lunges",
-        name: "LUNGES",
-        sets: 3,
-        reps: "12 / LEG",
-      },
-      {
-        id: "glute-bridge",
-        name: "GLUTE BRIDGE",
-        sets: 3,
-        reps: "15",
-      },
-      {
-        id: "calf-raises",
-        name: "CALF RAISES",
-        sets: 4,
-        reps: "20",
-      },
-    ],
-  },
-
-  full: {
-    title: "FULL BODY",
-    exercises: [
-      {
-        id: "burpees",
-        name: "BURPEES",
-        sets: 3,
-        reps: "12",
-      },
-      {
-        id: "push-ups",
-        name: "PUSH UPS",
-        sets: 3,
-        reps: "15",
-      },
-      {
-        id: "squats",
-        name: "SQUATS",
-        sets: 3,
-        reps: "20",
-      },
-      {
-        id: "mountain-climbers",
-        name: "MOUNTAIN CLIMBERS",
-        sets: 3,
-        reps: "30",
-      },
-    ],
-  },
 };
 
 function parseRepetitions(
@@ -147,8 +48,7 @@ export default function WorkoutSession({
   onComplete,
 }: Props) {
   const workout =
-    workoutData[workoutId] ??
-    workoutData.upper;
+    getWorkoutProgram(workoutId);
 
   const startedAtRef =
     useRef<string>(
@@ -156,6 +56,9 @@ export default function WorkoutSession({
     );
 
   const finishingRef =
+    useRef(false);
+
+  const setActionRef =
     useRef(false);
 
   const [
@@ -179,6 +82,11 @@ export default function WorkoutSession({
   ] = useState<
     WorkoutSetResult[]
   >([]);
+
+  const [
+    exitConfirmOpen,
+    setExitConfirmOpen,
+  ] = useState(false);
 
   useEffect(() => {
     const timer =
@@ -286,11 +194,6 @@ export default function WorkoutSession({
           finalSets,
       };
 
-    console.log(
-      "IRONAGE WORKOUT RESULT:",
-      result
-    );
-
     try {
       await onComplete(
         result
@@ -309,10 +212,14 @@ export default function WorkoutSession({
   const completeCurrentSet =
     () => {
       if (
-        finishingRef.current
+        finishingRef.current ||
+        setActionRef.current
       ) {
         return;
       }
+
+      setActionRef.current =
+        true;
 
       const alreadyCompleted =
         completedSets.some(
@@ -326,6 +233,9 @@ export default function WorkoutSession({
       if (
         alreadyCompleted
       ) {
+        setActionRef.current =
+          false;
+
         return;
       }
 
@@ -370,6 +280,11 @@ export default function WorkoutSession({
             value + 1
         );
 
+        window.setTimeout(() => {
+          setActionRef.current =
+            false;
+        }, 0);
+
         return;
       }
 
@@ -383,6 +298,11 @@ export default function WorkoutSession({
         );
 
         setCurrentSet(1);
+
+        window.setTimeout(() => {
+          setActionRef.current =
+            false;
+        }, 0);
 
         return;
       }
@@ -400,6 +320,23 @@ export default function WorkoutSession({
         return;
       }
 
+      setExitConfirmOpen(true);
+    };
+
+  const cancelExit =
+    () => {
+      setExitConfirmOpen(false);
+    };
+
+  const confirmExit =
+    () => {
+      if (
+        finishingRef.current
+      ) {
+        return;
+      }
+
+      setExitConfirmOpen(false);
       changeTab("home");
     };
 
@@ -605,6 +542,51 @@ export default function WorkoutSession({
         </section>
 
       </div>
+
+      {exitConfirmOpen && (
+        <div
+          className="session-exit-overlay"
+          role="presentation"
+        >
+          <div
+            className="session-exit-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="session-exit-title"
+          >
+            <span className="session-exit-eyebrow">
+              IRONAGE SESSION
+            </span>
+
+            <h2 id="session-exit-title">
+              EXIT WORKOUT?
+            </h2>
+
+            <p>
+              Your current workout progress
+              will be lost.
+            </p>
+
+            <div className="session-exit-actions">
+              <button
+                type="button"
+                className="session-exit-continue"
+                onClick={cancelExit}
+              >
+                CONTINUE TRAINING
+              </button>
+
+              <button
+                type="button"
+                className="session-exit-confirm"
+                onClick={confirmExit}
+              >
+                EXIT WORKOUT
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </main>
   );

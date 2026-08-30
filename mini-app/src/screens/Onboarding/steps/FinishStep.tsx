@@ -1,108 +1,70 @@
-import { useUser } from "../../../context/UserContext";
-
-import "../Onboarding.css";
-
-
-interface Props {
+type Props = {
   finish: () => void;
-}
-
+};
 
 export default function FinishStep({
   finish,
 }: Props) {
-
-  const { user } = useUser();
-
-
-  const handleFinish = () => {
-
-    localStorage.setItem(
-      "onboarding_complete",
-      "true"
-    );
-
-
-    finish();
-
-  };
-
-
   return (
+    <section className="onboarding-step onboarding-finish">
 
-    <div className="step finish-step">
+      <div className="onboarding-finish-content">
 
-      <div className="finish-icon">
-        ⚔️
-      </div>
-
-
-      <h1>
-        Твій профіль готовий
-      </h1>
-
-
-      <p>
-        Ласкаво просимо до IRONAGE,
-        {` ${user.name}`}.
-      </p>
-
-
-      <div className="profile-summary">
-
-        <div>
-          <span>🎂</span>
-          <strong>{user.age}</strong>
-          <small>років</small>
+        <div className="onboarding-eyebrow">
+          ATHLETE SYSTEM ACTIVATED
         </div>
 
+        <div className="onboarding-finish-line" />
 
-        <div>
-          <span>📏</span>
-          <strong>{user.height}</strong>
-          <small>см</small>
-        </div>
+        <h1 className="onboarding-title">
+          YOU'RE
+          <strong>READY.</strong>
+        </h1>
 
+        <p className="onboarding-description">
+          Your IRONAGE journey starts now.
+          <br />
+          No excuses. No looking back.
+        </p>
 
-        <div>
-          <span>⚖️</span>
-          <strong>{user.weight}</strong>
-          <small>кг</small>
-        </div>
+        <div className="onboarding-manifesto">
 
-      </div>
+          <div>
+            <span>01</span>
+            <strong>DISCIPLINE</strong>
+          </div>
 
+          <div>
+            <span>02</span>
+            <strong>STRENGTH</strong>
+          </div>
 
-      <div className="finish-level">
-
-        <span>
-          ⚔️
-        </span>
-
-        <div>
-
-          <strong>
-            IRON LVL 1
-          </strong>
-
-          <small>
-            Твій шлях починається зараз
-          </small>
+          <div>
+            <span>03</span>
+            <strong>RESULTS</strong>
+          </div>
 
         </div>
 
       </div>
 
+      <div className="onboarding-step-bottom">
 
-      <button
-        className="button"
-        onClick={handleFinish}
-      >
-        🔥 ПОЧАТИ IRONAGE
-      </button>
+        <button
+          type="button"
+          className="onboarding-button onboarding-finish-button"
+          onClick={finish}
+        >
+          <span>ENTER IRONAGE</span>
+          <strong>→</strong>
+        </button>
 
-    </div>
+        <div className="onboarding-footer">
+          WELCOME TO THE IRONAGE SYSTEM
+        </div>
 
+      </div>
+
+    </section>
   );
-
 }

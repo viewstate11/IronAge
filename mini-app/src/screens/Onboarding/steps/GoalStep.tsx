@@ -1,137 +1,110 @@
-import { useState } from "react";
-
-import { useUser } from "../../../context/UserContext";
-
-import "../Onboarding.css";
-
-
-interface Props {
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
   next: () => void;
-}
+};
 
-
-export default function GoalStep({ next }: Props) {
-
-  const { setUser } = useUser();
-
-  const [goal, setGoal] = useState("");
-
-
+export default function GoalStep({
+  value,
+  onChange,
+  next,
+}: Props) {
   const goals = [
     {
-      id: "lose_weight",
-      emoji: "🔥",
-      title: "Схуднути",
-      description: "Спалити жир та стати легшим",
+      id: "MUSCLE",
+      number: "01",
+      title: "BUILD MUSCLE",
+      subtitle: "SIZE & PHYSIQUE",
     },
     {
-      id: "build_muscle",
-      emoji: "💪",
-      title: "Набрати м'язи",
-      description: "Стати сильнішим та масивнішим",
+      id: "LOSE_WEIGHT",
+      number: "02",
+      title: "LOSE FAT",
+      subtitle: "LEAN & DEFINED",
     },
     {
-      id: "get_fit",
-      emoji: "⚡",
-      title: "Бути у формі",
-      description: "Покращити фізичну форму",
+      id: "STRENGTH",
+      number: "03",
+      title: "GET STRONGER",
+      subtitle: "POWER & PERFORMANCE",
     },
     {
-      id: "strength",
-      emoji: "⚔️",
-      title: "Стати сильнішим",
-      description: "Розвинути силу та витривалість",
+      id: "FITNESS",
+      number: "04",
+      title: "STAY FIT",
+      subtitle: "HEALTH & CONDITIONING",
     },
   ];
 
-
-  const handleNext = () => {
-
-    if (!goal) return;
-
-
-    localStorage.setItem(
-      "goal",
-      goal
-    );
-
-
-    setUser((prev) => ({
-      ...prev,
-      goal,
-    }));
-
-
-    next();
-
-  };
-
-
   return (
+    <section className="onboarding-step">
 
-    <div className="step">
+      <div className="onboarding-step-content">
 
-      <h1>
-        Яка твоя головна ціль?
-      </h1>
+        <div className="onboarding-eyebrow">
+          YOUR MISSION
+        </div>
 
+        <h1 className="onboarding-title">
+          WHAT DO YOU
+          <strong>WANT TO BUILD?</strong>
+        </h1>
 
-      <p>
-        IRONAGE підбере програму під тебе
-      </p>
+        <p className="onboarding-description">
+          Choose your primary goal.
+          IRONAGE will adapt your system around it.
+        </p>
 
+        <div className="goal-options">
 
-      <div className="goal-options">
+          {goals.map((goal) => (
 
-        {goals.map((item) => (
+            <button
+              key={goal.id}
+              type="button"
+              className={`goal-option ${
+                value === goal.id ? "active" : ""
+              }`}
+              onClick={() => onChange(goal.id)}
+            >
+              <span className="goal-number">
+                {goal.number}
+              </span>
 
-          <button
-            key={item.id}
-            type="button"
-            className={
-              goal === item.id
-                ? "goal-option selected"
-                : "goal-option"
-            }
-            onClick={() =>
-              setGoal(item.id)
-            }
-          >
+              <span className="goal-content">
+                <strong>{goal.title}</strong>
+                <small>{goal.subtitle}</small>
+              </span>
 
-            <span className="goal-emoji">
-              {item.emoji}
-            </span>
+              <span className="goal-arrow">
+                →
+              </span>
+            </button>
 
+          ))}
 
-            <span className="goal-content">
-
-              <strong>
-                {item.title}
-              </strong>
-
-              <small>
-                {item.description}
-              </small>
-
-            </span>
-
-          </button>
-
-        ))}
+        </div>
 
       </div>
 
+      <div className="onboarding-step-bottom">
 
-      <button
-        className="button"
-        disabled={!goal}
-        onClick={handleNext}
-      >
-        ДАЛІ
-      </button>
+        <button
+          type="button"
+          className="onboarding-button"
+          disabled={!value}
+          onClick={next}
+        >
+          <span>CONTINUE</span>
+          <strong>→</strong>
+        </button>
 
-    </div>
+        <div className="onboarding-footer">
+          IRONAGE ATHLETE SYSTEM
+        </div>
 
+      </div>
+
+    </section>
   );
-
 }
