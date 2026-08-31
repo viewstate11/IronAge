@@ -15,10 +15,11 @@ const router = Router();
 
    Premium entitlement is read-only from the client.
 
-   IMPORTANT:
-   The client must never be allowed to grant itself Premium.
-   Future payment providers / App Store verification will
-   update entitlement through trusted server-side flows.
+   Source of truth:
+   1. Trusted Subscription records
+   2. Legacy User.premiumPlan fallback
+
+   The client can never grant itself Premium.
 ========================================================= */
 
 router.get(
@@ -29,16 +30,55 @@ router.get(
       const authenticatedRequest =
         req as AppAuthenticatedRequest;
 
+      const now = new Date();
+
       const user =
         await prisma.user.findUnique({
           where: {
-            id:
-              authenticatedRequest.appUserId,
+            id: authenticatedRequest.appUserId,
           },
 
           select: {
             id: true,
             premiumPlan: true,
+
+            subscriptions: {
+              where: {
+                status: "ACTIVE",
+
+                OR: [
+                  {
+                    expiresAt: null,
+                  },
+                  {
+                    expiresAt: {
+                      gt: now,
+                    },
+                  },
+                ],
+              },
+
+              orderBy: [
+                {
+                  expiresAt: "desc",
+                },
+                {
+                  createdAt: "desc",
+                },
+              ],
+
+              take: 1,
+
+              select: {
+                id: true,
+                provider: true,
+                platform: true,
+                productId: true,
+                plan: true,
+                status: true,
+                expiresAt: true,
+              },
+            },
           },
         });
 
@@ -49,10 +89,25 @@ router.get(
         });
       }
 
+      const subscription =
+        user.subscriptions[0] ?? null;
+
+      const premiumPlan =
+        subscription?.plan ??
+        user.premiumPlan ??
+        null;
+
       return res.json({
         success: true,
-        premiumPlan:
-          user.premiumPlan,
+        premiumPlan,
+        isPremium: premiumPlan !== null,
+        entitlementSource:
+          subscription
+            ? "SUBSCRIPTION"
+            : user.premiumPlan
+              ? "LEGACY"
+              : "NONE",
+        subscription,
       });
     } catch (error) {
       console.error(
@@ -71,11 +126,9 @@ router.get(
 
 /* =========================================================
    CLIENT PREMIUM MUTATION BLOCK
-
    PUT /api/premium
 
    Premium cannot be activated directly by the client.
-   A verified payment flow will replace this endpoint.
 ========================================================= */
 
 router.put(
