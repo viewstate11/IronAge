@@ -1,6 +1,7 @@
 import {
   Environment,
   SignedDataVerifier,
+  Type,
   type JWSTransactionDecodedPayload,
 } from "@apple/app-store-server-library";
 
@@ -104,22 +105,69 @@ function validateDecodedTransaction(
     );
   }
 
-  if (transaction.revocationDate) {
+  if (
+    transaction.type !==
+    Type.AUTO_RENEWABLE_SUBSCRIPTION
+  ) {
+    throw new Error(
+      "Apple Premium product is not an auto-renewable subscription"
+    );
+  }
+
+  if (
+    typeof transaction.revocationDate ===
+      "number" &&
+    Number.isFinite(
+      transaction.revocationDate
+    )
+  ) {
     throw new Error(
       "Apple transaction has been revoked"
     );
   }
 
+  const expiresDate =
+    requireTimestamp(
+      transaction.expiresDate,
+      "expiresDate"
+    );
+
+  const purchasedAt =
+    new Date(purchaseDate);
+
   const expiresAt =
-    typeof transaction.expiresDate ===
-    "number"
-      ? new Date(
-          transaction.expiresDate
-        )
-      : null;
+    new Date(expiresDate);
 
   if (
-    expiresAt &&
+    Number.isNaN(
+      purchasedAt.getTime()
+    )
+  ) {
+    throw new Error(
+      "Apple purchase date is invalid"
+    );
+  }
+
+  if (
+    Number.isNaN(
+      expiresAt.getTime()
+    )
+  ) {
+    throw new Error(
+      "Apple expiration date is invalid"
+    );
+  }
+
+  if (
+    expiresAt.getTime() <=
+    purchasedAt.getTime()
+  ) {
+    throw new Error(
+      "Apple subscription expiration is invalid"
+    );
+  }
+
+  if (
     expiresAt.getTime() <= Date.now()
   ) {
     throw new Error(
@@ -138,8 +186,7 @@ function validateDecodedTransaction(
 
     productId,
 
-    purchasedAt:
-      new Date(purchaseDate),
+    purchasedAt,
 
     expiresAt,
 

@@ -121,6 +121,61 @@ export type AuthMode =
    PREMIUM API
 ========================================================= */
 
+export type PremiumVerificationResult = {
+  premiumPlan: PremiumPlan;
+  isPremium: boolean;
+};
+
+export async function verifyApplePremiumPurchase(
+  signedTransaction: string
+): Promise<PremiumVerificationResult> {
+  if (
+    typeof signedTransaction !== "string" ||
+    signedTransaction.length === 0
+  ) {
+    throw new Error(
+      "Apple signed transaction is required"
+    );
+  }
+
+  const response =
+    await api.post<{
+      success: boolean;
+      premiumPlan: PremiumPlan;
+      isPremium: boolean;
+    }>(
+      "/premium/verify",
+      {
+        provider: "APPLE",
+        platform: "IOS",
+        verificationPayload:
+          signedTransaction,
+      },
+      telegramAuthOptions()
+    );
+
+  if (
+    !response ||
+    response.success !== true ||
+    (
+      response.premiumPlan !== "MONTHLY" &&
+      response.premiumPlan !== "YEARLY"
+    ) ||
+    response.isPremium !== true
+  ) {
+    throw new Error(
+      "Invalid Apple Premium verification response"
+    );
+  }
+
+  return {
+    premiumPlan:
+      response.premiumPlan,
+    isPremium:
+      response.isPremium,
+  };
+}
+
 export async function getPremiumPlan(): Promise<
   PremiumPlan | null
 > {

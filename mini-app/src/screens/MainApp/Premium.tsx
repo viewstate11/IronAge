@@ -4,8 +4,13 @@ import { useUser } from "../../context/UserContext";
 
 import {
   getPremiumPlan,
+  verifyApplePremiumPurchase,
   type PremiumPlan,
 } from "../../api/client";
+
+import {
+  IronAgeStoreKit,
+} from "../../native/ironAgeStoreKit";
 
 import "./Premium.css";
 
@@ -81,11 +86,87 @@ export default function Premium({ onBack }: Props) {
   }, []);
 
 
-  const handlePremiumCheckout = () => {
+  const [isPurchasing, setIsPurchasing] =
+    useState(false);
+
+  const handlePremiumCheckout = async () => {
+    if (serverPlan === selectedPlan) {
+      return;
+    }
+
     setError(null);
-    setMessage(
-      "PREMIUM PAYMENT WILL BE AVAILABLE SOON"
-    );
+    setMessage(null);
+    setIsPurchasing(true);
+
+    try {
+      const productId =
+        selectedPlan === "MONTHLY"
+          ? "com.ironage.app.premium.monthly"
+          : "com.ironage.app.premium.yearly";
+
+      const purchase =
+        await IronAgeStoreKit.purchase({
+          productId,
+        });
+
+      if (
+        purchase.status === "CANCELLED"
+      ) {
+        setMessage(
+          "PURCHASE CANCELLED"
+        );
+        return;
+      }
+
+      if (
+        purchase.status === "PENDING"
+      ) {
+        setMessage(
+          "PURCHASE PENDING"
+        );
+        return;
+      }
+
+      if (
+        !purchase.signedTransaction
+      ) {
+        throw new Error(
+          "Apple signed transaction missing"
+        );
+      }
+
+      const verification =
+        await verifyApplePremiumPurchase(
+          purchase.signedTransaction
+        );
+
+      setServerPlan(
+        verification.premiumPlan
+      );
+
+      setSelectedPlan(
+        verification.premiumPlan
+      );
+
+      await refreshUser();
+
+      setMessage(
+        `${verification.premiumPlan} PREMIUM ACTIVATED`
+      );
+    } catch (checkoutError) {
+      console.error(
+        "IRONAGE PREMIUM CHECKOUT ERROR:",
+        checkoutError
+      );
+
+      setError(
+        checkoutError instanceof Error
+          ? checkoutError.message
+          : "Premium purchase failed"
+      );
+    } finally {
+      setIsPurchasing(false);
+    }
   };
 
   return (
@@ -122,7 +203,7 @@ export default function Premium({ onBack }: Props) {
 
         <section className="premium-dev-notice">
           <strong>PREMIUM ACCESS</strong>
-          <span>SECURE PAYMENT WILL BE AVAILABLE SOON</span>
+          <span>SECURE APP STORE PAYMENT</span>
         </section>
 
         <section className="premium-status">
@@ -196,10 +277,16 @@ export default function Premium({ onBack }: Props) {
           type="button"
           className="premium-activate"
           onClick={handlePremiumCheckout}
+          disabled={
+            isPurchasing ||
+            serverPlan === selectedPlan
+          }
         >
           {serverPlan === selectedPlan
             ? `${selectedPlan} ACTIVE`
-            : "CONTINUE TO PAYMENT"}
+            : isPurchasing
+              ? "PROCESSING..."
+              : "CONTINUE TO PAYMENT"}
         </button>
 
       </div>
