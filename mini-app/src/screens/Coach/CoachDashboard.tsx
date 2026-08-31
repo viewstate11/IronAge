@@ -8,6 +8,7 @@ import api, {
 } from "../../api/client";
 
 import CreateWorkout from "./CreateWorkout";
+import CreateProgram from "./CreateProgram";
 
 import "./CoachDashboard.css";
 
@@ -19,7 +20,9 @@ type CoachView =
   | "dashboard"
   | "clients"
   | "workouts"
-  | "create-workout";
+  | "create-workout"
+  | "programs"
+  | "create-program";
 
 type CoachClient = {
   relationshipId: number;
@@ -93,6 +96,33 @@ type CoachWorkoutsResponse = {
   workouts: CoachWorkout[];
 };
 
+type CoachProgramWorkout = {
+  id: number;
+  programId: number;
+  workoutId: number;
+  week: number | null;
+  day: number | null;
+  position: number;
+  workout: CoachWorkout;
+};
+
+type CoachProgram = {
+  id: number;
+  coachId: number;
+  name: string;
+  description: string | null;
+  durationWeeks: number | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  workouts: CoachProgramWorkout[];
+};
+
+type CoachProgramsResponse = {
+  success: boolean;
+  programs: CoachProgram[];
+};
+
 function formatGoal(
   goal: string | null
 ): string {
@@ -152,6 +182,17 @@ export default function CoachDashboard({
     useState(false);
 
   const [workoutsError, setWorkoutsError] =
+    useState<string | null>(
+      null
+    );
+
+  const [programs, setPrograms] =
+    useState<CoachProgram[]>([]);
+
+  const [loadingPrograms, setLoadingPrograms] =
+    useState(false);
+
+  const [programsError, setProgramsError] =
     useState<string | null>(
       null
     );
@@ -238,6 +279,43 @@ export default function CoachDashboard({
     }
   }
 
+  async function loadPrograms() {
+    try {
+      setLoadingPrograms(true);
+      setProgramsError(null);
+
+      const response =
+        await api.get<CoachProgramsResponse>(
+          "/coach-programs",
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        !Array.isArray(response.programs)
+      ) {
+        throw new Error(
+          "Invalid coach programs response"
+        );
+      }
+
+      setPrograms(response.programs);
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH PROGRAMS UI ERROR:",
+        error
+      );
+
+      setProgramsError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load programs"
+      );
+    } finally {
+      setLoadingPrograms(false);
+    }
+  }
+
   useEffect(() => {
     if (view === "clients") {
       void loadClients();
@@ -246,7 +324,231 @@ export default function CoachDashboard({
     if (view === "workouts") {
       void loadWorkouts();
     }
+
+    if (view === "programs") {
+      void loadPrograms();
+    }
   }, [view]);
+
+  if (view === "create-program") {
+    return (
+      <CreateProgram
+        onBack={() =>
+          setView("programs")
+        }
+        onCreated={() =>
+          setView("programs")
+        }
+      />
+    );
+  }
+
+  if (view === "programs") {
+    return (
+      <main className="coach-dashboard">
+        <div className="coach-dashboard__content">
+
+          <header className="coach-dashboard__header">
+            <button
+              type="button"
+              className="coach-dashboard__back"
+              onClick={() =>
+                setView("dashboard")
+              }
+              aria-label="Back to coach dashboard"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>
+                COACH CONTROL CENTER
+              </span>
+
+              <h1>
+                MY PROGRAMS
+              </h1>
+
+              <p>
+                TRAINING SYSTEMS
+              </p>
+            </div>
+          </header>
+
+          <button
+            type="button"
+            className="coach-programs-create"
+            onClick={() =>
+              setView("create-program")
+            }
+          >
+            <span>
+              + CREATE PROGRAM
+            </span>
+
+            <b>→</b>
+          </button>
+
+          <section className="coach-clients-summary">
+            <div>
+              <span>
+                ACTIVE PROGRAMS
+              </span>
+
+              <strong>
+                {programs.length}
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                WORKOUTS USED
+              </span>
+
+              <strong>
+                {programs.reduce(
+                  (total, program) =>
+                    total +
+                    program.workouts.length,
+                  0
+                )}
+              </strong>
+            </div>
+          </section>
+
+          {loadingPrograms && (
+            <section className="coach-clients-state">
+              <span>
+                IRONAGE COACH
+              </span>
+
+              <strong>
+                LOADING PROGRAMS...
+              </strong>
+            </section>
+          )}
+
+          {!loadingPrograms &&
+            programsError && (
+              <section className="coach-clients-state coach-clients-state--error">
+                <span>
+                  CONNECTION ERROR
+                </span>
+
+                <strong>
+                  {programsError}
+                </strong>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadPrograms()
+                  }
+                >
+                  RETRY
+                </button>
+              </section>
+            )}
+
+          {!loadingPrograms &&
+            !programsError &&
+            programs.length === 0 && (
+              <section className="coach-clients-state">
+                <span>
+                  PROGRAM LIBRARY
+                </span>
+
+                <strong>
+                  NO PROGRAMS YET
+                </strong>
+
+                <p>
+                  Your training programs will
+                  appear here.
+                </p>
+              </section>
+            )}
+
+          {!loadingPrograms &&
+            !programsError &&
+            programs.length > 0 && (
+              <section className="coach-programs-list">
+                {programs.map(
+                  (program) => (
+                    <article
+                      key={program.id}
+                      className="coach-program-card"
+                    >
+                      <div className="coach-program-card__header">
+                        <div>
+                          <span>
+                            PROGRAM #{program.id}
+                          </span>
+
+                          <strong>
+                            {program.name}
+                          </strong>
+                        </div>
+
+                        <b>
+                          {program.durationWeeks
+                            ? `${program.durationWeeks} WEEKS`
+                            : "—"}
+                        </b>
+                      </div>
+
+                      {program.description && (
+                        <p className="coach-program-card__description">
+                          {program.description}
+                        </p>
+                      )}
+
+                      <div className="coach-program-card__meta">
+                        <span>
+                          {program.workouts.length} WORKOUTS
+                        </span>
+                      </div>
+
+                      {program.workouts.length > 0 && (
+                        <div className="coach-program-card__workouts">
+                          {program.workouts.map(
+                            (item) => (
+                              <div
+                                key={item.id}
+                                className="coach-program-workout"
+                              >
+                                <div>
+                                  <span>
+                                    {item.week
+                                      ? `WEEK ${item.week}`
+                                      : "WEEK —"}
+
+                                    {" · "}
+
+                                    {item.day
+                                      ? `DAY ${item.day}`
+                                      : "DAY —"}
+                                  </span>
+
+                                  <strong>
+                                    {item.workout.name}
+                                  </strong>
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </article>
+                  )
+                )}
+              </section>
+            )}
+
+        </div>
+      </main>
+    );
+  }
 
   if (view === "create-workout") {
     return (
@@ -851,6 +1153,9 @@ export default function CoachDashboard({
           <button
             type="button"
             className="coach-dashboard__card"
+            onClick={() =>
+              setView("programs")
+            }
           >
             <div className="coach-dashboard__number">
               03

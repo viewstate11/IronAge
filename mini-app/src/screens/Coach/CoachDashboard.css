@@ -595,3 +595,137 @@
 .coach-workouts-create b {
   font-size: 17px;
 }
+
+.coach-programs-list {
+  display: grid;
+  gap: 14px;
+}
+
+.coach-program-card {
+  overflow: hidden;
+  border: 1px solid #181818;
+  border-radius: 18px;
+  background: #0a0a0a;
+}
+
+.coach-program-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px;
+}
+
+.coach-program-card__header span {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.coach-program-card__header strong {
+  display: block;
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+}
+
+.coach-program-card__header > b {
+  flex: 0 0 auto;
+  color: #d4af37;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.coach-program-card__description {
+  margin: 0;
+  padding: 0 18px 16px;
+  color: #777777;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.coach-program-card__meta {
+  padding: 12px 18px;
+  border-top: 1px solid #181818;
+  color: #d4af37;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.coach-program-card__workouts {
+  border-top: 1px solid #181818;
+}
+
+.coach-program-workout {
+  padding: 14px 18px;
+}
+
+.coach-program-workout + .coach-program-workout {
+  border-top: 1px solid #151515;
+}
+
+.coach-program-workout span {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.coach-program-workout strong {
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.coach-programs-create {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 0 18px;
+  border: 1px solid #d4af37;
+  border-radius: 16px;
+  background: #d4af37;
+  color: #050505;
+  font-family: Montserrat, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.coach-programs-create b {
+  font-size: 17px;
+}
+
+.coach-programs-create {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 0 18px;
+  border: 1px solid #d4af37;
+  border-radius: 16px;
+  background: #d4af37;
+  color: #050505;
+  font-family: Montserrat, sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.coach-programs-create b {
+  font-size: 17px;
+}
