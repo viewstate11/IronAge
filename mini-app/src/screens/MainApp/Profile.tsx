@@ -9,6 +9,7 @@ import vasylPhoto from "../../assets/vasyl-ua.jpg";
 type Props = {
   onOpenPremium?: () => void;
   onOpenCoach?: () => void;
+  onOpenMyProgram?: () => void;
 };
 
 type ProfileView =
@@ -63,6 +64,7 @@ const goals: Array<{
 export default function Profile({
   onOpenPremium,
   onOpenCoach,
+  onOpenMyProgram,
 }: Props) {
   const { user, updateProfile } = useUser();
 
@@ -697,11 +699,33 @@ export default function Profile({
 
           <button
             type="button"
+            onClick={onOpenMyProgram}
+            disabled={!onOpenMyProgram}
+          >
+            <div>
+              <span>05</span>
+
+              <section>
+                <strong>
+                  MY PROGRAM
+                </strong>
+
+                <small>
+                  COACH · PLAN · WORKOUTS
+                </small>
+              </section>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
             disabled
             aria-disabled="true"
           >
             <div>
-              <span>05</span>
+              <span>06</span>
 
               <section>
                 <strong>
@@ -723,7 +747,7 @@ export default function Profile({
             aria-disabled="true"
           >
             <div>
-              <span>06</span>
+              <span>07</span>
 
               <section>
                 <strong>

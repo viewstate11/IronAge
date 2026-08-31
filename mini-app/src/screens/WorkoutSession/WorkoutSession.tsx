@@ -14,6 +14,7 @@ import {
 } from "../../services/workoutService";
 
 import type {
+  WorkoutProgram,
   WorkoutSetResult,
   WorkoutSessionResult,
 } from "../../types/workout";
@@ -21,6 +22,7 @@ import type {
 type Props = {
   changeTab: (nextTab: string) => void;
   workoutId: string;
+  workoutProgram?: WorkoutProgram;
   onComplete: (
     result: WorkoutSessionResult
   ) => void | Promise<void>;
@@ -45,9 +47,11 @@ function parseRepetitions(
 export default function WorkoutSession({
   changeTab,
   workoutId,
+  workoutProgram,
   onComplete,
 }: Props) {
   const workout =
+    workoutProgram ??
     getWorkoutProgram(workoutId);
 
   const startedAtRef =

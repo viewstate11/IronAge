@@ -16,10 +16,12 @@ import TelegramBackButton from "../../components/TelegramBackButton";
 import WorkoutSession from "../WorkoutSession/WorkoutSession";
 import WorkoutComplete from "../WorkoutComplete/WorkoutComplete";
 import CoachDashboard from "../Coach/CoachDashboard";
+import MyProgram from "../Client/MyProgram";
 
 import type { Tab } from "../../navigation/tabs";
 
 import type {
+  WorkoutProgram,
   WorkoutSessionResult,
 } from "../../types/workout";
 
@@ -33,6 +35,7 @@ type AppScreen =
   | Tab
   | "premium"
   | "coach"
+  | "my-program"
   | "session"
   | "complete";
 
@@ -66,6 +69,13 @@ export default function MainApp() {
     activeWorkoutId,
     setActiveWorkoutId,
   ] = useState<string>("upper");
+
+  const [
+    activeWorkoutProgram,
+    setActiveWorkoutProgram,
+  ] = useState<WorkoutProgram | undefined>(
+    undefined
+  );
 
 
   /* =========================================================
@@ -158,7 +168,10 @@ export default function MainApp() {
   ========================================================= */
 
   const startWorkout = useCallback(
-    (workoutId: string) => {
+    (
+      workoutId: string,
+      workoutProgram?: WorkoutProgram
+    ) => {
 
       setSaveError(null);
 
@@ -166,6 +179,10 @@ export default function MainApp() {
 
       setActiveWorkoutId(
         workoutId
+      );
+
+      setActiveWorkoutProgram(
+        workoutProgram
       );
 
       setScreen("session");
@@ -349,7 +366,8 @@ export default function MainApp() {
   const showTabBar =
     screen !== "session" &&
     screen !== "complete" &&
-    screen !== "coach";
+    screen !== "coach" &&
+    screen !== "my-program";
 
 
   /* =========================================================
@@ -517,6 +535,9 @@ export default function MainApp() {
             onOpenCoach={() => {
               setScreen("coach");
             }}
+            onOpenMyProgram={() => {
+              setScreen("my-program");
+            }}
           />
 
         )}
@@ -537,6 +558,25 @@ export default function MainApp() {
           <CoachDashboard
             onBack={() => {
               setScreen("profile");
+            }}
+          />
+
+        )}
+
+        {screen === "my-program" && (
+
+          <MyProgram
+            onBack={() => {
+              setScreen("profile");
+            }}
+            onStartWorkout={(
+              workoutId,
+              workoutProgram
+            ) => {
+              startWorkout(
+                workoutId,
+                workoutProgram
+              );
             }}
           />
 
@@ -572,6 +612,10 @@ export default function MainApp() {
 
             workoutId={
               activeWorkoutId
+            }
+
+            workoutProgram={
+              activeWorkoutProgram
             }
 
             onComplete={
