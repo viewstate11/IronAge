@@ -97,3 +97,8 @@ export type ProgramWorkoutCompletion = Prisma.ProgramWorkoutCompletionModel
  * 
  */
 export type CoachInvite = Prisma.CoachInviteModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel

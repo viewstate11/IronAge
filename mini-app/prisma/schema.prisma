@@ -39,6 +39,7 @@ model User {
   trainingPrograms    TrainingProgram[]   @relation("TrainingProgramCoach")
   programAssignments  ProgramAssignment[] @relation("ProgramClient")
   assignedPrograms    ProgramAssignment[] @relation("ProgramAssignedBy")
+  subscriptions       Subscription[]
 
   @@index([createdAt])
 }
@@ -335,5 +336,29 @@ model CoachInvite {
   coach User @relation("CoachInvites", fields: [coachId], references: [id], onDelete: Cascade)
 
   @@index([coachId])
+  @@index([expiresAt])
+}
+
+model Subscription {
+  id                    Int       @id @default(autoincrement())
+  userId                Int
+  provider              String
+  platform              String
+  productId             String
+  plan                  String
+  status                String
+  transactionId         String?   @unique
+  originalTransactionId String?
+  purchasedAt           DateTime?
+  expiresAt             DateTime?
+  lastVerifiedAt        DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([originalTransactionId])
   @@index([expiresAt])
 }

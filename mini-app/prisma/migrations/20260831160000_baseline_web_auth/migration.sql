@@ -1,0 +1,8 @@
+ALTER TABLE "User"
+ALTER COLUMN "telegramId" DROP NOT NULL;
+
+ALTER TABLE "User"
+ADD COLUMN "webId" TEXT;
+
+CREATE UNIQUE INDEX "User_webId_key"
+ON "User"("webId");
