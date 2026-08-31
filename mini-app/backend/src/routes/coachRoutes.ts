@@ -385,7 +385,11 @@ router.get(
         });
       }
 
-      const [workouts, progress] =
+      const [
+        workouts,
+        progress,
+        activeAssignment,
+      ] =
         await Promise.all([
           prisma.workoutSession.findMany({
             where: {
@@ -419,7 +423,171 @@ router.get(
               createdAt: "desc",
             },
           }),
+
+          prisma.programAssignment.findFirst({
+            where: {
+              clientId,
+              assignedBy: coachId,
+              isActive: true,
+            },
+
+            include: {
+              program: {
+                include: {
+                  workouts: {
+                    include: {
+                      workout: {
+                        select: {
+                          id: true,
+                          name: true,
+                        },
+                      },
+                    },
+
+                    orderBy: {
+                      position: "asc",
+                    },
+                  },
+                },
+              },
+
+              completions: {
+                select: {
+                  programWorkoutId: true,
+                  workoutSessionId: true,
+                  completedAt: true,
+                },
+
+                orderBy: {
+                  completedAt: "desc",
+                },
+              },
+            },
+
+            orderBy: {
+              createdAt: "desc",
+            },
+          }),
         ]);
+
+      /*
+       * Program adherence is calculated only from the
+       * authenticated coach's active assignment.
+       *
+       * ProgramWorkoutCompletion is the source of truth.
+       */
+
+      const adherence =
+        activeAssignment
+          ? (() => {
+              const scheduledWorkouts =
+                activeAssignment.program.workouts;
+
+              const completionByProgramWorkoutId =
+                new Map(
+                  activeAssignment.completions.map(
+                    (completion) => [
+                      completion.programWorkoutId,
+                      completion,
+                    ]
+                  )
+                );
+
+              const completedWorkouts =
+                scheduledWorkouts.filter(
+                  (programWorkout) =>
+                    completionByProgramWorkoutId.has(
+                      programWorkout.id
+                    )
+                ).length;
+
+              const totalWorkouts =
+                scheduledWorkouts.length;
+
+              const percentage =
+                totalWorkouts > 0
+                  ? Math.round(
+                      (completedWorkouts /
+                        totalWorkouts) *
+                        100
+                    )
+                  : 0;
+
+              const latestCompletion =
+                activeAssignment.completions[0] ??
+                null;
+
+              return {
+                assignmentId:
+                  activeAssignment.id,
+
+                programId:
+                  activeAssignment.program.id,
+
+                programName:
+                  activeAssignment.program.name,
+
+                startDate:
+                  activeAssignment.startDate,
+
+                endDate:
+                  activeAssignment.endDate,
+
+                totalWorkouts,
+
+                completedWorkouts,
+
+                percentage,
+
+                lastCompletedAt:
+                  latestCompletion?.completedAt ??
+                  null,
+
+                workouts:
+                  scheduledWorkouts.map(
+                    (programWorkout) => {
+                      const completion =
+                        completionByProgramWorkoutId.get(
+                          programWorkout.id
+                        );
+
+                      return {
+                        programWorkoutId:
+                          programWorkout.id,
+
+                        workoutId:
+                          programWorkout.workout.id,
+
+                        workoutName:
+                          programWorkout.workout.name,
+
+                        week:
+                          programWorkout.week,
+
+                        day:
+                          programWorkout.day,
+
+                        position:
+                          programWorkout.position,
+
+                        status:
+                          completion
+                            ? "COMPLETED"
+                            : "PENDING",
+
+                        completedAt:
+                          completion?.completedAt ??
+                          null,
+
+                        workoutSessionId:
+                          completion?.workoutSessionId ??
+                          null,
+                      };
+                    }
+                  ),
+              };
+            })()
+          : null;
 
       return res.json({
         success: true,
@@ -427,6 +595,7 @@ router.get(
           relationship.client,
         workouts,
         progress,
+        adherence,
       });
     } catch (error) {
       console.error(

@@ -86,11 +86,37 @@ type CoachClientProgress = {
   createdAt: string;
 };
 
+type CoachProgramAdherenceWorkout = {
+  programWorkoutId: number;
+  workoutId: number;
+  workoutName: string;
+  week: number | null;
+  day: number | null;
+  position: number;
+  status: "COMPLETED" | "PENDING";
+  completedAt: string | null;
+  workoutSessionId: number | null;
+};
+
+type CoachProgramAdherence = {
+  assignmentId: number;
+  programId: number;
+  programName: string;
+  startDate: string | null;
+  endDate: string | null;
+  totalWorkouts: number;
+  completedWorkouts: number;
+  percentage: number;
+  lastCompletedAt: string | null;
+  workouts: CoachProgramAdherenceWorkout[];
+};
+
 type CoachClientResultsResponse = {
   success: boolean;
   client: CoachClient["client"];
   workouts: CoachClientWorkout[];
   progress: CoachClientProgress[];
+  adherence: CoachProgramAdherence | null;
 };
 
 type CoachWorkoutExercise = {
@@ -226,6 +252,11 @@ export default function CoachDashboard({
 
   const [clientProgress, setClientProgress] =
     useState<CoachClientProgress[]>([]);
+
+  const [clientAdherence, setClientAdherence] =
+    useState<CoachProgramAdherence | null>(
+      null
+    );
 
   const [
     loadingClientResults,
@@ -374,6 +405,7 @@ export default function CoachDashboard({
       setClientResultsError(null);
       setClientResults([]);
       setClientProgress([]);
+      setClientAdherence(null);
       setView("client-results");
 
       const response =
@@ -398,6 +430,10 @@ export default function CoachDashboard({
 
       setClientProgress(
         response.progress
+      );
+
+      setClientAdherence(
+        response.adherence ?? null
       );
     } catch (error) {
       console.error(
@@ -528,6 +564,8 @@ export default function CoachDashboard({
               onClick={() => {
                 setSelectedClient(null);
                 setClientResults([]);
+                setClientProgress([]);
+                setClientAdherence(null);
                 setClientResultsError(null);
                 setView("clients");
               }}
@@ -674,6 +712,101 @@ export default function CoachDashboard({
                     {clientProgress[0].note}
                   </p>
                 )}
+              </section>
+            )}
+
+          {!loadingClientResults &&
+            !clientResultsError &&
+            clientAdherence && (
+              <section className="coach-adherence-card">
+                <div className="coach-adherence-card__header">
+                  <div>
+                    <span>
+                      PROGRAM ADHERENCE
+                    </span>
+
+                    <strong>
+                      {clientAdherence.programName}
+                    </strong>
+                  </div>
+
+                  <b>
+                    {clientAdherence.percentage}%
+                  </b>
+                </div>
+
+                <div className="coach-adherence-card__summary">
+                  <strong>
+                    {clientAdherence.completedWorkouts}
+                    {" / "}
+                    {clientAdherence.totalWorkouts}
+                  </strong>
+
+                  <span>
+                    WORKOUTS COMPLETED
+                  </span>
+                </div>
+
+                <div
+                  className="coach-adherence-card__progress"
+                  aria-label={`Program adherence ${clientAdherence.percentage}%`}
+                >
+                  <div
+                    style={{
+                      width: `${Math.min(
+                        100,
+                        Math.max(
+                          0,
+                          clientAdherence.percentage
+                        )
+                      )}%`,
+                    }}
+                  />
+                </div>
+
+                <div className="coach-adherence-card__workouts">
+                  {clientAdherence.workouts.map(
+                    (item) => (
+                      <article
+                        key={item.programWorkoutId}
+                        className={`coach-adherence-workout coach-adherence-workout--${item.status.toLowerCase()}`}
+                      >
+                        <div>
+                          <span>
+                            {item.week
+                              ? `WEEK ${item.week}`
+                              : "PROGRAM"}
+                            {item.day
+                              ? ` · DAY ${item.day}`
+                              : ""}
+                          </span>
+
+                          <strong>
+                            {item.workoutName}
+                          </strong>
+                        </div>
+
+                        <b>
+                          {item.status}
+                        </b>
+                      </article>
+                    )
+                  )}
+                </div>
+
+                <footer className="coach-adherence-card__footer">
+                  <span>
+                    LAST COMPLETED
+                  </span>
+
+                  <strong>
+                    {clientAdherence.lastCompletedAt
+                      ? new Date(
+                          clientAdherence.lastCompletedAt
+                        ).toLocaleString()
+                      : "—"}
+                  </strong>
+                </footer>
               </section>
             )}
 

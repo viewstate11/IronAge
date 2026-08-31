@@ -1167,3 +1167,155 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   PROGRAM ADHERENCE
+========================================================= */
+
+.coach-adherence-card {
+  margin: 18px 0 24px;
+  padding: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.34);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212, 175, 55, 0.09),
+      rgba(255, 255, 255, 0.015)
+    );
+}
+
+.coach-adherence-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.coach-adherence-card__header span {
+  display: block;
+  color: #d4af37;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.coach-adherence-card__header strong {
+  display: block;
+  margin-top: 7px;
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 22px;
+}
+
+.coach-adherence-card__header > b {
+  color: #d4af37;
+  font-family: Montserrat, sans-serif;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.coach-adherence-card__summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.coach-adherence-card__summary strong {
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+}
+
+.coach-adherence-card__summary span {
+  color: #777777;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.coach-adherence-card__progress {
+  height: 7px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #1a1a1a;
+}
+
+.coach-adherence-card__progress > div {
+  height: 100%;
+  border-radius: inherit;
+  background: #d4af37;
+}
+
+.coach-adherence-card__workouts {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.coach-adherence-workout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 14px;
+  border: 1px solid #202020;
+  border-radius: 12px;
+  background: #0a0a0a;
+}
+
+.coach-adherence-workout span {
+  display: block;
+  color: #777777;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.coach-adherence-workout strong {
+  display: block;
+  margin-top: 4px;
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+}
+
+.coach-adherence-workout > b {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.coach-adherence-workout--completed > b {
+  color: #d4af37;
+}
+
+.coach-adherence-workout--pending > b {
+  color: #777777;
+}
+
+.coach-adherence-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #202020;
+}
+
+.coach-adherence-card__footer span {
+  color: #666666;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.coach-adherence-card__footer strong {
+  color: #ffffff;
+  font-size: 9px;
+  text-align: right;
+}
+
