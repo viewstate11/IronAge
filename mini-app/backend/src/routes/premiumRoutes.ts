@@ -3,6 +3,12 @@ import { Router } from "express";
 import { prisma } from "../prisma.js";
 
 import {
+  verifyPremiumPurchase,
+  type PaymentPlatform,
+  type PaymentProvider,
+} from "../services/premiumPayment.js";
+
+import {
   requireAppAuth,
   type AppAuthenticatedRequest,
 } from "../middleware/appAuthMiddleware.js";
@@ -119,6 +125,133 @@ router.get(
         success: false,
         message:
           "Failed to load premium plan",
+      });
+    }
+  }
+);
+
+/* =========================================================
+   VERIFY PREMIUM PURCHASE
+   POST /api/premium/verify
+
+   Authentication is required.
+
+   IMPORTANT:
+   The client submits purchase evidence only.
+   Premium is granted only after trusted provider verification.
+========================================================= */
+
+router.post(
+  "/verify",
+  requireAppAuth,
+  async (req, res) => {
+    try {
+      const authenticatedRequest =
+        req as AppAuthenticatedRequest;
+
+      const {
+        provider,
+        platform,
+        productId,
+        transactionId,
+        verificationPayload,
+      } = req.body ?? {};
+
+      if (
+        typeof provider !== "string" ||
+        typeof platform !== "string" ||
+        typeof productId !== "string" ||
+        typeof transactionId !== "string" ||
+        typeof verificationPayload !== "string"
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Invalid purchase verification payload",
+        });
+      }
+
+      const verified =
+        await verifyPremiumPurchase({
+          provider:
+            provider as PaymentProvider,
+          platform:
+            platform as PaymentPlatform,
+          productId,
+          transactionId,
+          verificationPayload,
+        });
+
+      const subscription =
+        await prisma.subscription.upsert({
+          where: {
+            transactionId:
+              verified.transactionId,
+          },
+
+          update: {
+            provider: verified.provider,
+            platform: verified.platform,
+            productId: verified.productId,
+            plan: verified.plan,
+            status: "ACTIVE",
+            originalTransactionId:
+              verified.originalTransactionId,
+            purchasedAt:
+              verified.purchasedAt,
+            expiresAt:
+              verified.expiresAt,
+            lastVerifiedAt: new Date(),
+          },
+
+          create: {
+            userId:
+              authenticatedRequest.appUserId,
+            provider: verified.provider,
+            platform: verified.platform,
+            productId: verified.productId,
+            plan: verified.plan,
+            status: "ACTIVE",
+            transactionId:
+              verified.transactionId,
+            originalTransactionId:
+              verified.originalTransactionId,
+            purchasedAt:
+              verified.purchasedAt,
+            expiresAt:
+              verified.expiresAt,
+            lastVerifiedAt: new Date(),
+          },
+        });
+
+      if (
+        subscription.userId !==
+        authenticatedRequest.appUserId
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Purchase belongs to another account",
+        });
+      }
+
+      return res.json({
+        success: true,
+        premiumPlan: subscription.plan,
+        isPremium: true,
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE PREMIUM VERIFY ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Purchase verification failed",
       });
     }
   }
