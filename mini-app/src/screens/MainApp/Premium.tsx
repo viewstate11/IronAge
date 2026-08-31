@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useUser } from "../../context/UserContext";
 
 import {
-  updatePremiumPlan,
+  getPremiumPlan,
   type PremiumPlan,
 } from "../../api/client";
 
@@ -34,12 +34,51 @@ export default function Premium({ onBack }: Props) {
       : null;
   }, [user.premiumPlan]);
 
+  const [serverPlan, setServerPlan] =
+    useState<PremiumPlan | null>(activePlan);
+
   const [selectedPlan, setSelectedPlan] =
     useState<PremiumPlan>(activePlan ?? "MONTHLY");
 
-  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPremium = async () => {
+      try {
+        const plan = await getPremiumPlan();
+
+        if (!cancelled) {
+          setServerPlan(plan);
+
+          if (plan) {
+            setSelectedPlan(plan);
+          }
+        }
+      } catch (loadError) {
+        console.error(
+          "IRONAGE PREMIUM LOAD ERROR:",
+          loadError
+        );
+
+        if (!cancelled) {
+          setError(
+            loadError instanceof Error
+              ? loadError.message
+              : "Failed to load Premium status"
+          );
+        }
+      }
+    };
+
+    void loadPremium();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
 
   const handlePremiumCheckout = () => {
@@ -88,7 +127,7 @@ export default function Premium({ onBack }: Props) {
 
         <section className="premium-status">
           <span>CURRENT PLAN</span>
-          <strong>{activePlan ?? "FREE"}</strong>
+          <strong>{serverPlan ?? "FREE"}</strong>
         </section>
 
         <section className="premium-plans">
@@ -158,7 +197,7 @@ export default function Premium({ onBack }: Props) {
           className="premium-activate"
           onClick={handlePremiumCheckout}
         >
-          {activePlan === selectedPlan
+          {serverPlan === selectedPlan
             ? `${selectedPlan} ACTIVE`
             : "CONTINUE TO PAYMENT"}
         </button>

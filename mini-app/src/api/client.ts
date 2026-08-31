@@ -118,6 +118,37 @@ export type AuthMode =
   | "web";
 
 /* =========================================================
+   PREMIUM API
+========================================================= */
+
+export async function getPremiumPlan(): Promise<
+  PremiumPlan | null
+> {
+  const response =
+    await api.get<{
+      success: boolean;
+      premiumPlan: PremiumPlan | null;
+    }>(
+      "/premium",
+      telegramAuthOptions()
+    );
+
+  if (
+    !response ||
+    !Object.prototype.hasOwnProperty.call(
+      response,
+      "premiumPlan"
+    )
+  ) {
+    throw new Error(
+      "Invalid premium response from API"
+    );
+  }
+
+  return response.premiumPlan;
+}
+
+/* =========================================================
    WEB IDENTITY
 ========================================================= */
 
@@ -767,22 +798,6 @@ export async function getProgressHistory(): Promise<
 /* =========================================================
    PREMIUM API
 ========================================================= */
-
-export async function updatePremiumPlan(
-  plan: PremiumPlan | null
-): Promise<PremiumPlan | null> {
-  const response =
-    await api.put<{
-      success: boolean;
-      premiumPlan: PremiumPlan | null;
-    }>(
-      "/premium",
-      { plan },
-      telegramAuthOptions()
-    );
-
-  return response.premiumPlan;
-}
 
 /* =========================================================
    WEB ID

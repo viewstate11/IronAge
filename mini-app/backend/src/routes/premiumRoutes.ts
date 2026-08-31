@@ -10,31 +10,15 @@ import {
 const router = Router();
 
 /* =========================================================
-   PREMIUM PLANS
-========================================================= */
-
-const PREMIUM_PLANS = [
-  "MONTHLY",
-  "YEARLY",
-] as const;
-
-type PremiumPlan =
-  (typeof PREMIUM_PLANS)[number];
-
-function isPremiumPlan(
-  value: unknown
-): value is PremiumPlan {
-  return (
-    typeof value === "string" &&
-    PREMIUM_PLANS.includes(
-      value as PremiumPlan
-    )
-  );
-}
-
-/* =========================================================
    GET CURRENT PREMIUM
    GET /api/premium
+
+   Premium entitlement is read-only from the client.
+
+   IMPORTANT:
+   The client must never be allowed to grant itself Premium.
+   Future payment providers / App Store verification will
+   update entitlement through trusted server-side flows.
 ========================================================= */
 
 router.get(
@@ -86,71 +70,23 @@ router.get(
 );
 
 /* =========================================================
-   UPDATE CURRENT PREMIUM
+   CLIENT PREMIUM MUTATION BLOCK
+
    PUT /api/premium
 
-   Temporary development endpoint.
-   Real payments will replace direct activation later.
+   Premium cannot be activated directly by the client.
+   A verified payment flow will replace this endpoint.
 ========================================================= */
 
 router.put(
   "/",
   requireAppAuth,
-  async (req, res) => {
-    try {
-      const authenticatedRequest =
-        req as AppAuthenticatedRequest;
-
-      const plan =
-        req.body?.plan;
-
-      if (
-        plan !== null &&
-        !isPremiumPlan(plan)
-      ) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Invalid premium plan",
-          allowedPlans:
-            PREMIUM_PLANS,
-        });
-      }
-
-      const user =
-        await prisma.user.update({
-          where: {
-            id:
-              authenticatedRequest.appUserId,
-          },
-
-          data: {
-            premiumPlan: plan,
-          },
-
-          select: {
-            id: true,
-            premiumPlan: true,
-          },
-        });
-
-      return res.json({
-        success: true,
-        premiumPlan:
-          user.premiumPlan,
-      });
-    } catch (error) {
-      console.error(
-        "IRONAGE PREMIUM UPDATE ERROR:",
-        error
-      );
-
-      return res.status(500).json({
-        success: false,
-        message:
-          "Failed to update premium plan",
-      });
-    }
+  (_req, res) => {
+    return res.status(403).json({
+      success: false,
+      message:
+        "Direct Premium activation is disabled",
+    });
   }
 );
 
