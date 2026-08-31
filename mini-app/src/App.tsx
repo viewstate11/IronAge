@@ -1,4 +1,5 @@
 import { UserProvider, useUser } from "./context/UserContext";
+import { AppEntitlementsProvider } from "./context/AppEntitlementsContext";
 import MainApp from "./screens/MainApp/MainApp";
 import Onboarding from "./screens/Onboarding/Onboarding";
 
@@ -138,7 +139,9 @@ function AppContent() {
 export default function App() {
   return (
     <UserProvider>
-      <AppContent />
+      <AppEntitlementsProvider>
+        <AppContent />
+      </AppEntitlementsProvider>
     </UserProvider>
   );
 }

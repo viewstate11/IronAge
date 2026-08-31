@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useUser } from "../../context/UserContext";
+import { useAppEntitlements } from "../../context/AppEntitlementsContext";
 
 import {
-  getPremiumPlan,
   verifyApplePremiumPurchase,
   type PremiumPlan,
 } from "../../api/client";
@@ -26,71 +26,39 @@ const PLAN_FEATURES = [
   "IRONAGE PREMIUM EXPERIENCE",
 ];
 
-function isPremiumPlan(value: unknown): value is PremiumPlan {
-  return value === "MONTHLY" || value === "YEARLY";
-}
-
 export default function Premium({ onBack }: Props) {
-  const { user, refreshUser } = useUser();
+  const { refreshUser } = useUser();
 
-  const activePlan = useMemo<PremiumPlan | null>(() => {
-    return isPremiumPlan(user.premiumPlan)
-      ? user.premiumPlan
-      : null;
-  }, [user.premiumPlan]);
-
-  const [serverPlan, setServerPlan] =
-    useState<PremiumPlan | null>(activePlan);
+  const {
+    premiumPlan,
+    loading: entitlementLoading,
+    error: entitlementError,
+    refreshEntitlements,
+  } = useAppEntitlements();
 
   const [selectedPlan, setSelectedPlan] =
-    useState<PremiumPlan>(activePlan ?? "MONTHLY");
+    useState<PremiumPlan>(
+      premiumPlan ?? "MONTHLY"
+    );
 
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] =
+    useState<string | null>(null);
+
+  const [error, setError] =
+    useState<string | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const loadPremium = async () => {
-      try {
-        const plan = await getPremiumPlan();
-
-        if (!cancelled) {
-          setServerPlan(plan);
-
-          if (plan) {
-            setSelectedPlan(plan);
-          }
-        }
-      } catch (loadError) {
-        console.error(
-          "IRONAGE PREMIUM LOAD ERROR:",
-          loadError
-        );
-
-        if (!cancelled) {
-          setError(
-            loadError instanceof Error
-              ? loadError.message
-              : "Failed to load Premium status"
-          );
-        }
-      }
-    };
-
-    void loadPremium();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    if (premiumPlan) {
+      setSelectedPlan(premiumPlan);
+    }
+  }, [premiumPlan]);
 
 
   const [isPurchasing, setIsPurchasing] =
     useState(false);
 
   const handlePremiumCheckout = async () => {
-    if (serverPlan === selectedPlan) {
+    if (premiumPlan === selectedPlan) {
       return;
     }
 
@@ -140,14 +108,11 @@ export default function Premium({ onBack }: Props) {
           purchase.signedTransaction
         );
 
-      setServerPlan(
-        verification.premiumPlan
-      );
-
       setSelectedPlan(
         verification.premiumPlan
       );
 
+      await refreshEntitlements();
       await refreshUser();
 
       setMessage(
@@ -208,7 +173,11 @@ export default function Premium({ onBack }: Props) {
 
         <section className="premium-status">
           <span>CURRENT PLAN</span>
-          <strong>{serverPlan ?? "FREE"}</strong>
+          <strong>
+            {entitlementLoading
+              ? "LOADING..."
+              : premiumPlan ?? "FREE"}
+          </strong>
         </section>
 
         <section className="premium-plans">
@@ -261,9 +230,12 @@ export default function Premium({ onBack }: Props) {
           ))}
         </section>
 
-        {error && (
-          <div className="premium-message error" role="alert">
-            {error}
+        {(error || entitlementError) && (
+          <div
+            className="premium-message error"
+            role="alert"
+          >
+            {error ?? entitlementError}
           </div>
         )}
 
@@ -279,10 +251,11 @@ export default function Premium({ onBack }: Props) {
           onClick={handlePremiumCheckout}
           disabled={
             isPurchasing ||
-            serverPlan === selectedPlan
+            entitlementLoading ||
+            premiumPlan === selectedPlan
           }
         >
-          {serverPlan === selectedPlan
+          {premiumPlan === selectedPlan
             ? `${selectedPlan} ACTIVE`
             : isPurchasing
               ? "PROCESSING..."
