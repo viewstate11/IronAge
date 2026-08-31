@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useUser } from "../../context/UserContext";
+import { useAppEntitlements } from "../../context/AppEntitlementsContext";
 import type { Goal } from "../../types/user";
 
 import "./Profile.css";
@@ -67,6 +68,12 @@ export default function Profile({
   onOpenMyProgram,
 }: Props) {
   const { user, updateProfile } = useUser();
+
+  const {
+    premiumPlan,
+    isPremium,
+    loading: entitlementLoading,
+  } = useAppEntitlements();
 
   const [view, setView] =
     useState<ProfileView>("main");
@@ -671,7 +678,11 @@ export default function Profile({
             </div>
 
             <b>
-              {user.premiumPlan || "→"}
+              {entitlementLoading
+                ? "..."
+                : isPremium
+                  ? premiumPlan
+                  : "→"}
             </b>
           </button>
 
