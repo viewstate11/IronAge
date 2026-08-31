@@ -173,6 +173,8 @@ router.post(
         status,
         startedAt,
         completedAt,
+        assignmentId,
+        programWorkoutId,
         sets,
       } = req.body;
 
@@ -202,6 +204,76 @@ router.post(
           message:
             "workoutName is required",
         });
+      }
+
+      const hasAssignmentId =
+        assignmentId !==
+          undefined &&
+        assignmentId !==
+          null;
+
+      const hasProgramWorkoutId =
+        programWorkoutId !==
+          undefined &&
+        programWorkoutId !==
+          null;
+
+      /*
+       * Program execution metadata must
+       * always arrive as a complete pair.
+       */
+
+      if (
+        hasAssignmentId !==
+        hasProgramWorkoutId
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "assignmentId and programWorkoutId must be provided together",
+        });
+      }
+
+      let normalizedAssignmentId:
+        number | null =
+          null;
+
+      let normalizedProgramWorkoutId:
+        number | null =
+          null;
+
+      if (
+        hasAssignmentId &&
+        hasProgramWorkoutId
+      ) {
+        normalizedAssignmentId =
+          Number(
+            assignmentId
+          );
+
+        normalizedProgramWorkoutId =
+          Number(
+            programWorkoutId
+          );
+
+        if (
+          !Number.isInteger(
+            normalizedAssignmentId
+          ) ||
+          normalizedAssignmentId <=
+            0 ||
+          !Number.isInteger(
+            normalizedProgramWorkoutId
+          ) ||
+          normalizedProgramWorkoutId <=
+            0
+        ) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "assignmentId and programWorkoutId must be positive integers",
+          });
+        }
       }
 
       /* ===================================================
@@ -387,6 +459,66 @@ router.post(
       const result =
         await prisma.$transaction(
           async (tx) => {
+            /*
+             * COACH PROGRAM SECURITY
+             *
+             * Never trust program metadata supplied
+             * by the frontend.
+             */
+
+            if (
+              normalizedAssignmentId !==
+                null &&
+              normalizedProgramWorkoutId !==
+                null
+            ) {
+              const assignment =
+                await tx.programAssignment.findFirst({
+                  where: {
+                    id:
+                      normalizedAssignmentId,
+
+                    clientId:
+                      userId,
+
+                    isActive:
+                      true,
+                  },
+
+                  select: {
+                    id: true,
+                    programId: true,
+                  },
+                });
+
+              if (!assignment) {
+                throw new Error(
+                  "Active program assignment not found for authenticated user"
+                );
+              }
+
+              const scheduledWorkout =
+                await tx.programWorkout.findFirst({
+                  where: {
+                    id:
+                      normalizedProgramWorkoutId,
+
+                    programId:
+                      assignment.programId,
+                  },
+
+                  select: {
+                    id: true,
+                  },
+                });
+
+              if (!scheduledWorkout) {
+                throw new Error(
+                  "Program workout does not belong to active assignment"
+                );
+              }
+            }
+
             /* =============================================
                CREATE WORKOUT
             ============================================= */
@@ -436,6 +568,49 @@ router.post(
                   },
                 },
               });
+
+            /*
+             * PROGRAM ADHERENCE
+             *
+             * Only completed coach-program workouts
+             * create adherence records.
+             *
+             * skipDuplicates keeps the scheduled
+             * workout counted at most once per
+             * assignment while still allowing the
+             * user to repeat the workout session.
+             */
+
+            if (
+              normalizedStatus ===
+                "COMPLETED" &&
+              normalizedAssignmentId !==
+                null &&
+              normalizedProgramWorkoutId !==
+                null
+            ) {
+              await tx.programWorkoutCompletion.createMany({
+                data: [
+                  {
+                    assignmentId:
+                      normalizedAssignmentId,
+
+                    programWorkoutId:
+                      normalizedProgramWorkoutId,
+
+                    workoutSessionId:
+                      workout.id,
+
+                    completedAt:
+                      completedAtDate ??
+                      new Date(),
+                  },
+                ],
+
+                skipDuplicates:
+                  true,
+              });
+            }
 
             /* =============================================
                UPDATE USER

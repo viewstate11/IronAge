@@ -113,10 +113,14 @@ function getReps(
 }
 
 function toWorkoutProgram(
-  workout: TrainingWorkout
+  workout: TrainingWorkout,
+  assignmentId: number,
+  programWorkoutId: number
 ): WorkoutProgram {
   return {
     id: `coach-${workout.id}`,
+    assignmentId,
+    programWorkoutId,
     title: workout.name,
     description:
       workout.description || undefined,
@@ -461,7 +465,9 @@ export default function MyProgram({
                           onClick={() => {
                             const program =
                               toWorkoutProgram(
-                                workout
+                                workout,
+                                assignment.id,
+                                programWorkout.id
                               );
 
                             onStartWorkout(

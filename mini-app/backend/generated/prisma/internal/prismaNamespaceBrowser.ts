@@ -65,6 +65,7 @@ export const ModelName = {
   TrainingProgram: 'TrainingProgram',
   ProgramWorkout: 'ProgramWorkout',
   ProgramAssignment: 'ProgramAssignment',
+  ProgramWorkoutCompletion: 'ProgramWorkoutCompletion',
   CoachInvite: 'CoachInvite'
 } as const
 
@@ -307,6 +308,18 @@ export const ProgramAssignmentScalarFieldEnum = {
 } as const
 
 export type ProgramAssignmentScalarFieldEnum = (typeof ProgramAssignmentScalarFieldEnum)[keyof typeof ProgramAssignmentScalarFieldEnum]
+
+
+export const ProgramWorkoutCompletionScalarFieldEnum = {
+  id: 'id',
+  assignmentId: 'assignmentId',
+  programWorkoutId: 'programWorkoutId',
+  workoutSessionId: 'workoutSessionId',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ProgramWorkoutCompletionScalarFieldEnum = (typeof ProgramWorkoutCompletionScalarFieldEnum)[keyof typeof ProgramWorkoutCompletionScalarFieldEnum]
 
 
 export const CoachInviteScalarFieldEnum = {

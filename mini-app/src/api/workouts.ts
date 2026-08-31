@@ -45,6 +45,9 @@ export type CreateWorkoutPayload = {
   startedAt?: string | null;
   completedAt?: string | null;
 
+  assignmentId?: number;
+  programWorkoutId?: number;
+
   sets?: WorkoutSetPayload[];
 };
 
@@ -358,6 +361,12 @@ export async function createWorkout(
     startedAt,
 
     completedAt,
+
+    assignmentId:
+      payload.assignmentId,
+
+    programWorkoutId:
+      payload.programWorkoutId,
 
     sets,
   };

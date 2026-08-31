@@ -88,6 +88,11 @@ export type ProgramWorkout = Prisma.ProgramWorkoutModel
  */
 export type ProgramAssignment = Prisma.ProgramAssignmentModel
 /**
+ * Model ProgramWorkoutCompletion
+ * 
+ */
+export type ProgramWorkoutCompletion = Prisma.ProgramWorkoutCompletionModel
+/**
  * Model CoachInvite
  * 
  */

@@ -234,6 +234,12 @@ export default function MainApp() {
           name:
             result.workoutTitle,
 
+          assignmentId:
+            result.assignmentId,
+
+          programWorkoutId:
+            result.programWorkoutId,
+
           duration:
             result.durationSeconds,
 

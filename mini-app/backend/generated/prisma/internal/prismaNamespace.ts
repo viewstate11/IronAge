@@ -411,6 +411,7 @@ export const ModelName = {
   TrainingProgram: 'TrainingProgram',
   ProgramWorkout: 'ProgramWorkout',
   ProgramAssignment: 'ProgramAssignment',
+  ProgramWorkoutCompletion: 'ProgramWorkoutCompletion',
   CoachInvite: 'CoachInvite'
 } as const
 
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coachProfile" | "coachClient" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programAssignment" | "coachInvite"
+    modelProps: "user" | "coachProfile" | "coachClient" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programAssignment" | "programWorkoutCompletion" | "coachInvite"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1467,6 +1468,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProgramWorkoutCompletion: {
+      payload: Prisma.$ProgramWorkoutCompletionPayload<ExtArgs>
+      fields: Prisma.ProgramWorkoutCompletionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgramWorkoutCompletionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgramWorkoutCompletionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>
+        }
+        findFirst: {
+          args: Prisma.ProgramWorkoutCompletionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgramWorkoutCompletionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>
+        }
+        findMany: {
+          args: Prisma.ProgramWorkoutCompletionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>[]
+        }
+        create: {
+          args: Prisma.ProgramWorkoutCompletionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>
+        }
+        createMany: {
+          args: Prisma.ProgramWorkoutCompletionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProgramWorkoutCompletionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>[]
+        }
+        delete: {
+          args: Prisma.ProgramWorkoutCompletionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>
+        }
+        update: {
+          args: Prisma.ProgramWorkoutCompletionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgramWorkoutCompletionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgramWorkoutCompletionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProgramWorkoutCompletionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProgramWorkoutCompletionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramWorkoutCompletionPayload>
+        }
+        aggregate: {
+          args: Prisma.ProgramWorkoutCompletionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramWorkoutCompletion>
+        }
+        groupBy: {
+          args: Prisma.ProgramWorkoutCompletionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramWorkoutCompletionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgramWorkoutCompletionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramWorkoutCompletionCountAggregateOutputType> | number
+        }
+      }
+    }
     CoachInvite: {
       payload: Prisma.$CoachInvitePayload<ExtArgs>
       fields: Prisma.CoachInviteFieldRefs
@@ -1803,6 +1878,18 @@ export const ProgramAssignmentScalarFieldEnum = {
 } as const
 
 export type ProgramAssignmentScalarFieldEnum = (typeof ProgramAssignmentScalarFieldEnum)[keyof typeof ProgramAssignmentScalarFieldEnum]
+
+
+export const ProgramWorkoutCompletionScalarFieldEnum = {
+  id: 'id',
+  assignmentId: 'assignmentId',
+  programWorkoutId: 'programWorkoutId',
+  workoutSessionId: 'workoutSessionId',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ProgramWorkoutCompletionScalarFieldEnum = (typeof ProgramWorkoutCompletionScalarFieldEnum)[keyof typeof ProgramWorkoutCompletionScalarFieldEnum]
 
 
 export const CoachInviteScalarFieldEnum = {
@@ -2144,6 +2231,7 @@ export type GlobalOmitConfig = {
   trainingProgram?: Prisma.TrainingProgramOmit
   programWorkout?: Prisma.ProgramWorkoutOmit
   programAssignment?: Prisma.ProgramAssignmentOmit
+  programWorkoutCompletion?: Prisma.ProgramWorkoutCompletionOmit
   coachInvite?: Prisma.CoachInviteOmit
 }
 

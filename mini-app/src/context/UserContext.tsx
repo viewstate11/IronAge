@@ -109,6 +109,9 @@ export type CompleteWorkoutData = {
 
   completedAt?: string | null;
 
+  assignmentId?: number;
+  programWorkoutId?: number;
+
   sets?: Array<{
     exerciseId: string;
 
@@ -1231,6 +1234,12 @@ export function UserProvider({
               workoutId,
 
               workoutName,
+
+              assignmentId:
+                workout.assignmentId,
+
+              programWorkoutId:
+                workout.programWorkoutId,
 
               duration,
 

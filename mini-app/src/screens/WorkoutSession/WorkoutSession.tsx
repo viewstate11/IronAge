@@ -184,6 +184,10 @@ export default function WorkoutSession({
         workoutId,
         workoutTitle:
           workout.title,
+        assignmentId:
+          workout.assignmentId,
+        programWorkoutId:
+          workout.programWorkoutId,
         durationSeconds:
           seconds,
         exercisesCompleted:

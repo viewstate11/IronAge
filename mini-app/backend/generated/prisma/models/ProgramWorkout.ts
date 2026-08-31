@@ -254,6 +254,7 @@ export type ProgramWorkoutWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"ProgramWorkout"> | Date | string
   program?: Prisma.XOR<Prisma.TrainingProgramScalarRelationFilter, Prisma.TrainingProgramWhereInput>
   workout?: Prisma.XOR<Prisma.TrainingWorkoutScalarRelationFilter, Prisma.TrainingWorkoutWhereInput>
+  completions?: Prisma.ProgramWorkoutCompletionListRelationFilter
 }
 
 export type ProgramWorkoutOrderByWithRelationInput = {
@@ -266,6 +267,7 @@ export type ProgramWorkoutOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   program?: Prisma.TrainingProgramOrderByWithRelationInput
   workout?: Prisma.TrainingWorkoutOrderByWithRelationInput
+  completions?: Prisma.ProgramWorkoutCompletionOrderByRelationAggregateInput
 }
 
 export type ProgramWorkoutWhereUniqueInput = Prisma.AtLeast<{
@@ -282,6 +284,7 @@ export type ProgramWorkoutWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"ProgramWorkout"> | Date | string
   program?: Prisma.XOR<Prisma.TrainingProgramScalarRelationFilter, Prisma.TrainingProgramWhereInput>
   workout?: Prisma.XOR<Prisma.TrainingWorkoutScalarRelationFilter, Prisma.TrainingWorkoutWhereInput>
+  completions?: Prisma.ProgramWorkoutCompletionListRelationFilter
 }, "id" | "programId_position">
 
 export type ProgramWorkoutOrderByWithAggregationInput = {
@@ -319,6 +322,7 @@ export type ProgramWorkoutCreateInput = {
   createdAt?: Date | string
   program: Prisma.TrainingProgramCreateNestedOneWithoutWorkoutsInput
   workout: Prisma.TrainingWorkoutCreateNestedOneWithoutProgramWorkoutsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutProgramWorkoutInput
 }
 
 export type ProgramWorkoutUncheckedCreateInput = {
@@ -329,6 +333,7 @@ export type ProgramWorkoutUncheckedCreateInput = {
   day?: number | null
   position: number
   createdAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutProgramWorkoutInput
 }
 
 export type ProgramWorkoutUpdateInput = {
@@ -338,6 +343,7 @@ export type ProgramWorkoutUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   program?: Prisma.TrainingProgramUpdateOneRequiredWithoutWorkoutsNestedInput
   workout?: Prisma.TrainingWorkoutUpdateOneRequiredWithoutProgramWorkoutsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutProgramWorkoutNestedInput
 }
 
 export type ProgramWorkoutUncheckedUpdateInput = {
@@ -348,6 +354,7 @@ export type ProgramWorkoutUncheckedUpdateInput = {
   day?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutProgramWorkoutNestedInput
 }
 
 export type ProgramWorkoutCreateManyInput = {
@@ -440,6 +447,11 @@ export type ProgramWorkoutSumOrderByAggregateInput = {
   position?: Prisma.SortOrder
 }
 
+export type ProgramWorkoutScalarRelationFilter = {
+  is?: Prisma.ProgramWorkoutWhereInput
+  isNot?: Prisma.ProgramWorkoutWhereInput
+}
+
 export type ProgramWorkoutCreateNestedManyWithoutWorkoutInput = {
   create?: Prisma.XOR<Prisma.ProgramWorkoutCreateWithoutWorkoutInput, Prisma.ProgramWorkoutUncheckedCreateWithoutWorkoutInput> | Prisma.ProgramWorkoutCreateWithoutWorkoutInput[] | Prisma.ProgramWorkoutUncheckedCreateWithoutWorkoutInput[]
   connectOrCreate?: Prisma.ProgramWorkoutCreateOrConnectWithoutWorkoutInput | Prisma.ProgramWorkoutCreateOrConnectWithoutWorkoutInput[]
@@ -524,12 +536,27 @@ export type ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput = {
   deleteMany?: Prisma.ProgramWorkoutScalarWhereInput | Prisma.ProgramWorkoutScalarWhereInput[]
 }
 
+export type ProgramWorkoutCreateNestedOneWithoutCompletionsInput = {
+  create?: Prisma.XOR<Prisma.ProgramWorkoutCreateWithoutCompletionsInput, Prisma.ProgramWorkoutUncheckedCreateWithoutCompletionsInput>
+  connectOrCreate?: Prisma.ProgramWorkoutCreateOrConnectWithoutCompletionsInput
+  connect?: Prisma.ProgramWorkoutWhereUniqueInput
+}
+
+export type ProgramWorkoutUpdateOneRequiredWithoutCompletionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramWorkoutCreateWithoutCompletionsInput, Prisma.ProgramWorkoutUncheckedCreateWithoutCompletionsInput>
+  connectOrCreate?: Prisma.ProgramWorkoutCreateOrConnectWithoutCompletionsInput
+  upsert?: Prisma.ProgramWorkoutUpsertWithoutCompletionsInput
+  connect?: Prisma.ProgramWorkoutWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramWorkoutUpdateToOneWithWhereWithoutCompletionsInput, Prisma.ProgramWorkoutUpdateWithoutCompletionsInput>, Prisma.ProgramWorkoutUncheckedUpdateWithoutCompletionsInput>
+}
+
 export type ProgramWorkoutCreateWithoutWorkoutInput = {
   week?: number | null
   day?: number | null
   position: number
   createdAt?: Date | string
   program: Prisma.TrainingProgramCreateNestedOneWithoutWorkoutsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutProgramWorkoutInput
 }
 
 export type ProgramWorkoutUncheckedCreateWithoutWorkoutInput = {
@@ -539,6 +566,7 @@ export type ProgramWorkoutUncheckedCreateWithoutWorkoutInput = {
   day?: number | null
   position: number
   createdAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutProgramWorkoutInput
 }
 
 export type ProgramWorkoutCreateOrConnectWithoutWorkoutInput = {
@@ -586,6 +614,7 @@ export type ProgramWorkoutCreateWithoutProgramInput = {
   position: number
   createdAt?: Date | string
   workout: Prisma.TrainingWorkoutCreateNestedOneWithoutProgramWorkoutsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutProgramWorkoutInput
 }
 
 export type ProgramWorkoutUncheckedCreateWithoutProgramInput = {
@@ -595,6 +624,7 @@ export type ProgramWorkoutUncheckedCreateWithoutProgramInput = {
   day?: number | null
   position: number
   createdAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutProgramWorkoutInput
 }
 
 export type ProgramWorkoutCreateOrConnectWithoutProgramInput = {
@@ -623,6 +653,60 @@ export type ProgramWorkoutUpdateManyWithWhereWithoutProgramInput = {
   data: Prisma.XOR<Prisma.ProgramWorkoutUpdateManyMutationInput, Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramInput>
 }
 
+export type ProgramWorkoutCreateWithoutCompletionsInput = {
+  week?: number | null
+  day?: number | null
+  position: number
+  createdAt?: Date | string
+  program: Prisma.TrainingProgramCreateNestedOneWithoutWorkoutsInput
+  workout: Prisma.TrainingWorkoutCreateNestedOneWithoutProgramWorkoutsInput
+}
+
+export type ProgramWorkoutUncheckedCreateWithoutCompletionsInput = {
+  id?: number
+  programId: number
+  workoutId: number
+  week?: number | null
+  day?: number | null
+  position: number
+  createdAt?: Date | string
+}
+
+export type ProgramWorkoutCreateOrConnectWithoutCompletionsInput = {
+  where: Prisma.ProgramWorkoutWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramWorkoutCreateWithoutCompletionsInput, Prisma.ProgramWorkoutUncheckedCreateWithoutCompletionsInput>
+}
+
+export type ProgramWorkoutUpsertWithoutCompletionsInput = {
+  update: Prisma.XOR<Prisma.ProgramWorkoutUpdateWithoutCompletionsInput, Prisma.ProgramWorkoutUncheckedUpdateWithoutCompletionsInput>
+  create: Prisma.XOR<Prisma.ProgramWorkoutCreateWithoutCompletionsInput, Prisma.ProgramWorkoutUncheckedCreateWithoutCompletionsInput>
+  where?: Prisma.ProgramWorkoutWhereInput
+}
+
+export type ProgramWorkoutUpdateToOneWithWhereWithoutCompletionsInput = {
+  where?: Prisma.ProgramWorkoutWhereInput
+  data: Prisma.XOR<Prisma.ProgramWorkoutUpdateWithoutCompletionsInput, Prisma.ProgramWorkoutUncheckedUpdateWithoutCompletionsInput>
+}
+
+export type ProgramWorkoutUpdateWithoutCompletionsInput = {
+  week?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  day?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  program?: Prisma.TrainingProgramUpdateOneRequiredWithoutWorkoutsNestedInput
+  workout?: Prisma.TrainingWorkoutUpdateOneRequiredWithoutProgramWorkoutsNestedInput
+}
+
+export type ProgramWorkoutUncheckedUpdateWithoutCompletionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+  workoutId?: Prisma.IntFieldUpdateOperationsInput | number
+  week?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  day?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type ProgramWorkoutCreateManyWorkoutInput = {
   id?: number
   programId: number
@@ -638,6 +722,7 @@ export type ProgramWorkoutUpdateWithoutWorkoutInput = {
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   program?: Prisma.TrainingProgramUpdateOneRequiredWithoutWorkoutsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutProgramWorkoutNestedInput
 }
 
 export type ProgramWorkoutUncheckedUpdateWithoutWorkoutInput = {
@@ -647,6 +732,7 @@ export type ProgramWorkoutUncheckedUpdateWithoutWorkoutInput = {
   day?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutProgramWorkoutNestedInput
 }
 
 export type ProgramWorkoutUncheckedUpdateManyWithoutWorkoutInput = {
@@ -673,6 +759,7 @@ export type ProgramWorkoutUpdateWithoutProgramInput = {
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workout?: Prisma.TrainingWorkoutUpdateOneRequiredWithoutProgramWorkoutsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutProgramWorkoutNestedInput
 }
 
 export type ProgramWorkoutUncheckedUpdateWithoutProgramInput = {
@@ -682,6 +769,7 @@ export type ProgramWorkoutUncheckedUpdateWithoutProgramInput = {
   day?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   position?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutProgramWorkoutNestedInput
 }
 
 export type ProgramWorkoutUncheckedUpdateManyWithoutProgramInput = {
@@ -694,6 +782,35 @@ export type ProgramWorkoutUncheckedUpdateManyWithoutProgramInput = {
 }
 
 
+/**
+ * Count Type ProgramWorkoutCountOutputType
+ */
+
+export type ProgramWorkoutCountOutputType = {
+  completions: number
+}
+
+export type ProgramWorkoutCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  completions?: boolean | ProgramWorkoutCountOutputTypeCountCompletionsArgs
+}
+
+/**
+ * ProgramWorkoutCountOutputType without action
+ */
+export type ProgramWorkoutCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramWorkoutCountOutputType
+   */
+  select?: Prisma.ProgramWorkoutCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ProgramWorkoutCountOutputType without action
+ */
+export type ProgramWorkoutCountOutputTypeCountCompletionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgramWorkoutCompletionWhereInput
+}
+
 
 export type ProgramWorkoutSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -705,6 +822,8 @@ export type ProgramWorkoutSelect<ExtArgs extends runtime.Types.Extensions.Intern
   createdAt?: boolean
   program?: boolean | Prisma.TrainingProgramDefaultArgs<ExtArgs>
   workout?: boolean | Prisma.TrainingWorkoutDefaultArgs<ExtArgs>
+  completions?: boolean | Prisma.ProgramWorkout$completionsArgs<ExtArgs>
+  _count?: boolean | Prisma.ProgramWorkoutCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["programWorkout"]>
 
 export type ProgramWorkoutSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -745,6 +864,8 @@ export type ProgramWorkoutOmit<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProgramWorkoutInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.TrainingProgramDefaultArgs<ExtArgs>
   workout?: boolean | Prisma.TrainingWorkoutDefaultArgs<ExtArgs>
+  completions?: boolean | Prisma.ProgramWorkout$completionsArgs<ExtArgs>
+  _count?: boolean | Prisma.ProgramWorkoutCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProgramWorkoutIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.TrainingProgramDefaultArgs<ExtArgs>
@@ -760,6 +881,7 @@ export type $ProgramWorkoutPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     program: Prisma.$TrainingProgramPayload<ExtArgs>
     workout: Prisma.$TrainingWorkoutPayload<ExtArgs>
+    completions: Prisma.$ProgramWorkoutCompletionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1165,6 +1287,7 @@ export interface Prisma__ProgramWorkoutClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   program<T extends Prisma.TrainingProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__TrainingProgramClient<runtime.Types.Result.GetResult<Prisma.$TrainingProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   workout<T extends Prisma.TrainingWorkoutDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingWorkoutDefaultArgs<ExtArgs>>): Prisma.Prisma__TrainingWorkoutClient<runtime.Types.Result.GetResult<Prisma.$TrainingWorkoutPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  completions<T extends Prisma.ProgramWorkout$completionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramWorkout$completionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramWorkoutCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1599,6 +1722,30 @@ export type ProgramWorkoutDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many ProgramWorkouts to delete.
    */
   limit?: number
+}
+
+/**
+ * ProgramWorkout.completions
+ */
+export type ProgramWorkout$completionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramWorkoutCompletion
+   */
+  select?: Prisma.ProgramWorkoutCompletionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProgramWorkoutCompletion
+   */
+  omit?: Prisma.ProgramWorkoutCompletionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramWorkoutCompletionInclude<ExtArgs> | null
+  where?: Prisma.ProgramWorkoutCompletionWhereInput
+  orderBy?: Prisma.ProgramWorkoutCompletionOrderByWithRelationInput | Prisma.ProgramWorkoutCompletionOrderByWithRelationInput[]
+  cursor?: Prisma.ProgramWorkoutCompletionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProgramWorkoutCompletionScalarFieldEnum | Prisma.ProgramWorkoutCompletionScalarFieldEnum[]
 }
 
 /**

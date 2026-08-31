@@ -76,19 +76,20 @@ model CoachClient {
 }
 
 model WorkoutSession {
-  id          Int           @id @default(autoincrement())
-  userId      Int
-  workoutId   String
-  workoutName String
-  duration    Int           @default(0)
-  xp          Int           @default(0)
-  status      WorkoutStatus @default(COMPLETED)
-  startedAt   DateTime?
-  completedAt DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sets        WorkoutSet[]
+  id                Int                       @id @default(autoincrement())
+  userId            Int
+  workoutId         String
+  workoutName       String
+  duration          Int                       @default(0)
+  xp                Int                       @default(0)
+  status            WorkoutStatus             @default(COMPLETED)
+  startedAt         DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sets              WorkoutSet[]
+  programCompletion ProgramWorkoutCompletion?
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -275,8 +276,9 @@ model ProgramWorkout {
   position  Int
   createdAt DateTime @default(now())
 
-  program TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
-  workout TrainingWorkout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  program     TrainingProgram            @relation(fields: [programId], references: [id], onDelete: Cascade)
+  workout     TrainingWorkout            @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  completions ProgramWorkoutCompletion[]
 
   @@unique([programId, position])
   @@index([programId])
@@ -294,14 +296,32 @@ model ProgramAssignment {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
-  program TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
-  client  User            @relation("ProgramClient", fields: [clientId], references: [id], onDelete: Cascade)
-  coach   User            @relation("ProgramAssignedBy", fields: [assignedBy], references: [id], onDelete: Cascade)
+  program     TrainingProgram            @relation(fields: [programId], references: [id], onDelete: Cascade)
+  client      User                       @relation("ProgramClient", fields: [clientId], references: [id], onDelete: Cascade)
+  coach       User                       @relation("ProgramAssignedBy", fields: [assignedBy], references: [id], onDelete: Cascade)
+  completions ProgramWorkoutCompletion[]
 
   @@index([programId])
   @@index([clientId])
   @@index([assignedBy])
   @@index([clientId, isActive])
+}
+
+model ProgramWorkoutCompletion {
+  id               Int      @id @default(autoincrement())
+  assignmentId     Int
+  programWorkoutId Int
+  workoutSessionId Int      @unique
+  completedAt      DateTime @default(now())
+  createdAt        DateTime @default(now())
+
+  assignment     ProgramAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  programWorkout ProgramWorkout    @relation(fields: [programWorkoutId], references: [id], onDelete: Cascade)
+  workoutSession WorkoutSession    @relation(fields: [workoutSessionId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, programWorkoutId])
+  @@index([assignmentId])
+  @@index([programWorkoutId])
 }
 
 model CoachInvite {

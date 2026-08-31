@@ -34,6 +34,9 @@ export type WorkoutSessionResult = {
   completedAt: string;
 
   sets: WorkoutSetResult[];
+
+  assignmentId?: number;
+  programWorkoutId?: number;
 };
 
 /* =========================================================
@@ -57,6 +60,9 @@ export type WorkoutProgram = {
   description?: string;
 
   exercises: WorkoutExercise[];
+
+  assignmentId?: number;
+  programWorkoutId?: number;
 };
 
 /* =========================================================

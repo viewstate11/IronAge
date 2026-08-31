@@ -263,6 +263,7 @@ export type ProgramAssignmentWhereInput = {
   program?: Prisma.XOR<Prisma.TrainingProgramScalarRelationFilter, Prisma.TrainingProgramWhereInput>
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   coach?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  completions?: Prisma.ProgramWorkoutCompletionListRelationFilter
 }
 
 export type ProgramAssignmentOrderByWithRelationInput = {
@@ -278,6 +279,7 @@ export type ProgramAssignmentOrderByWithRelationInput = {
   program?: Prisma.TrainingProgramOrderByWithRelationInput
   client?: Prisma.UserOrderByWithRelationInput
   coach?: Prisma.UserOrderByWithRelationInput
+  completions?: Prisma.ProgramWorkoutCompletionOrderByRelationAggregateInput
 }
 
 export type ProgramAssignmentWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +298,7 @@ export type ProgramAssignmentWhereUniqueInput = Prisma.AtLeast<{
   program?: Prisma.XOR<Prisma.TrainingProgramScalarRelationFilter, Prisma.TrainingProgramWhereInput>
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   coach?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  completions?: Prisma.ProgramWorkoutCompletionListRelationFilter
 }, "id">
 
 export type ProgramAssignmentOrderByWithAggregationInput = {
@@ -339,6 +342,7 @@ export type ProgramAssignmentCreateInput = {
   program: Prisma.TrainingProgramCreateNestedOneWithoutAssignmentsInput
   client: Prisma.UserCreateNestedOneWithoutProgramAssignmentsInput
   coach: Prisma.UserCreateNestedOneWithoutAssignedProgramsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentUncheckedCreateInput = {
@@ -351,6 +355,7 @@ export type ProgramAssignmentUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentUpdateInput = {
@@ -362,6 +367,7 @@ export type ProgramAssignmentUpdateInput = {
   program?: Prisma.TrainingProgramUpdateOneRequiredWithoutAssignmentsNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProgramAssignmentsNestedInput
   coach?: Prisma.UserUpdateOneRequiredWithoutAssignedProgramsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateInput = {
@@ -374,6 +380,7 @@ export type ProgramAssignmentUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentCreateManyInput = {
@@ -466,6 +473,11 @@ export type ProgramAssignmentSumOrderByAggregateInput = {
   programId?: Prisma.SortOrder
   clientId?: Prisma.SortOrder
   assignedBy?: Prisma.SortOrder
+}
+
+export type ProgramAssignmentScalarRelationFilter = {
+  is?: Prisma.ProgramAssignmentWhereInput
+  isNot?: Prisma.ProgramAssignmentWhereInput
 }
 
 export type ProgramAssignmentCreateNestedManyWithoutClientInput = {
@@ -594,6 +606,20 @@ export type ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput = {
   deleteMany?: Prisma.ProgramAssignmentScalarWhereInput | Prisma.ProgramAssignmentScalarWhereInput[]
 }
 
+export type ProgramAssignmentCreateNestedOneWithoutCompletionsInput = {
+  create?: Prisma.XOR<Prisma.ProgramAssignmentCreateWithoutCompletionsInput, Prisma.ProgramAssignmentUncheckedCreateWithoutCompletionsInput>
+  connectOrCreate?: Prisma.ProgramAssignmentCreateOrConnectWithoutCompletionsInput
+  connect?: Prisma.ProgramAssignmentWhereUniqueInput
+}
+
+export type ProgramAssignmentUpdateOneRequiredWithoutCompletionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProgramAssignmentCreateWithoutCompletionsInput, Prisma.ProgramAssignmentUncheckedCreateWithoutCompletionsInput>
+  connectOrCreate?: Prisma.ProgramAssignmentCreateOrConnectWithoutCompletionsInput
+  upsert?: Prisma.ProgramAssignmentUpsertWithoutCompletionsInput
+  connect?: Prisma.ProgramAssignmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProgramAssignmentUpdateToOneWithWhereWithoutCompletionsInput, Prisma.ProgramAssignmentUpdateWithoutCompletionsInput>, Prisma.ProgramAssignmentUncheckedUpdateWithoutCompletionsInput>
+}
+
 export type ProgramAssignmentCreateWithoutClientInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
@@ -602,6 +628,7 @@ export type ProgramAssignmentCreateWithoutClientInput = {
   updatedAt?: Date | string
   program: Prisma.TrainingProgramCreateNestedOneWithoutAssignmentsInput
   coach: Prisma.UserCreateNestedOneWithoutAssignedProgramsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentUncheckedCreateWithoutClientInput = {
@@ -613,6 +640,7 @@ export type ProgramAssignmentUncheckedCreateWithoutClientInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentCreateOrConnectWithoutClientInput = {
@@ -633,6 +661,7 @@ export type ProgramAssignmentCreateWithoutCoachInput = {
   updatedAt?: Date | string
   program: Prisma.TrainingProgramCreateNestedOneWithoutAssignmentsInput
   client: Prisma.UserCreateNestedOneWithoutProgramAssignmentsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentUncheckedCreateWithoutCoachInput = {
@@ -644,6 +673,7 @@ export type ProgramAssignmentUncheckedCreateWithoutCoachInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentCreateOrConnectWithoutCoachInput = {
@@ -711,6 +741,7 @@ export type ProgramAssignmentCreateWithoutProgramInput = {
   updatedAt?: Date | string
   client: Prisma.UserCreateNestedOneWithoutProgramAssignmentsInput
   coach: Prisma.UserCreateNestedOneWithoutAssignedProgramsInput
+  completions?: Prisma.ProgramWorkoutCompletionCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentUncheckedCreateWithoutProgramInput = {
@@ -722,6 +753,7 @@ export type ProgramAssignmentUncheckedCreateWithoutProgramInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type ProgramAssignmentCreateOrConnectWithoutProgramInput = {
@@ -748,6 +780,68 @@ export type ProgramAssignmentUpdateWithWhereUniqueWithoutProgramInput = {
 export type ProgramAssignmentUpdateManyWithWhereWithoutProgramInput = {
   where: Prisma.ProgramAssignmentScalarWhereInput
   data: Prisma.XOR<Prisma.ProgramAssignmentUpdateManyMutationInput, Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramInput>
+}
+
+export type ProgramAssignmentCreateWithoutCompletionsInput = {
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  program: Prisma.TrainingProgramCreateNestedOneWithoutAssignmentsInput
+  client: Prisma.UserCreateNestedOneWithoutProgramAssignmentsInput
+  coach: Prisma.UserCreateNestedOneWithoutAssignedProgramsInput
+}
+
+export type ProgramAssignmentUncheckedCreateWithoutCompletionsInput = {
+  id?: number
+  programId: number
+  clientId: number
+  assignedBy: number
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ProgramAssignmentCreateOrConnectWithoutCompletionsInput = {
+  where: Prisma.ProgramAssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProgramAssignmentCreateWithoutCompletionsInput, Prisma.ProgramAssignmentUncheckedCreateWithoutCompletionsInput>
+}
+
+export type ProgramAssignmentUpsertWithoutCompletionsInput = {
+  update: Prisma.XOR<Prisma.ProgramAssignmentUpdateWithoutCompletionsInput, Prisma.ProgramAssignmentUncheckedUpdateWithoutCompletionsInput>
+  create: Prisma.XOR<Prisma.ProgramAssignmentCreateWithoutCompletionsInput, Prisma.ProgramAssignmentUncheckedCreateWithoutCompletionsInput>
+  where?: Prisma.ProgramAssignmentWhereInput
+}
+
+export type ProgramAssignmentUpdateToOneWithWhereWithoutCompletionsInput = {
+  where?: Prisma.ProgramAssignmentWhereInput
+  data: Prisma.XOR<Prisma.ProgramAssignmentUpdateWithoutCompletionsInput, Prisma.ProgramAssignmentUncheckedUpdateWithoutCompletionsInput>
+}
+
+export type ProgramAssignmentUpdateWithoutCompletionsInput = {
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  program?: Prisma.TrainingProgramUpdateOneRequiredWithoutAssignmentsNestedInput
+  client?: Prisma.UserUpdateOneRequiredWithoutProgramAssignmentsNestedInput
+  coach?: Prisma.UserUpdateOneRequiredWithoutAssignedProgramsNestedInput
+}
+
+export type ProgramAssignmentUncheckedUpdateWithoutCompletionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  programId?: Prisma.IntFieldUpdateOperationsInput | number
+  clientId?: Prisma.IntFieldUpdateOperationsInput | number
+  assignedBy?: Prisma.IntFieldUpdateOperationsInput | number
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgramAssignmentCreateManyClientInput = {
@@ -780,6 +874,7 @@ export type ProgramAssignmentUpdateWithoutClientInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   program?: Prisma.TrainingProgramUpdateOneRequiredWithoutAssignmentsNestedInput
   coach?: Prisma.UserUpdateOneRequiredWithoutAssignedProgramsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateWithoutClientInput = {
@@ -791,6 +886,7 @@ export type ProgramAssignmentUncheckedUpdateWithoutClientInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateManyWithoutClientInput = {
@@ -812,6 +908,7 @@ export type ProgramAssignmentUpdateWithoutCoachInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   program?: Prisma.TrainingProgramUpdateOneRequiredWithoutAssignmentsNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProgramAssignmentsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateWithoutCoachInput = {
@@ -823,6 +920,7 @@ export type ProgramAssignmentUncheckedUpdateWithoutCoachInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateManyWithoutCoachInput = {
@@ -855,6 +953,7 @@ export type ProgramAssignmentUpdateWithoutProgramInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.UserUpdateOneRequiredWithoutProgramAssignmentsNestedInput
   coach?: Prisma.UserUpdateOneRequiredWithoutAssignedProgramsNestedInput
+  completions?: Prisma.ProgramWorkoutCompletionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateWithoutProgramInput = {
@@ -866,6 +965,7 @@ export type ProgramAssignmentUncheckedUpdateWithoutProgramInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completions?: Prisma.ProgramWorkoutCompletionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 export type ProgramAssignmentUncheckedUpdateManyWithoutProgramInput = {
@@ -879,6 +979,35 @@ export type ProgramAssignmentUncheckedUpdateManyWithoutProgramInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ProgramAssignmentCountOutputType
+ */
+
+export type ProgramAssignmentCountOutputType = {
+  completions: number
+}
+
+export type ProgramAssignmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  completions?: boolean | ProgramAssignmentCountOutputTypeCountCompletionsArgs
+}
+
+/**
+ * ProgramAssignmentCountOutputType without action
+ */
+export type ProgramAssignmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramAssignmentCountOutputType
+   */
+  select?: Prisma.ProgramAssignmentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ProgramAssignmentCountOutputType without action
+ */
+export type ProgramAssignmentCountOutputTypeCountCompletionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgramWorkoutCompletionWhereInput
+}
 
 
 export type ProgramAssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -894,6 +1023,8 @@ export type ProgramAssignmentSelect<ExtArgs extends runtime.Types.Extensions.Int
   program?: boolean | Prisma.TrainingProgramDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  completions?: boolean | Prisma.ProgramAssignment$completionsArgs<ExtArgs>
+  _count?: boolean | Prisma.ProgramAssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["programAssignment"]>
 
 export type ProgramAssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -943,6 +1074,8 @@ export type ProgramAssignmentInclude<ExtArgs extends runtime.Types.Extensions.In
   program?: boolean | Prisma.TrainingProgramDefaultArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  completions?: boolean | Prisma.ProgramAssignment$completionsArgs<ExtArgs>
+  _count?: boolean | Prisma.ProgramAssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProgramAssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   program?: boolean | Prisma.TrainingProgramDefaultArgs<ExtArgs>
@@ -961,6 +1094,7 @@ export type $ProgramAssignmentPayload<ExtArgs extends runtime.Types.Extensions.I
     program: Prisma.$TrainingProgramPayload<ExtArgs>
     client: Prisma.$UserPayload<ExtArgs>
     coach: Prisma.$UserPayload<ExtArgs>
+    completions: Prisma.$ProgramWorkoutCompletionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1369,6 +1503,7 @@ export interface Prisma__ProgramAssignmentClient<T, Null = never, ExtArgs extend
   program<T extends Prisma.TrainingProgramDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgramDefaultArgs<ExtArgs>>): Prisma.Prisma__TrainingProgramClient<runtime.Types.Result.GetResult<Prisma.$TrainingProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   client<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   coach<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  completions<T extends Prisma.ProgramAssignment$completionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProgramAssignment$completionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramWorkoutCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1805,6 +1940,30 @@ export type ProgramAssignmentDeleteManyArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many ProgramAssignments to delete.
    */
   limit?: number
+}
+
+/**
+ * ProgramAssignment.completions
+ */
+export type ProgramAssignment$completionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramWorkoutCompletion
+   */
+  select?: Prisma.ProgramWorkoutCompletionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProgramWorkoutCompletion
+   */
+  omit?: Prisma.ProgramWorkoutCompletionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramWorkoutCompletionInclude<ExtArgs> | null
+  where?: Prisma.ProgramWorkoutCompletionWhereInput
+  orderBy?: Prisma.ProgramWorkoutCompletionOrderByWithRelationInput | Prisma.ProgramWorkoutCompletionOrderByWithRelationInput[]
+  cursor?: Prisma.ProgramWorkoutCompletionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProgramWorkoutCompletionScalarFieldEnum | Prisma.ProgramWorkoutCompletionScalarFieldEnum[]
 }
 
 /**
