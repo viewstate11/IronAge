@@ -42,60 +42,11 @@ export default function Premium({ onBack }: Props) {
   const [error, setError] = useState<string | null>(null);
 
 
-  const activateSelectedPlan = async () => {
-    if (saving) return;
-
-    try {
-      setSaving(true);
-      setError(null);
-      setMessage(null);
-
-      await updatePremiumPlan(selectedPlan);
-      await refreshUser();
-
-      setMessage(`${selectedPlan} TEST PLAN ACTIVATED`);
-    } catch (activationError) {
-      console.error(
-        "IRONAGE PREMIUM ACTIVATION ERROR:",
-        activationError
-      );
-
-      setError(
-        activationError instanceof Error
-          ? activationError.message
-          : "Premium activation failed"
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const removeTestPlan = async () => {
-    if (saving) return;
-
-    try {
-      setSaving(true);
-      setError(null);
-      setMessage(null);
-
-      await updatePremiumPlan(null);
-      await refreshUser();
-
-      setMessage("TEST PREMIUM REMOVED");
-    } catch (removeError) {
-      console.error(
-        "IRONAGE PREMIUM REMOVE ERROR:",
-        removeError
-      );
-
-      setError(
-        removeError instanceof Error
-          ? removeError.message
-          : "Premium reset failed"
-      );
-    } finally {
-      setSaving(false);
-    }
+  const handlePremiumCheckout = () => {
+    setError(null);
+    setMessage(
+      "PREMIUM PAYMENT WILL BE AVAILABLE SOON"
+    );
   };
 
   return (
@@ -131,8 +82,8 @@ export default function Premium({ onBack }: Props) {
         </section>
 
         <section className="premium-dev-notice">
-          <strong>DEVELOPMENT PREVIEW</strong>
-          <span>NO REAL PAYMENT IS PROCESSED YET</span>
+          <strong>PREMIUM ACCESS</strong>
+          <span>SECURE PAYMENT WILL BE AVAILABLE SOON</span>
         </section>
 
         <section className="premium-status">
@@ -205,26 +156,12 @@ export default function Premium({ onBack }: Props) {
         <button
           type="button"
           className="premium-activate"
-          disabled={saving}
-          onClick={activateSelectedPlan}
+          onClick={handlePremiumCheckout}
         >
-          {saving
-            ? "PROCESSING..."
-            : activePlan === selectedPlan
-              ? `${selectedPlan} ACTIVE`
-              : "ACTIVATE TEST PLAN"}
+          {activePlan === selectedPlan
+            ? `${selectedPlan} ACTIVE`
+            : "CONTINUE TO PAYMENT"}
         </button>
-
-        {activePlan && (
-          <button
-            type="button"
-            className="premium-reset"
-            disabled={saving}
-            onClick={removeTestPlan}
-          >
-            REMOVE TEST PREMIUM
-          </button>
-        )}
 
       </div>
     </main>
