@@ -1,5 +1,6 @@
 import { UserProvider, useUser } from "./context/UserContext";
 import { AppEntitlementsProvider } from "./context/AppEntitlementsContext";
+import { FeatureAccessProvider } from "./context/FeatureAccessContext";
 import MainApp from "./screens/MainApp/MainApp";
 import Onboarding from "./screens/Onboarding/Onboarding";
 
@@ -140,7 +141,9 @@ export default function App() {
   return (
     <UserProvider>
       <AppEntitlementsProvider>
-        <AppContent />
+        <FeatureAccessProvider>
+          <AppContent />
+        </FeatureAccessProvider>
       </AppEntitlementsProvider>
     </UserProvider>
   );
