@@ -1089,3 +1089,81 @@
   font-size: 7px;
   font-weight: 800;
 }
+
+.coach-progress-card {
+  margin: 18px 0 24px;
+  padding: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212, 175, 55, 0.08),
+      rgba(255, 255, 255, 0.02)
+    );
+}
+
+.coach-progress-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.coach-progress-card__header span {
+  display: block;
+  color: #d4af37;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.coach-progress-card__header strong {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.coach-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.coach-progress-grid > div {
+  padding: 15px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.coach-progress-grid strong {
+  display: block;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.coach-progress-grid span {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.coach-progress-card__note {
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 520px) {
+  .coach-progress-grid {
+    grid-template-columns: 1fr;
+  }
+}

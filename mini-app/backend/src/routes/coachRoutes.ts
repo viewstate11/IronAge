@@ -385,35 +385,48 @@ router.get(
         });
       }
 
-      const workouts =
-        await prisma.workoutSession.findMany({
-          where: {
-            userId: clientId,
-          },
-
-          include: {
-            sets: {
-              orderBy: [
-                {
-                  exerciseName: "asc",
-                },
-                {
-                  setNumber: "asc",
-                },
-              ],
+      const [workouts, progress] =
+        await Promise.all([
+          prisma.workoutSession.findMany({
+            where: {
+              userId: clientId,
             },
-          },
 
-          orderBy: {
-            createdAt: "desc",
-          },
-        });
+            include: {
+              sets: {
+                orderBy: [
+                  {
+                    exerciseName: "asc",
+                  },
+                  {
+                    setNumber: "asc",
+                  },
+                ],
+              },
+            },
+
+            orderBy: {
+              createdAt: "desc",
+            },
+          }),
+
+          prisma.progress.findMany({
+            where: {
+              userId: clientId,
+            },
+
+            orderBy: {
+              createdAt: "desc",
+            },
+          }),
+        ]);
 
       return res.json({
         success: true,
         client:
           relationship.client,
         workouts,
+        progress,
       });
     } catch (error) {
       console.error(

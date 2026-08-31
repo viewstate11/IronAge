@@ -76,10 +76,21 @@ type CoachClientWorkout = {
   sets: CoachClientWorkoutSet[];
 };
 
+type CoachClientProgress = {
+  id: number;
+  userId: number;
+  weight: number | null;
+  bodyFat: number | null;
+  muscleMass: number | null;
+  note: string | null;
+  createdAt: string;
+};
+
 type CoachClientResultsResponse = {
   success: boolean;
   client: CoachClient["client"];
   workouts: CoachClientWorkout[];
+  progress: CoachClientProgress[];
 };
 
 type CoachWorkoutExercise = {
@@ -212,6 +223,9 @@ export default function CoachDashboard({
 
   const [clientResults, setClientResults] =
     useState<CoachClientWorkout[]>([]);
+
+  const [clientProgress, setClientProgress] =
+    useState<CoachClientProgress[]>([]);
 
   const [
     loadingClientResults,
@@ -359,6 +373,7 @@ export default function CoachDashboard({
       setLoadingClientResults(true);
       setClientResultsError(null);
       setClientResults([]);
+      setClientProgress([]);
       setView("client-results");
 
       const response =
@@ -369,7 +384,8 @@ export default function CoachDashboard({
 
       if (
         !response ||
-        !Array.isArray(response.workouts)
+        !Array.isArray(response.workouts) ||
+        !Array.isArray(response.progress)
       ) {
         throw new Error(
           "Invalid client results response"
@@ -378,6 +394,10 @@ export default function CoachDashboard({
 
       setClientResults(
         response.workouts
+      );
+
+      setClientProgress(
+        response.progress
       );
     } catch (error) {
       console.error(
@@ -605,6 +625,55 @@ export default function CoachDashboard({
                 >
                   RETRY
                 </button>
+              </section>
+            )}
+
+          {!loadingClientResults &&
+            !clientResultsError &&
+            clientProgress.length > 0 && (
+              <section className="coach-progress-card">
+                <div className="coach-progress-card__header">
+                  <div>
+                    <span>
+                      CURRENT PROGRESS
+                    </span>
+
+                    <strong>
+                      {new Date(
+                        clientProgress[0].createdAt
+                      ).toLocaleDateString()}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="coach-progress-grid">
+                  <div>
+                    <strong>
+                      {clientProgress[0].weight ?? "—"}
+                    </strong>
+                    <span>KG · WEIGHT</span>
+                  </div>
+
+                  <div>
+                    <strong>
+                      {clientProgress[0].bodyFat ?? "—"}
+                    </strong>
+                    <span>% · BODY FAT</span>
+                  </div>
+
+                  <div>
+                    <strong>
+                      {clientProgress[0].muscleMass ?? "—"}
+                    </strong>
+                    <span>KG · MUSCLE MASS</span>
+                  </div>
+                </div>
+
+                {clientProgress[0].note && (
+                  <p className="coach-progress-card__note">
+                    {clientProgress[0].note}
+                  </p>
+                )}
               </section>
             )}
 
