@@ -160,9 +160,16 @@ router.post(
       if (
         typeof provider !== "string" ||
         typeof platform !== "string" ||
-        typeof productId !== "string" ||
-        typeof transactionId !== "string" ||
-        typeof verificationPayload !== "string"
+        typeof verificationPayload !== "string" ||
+        verificationPayload.length === 0 ||
+        (
+          productId !== undefined &&
+          typeof productId !== "string"
+        ) ||
+        (
+          transactionId !== undefined &&
+          typeof transactionId !== "string"
+        )
       ) {
         return res.status(400).json({
           success: false,
@@ -177,56 +184,28 @@ router.post(
             provider as PaymentProvider,
           platform:
             platform as PaymentPlatform,
+          verificationPayload,
           productId,
           transactionId,
-          verificationPayload,
         });
 
-      const subscription =
-        await prisma.subscription.upsert({
+      const existingSubscription =
+        await prisma.subscription.findUnique({
           where: {
             transactionId:
               verified.transactionId,
           },
 
-          update: {
-            provider: verified.provider,
-            platform: verified.platform,
-            productId: verified.productId,
-            plan: verified.plan,
-            status: "ACTIVE",
-            originalTransactionId:
-              verified.originalTransactionId,
-            purchasedAt:
-              verified.purchasedAt,
-            expiresAt:
-              verified.expiresAt,
-            lastVerifiedAt: new Date(),
-          },
-
-          create: {
-            userId:
-              authenticatedRequest.appUserId,
-            provider: verified.provider,
-            platform: verified.platform,
-            productId: verified.productId,
-            plan: verified.plan,
-            status: "ACTIVE",
-            transactionId:
-              verified.transactionId,
-            originalTransactionId:
-              verified.originalTransactionId,
-            purchasedAt:
-              verified.purchasedAt,
-            expiresAt:
-              verified.expiresAt,
-            lastVerifiedAt: new Date(),
+          select: {
+            id: true,
+            userId: true,
           },
         });
 
       if (
-        subscription.userId !==
-        authenticatedRequest.appUserId
+        existingSubscription &&
+        existingSubscription.userId !==
+          authenticatedRequest.appUserId
       ) {
         return res.status(409).json({
           success: false,
@@ -234,6 +213,60 @@ router.post(
             "Purchase belongs to another account",
         });
       }
+
+      const subscription =
+        existingSubscription
+          ? await prisma.subscription.update({
+              where: {
+                id:
+                  existingSubscription.id,
+              },
+
+              data: {
+                provider:
+                  verified.provider,
+                platform:
+                  verified.platform,
+                productId:
+                  verified.productId,
+                plan:
+                  verified.plan,
+                status: "ACTIVE",
+                originalTransactionId:
+                  verified.originalTransactionId,
+                purchasedAt:
+                  verified.purchasedAt,
+                expiresAt:
+                  verified.expiresAt,
+                lastVerifiedAt:
+                  new Date(),
+              },
+            })
+          : await prisma.subscription.create({
+              data: {
+                userId:
+                  authenticatedRequest.appUserId,
+                provider:
+                  verified.provider,
+                platform:
+                  verified.platform,
+                productId:
+                  verified.productId,
+                plan:
+                  verified.plan,
+                status: "ACTIVE",
+                transactionId:
+                  verified.transactionId,
+                originalTransactionId:
+                  verified.originalTransactionId,
+                purchasedAt:
+                  verified.purchasedAt,
+                expiresAt:
+                  verified.expiresAt,
+                lastVerifiedAt:
+                  new Date(),
+              },
+            });
 
       return res.json({
         success: true,
