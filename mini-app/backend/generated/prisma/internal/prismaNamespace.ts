@@ -410,7 +410,8 @@ export const ModelName = {
   WorkoutExercise: 'WorkoutExercise',
   TrainingProgram: 'TrainingProgram',
   ProgramWorkout: 'ProgramWorkout',
-  ProgramAssignment: 'ProgramAssignment'
+  ProgramAssignment: 'ProgramAssignment',
+  CoachInvite: 'CoachInvite'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coachProfile" | "coachClient" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programAssignment"
+    modelProps: "user" | "coachProfile" | "coachClient" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programAssignment" | "coachInvite"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1466,6 +1467,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CoachInvite: {
+      payload: Prisma.$CoachInvitePayload<ExtArgs>
+      fields: Prisma.CoachInviteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CoachInviteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CoachInviteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>
+        }
+        findFirst: {
+          args: Prisma.CoachInviteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CoachInviteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>
+        }
+        findMany: {
+          args: Prisma.CoachInviteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>[]
+        }
+        create: {
+          args: Prisma.CoachInviteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>
+        }
+        createMany: {
+          args: Prisma.CoachInviteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CoachInviteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>[]
+        }
+        delete: {
+          args: Prisma.CoachInviteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>
+        }
+        update: {
+          args: Prisma.CoachInviteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>
+        }
+        deleteMany: {
+          args: Prisma.CoachInviteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CoachInviteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CoachInviteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>[]
+        }
+        upsert: {
+          args: Prisma.CoachInviteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CoachInvitePayload>
+        }
+        aggregate: {
+          args: Prisma.CoachInviteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCoachInvite>
+        }
+        groupBy: {
+          args: Prisma.CoachInviteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoachInviteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CoachInviteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CoachInviteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1728,6 +1803,18 @@ export const ProgramAssignmentScalarFieldEnum = {
 } as const
 
 export type ProgramAssignmentScalarFieldEnum = (typeof ProgramAssignmentScalarFieldEnum)[keyof typeof ProgramAssignmentScalarFieldEnum]
+
+
+export const CoachInviteScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  coachId: 'coachId',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CoachInviteScalarFieldEnum = (typeof CoachInviteScalarFieldEnum)[keyof typeof CoachInviteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2057,6 +2144,7 @@ export type GlobalOmitConfig = {
   trainingProgram?: Prisma.TrainingProgramOmit
   programWorkout?: Prisma.ProgramWorkoutOmit
   programAssignment?: Prisma.ProgramAssignmentOmit
+  coachInvite?: Prisma.CoachInviteOmit
 }
 
 /* Types for Logging */

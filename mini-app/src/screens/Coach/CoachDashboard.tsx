@@ -22,7 +22,8 @@ type CoachView =
   | "workouts"
   | "create-workout"
   | "programs"
-  | "create-program";
+  | "create-program"
+  | "assign-program";
 
 type CoachClient = {
   relationshipId: number;
@@ -197,6 +198,71 @@ export default function CoachDashboard({
       null
     );
 
+  const [selectedProgram, setSelectedProgram] =
+    useState<CoachProgram | null>(null);
+
+  const [assigningClientId, setAssigningClientId] =
+    useState<number | null>(null);
+
+  const [assignError, setAssignError] =
+    useState<string | null>(null);
+
+  const [assignSuccess, setAssignSuccess] =
+    useState<string | null>(null);
+
+  async function assignProgram(
+    client: CoachClient
+  ) {
+    if (!selectedProgram) {
+      return;
+    }
+
+    try {
+      setAssigningClientId(
+        client.client.id
+      );
+      setAssignError(null);
+      setAssignSuccess(null);
+
+      const response =
+        await api.post<{
+          success: boolean;
+        }>(
+          `/coach-programs/${selectedProgram.id}/assign`,
+          {
+            clientId:
+              client.client.id,
+          },
+          telegramAuthOptions()
+        );
+
+      if (!response?.success) {
+        throw new Error(
+          "Program assignment failed"
+        );
+      }
+
+      setAssignSuccess(
+        `${selectedProgram.name} assigned to ${getClientName(
+          client.client
+        )}`
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE PROGRAM ASSIGN UI ERROR:",
+        error
+      );
+
+      setAssignError(
+        error instanceof Error
+          ? error.message
+          : "Failed to assign program"
+      );
+    } finally {
+      setAssigningClientId(null);
+    }
+  }
+
   async function loadClients() {
     try {
       setLoadingClients(true);
@@ -328,7 +394,203 @@ export default function CoachDashboard({
     if (view === "programs") {
       void loadPrograms();
     }
+
+    if (view === "assign-program") {
+      void loadClients();
+    }
   }, [view]);
+
+  if (
+    view === "assign-program" &&
+    selectedProgram
+  ) {
+    return (
+      <main className="coach-dashboard">
+        <div className="coach-dashboard__content">
+
+          <header className="coach-dashboard__header">
+            <button
+              type="button"
+              className="coach-dashboard__back"
+              onClick={() => {
+                setAssignError(null);
+                setAssignSuccess(null);
+                setView("programs");
+              }}
+              aria-label="Back to programs"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>
+                PROGRAM ASSIGNMENT
+              </span>
+
+              <h1>
+                ASSIGN PROGRAM
+              </h1>
+
+              <p>
+                SELECT ATHLETE
+              </p>
+            </div>
+          </header>
+
+          <section className="coach-assign-program__program">
+            <span>
+              SELECTED PROGRAM
+            </span>
+
+            <strong>
+              {selectedProgram.name}
+            </strong>
+
+            <small>
+              {selectedProgram.durationWeeks
+                ? `${selectedProgram.durationWeeks} WEEKS`
+                : "CUSTOM DURATION"}
+              {" · "}
+              {selectedProgram.workouts.length} WORKOUTS
+            </small>
+          </section>
+
+          {loadingClients && (
+            <section className="coach-clients-state">
+              <span>
+                IRONAGE COACH
+              </span>
+
+              <strong>
+                LOADING CLIENTS...
+              </strong>
+            </section>
+          )}
+
+          {!loadingClients &&
+            clientsError && (
+              <section className="coach-clients-state coach-clients-state--error">
+                <span>
+                  CONNECTION ERROR
+                </span>
+
+                <strong>
+                  {clientsError}
+                </strong>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadClients()
+                  }
+                >
+                  RETRY
+                </button>
+              </section>
+            )}
+
+          {!loadingClients &&
+            !clientsError &&
+            clients.length === 0 && (
+              <section className="coach-clients-state">
+                <span>
+                  CLIENT ROSTER
+                </span>
+
+                <strong>
+                  NO CLIENTS YET
+                </strong>
+
+                <p>
+                  Invite a client before assigning a program.
+                </p>
+              </section>
+            )}
+
+          {assignError && (
+            <section className="coach-assign-program__message coach-assign-program__message--error">
+              {assignError}
+            </section>
+          )}
+
+          {assignSuccess && (
+            <section className="coach-assign-program__message coach-assign-program__message--success">
+              <strong>
+                PROGRAM ASSIGNED
+              </strong>
+
+              <span>
+                {assignSuccess}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAssignSuccess(null);
+                  setView("programs");
+                }}
+              >
+                BACK TO PROGRAMS
+              </button>
+            </section>
+          )}
+
+          {!loadingClients &&
+            !clientsError &&
+            !assignSuccess &&
+            clients.length > 0 && (
+              <section className="coach-assign-program__clients">
+                {clients.map(
+                  (client) => (
+                    <button
+                      key={client.relationshipId}
+                      type="button"
+                      className="coach-assign-client"
+                      disabled={
+                        assigningClientId !== null
+                      }
+                      onClick={() =>
+                        void assignProgram(
+                          client
+                        )
+                      }
+                    >
+                      <div>
+                        <span>
+                          ATHLETE #{client.client.id}
+                        </span>
+
+                        <strong>
+                          {getClientName(
+                            client.client
+                          )}
+                        </strong>
+
+                        <small>
+                          {formatGoal(
+                            client.client.goal
+                          )}
+                          {" · "}
+                          LEVEL {client.client.level}
+                        </small>
+                      </div>
+
+                      <b>
+                        {assigningClientId ===
+                        client.client.id
+                          ? "..."
+                          : "ASSIGN →"}
+                      </b>
+                    </button>
+                  )
+                )}
+              </section>
+            )}
+
+        </div>
+      </main>
+    );
+  }
 
   if (view === "create-program") {
     return (
@@ -539,6 +801,27 @@ export default function CoachDashboard({
                           )}
                         </div>
                       )}
+
+                      <button
+                        type="button"
+                        className="coach-program-card__assign"
+                        onClick={() => {
+                          setSelectedProgram(
+                            program
+                          );
+                          setAssignError(null);
+                          setAssignSuccess(null);
+                          setView(
+                            "assign-program"
+                          );
+                        }}
+                      >
+                        <span>
+                          ASSIGN PROGRAM
+                        </span>
+
+                        <b>→</b>
+                      </button>
                     </article>
                   )
                 )}

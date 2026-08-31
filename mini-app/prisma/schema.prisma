@@ -33,6 +33,7 @@ model User {
   workoutSessions     WorkoutSession[]
   coachProfile        CoachProfile?
   coachRelationships  CoachClient[]       @relation("CoachUser")
+  coachInvites        CoachInvite[]       @relation("CoachInvites")
   clientRelationships CoachClient[]       @relation("ClientUser")
   trainingWorkouts    TrainingWorkout[]   @relation("TrainingWorkoutCoach")
   trainingPrograms    TrainingProgram[]   @relation("TrainingProgramCoach")
@@ -301,4 +302,18 @@ model ProgramAssignment {
   @@index([clientId])
   @@index([assignedBy])
   @@index([clientId, isActive])
+}
+
+model CoachInvite {
+  id         Int       @id @default(autoincrement())
+  token      String    @unique
+  coachId    Int
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  coach User @relation("CoachInvites", fields: [coachId], references: [id], onDelete: Cascade)
+
+  @@index([coachId])
+  @@index([expiresAt])
 }

@@ -729,3 +729,157 @@
 .coach-programs-create b {
   font-size: 17px;
 }
+
+.coach-program-card__assign {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 18px;
+  border: 0;
+  border-top: 1px solid #2a2413;
+  background: #0d0c08;
+  color: #d4af37;
+  font-family: Montserrat, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.coach-program-card__assign b {
+  font-size: 16px;
+}
+
+.coach-assign-program__program {
+  margin-bottom: 14px;
+  padding: 18px;
+  border: 1px solid #d4af37;
+  border-radius: 18px;
+  background: #0a0a0a;
+}
+
+.coach-assign-program__program span {
+  display: block;
+  margin-bottom: 7px;
+  color: #d4af37;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.coach-assign-program__program strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 17px;
+}
+
+.coach-assign-program__program small {
+  color: #777777;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.coach-assign-program__clients {
+  display: grid;
+  gap: 10px;
+}
+
+.coach-assign-client {
+  width: 100%;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 16px;
+  border: 1px solid #181818;
+  border-radius: 16px;
+  background: #0a0a0a;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.coach-assign-client:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.coach-assign-client span {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.coach-assign-client strong {
+  display: block;
+  margin-bottom: 5px;
+  font-family: Montserrat, sans-serif;
+  font-size: 13px;
+}
+
+.coach-assign-client small {
+  color: #777777;
+  font-size: 8px;
+}
+
+.coach-assign-client > b {
+  flex: 0 0 auto;
+  color: #d4af37;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+.coach-assign-program__message {
+  margin-bottom: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.coach-assign-program__message--error {
+  border: 1px solid #5a2020;
+  background: #120808;
+  color: #ff8b8b;
+}
+
+.coach-assign-program__message--success {
+  display: grid;
+  gap: 8px;
+  border: 1px solid #d4af37;
+  background: #0d0c08;
+  color: #ffffff;
+}
+
+.coach-assign-program__message--success strong {
+  color: #d4af37;
+  font-family: Montserrat, sans-serif;
+  font-size: 11px;
+}
+
+.coach-assign-program__message--success span {
+  color: #b5b5b5;
+}
+
+.coach-assign-program__message--success button {
+  min-height: 44px;
+  margin-top: 4px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  background: #d4af37;
+  color: #050505;
+  font-family: Montserrat, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  cursor: pointer;
+}
