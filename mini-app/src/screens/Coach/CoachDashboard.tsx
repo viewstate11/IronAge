@@ -1,0 +1,895 @@
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import api, {
+  telegramAuthOptions,
+} from "../../api/client";
+
+import CreateWorkout from "./CreateWorkout";
+
+import "./CoachDashboard.css";
+
+type Props = {
+  onBack: () => void;
+};
+
+type CoachView =
+  | "dashboard"
+  | "clients"
+  | "workouts"
+  | "create-workout";
+
+type CoachClient = {
+  relationshipId: number;
+  assignedAt: string;
+
+  client: {
+    id: number;
+    firstName: string | null;
+    lastName: string | null;
+    username: string | null;
+    age: number | null;
+    gender: string | null;
+    weight: number | null;
+    height: number | null;
+    goal: string | null;
+    level: number;
+    xp: number;
+    workouts: number;
+    streak: number;
+  };
+};
+
+type CoachClientsResponse = {
+  success: boolean;
+  clients: CoachClient[];
+};
+
+type CoachWorkoutExercise = {
+  id: number;
+  exerciseId: number;
+  position: number;
+  sets: number | null;
+  repetitions: number | null;
+  minRepetitions: number | null;
+  maxRepetitions: number | null;
+  duration: number | null;
+  restSeconds: number | null;
+  targetWeight: number | null;
+  tempo: string | null;
+  coachNotes: string | null;
+  coachVideoUrl: string | null;
+
+  exercise: {
+    id: number;
+    slug: string;
+    name: string;
+    description: string | null;
+    instructions: string | null;
+    muscleGroup: string | null;
+    equipment: string | null;
+    demoVideoUrl: string | null;
+    thumbnailUrl: string | null;
+  };
+};
+
+type CoachWorkout = {
+  id: number;
+  coachId: number;
+  name: string;
+  description: string | null;
+  duration: number | null;
+  difficulty: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  exercises: CoachWorkoutExercise[];
+};
+
+type CoachWorkoutsResponse = {
+  success: boolean;
+  workouts: CoachWorkout[];
+};
+
+function formatGoal(
+  goal: string | null
+): string {
+  if (!goal) {
+    return "NO GOAL";
+  }
+
+  return goal
+    .replace(/_/g, " ");
+}
+
+function getClientName(
+  client: CoachClient["client"]
+): string {
+  const name = [
+    client.firstName,
+    client.lastName,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  if (name) {
+    return name;
+  }
+
+  if (client.username) {
+    return `@${client.username}`;
+  }
+
+  return `ATHLETE #${client.id}`;
+}
+
+export default function CoachDashboard({
+  onBack,
+}: Props) {
+  const [view, setView] =
+    useState<CoachView>(
+      "dashboard"
+    );
+
+  const [clients, setClients] =
+    useState<CoachClient[]>([]);
+
+  const [loadingClients, setLoadingClients] =
+    useState(false);
+
+  const [clientsError, setClientsError] =
+    useState<string | null>(
+      null
+    );
+
+  const [workouts, setWorkouts] =
+    useState<CoachWorkout[]>([]);
+
+  const [loadingWorkouts, setLoadingWorkouts] =
+    useState(false);
+
+  const [workoutsError, setWorkoutsError] =
+    useState<string | null>(
+      null
+    );
+
+  async function loadClients() {
+    try {
+      setLoadingClients(true);
+      setClientsError(null);
+
+      const response =
+        await api.get<CoachClientsResponse>(
+          "/coaches/clients",
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        !Array.isArray(
+          response.clients
+        )
+      ) {
+        throw new Error(
+          "Invalid coach clients response"
+        );
+      }
+
+      setClients(
+        response.clients
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH CLIENTS UI ERROR:",
+        error
+      );
+
+      setClientsError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load clients"
+      );
+    } finally {
+      setLoadingClients(false);
+    }
+  }
+
+  async function loadWorkouts() {
+    try {
+      setLoadingWorkouts(true);
+      setWorkoutsError(null);
+
+      const response =
+        await api.get<CoachWorkoutsResponse>(
+          "/coach-workouts",
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        !Array.isArray(
+          response.workouts
+        )
+      ) {
+        throw new Error(
+          "Invalid coach workouts response"
+        );
+      }
+
+      setWorkouts(
+        response.workouts
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH WORKOUTS UI ERROR:",
+        error
+      );
+
+      setWorkoutsError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load workouts"
+      );
+    } finally {
+      setLoadingWorkouts(false);
+    }
+  }
+
+  useEffect(() => {
+    if (view === "clients") {
+      void loadClients();
+    }
+
+    if (view === "workouts") {
+      void loadWorkouts();
+    }
+  }, [view]);
+
+  if (view === "create-workout") {
+    return (
+      <CreateWorkout
+        onBack={() =>
+          setView("workouts")
+        }
+        onCreated={() =>
+          setView("workouts")
+        }
+      />
+    );
+  }
+
+  if (view === "workouts") {
+    return (
+      <main className="coach-dashboard">
+        <div className="coach-dashboard__content">
+
+          <header className="coach-dashboard__header">
+            <button
+              type="button"
+              className="coach-dashboard__back"
+              onClick={() =>
+                setView("dashboard")
+              }
+              aria-label="Back to coach dashboard"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>
+                COACH CONTROL CENTER
+              </span>
+
+              <h1>
+                MY WORKOUTS
+              </h1>
+
+              <p>
+                TRAINING LIBRARY
+              </p>
+            </div>
+          </header>
+
+          <button
+            type="button"
+            className="coach-workouts-create"
+            onClick={() =>
+              setView("create-workout")
+            }
+          >
+            <span>
+              + CREATE WORKOUT
+            </span>
+
+            <b>→</b>
+          </button>
+
+          <section className="coach-clients-summary">
+            <div>
+              <span>
+                ACTIVE WORKOUTS
+              </span>
+
+              <strong>
+                {workouts.length}
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                EXERCISES USED
+              </span>
+
+              <strong>
+                {workouts.reduce(
+                  (total, workout) =>
+                    total +
+                    workout.exercises.length,
+                  0
+                )}
+              </strong>
+            </div>
+          </section>
+
+          {loadingWorkouts && (
+            <section className="coach-clients-state">
+              <span>
+                IRONAGE COACH
+              </span>
+
+              <strong>
+                LOADING WORKOUTS...
+              </strong>
+            </section>
+          )}
+
+          {!loadingWorkouts &&
+            workoutsError && (
+              <section className="coach-clients-state coach-clients-state--error">
+                <span>
+                  CONNECTION ERROR
+                </span>
+
+                <strong>
+                  {workoutsError}
+                </strong>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadWorkouts()
+                  }
+                >
+                  RETRY
+                </button>
+              </section>
+            )}
+
+          {!loadingWorkouts &&
+            !workoutsError &&
+            workouts.length === 0 && (
+              <section className="coach-clients-state">
+                <span>
+                  TRAINING LIBRARY
+                </span>
+
+                <strong>
+                  NO WORKOUTS YET
+                </strong>
+
+                <p>
+                  Your coach workouts will
+                  appear here.
+                </p>
+              </section>
+            )}
+
+          {!loadingWorkouts &&
+            !workoutsError &&
+            workouts.length > 0 && (
+              <section className="coach-workouts-list">
+                {workouts.map(
+                  (workout) => (
+                    <article
+                      key={workout.id}
+                      className="coach-workout-card"
+                    >
+                      <div className="coach-workout-card__header">
+                        <div>
+                          <span>
+                            WORKOUT #{workout.id}
+                          </span>
+
+                          <strong>
+                            {workout.name}
+                          </strong>
+
+                          <small>
+                            {workout.difficulty ||
+                              "STANDARD"}
+                          </small>
+                        </div>
+
+                        <b>
+                          {workout.duration
+                            ? `${workout.duration} MIN`
+                            : "—"}
+                        </b>
+                      </div>
+
+                      {workout.description && (
+                        <p className="coach-workout-card__description">
+                          {workout.description}
+                        </p>
+                      )}
+
+                      <div className="coach-workout-card__exercises">
+                        {workout.exercises.map(
+                          (item) => (
+                            <div
+                              key={item.id}
+                              className="coach-workout-exercise"
+                            >
+                              <span>
+                                {String(
+                                  item.position
+                                ).padStart(
+                                  2,
+                                  "0"
+                                )}
+                              </span>
+
+                              <div>
+                                <strong>
+                                  {item.exercise.name}
+                                </strong>
+
+                                <small>
+                                  {item.sets
+                                    ? `${item.sets} SETS`
+                                    : "SETS —"}
+
+                                  {" · "}
+
+                                  {item.repetitions
+                                    ? `${item.repetitions} REPS`
+                                    : item.minRepetitions &&
+                                        item.maxRepetitions
+                                      ? `${item.minRepetitions}-${item.maxRepetitions} REPS`
+                                      : "REPS —"}
+
+                                  {" · "}
+
+                                  {item.restSeconds
+                                    ? `${item.restSeconds}S REST`
+                                    : "REST —"}
+                                </small>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </article>
+                  )
+                )}
+              </section>
+            )}
+
+        </div>
+      </main>
+    );
+  }
+
+  if (view === "clients") {
+    return (
+      <main className="coach-dashboard">
+        <div className="coach-dashboard__content">
+
+          <header className="coach-dashboard__header">
+            <button
+              type="button"
+              className="coach-dashboard__back"
+              onClick={() =>
+                setView(
+                  "dashboard"
+                )
+              }
+              aria-label="Back to coach dashboard"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>
+                COACH CONTROL CENTER
+              </span>
+
+              <h1>
+                MY CLIENTS
+              </h1>
+
+              <p>
+                ATHLETES UNDER YOUR COACHING
+              </p>
+            </div>
+          </header>
+
+          <section className="coach-clients-summary">
+            <div>
+              <span>
+                ACTIVE ATHLETES
+              </span>
+
+              <strong>
+                {clients.length}
+              </strong>
+            </div>
+
+            <div>
+              <span>
+                TOTAL WORKOUTS
+              </span>
+
+              <strong>
+                {clients.reduce(
+                  (
+                    total,
+                    relationship
+                  ) =>
+                    total +
+                    (
+                      relationship
+                        .client
+                        .workouts ||
+                      0
+                    ),
+                  0
+                )}
+              </strong>
+            </div>
+          </section>
+
+          {loadingClients && (
+            <section className="coach-clients-state">
+              <span>
+                IRONAGE COACH
+              </span>
+
+              <strong>
+                LOADING ATHLETES...
+              </strong>
+            </section>
+          )}
+
+          {!loadingClients &&
+            clientsError && (
+              <section className="coach-clients-state coach-clients-state--error">
+                <span>
+                  CONNECTION ERROR
+                </span>
+
+                <strong>
+                  {clientsError}
+                </strong>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadClients()
+                  }
+                >
+                  RETRY
+                </button>
+              </section>
+            )}
+
+          {!loadingClients &&
+            !clientsError &&
+            clients.length === 0 && (
+              <section className="coach-clients-state">
+                <span>
+                  ATHLETE ROSTER
+                </span>
+
+                <strong>
+                  NO CLIENTS YET
+                </strong>
+
+                <p>
+                  Assigned athletes will
+                  appear here.
+                </p>
+              </section>
+            )}
+
+          {!loadingClients &&
+            !clientsError &&
+            clients.length > 0 && (
+              <section className="coach-clients-list">
+                {clients.map(
+                  (relationship) => {
+                    const {
+                      client,
+                    } =
+                      relationship;
+
+                    return (
+                      <article
+                        key={
+                          relationship.relationshipId
+                        }
+                        className="coach-client-card"
+                      >
+                        <div className="coach-client-card__top">
+                          <div className="coach-client-card__avatar">
+                            {(
+                              client.firstName?.[0] ||
+                              client.username?.[0] ||
+                              "A"
+                            ).toUpperCase()}
+                          </div>
+
+                          <div className="coach-client-card__identity">
+                            <span>
+                              ATHLETE #{client.id}
+                            </span>
+
+                            <strong>
+                              {getClientName(
+                                client
+                              )}
+                            </strong>
+
+                            <small>
+                              {formatGoal(
+                                client.goal
+                              )}
+                            </small>
+                          </div>
+
+                          <div className="coach-client-card__level">
+                            <span>
+                              LEVEL
+                            </span>
+
+                            <strong>
+                              {client.level}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div className="coach-client-card__body">
+                          <div>
+                            <span>
+                              WORKOUTS
+                            </span>
+
+                            <strong>
+                              {client.workouts}
+                            </strong>
+                          </div>
+
+                          <div>
+                            <span>
+                              STREAK
+                            </span>
+
+                            <strong>
+                              {client.streak}
+                            </strong>
+                          </div>
+
+                          <div>
+                            <span>
+                              XP
+                            </span>
+
+                            <strong>
+                              {client.xp}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div className="coach-client-card__meta">
+                          <span>
+                            {client.age
+                              ? `${client.age} Y`
+                              : "AGE —"}
+                          </span>
+
+                          <span>
+                            {client.weight
+                              ? `${client.weight} KG`
+                              : "WEIGHT —"}
+                          </span>
+
+                          <span>
+                            {client.height
+                              ? `${client.height} CM`
+                              : "HEIGHT —"}
+                          </span>
+                        </div>
+                      </article>
+                    );
+                  }
+                )}
+              </section>
+            )}
+
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="coach-dashboard">
+      <div className="coach-dashboard__content">
+
+        <header className="coach-dashboard__header">
+          <button
+            type="button"
+            className="coach-dashboard__back"
+            onClick={onBack}
+            aria-label="Back to profile"
+          >
+            ←
+          </button>
+
+          <div>
+            <span>
+              IRONAGE PROFESSIONAL
+            </span>
+
+            <h1>
+              COACH SYSTEM
+            </h1>
+
+            <p>
+              BUILD ATHLETES. TRACK RESULTS.
+            </p>
+          </div>
+        </header>
+
+        <section className="coach-dashboard__hero">
+          <div className="coach-dashboard__mark">
+            IA
+          </div>
+
+          <div>
+            <span>
+              COACH CONTROL CENTER
+            </span>
+
+            <h2>
+              LEAD.
+              <br />
+              PROGRAM.
+              <br />
+              <strong>
+                TRANSFORM.
+              </strong>
+            </h2>
+
+            <p>
+              Manage your athletes, create workouts
+              and build complete training programs.
+            </p>
+          </div>
+        </section>
+
+        <div className="coach-dashboard__section-title">
+          <span />
+          <strong>
+            COACH TOOLS
+          </strong>
+          <span />
+        </div>
+
+        <section className="coach-dashboard__tools">
+
+          <button
+            type="button"
+            className="coach-dashboard__card"
+            onClick={() =>
+              setView(
+                "clients"
+              )
+            }
+          >
+            <div className="coach-dashboard__number">
+              01
+            </div>
+
+            <div className="coach-dashboard__card-content">
+              <span>
+                ATHLETES
+              </span>
+
+              <strong>
+                MY CLIENTS
+              </strong>
+
+              <small>
+                Manage assigned athletes and monitor progress.
+              </small>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
+            className="coach-dashboard__card"
+            onClick={() =>
+              setView("workouts")
+            }
+          >
+            <div className="coach-dashboard__number">
+              02
+            </div>
+
+            <div className="coach-dashboard__card-content">
+              <span>
+                TRAINING
+              </span>
+
+              <strong>
+                MY WORKOUTS
+              </strong>
+
+              <small>
+                Build workouts from the IRONAGE exercise library.
+              </small>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
+            className="coach-dashboard__card"
+          >
+            <div className="coach-dashboard__number">
+              03
+            </div>
+
+            <div className="coach-dashboard__card-content">
+              <span>
+                PROGRAMMING
+              </span>
+
+              <strong>
+                MY PROGRAMS
+              </strong>
+
+              <small>
+                Create programs and assign them to your clients.
+              </small>
+            </div>
+
+            <b>→</b>
+          </button>
+
+        </section>
+
+        <section className="coach-dashboard__status">
+          <div>
+            <span>
+              COACH STATUS
+            </span>
+
+            <strong>
+              ACTIVE
+            </strong>
+          </div>
+
+          <div className="coach-dashboard__status-dot" />
+        </section>
+
+      </div>
+    </main>
+  );
+}

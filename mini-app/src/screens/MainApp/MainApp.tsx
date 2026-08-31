@@ -15,6 +15,7 @@ import TelegramBackButton from "../../components/TelegramBackButton";
 
 import WorkoutSession from "../WorkoutSession/WorkoutSession";
 import WorkoutComplete from "../WorkoutComplete/WorkoutComplete";
+import CoachDashboard from "../Coach/CoachDashboard";
 
 import type { Tab } from "../../navigation/tabs";
 
@@ -31,6 +32,7 @@ import { useUser } from "../../context/UserContext";
 type AppScreen =
   | Tab
   | "premium"
+  | "coach"
   | "session"
   | "complete";
 
@@ -346,7 +348,8 @@ export default function MainApp() {
 
   const showTabBar =
     screen !== "session" &&
-    screen !== "complete";
+    screen !== "complete" &&
+    screen !== "coach";
 
 
   /* =========================================================
@@ -511,6 +514,9 @@ export default function MainApp() {
             onOpenPremium={() => {
               setScreen("premium");
             }}
+            onOpenCoach={() => {
+              setScreen("coach");
+            }}
           />
 
         )}
@@ -518,6 +524,17 @@ export default function MainApp() {
         {screen === "premium" && (
 
           <Premium
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
+
+        {screen === "coach" && (
+
+          <CoachDashboard
             onBack={() => {
               setScreen("profile");
             }}
