@@ -23,7 +23,8 @@ type CoachView =
   | "create-workout"
   | "programs"
   | "create-program"
-  | "assign-program";
+  | "assign-program"
+  | "client-results";
 
 type CoachClient = {
   relationshipId: number;
@@ -49,6 +50,36 @@ type CoachClient = {
 type CoachClientsResponse = {
   success: boolean;
   clients: CoachClient[];
+};
+
+type CoachClientWorkoutSet = {
+  id: number;
+  exerciseId: string;
+  exerciseName: string;
+  setNumber: number;
+  repetitions: number | null;
+  weight: number | null;
+  duration: number | null;
+  completed: boolean;
+};
+
+type CoachClientWorkout = {
+  id: number;
+  workoutId: string;
+  workoutName: string;
+  duration: number;
+  xp: number;
+  status: string;
+  startedAt: string;
+  completedAt: string | null;
+  createdAt: string;
+  sets: CoachClientWorkoutSet[];
+};
+
+type CoachClientResultsResponse = {
+  success: boolean;
+  client: CoachClient["client"];
+  workouts: CoachClientWorkout[];
 };
 
 type CoachWorkoutExercise = {
@@ -175,6 +206,22 @@ export default function CoachDashboard({
     useState<string | null>(
       null
     );
+
+  const [selectedClient, setSelectedClient] =
+    useState<CoachClient | null>(null);
+
+  const [clientResults, setClientResults] =
+    useState<CoachClientWorkout[]>([]);
+
+  const [
+    loadingClientResults,
+    setLoadingClientResults,
+  ] = useState(false);
+
+  const [
+    clientResultsError,
+    setClientResultsError,
+  ] = useState<string | null>(null);
 
   const [workouts, setWorkouts] =
     useState<CoachWorkout[]>([]);
@@ -304,6 +351,50 @@ export default function CoachDashboard({
     }
   }
 
+  async function loadClientResults(
+    client: CoachClient
+  ) {
+    try {
+      setSelectedClient(client);
+      setLoadingClientResults(true);
+      setClientResultsError(null);
+      setClientResults([]);
+      setView("client-results");
+
+      const response =
+        await api.get<CoachClientResultsResponse>(
+          `/coaches/clients/${client.client.id}/results`,
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        !Array.isArray(response.workouts)
+      ) {
+        throw new Error(
+          "Invalid client results response"
+        );
+      }
+
+      setClientResults(
+        response.workouts
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH CLIENT RESULTS UI ERROR:",
+        error
+      );
+
+      setClientResultsError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load client results"
+      );
+    } finally {
+      setLoadingClientResults(false);
+    }
+  }
+
   async function loadWorkouts() {
     try {
       setLoadingWorkouts(true);
@@ -399,6 +490,235 @@ export default function CoachDashboard({
       void loadClients();
     }
   }, [view]);
+
+  if (
+    view === "client-results" &&
+    selectedClient
+  ) {
+    const client =
+      selectedClient.client;
+
+    return (
+      <main className="coach-dashboard">
+        <div className="coach-dashboard__content">
+          <header className="coach-dashboard__header">
+            <button
+              type="button"
+              className="coach-dashboard__back"
+              onClick={() => {
+                setSelectedClient(null);
+                setClientResults([]);
+                setClientResultsError(null);
+                setView("clients");
+              }}
+              aria-label="Back to clients"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>
+                ATHLETE PERFORMANCE
+              </span>
+
+              <h1>
+                CLIENT RESULTS
+              </h1>
+
+              <p>
+                WORKOUT HISTORY
+              </p>
+            </div>
+          </header>
+
+          <section className="coach-client-results__athlete">
+            <span>
+              ATHLETE #{client.id}
+            </span>
+
+            <h2>
+              {getClientName(client)}
+            </h2>
+
+            <p>
+              {formatGoal(client.goal)}
+              {" · "}
+              LEVEL {client.level}
+            </p>
+
+            <div>
+              <section>
+                <strong>
+                  {client.workouts}
+                </strong>
+                <span>
+                  WORKOUTS
+                </span>
+              </section>
+
+              <section>
+                <strong>
+                  {client.xp}
+                </strong>
+                <span>XP</span>
+              </section>
+
+              <section>
+                <strong>
+                  {client.streak}
+                </strong>
+                <span>STREAK</span>
+              </section>
+            </div>
+          </section>
+
+          {loadingClientResults && (
+            <section className="coach-clients-state">
+              <span>
+                IRONAGE COACH
+              </span>
+
+              <strong>
+                LOADING RESULTS...
+              </strong>
+            </section>
+          )}
+
+          {!loadingClientResults &&
+            clientResultsError && (
+              <section className="coach-clients-state coach-clients-state--error">
+                <span>
+                  RESULTS ERROR
+                </span>
+
+                <strong>
+                  {clientResultsError}
+                </strong>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadClientResults(
+                      selectedClient
+                    )
+                  }
+                >
+                  RETRY
+                </button>
+              </section>
+            )}
+
+          {!loadingClientResults &&
+            !clientResultsError &&
+            clientResults.length === 0 && (
+              <section className="coach-clients-state">
+                <span>
+                  WORKOUT HISTORY
+                </span>
+
+                <strong>
+                  NO RESULTS YET
+                </strong>
+
+                <p>
+                  Completed client workouts
+                  will appear here.
+                </p>
+              </section>
+            )}
+
+          {!loadingClientResults &&
+            !clientResultsError &&
+            clientResults.length > 0 && (
+              <section className="coach-client-results__list">
+                {clientResults.map(
+                  (workout) => (
+                    <article
+                      key={workout.id}
+                      className="coach-client-result"
+                    >
+                      <header>
+                        <div>
+                          <span>
+                            {workout.status}
+                          </span>
+
+                          <h3>
+                            {workout.workoutName}
+                          </h3>
+
+                          <small>
+                            {new Date(
+                              workout.completedAt ||
+                                workout.createdAt
+                            ).toLocaleString()}
+                          </small>
+                        </div>
+
+                        <section>
+                          <strong>
+                            +{workout.xp}
+                          </strong>
+                          <span>XP</span>
+                        </section>
+                      </header>
+
+                      <div className="coach-client-result__meta">
+                        <span>
+                          {workout.duration} SEC
+                        </span>
+
+                        <span>
+                          {workout.sets.length} SETS
+                        </span>
+                      </div>
+
+                      <div className="coach-client-result__sets">
+                        {workout.sets.map(
+                          (set) => (
+                            <div key={set.id}>
+                              <section>
+                                <strong>
+                                  {set.exerciseName}
+                                </strong>
+
+                                <small>
+                                  SET {set.setNumber}
+                                </small>
+                              </section>
+
+                              <section>
+                                <b>
+                                  {set.repetitions ??
+                                    "—"}
+                                </b>
+                                <span>
+                                  REPS
+                                </span>
+                              </section>
+
+                              <section>
+                                <b>
+                                  {set.weight ??
+                                    "—"}
+                                </b>
+                                <span>
+                                  KG
+                                </span>
+                              </section>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </article>
+                  )
+                )}
+              </section>
+            )}
+        </div>
+      </main>
+    );
+  }
 
   if (
     view === "assign-program" &&
@@ -1297,7 +1617,27 @@ export default function CoachDashboard({
                               : "HEIGHT —"}
                           </span>
                         </div>
-                      </article>
+                      <button
+                    type="button"
+                    className="coach-client-card__results"
+                    onClick={() =>
+                      void loadClientResults(
+                        clients.find(
+                          (item) =>
+                            item.client.id ===
+                            client.id
+                        )!
+                      )
+                    }
+                  >
+                    <span>
+                      VIEW RESULTS
+                    </span>
+
+                    <b>→</b>
+                  </button>
+
+                  </article>
                     );
                   }
                 )}

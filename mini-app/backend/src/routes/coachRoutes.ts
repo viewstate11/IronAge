@@ -307,6 +307,133 @@ router.get(
   }
 );
 
+router.get(
+  "/clients/:clientId/results",
+  requireAppAuth,
+  async (req, res) => {
+    try {
+      const coachId =
+        getCurrentUserId(
+          req as AppAuthenticatedRequest
+        );
+
+      const clientId =
+        parsePositiveInt(
+          req.params.clientId,
+          "clientId"
+        );
+
+      const coachProfile =
+        await prisma.coachProfile.findUnique({
+          where: {
+            userId: coachId,
+          },
+        });
+
+      if (
+        !coachProfile ||
+        !coachProfile.isActive
+      ) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Active coach profile required",
+        });
+      }
+
+      const relationship =
+        await prisma.coachClient.findUnique({
+          where: {
+            clientId,
+          },
+          include: {
+            client: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                username: true,
+                age: true,
+                gender: true,
+                weight: true,
+                height: true,
+                goal: true,
+                level: true,
+                xp: true,
+                workouts: true,
+                streak: true,
+              },
+            },
+          },
+        });
+
+      if (!relationship) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Coach-client relationship not found",
+        });
+      }
+
+      if (
+        relationship.coachId !==
+        coachId
+      ) {
+        return res.status(403).json({
+          success: false,
+          message: "Access denied",
+        });
+      }
+
+      const workouts =
+        await prisma.workoutSession.findMany({
+          where: {
+            userId: clientId,
+          },
+
+          include: {
+            sets: {
+              orderBy: [
+                {
+                  exerciseName: "asc",
+                },
+                {
+                  setNumber: "asc",
+                },
+              ],
+            },
+          },
+
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+      return res.json({
+        success: true,
+        client:
+          relationship.client,
+        workouts,
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH CLIENT RESULTS LOAD ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Coach client results load error",
+        error:
+          error instanceof Error
+            ? error.message
+            : String(error),
+      });
+    }
+  }
+);
+
 router.post(
   "/clients",
   requireAppAuth,
