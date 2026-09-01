@@ -11,6 +11,8 @@
 export type * from './models/User.js'
 export type * from './models/CoachProfile.js'
 export type * from './models/CoachClient.js'
+export type * from './models/AuthIdentity.js'
+export type * from './models/AuthSession.js'
 export type * from './models/WorkoutSession.js'
 export type * from './models/WorkoutSet.js'
 export type * from './models/Progress.js'

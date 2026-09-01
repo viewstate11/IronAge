@@ -54,6 +54,8 @@ export const ModelName = {
   User: 'User',
   CoachProfile: 'CoachProfile',
   CoachClient: 'CoachClient',
+  AuthIdentity: 'AuthIdentity',
+  AuthSession: 'AuthSession',
   WorkoutSession: 'WorkoutSession',
   WorkoutSet: 'WorkoutSet',
   Progress: 'Progress',
@@ -137,6 +139,33 @@ export const CoachClientScalarFieldEnum = {
 } as const
 
 export type CoachClientScalarFieldEnum = (typeof CoachClientScalarFieldEnum)[keyof typeof CoachClientScalarFieldEnum]
+
+
+export const AuthIdentityScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  providerUserId: 'providerUserId',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  passwordHash: 'passwordHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuthIdentityScalarFieldEnum = (typeof AuthIdentityScalarFieldEnum)[keyof typeof AuthIdentityScalarFieldEnum]
+
+
+export const AuthSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuthSessionScalarFieldEnum = (typeof AuthSessionScalarFieldEnum)[keyof typeof AuthSessionScalarFieldEnum]
 
 
 export const WorkoutSessionScalarFieldEnum = {

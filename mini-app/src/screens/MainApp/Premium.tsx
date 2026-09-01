@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 
 import { useUser } from "../../context/UserContext";
 import { useAppEntitlements } from "../../context/AppEntitlementsContext";
@@ -28,6 +29,10 @@ const PLAN_FEATURES = [
 
 export default function Premium({ onBack }: Props) {
   const { refreshUser } = useUser();
+
+  const isNativeIOS =
+    Capacitor.isNativePlatform() &&
+    Capacitor.getPlatform() === "ios";
 
   const {
     premiumPlan,
@@ -59,6 +64,14 @@ export default function Premium({ onBack }: Props) {
 
   const handlePremiumCheckout = async () => {
     if (premiumPlan === selectedPlan) {
+      return;
+    }
+
+    if (!isNativeIOS) {
+      setError(
+        "APP STORE PAYMENT IS AVAILABLE IN THE IRONAGE IOS APP"
+      );
+      setMessage(null);
       return;
     }
 
@@ -252,14 +265,17 @@ export default function Premium({ onBack }: Props) {
           disabled={
             isPurchasing ||
             entitlementLoading ||
-            premiumPlan === selectedPlan
+            premiumPlan === selectedPlan ||
+            !isNativeIOS
           }
         >
           {premiumPlan === selectedPlan
             ? `${selectedPlan} ACTIVE`
-            : isPurchasing
-              ? "PROCESSING..."
-              : "CONTINUE TO PAYMENT"}
+            : !isNativeIOS
+              ? "AVAILABLE IN IOS APP"
+              : isPurchasing
+                ? "PROCESSING..."
+                : "CONTINUE TO PAYMENT"}
         </button>
 
       </div>

@@ -14,8 +14,11 @@ import {
 import {
   createOrUpdateUser,
   getUser,
+  getSessionUser,
   getIronAgeWebId,
   isWebAuth,
+  updateCurrentUser,
+  logoutCurrentSession,
   type ApiUser,
 } from "../api/client";
 
@@ -162,6 +165,8 @@ export type User = Omit<
 export type UserContextValue = {
   user: User;
 
+  authenticated: boolean;
+
   loading: boolean;
 
   error: string | null;
@@ -171,6 +176,8 @@ export type UserContextValue = {
   >;
 
   refreshUser: () => Promise<void>;
+
+  logout: () => Promise<void>;
 
   completeOnboarding: (
     profile: ProfileData
@@ -444,6 +451,9 @@ export function UserProvider({
       createDefaultUser()
     );
 
+  const [authenticated, setAuthenticated] =
+    useState(false);
+
   const [loading, setLoading] =
     useState(true);
 
@@ -606,19 +616,57 @@ export function UserProvider({
             !telegramId ||
             !initData
           ) {
+            /*
+             * First try the real authenticated
+             * browser session.
+             *
+             * The HttpOnly cookie is sent by
+             * the browser automatically.
+             */
+
+            try {
+              const apiUser =
+                await getSessionUser();
+
+              const normalized =
+                normalizeUser(
+                  apiUser
+                );
+
+              setUser(
+                normalized
+              );
+
+              setAuthenticated(true);
+
+              return;
+            } catch {
+              /*
+               * No valid session.
+               *
+               * Keep the legacy webId path
+               * temporarily for existing users.
+               */
+            }
+
+            const webId =
+              getIronAgeWebId();
+
+            if (!webId) {
+              setUser(
+                createDefaultUser()
+              );
+
+              setAuthenticated(false);
+
+              return;
+            }
+
             const apiUser =
-              await createOrUpdateUser({
-                webId: null,
-                telegramId: null,
-                firstName:
-                  "IRONAGE",
-                lastName:
-                  null,
-                username:
-                  null,
-                languageCode:
-                  "uk",
-              });
+              await getUser(
+                null,
+                null
+              );
 
             const normalized =
               normalizeUser(
@@ -628,6 +676,8 @@ export function UserProvider({
             setUser(
               normalized
             );
+
+            setAuthenticated(true);
 
             return;
           }
@@ -676,6 +726,8 @@ export function UserProvider({
             normalized
           );
 
+          setAuthenticated(true);
+
         } catch (err) {
           console.error(
             "IRONAGE: User load error:",
@@ -700,6 +752,45 @@ export function UserProvider({
       [
         resolveTelegramIdentity,
       ]
+    );
+
+  /* =======================================================
+     LOGOUT
+======================================================= */
+
+  const logout =
+    useCallback(
+      async (): Promise<void> => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          await logoutCurrentSession();
+
+          setUser(
+            createDefaultUser()
+          );
+
+          setAuthenticated(false);
+        } catch (err) {
+          console.error(
+            "IRONAGE: Logout error:",
+            err
+          );
+
+          const message =
+            err instanceof Error
+              ? err.message
+              : "Logout failed";
+
+          setError(message);
+
+          throw err;
+        } finally {
+          setLoading(false);
+        }
+      },
+      []
     );
 
   /* =======================================================
@@ -741,30 +832,45 @@ export function UserProvider({
           const webAuth =
             !telegramAuth;
 
-          const webId =
-            webAuth
-              ? getIronAgeWebId()
-              : null;
-
           /*
-           * GET USER
-           *
            * WEB:
-           * Load by webId.
+           * First use the real HttpOnly
+           * session cookie.
            *
            * TELEGRAM:
-           * Load by telegramId + initData.
+           * Keep the existing Telegram flow.
            */
 
-          const apiUser =
-            await getUser(
-              webAuth
-                ? null
-                : telegramId,
-              webAuth
-                ? null
-                : initData
-            );
+          let apiUser: ApiUser;
+
+          if (webAuth) {
+            try {
+              apiUser =
+                await getSessionUser();
+            } catch {
+              const webId =
+                getIronAgeWebId();
+
+              if (!webId) {
+                setAuthenticated(false);
+                setError(null);
+
+                return;
+              }
+
+              apiUser =
+                await getUser(
+                  null,
+                  null
+                );
+            }
+          } else {
+            apiUser =
+              await getUser(
+                telegramId,
+                initData
+              );
+          }
 
           const normalized =
             normalizeUser(
@@ -784,6 +890,8 @@ export function UserProvider({
                 normalized.onboardingCompleted,
             })
           );
+
+          setAuthenticated(true);
 
         } catch (err) {
           console.error(
@@ -913,56 +1021,56 @@ export function UserProvider({
               ? null
               : getEffectiveTelegramId();
 
-          const webId =
-            webAuth
-              ? getIronAgeWebId()
-              : null;
+          const profileInput = {
+            username:
+              telegramUser?.username ??
+              user.username ??
+              null,
+
+            firstName:
+              profile.name.trim(),
+
+            lastName:
+              telegramUser?.last_name ??
+              user.lastName ??
+              null,
+
+            languageCode:
+              telegramUser?.language_code ??
+              user.languageCode ??
+              "uk",
+
+            age:
+              profile.age,
+
+            gender:
+              profile.gender,
+
+            height:
+              profile.height,
+
+            weight:
+              profile.weight,
+
+            goal:
+              profile.goal,
+
+            onboardingCompleted:
+              true,
+          };
 
           const apiUser =
-            await createOrUpdateUser(
-              {
-                telegramId,
-
-                webId,
-
-                username:
-                  telegramUser?.username ??
-                  user.username ??
-                  null,
-
-                firstName:
-                  profile.name.trim(),
-
-                lastName:
-                  telegramUser?.last_name ??
-                  user.lastName ??
-                  null,
-
-                languageCode:
-                  telegramUser?.language_code ??
-                  user.languageCode ??
-                  "uk",
-
-                age:
-                  profile.age,
-
-                gender:
-                  profile.gender,
-
-                height:
-                  profile.height,
-
-                weight:
-                  profile.weight,
-
-                goal:
-                  profile.goal,
-
-                onboardingCompleted:
-                  true,
-              },
-              initData
-            );
+            webAuth
+              ? await updateCurrentUser(
+                  profileInput
+                )
+              : await createOrUpdateUser(
+                  {
+                    ...profileInput,
+                    telegramId,
+                  },
+                  initData
+                );
 
           const updatedUser =
             normalizeUser(
@@ -1338,6 +1446,8 @@ export function UserProvider({
       () => ({
         user,
 
+        authenticated,
+
         loading,
 
         error,
@@ -1345,6 +1455,8 @@ export function UserProvider({
         setUser,
 
         refreshUser,
+
+        logout,
 
         completeOnboarding,
 
@@ -1355,11 +1467,15 @@ export function UserProvider({
       [
         user,
 
+        authenticated,
+
         loading,
 
         error,
 
         refreshUser,
+
+        logout,
 
         completeOnboarding,
 

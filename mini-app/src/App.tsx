@@ -1,16 +1,48 @@
-import { UserProvider, useUser } from "./context/UserContext";
-import { AppEntitlementsProvider } from "./context/AppEntitlementsContext";
-import { FeatureAccessProvider } from "./context/FeatureAccessContext";
+import {
+  useState,
+} from "react";
+
+import {
+  UserProvider,
+  useUser,
+} from "./context/UserContext";
+
+import {
+  AppEntitlementsProvider,
+} from "./context/AppEntitlementsContext";
+
+import {
+  FeatureAccessProvider,
+} from "./context/FeatureAccessContext";
+
 import MainApp from "./screens/MainApp/MainApp";
 import Onboarding from "./screens/Onboarding/Onboarding";
+import Welcome from "./screens/Welcome/Welcome";
+import AuthScreen from "./screens/Auth/AuthScreen";
+
+function AuthenticatedApp() {
+  return (
+    <AppEntitlementsProvider>
+      <FeatureAccessProvider>
+        <MainApp />
+      </FeatureAccessProvider>
+    </AppEntitlementsProvider>
+  );
+}
 
 function AppContent() {
   const {
     user,
+    authenticated,
     loading,
     error,
     refreshUser,
   } = useUser();
+
+  const [
+    authScreenOpen,
+    setAuthScreenOpen,
+  ] = useState(false);
 
   if (loading) {
     return (
@@ -26,7 +58,11 @@ function AppContent() {
           padding: 24,
         }}
       >
-        <div style={{ textAlign: "center" }}>
+        <div
+          style={{
+            textAlign: "center",
+          }}
+        >
           <div
             style={{
               fontSize: 28,
@@ -38,11 +74,35 @@ function AppContent() {
             IRONAGE
           </div>
 
-          <div style={{ color: "#aaa" }}>
+          <div
+            style={{
+              color: "#aaa",
+            }}
+          >
             Loading...
           </div>
         </div>
       </div>
+    );
+  }
+
+  if (!authenticated) {
+    if (authScreenOpen) {
+      return (
+        <AuthScreen
+          back={() =>
+            setAuthScreenOpen(false)
+          }
+        />
+      );
+    }
+
+    return (
+      <Welcome
+        start={() =>
+          setAuthScreenOpen(true)
+        }
+      />
     );
   }
 
@@ -134,17 +194,13 @@ function AppContent() {
     return <Onboarding />;
   }
 
-  return <MainApp />;
+  return <AuthenticatedApp />;
 }
 
 export default function App() {
   return (
     <UserProvider>
-      <AppEntitlementsProvider>
-        <FeatureAccessProvider>
-          <AppContent />
-        </FeatureAccessProvider>
-      </AppEntitlementsProvider>
+      <AppContent />
     </UserProvider>
   );
 }

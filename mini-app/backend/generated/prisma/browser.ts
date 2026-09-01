@@ -33,6 +33,16 @@ export type CoachProfile = Prisma.CoachProfileModel
  */
 export type CoachClient = Prisma.CoachClientModel
 /**
+ * Model AuthIdentity
+ * 
+ */
+export type AuthIdentity = Prisma.AuthIdentityModel
+/**
+ * Model AuthSession
+ * 
+ */
+export type AuthSession = Prisma.AuthSessionModel
+/**
  * Model WorkoutSession
  * 
  */

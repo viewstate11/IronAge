@@ -7,6 +7,10 @@ import type {
 import { prisma } from "../prisma.js";
 
 import {
+  getAuthSessionUser,
+} from "../services/authSession.js";
+
+import {
   requireTelegramAuth,
   getAuthenticatedTelegramUser,
 } from "./authMiddleware.js";
@@ -18,8 +22,9 @@ import {
 export type AppAuthenticatedRequest =
   Request & {
     appUserId: number;
-    authType: "telegram" | "web";
+    authType: "telegram" | "session" | "web";
     webId?: string;
+    sessionId?: number;
   };
 
 /* =========================================================
@@ -128,6 +133,74 @@ export async function requireAppAuth(
 
       authenticatedRequest.authType =
         "telegram";
+
+      next();
+
+      return;
+    }
+
+    /* =====================================================
+       SESSION
+    ===================================================== */
+
+    const headerSessionToken =
+      req.header(
+        "x-ironage-session"
+      )?.trim();
+
+    const cookieHeader =
+      req.header("cookie") || "";
+
+    const cookieSessionToken =
+      cookieHeader
+        .split(";")
+        .map(value => value.trim())
+        .find(value =>
+          value.startsWith(
+            "ironage_session="
+          )
+        )
+        ?.slice(
+          "ironage_session=".length
+        );
+
+    const sessionToken =
+      headerSessionToken ||
+      (
+        cookieSessionToken
+          ? decodeURIComponent(
+              cookieSessionToken
+            )
+          : ""
+      );
+
+    if (sessionToken) {
+      const session =
+        await getAuthSessionUser(
+          sessionToken
+        );
+
+      if (!session) {
+        res.status(401).json({
+          success: false,
+          message:
+            "Invalid or expired IRONAGE session",
+        });
+
+        return;
+      }
+
+      const authenticatedRequest =
+        req as AppAuthenticatedRequest;
+
+      authenticatedRequest.appUserId =
+        session.userId;
+
+      authenticatedRequest.authType =
+        "session";
+
+      authenticatedRequest.sessionId =
+        session.sessionId;
 
       next();
 

@@ -26,6 +26,8 @@ import type {
 } from "../../types/workout";
 
 import { useUser } from "../../context/UserContext";
+import { useFeatureAccess } from "../../context/FeatureAccessContext";
+import type { FeatureKey } from "../../config/featureAccess";
 
 /* =========================================================
    TYPES
@@ -49,6 +51,11 @@ export default function MainApp() {
   const {
     completeWorkout,
   } = useUser();
+
+  const {
+    canAccess,
+    loading: accessLoading,
+  } = useFeatureAccess();
 
 
   /* =========================================================
@@ -140,12 +147,108 @@ export default function MainApp() {
 
 
       /*
+       * Resolve application screen
+       * to its centralized access rule.
+       */
+
+      const featureByScreen:
+        Partial<Record<AppScreen, FeatureKey>> = {
+          home: "dashboard",
+          workout: "workout",
+          nutrition: "nutrition",
+          progress: "progress",
+          profile: "profile",
+          ai: "aiTrainer",
+          coach: "coachSystem",
+          "my-program": "myProgram",
+          session: "workoutSession",
+        };
+
+      const targetScreen =
+        nextScreen as AppScreen;
+
+      const feature =
+        featureByScreen[targetScreen];
+
+
+      /*
+       * While access state is loading,
+       * protected screens stay closed.
+       *
+       * Free workout execution is never
+       * interrupted by this guard.
+       */
+
+      if (
+        accessLoading &&
+        (
+          targetScreen === "ai" ||
+          targetScreen === "coach" ||
+          targetScreen === "my-program"
+        )
+      ) {
+        console.warn(
+          "IRONAGE: Access state is still loading."
+        );
+
+        return;
+      }
+
+
+      /*
+       * PREMIUM
+       *
+       * Premium features redirect to the
+       * Premium screen when entitlement
+       * is missing.
+       */
+
+      if (
+        feature &&
+        !canAccess(feature)
+      ) {
+        if (
+          targetScreen === "ai"
+        ) {
+          setSaveError(null);
+          setScreen("premium");
+          return;
+        }
+
+        /*
+         * Coach and Client screens are
+         * role-based, not Premium-based.
+         *
+         * Never sell Premium as a way
+         * around a missing Coach/Client role.
+         */
+
+        if (
+          targetScreen === "coach" ||
+          targetScreen === "my-program"
+        ) {
+          console.warn(
+            `IRONAGE: Access denied for ${targetScreen}.`
+          );
+
+          return;
+        }
+
+        console.warn(
+          `IRONAGE: Access denied for ${targetScreen}.`
+        );
+
+        return;
+      }
+
+
+      /*
        * Clear old workout result when
        * navigating to a normal application tab.
        */
 
       if (
-        nextScreen !== "session"
+        targetScreen !== "session"
       ) {
         setSaveError(null);
       }
@@ -155,11 +258,12 @@ export default function MainApp() {
        * MAIN NAVIGATION
        */
 
-      setScreen(
-        nextScreen as AppScreen
-      );
+      setScreen(targetScreen);
     },
-    []
+    [
+      accessLoading,
+      canAccess,
+    ]
   );
 
 
@@ -539,10 +643,10 @@ export default function MainApp() {
               setScreen("premium");
             }}
             onOpenCoach={() => {
-              setScreen("coach");
+              changeTab("coach");
             }}
             onOpenMyProgram={() => {
-              setScreen("my-program");
+              changeTab("my-program");
             }}
           />
 
@@ -784,13 +888,12 @@ export default function MainApp() {
           ) => {
 
             /*
-             * IMPORTANT:
-             *
-             * TabBar navigation now uses
-             * the exact same screen state.
+             * All TabBar navigation must
+             * pass through centralized
+             * feature access control.
              */
 
-            setScreen(
+            changeTab(
               nextTab
             );
 

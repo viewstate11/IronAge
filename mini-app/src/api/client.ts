@@ -231,25 +231,10 @@ function getWebId(): string {
         WEB_ID_STORAGE_KEY
       );
 
-    if (
-      existing &&
-      existing.trim()
-    ) {
-      return existing.trim();
-    }
-
-    const generated =
-      crypto.randomUUID();
-
-    window.localStorage.setItem(
-      WEB_ID_STORAGE_KEY,
-      generated
-    );
-
-    return generated;
+    return existing?.trim() || "";
   } catch (error) {
     console.error(
-      "IRONAGE: Failed to create web identity:",
+      "IRONAGE: Failed to read web identity:",
       error
     );
 
@@ -275,6 +260,8 @@ async function request<T>(
     await fetch(
       `${API_URL}${path}`,
       {
+        credentials: "include",
+
         ...fetchOptions,
 
         headers: {
@@ -515,18 +502,29 @@ export function telegramAuthOptions(
   const webId =
     getWebId();
 
-  if (!webId) {
-    throw new Error(
-      "IRONAGE web identity could not be created."
-    );
+  /*
+   * Legacy Web identity.
+   *
+   * Keep this temporarily for existing
+   * users created before session auth.
+   */
+  if (webId) {
+    return {
+      headers: {
+        "x-ironage-web-id":
+          webId,
+      },
+    };
   }
 
-  return {
-    headers: {
-      "x-ironage-web-id":
-        webId,
-    },
-  };
+  /*
+   * New Web authentication.
+   *
+   * No JS-readable credential is required.
+   * The HttpOnly session cookie is sent
+   * automatically by request().
+   */
+  return {};
 }
 
 /* =========================================================
@@ -735,6 +733,34 @@ export async function createOrUpdateUser(
 }
 
 /* =========================================================
+   SESSION USER
+========================================================= */
+
+export async function getSessionUser(): Promise<ApiUser> {
+  const response =
+    await api.get<{
+      success: boolean;
+      user: ApiUser;
+    }>(
+      "/users/me",
+      {
+        credentials: "include",
+      }
+    );
+
+  if (
+    !response ||
+    !response.user
+  ) {
+    throw new Error(
+      "Invalid session user response from API"
+    );
+  }
+
+  return response.user;
+}
+
+/* =========================================================
    CURRENT USER
 ========================================================= */
 
@@ -892,3 +918,93 @@ export function isWebAuth(): boolean {
 ========================================================= */
 
 export default api;
+/* =========================================================
+   EMAIL AUTH
+========================================================= */
+
+export type EmailAuthResult = {
+  success: boolean;
+  authType: "session";
+  user: ApiUser;
+};
+
+export async function registerEmail(
+  email: string,
+  password: string,
+  firstName: string
+): Promise<EmailAuthResult> {
+  return api.post<EmailAuthResult>(
+    "/auth/email/register",
+    {
+      email: email.trim().toLowerCase(),
+      password,
+      firstName: firstName.trim(),
+    }
+  );
+}
+
+export async function loginEmail(
+  email: string,
+  password: string
+): Promise<EmailAuthResult> {
+  return api.post<EmailAuthResult>(
+    "/auth/email/login",
+    {
+      email: email.trim().toLowerCase(),
+      password,
+    }
+  );
+}
+
+/* =========================================================
+   UPDATE CURRENT USER
+========================================================= */
+
+export async function updateCurrentUser(
+  input: CreateOrUpdateUserInput
+): Promise<ApiUser> {
+  const response =
+    await api.patch<{
+      success: boolean;
+      user: ApiUser;
+    }>(
+      "/users/me",
+      input,
+      telegramAuthOptions()
+    );
+
+  if (
+    !response ||
+    response.success !== true ||
+    !response.user
+  ) {
+    throw new Error(
+      "Invalid current user update response"
+    );
+  }
+
+  return response.user;
+}
+
+/* =========================================================
+   LOGOUT CURRENT SESSION
+========================================================= */
+
+export async function logoutCurrentSession(): Promise<void> {
+  const response =
+    await api.post<{
+      success: boolean;
+    }>(
+      "/auth/logout",
+      {}
+    );
+
+  if (
+    !response ||
+    response.success !== true
+  ) {
+    throw new Error(
+      "Logout failed"
+    );
+  }
+}

@@ -40,6 +40,8 @@ model User {
   programAssignments  ProgramAssignment[] @relation("ProgramClient")
   assignedPrograms    ProgramAssignment[] @relation("ProgramAssignedBy")
   subscriptions       Subscription[]
+  authIdentities      AuthIdentity[]
+  authSessions        AuthSession[]
 
   @@index([createdAt])
 }
@@ -74,6 +76,44 @@ model CoachClient {
   @@unique([coachId, clientId])
   @@unique([clientId])
   @@index([coachId])
+}
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+  APPLE
+}
+
+model AuthIdentity {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  provider       AuthProvider
+  providerUserId String
+  email          String?
+  emailVerified  Boolean      @default(false)
+  passwordHash   String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+  @@index([email])
+}
+
+model AuthSession {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model WorkoutSession {

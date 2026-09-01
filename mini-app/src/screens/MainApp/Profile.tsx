@@ -67,7 +67,11 @@ export default function Profile({
   onOpenCoach,
   onOpenMyProgram,
 }: Props) {
-  const { user, updateProfile } = useUser();
+  const {
+    user,
+    updateProfile,
+    logout,
+  } = useUser();
 
   const {
     premiumPlan,
@@ -772,6 +776,29 @@ export default function Profile({
             </div>
 
             <b>SOON</b>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              void logout();
+            }}
+          >
+            <div>
+              <span>08</span>
+
+              <section>
+                <strong>
+                  LOG OUT
+                </strong>
+
+                <small>
+                  END CURRENT SESSION
+                </small>
+              </section>
+            </div>
+
+            <b>→</b>
           </button>
 
         </section>

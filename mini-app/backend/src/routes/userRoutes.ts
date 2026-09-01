@@ -1011,6 +1011,135 @@ router.get(
 );
 
 /* =========================================================
+   UPDATE CURRENT USER
+   PATCH /api/users/me
+========================================================= */
+
+router.patch(
+  "/me",
+  requireAppAuth,
+  async (
+    req,
+    res
+  ) => {
+    try {
+      const authenticatedRequest =
+        req as AppAuthenticatedRequest;
+
+      const {
+        username,
+        firstName,
+        lastName,
+        languageCode,
+        age,
+        gender,
+        weight,
+        height,
+        goal,
+        onboardingCompleted,
+      } = req.body ?? {};
+
+      const updateData: any = {};
+
+      if (username !== undefined) {
+        updateData.username =
+          username || null;
+      }
+
+      if (firstName !== undefined) {
+        const normalizedFirstName =
+          typeof firstName === "string"
+            ? firstName.trim()
+            : "";
+
+        if (!normalizedFirstName) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "First name cannot be empty",
+          });
+        }
+
+        updateData.firstName =
+          normalizedFirstName;
+      }
+
+      if (lastName !== undefined) {
+        updateData.lastName =
+          typeof lastName === "string"
+            ? lastName.trim() || null
+            : null;
+      }
+
+      if (languageCode !== undefined) {
+        updateData.languageCode =
+          typeof languageCode === "string"
+            ? languageCode.trim() || null
+            : null;
+      }
+
+      if (age !== undefined) {
+        updateData.age =
+          parseOptionalNumber(age);
+      }
+
+      if (gender !== undefined) {
+        updateData.gender =
+          parseGender(gender);
+      }
+
+      if (weight !== undefined) {
+        updateData.weight =
+          parseOptionalNumber(weight);
+      }
+
+      if (height !== undefined) {
+        updateData.height =
+          parseOptionalNumber(height);
+      }
+
+      if (goal !== undefined) {
+        updateData.goal =
+          parseGoal(goal);
+      }
+
+      if (onboardingCompleted !== undefined) {
+        updateData.onboardingCompleted =
+          Boolean(onboardingCompleted);
+      }
+
+      const user =
+        await prisma.user.update({
+          where: {
+            id:
+              authenticatedRequest.appUserId,
+          },
+
+          data:
+            updateData,
+        });
+
+      return res.status(200).json({
+        success: true,
+        user:
+          serializeUser(user),
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE UPDATE CURRENT USER ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to update current user",
+      });
+    }
+  }
+);
+
+/* =========================================================
    DELETE CURRENT USER
    DELETE /api/users/me
 ========================================================= */
