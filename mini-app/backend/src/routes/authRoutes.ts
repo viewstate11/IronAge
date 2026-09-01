@@ -489,9 +489,6 @@ router.post(
           "session",
 
         session: {
-          token:
-            session.token,
-
           expiresAt:
             session.expiresAt,
         },
@@ -598,9 +595,6 @@ router.post(
           "session",
 
         session: {
-          token:
-            session.token,
-
           expiresAt:
             session.expiresAt,
         },
