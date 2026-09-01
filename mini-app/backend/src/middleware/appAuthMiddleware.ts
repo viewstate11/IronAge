@@ -28,6 +28,42 @@ export type AppAuthenticatedRequest =
   };
 
 /* =========================================================
+   COOKIE SESSION ORIGIN PROTECTION
+========================================================= */
+
+const trustedWebOrigins =
+  new Set([
+    "https://ironage.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+  ]);
+
+function isMutationMethod(
+  method: string
+): boolean {
+  return [
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+  ].includes(
+    method.toUpperCase()
+  );
+}
+
+function hasTrustedCookieOrigin(
+  req: Request
+): boolean {
+  const origin =
+    req.header("origin")?.trim();
+
+  return Boolean(
+    origin &&
+    trustedWebOrigins.has(origin)
+  );
+}
+
+/* =========================================================
    WEB ID VALIDATION
 ========================================================= */
 
@@ -164,15 +200,48 @@ export async function requireAppAuth(
           "ironage_session=".length
         );
 
+    let decodedCookieSessionToken = "";
+
+    if (cookieSessionToken) {
+      try {
+        decodedCookieSessionToken =
+          decodeURIComponent(
+            cookieSessionToken
+          );
+      } catch {
+        res.status(401).json({
+          success: false,
+          message:
+            "Invalid IRONAGE session cookie",
+        });
+
+        return;
+      }
+    }
+
+    const isCookieSession =
+      Boolean(
+        !headerSessionToken &&
+        decodedCookieSessionToken
+      );
+
+    if (
+      isCookieSession &&
+      isMutationMethod(req.method) &&
+      !hasTrustedCookieOrigin(req)
+    ) {
+      res.status(403).json({
+        success: false,
+        message:
+          "IRONAGE request origin denied",
+      });
+
+      return;
+    }
+
     const sessionToken =
       headerSessionToken ||
-      (
-        cookieSessionToken
-          ? decodeURIComponent(
-              cookieSessionToken
-            )
-          : ""
-      );
+      decodedCookieSessionToken;
 
     if (sessionToken) {
       const session =

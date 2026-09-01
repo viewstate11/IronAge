@@ -21,9 +21,54 @@ const app = express();
    CORS
 ========================================================= */
 
+const allowedOrigins =
+  new Set([
+    "https://ironage.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "capacitor://localhost",
+  ]);
+
 app.use(
   cors({
-    origin: true,
+    origin: (
+      origin,
+      callback
+    ) => {
+      /*
+       * Requests without Origin are allowed.
+       * Examples:
+       * - curl
+       * - server-to-server
+       * - some native requests
+       */
+      if (!origin) {
+        callback(
+          null,
+          true
+        );
+
+        return;
+      }
+
+      if (
+        allowedOrigins.has(origin)
+      ) {
+        callback(
+          null,
+          true
+        );
+
+        return;
+      }
+
+      callback(
+        new Error(
+          "IRONAGE CORS origin denied"
+        )
+      );
+    },
+
     credentials: true,
   })
 );
