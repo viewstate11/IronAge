@@ -497,6 +497,19 @@ router.post(
           serializeUser(user),
       });
     } catch (error) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        error.code === "P2002"
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Email is already registered",
+        });
+      }
+
       console.error(
         "IRONAGE EMAIL REGISTER ERROR:",
         error
