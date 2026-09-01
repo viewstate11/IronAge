@@ -4,6 +4,15 @@ import {
   type Response,
 } from "express";
 
+import type {
+  NextFunction,
+} from "express";
+
+import {
+  emailRegisterRateLimit,
+  emailLoginRateLimit,
+} from "../services/authRateLimit.js";
+
 import { prisma } from "../prisma.js";
 
 import {
@@ -29,7 +38,7 @@ const SESSION_COOKIE_MAX_AGE_MS =
   1000 * 60 * 60 * 24 * 30;
 
 function setSessionCookie(
-  res: any,
+  res: Response,
   token: string
 ): void {
   res.cookie(
@@ -47,6 +56,96 @@ function setSessionCookie(
     }
   );
 }
+
+async function enforceAuthRateLimit(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  type: "register" | "login"
+) {
+  try {
+    const identifier =
+      req.ip || "unknown";
+
+    const limiter =
+      type === "register"
+        ? emailRegisterRateLimit
+        : emailLoginRateLimit;
+
+    const result =
+      await limiter.limit(
+        identifier
+      );
+
+    res.setHeader(
+      "RateLimit-Limit",
+      String(result.limit)
+    );
+
+    res.setHeader(
+      "RateLimit-Remaining",
+      String(result.remaining)
+    );
+
+    res.setHeader(
+      "RateLimit-Reset",
+      String(
+        Math.ceil(
+          result.reset / 1000
+        )
+      )
+    );
+
+    if (!result.success) {
+      return res.status(429).json({
+        success: false,
+        message:
+          type === "register"
+            ? "Too many registration attempts. Please try again later."
+            : "Too many login attempts. Please try again later.",
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error(
+      "IRONAGE AUTH RATE LIMIT ERROR:",
+      error
+    );
+
+    return res.status(503).json({
+      success: false,
+      message:
+        "Authentication service temporarily unavailable",
+    });
+  }
+}
+
+const enforceEmailRegisterRateLimit =
+  (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) =>
+    enforceAuthRateLimit(
+      req,
+      res,
+      next,
+      "register"
+    );
+
+const enforceEmailLoginRateLimit =
+  (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) =>
+    enforceAuthRateLimit(
+      req,
+      res,
+      next,
+      "login"
+    );
 
 /* =========================================================
    SERIALIZE USER
@@ -355,6 +454,7 @@ router.post(
 
 router.post(
   "/email/register",
+  enforceEmailRegisterRateLimit,
   async (req, res) => {
     try {
       const email =
@@ -541,6 +641,7 @@ router.post(
 
 router.post(
   "/email/login",
+  enforceEmailLoginRateLimit,
   async (req, res) => {
     try {
       const email =

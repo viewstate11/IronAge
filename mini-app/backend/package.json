@@ -4,15 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx src/server.ts",
+    "dev": "DOTENV_CONFIG_PATH=.env tsx -r dotenv/config src/server.ts",
     "build": "tsc --noEmit",
-    "start": "tsx src/server.ts"
+    "start": "DOTENV_CONFIG_PATH=.env tsx -r dotenv/config src/server.ts"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",
     "@neondatabase/serverless": "^1.1.0",
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^5.1.0",
