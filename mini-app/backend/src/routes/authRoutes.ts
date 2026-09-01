@@ -431,7 +431,10 @@ router.post(
       const passwordHash =
         await hashPassword(password);
 
-      const user =
+      const {
+        user,
+        session,
+      } =
         await prisma.$transaction(
           async (tx) => {
             const createdUser =
@@ -468,13 +471,18 @@ router.post(
               },
             });
 
-            return createdUser;
-          }
-        );
+            const createdSession =
+              await createAuthSession(
+                createdUser.id,
+                tx
+              );
 
-      const session =
-        await createAuthSession(
-          user.id
+            return {
+              user: createdUser,
+              session:
+                createdSession,
+            };
+          }
         );
 
       setSessionCookie(

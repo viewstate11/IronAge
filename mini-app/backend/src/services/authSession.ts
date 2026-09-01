@@ -3,6 +3,7 @@ import {
   randomBytes,
 } from "node:crypto";
 
+import type { Prisma } from "../../generated/prisma/client.js";
 import { prisma } from "../prisma.js";
 
 const SESSION_LIFETIME_MS =
@@ -17,7 +18,9 @@ function hashSessionToken(
 }
 
 export async function createAuthSession(
-  userId: number
+  userId: number,
+  db: Prisma.TransactionClient | typeof prisma =
+    prisma
 ) {
   const token =
     randomBytes(32)
@@ -32,7 +35,7 @@ export async function createAuthSession(
         SESSION_LIFETIME_MS
     );
 
-  await prisma.authSession.create({
+  await db.authSession.create({
     data: {
       userId,
       tokenHash,
