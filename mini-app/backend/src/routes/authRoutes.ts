@@ -64,8 +64,29 @@ async function enforceAuthRateLimit(
   type: "register" | "login"
 ) {
   try {
+    const forwardedFor =
+      req.headers["x-forwarded-for"];
+
+    const realIp =
+      req.headers["x-real-ip"];
+
     const identifier =
-      req.ip || "unknown";
+      (
+        typeof forwardedFor === "string"
+          ? forwardedFor.split(",")[0]?.trim()
+          : Array.isArray(forwardedFor)
+            ? forwardedFor[0]
+            : undefined
+      ) ||
+      (
+        typeof realIp === "string"
+          ? realIp.trim()
+          : Array.isArray(realIp)
+            ? realIp[0]
+            : undefined
+      ) ||
+      req.ip ||
+      "unknown";
 
     const limiter =
       type === "register"
