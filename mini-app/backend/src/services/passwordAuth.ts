@@ -12,6 +12,11 @@ const scrypt = promisify(
 
 const KEY_LENGTH = 64;
 
+const DUMMY_PASSWORD_HASH =
+  "scrypt$00000000000000000000000000000000$" +
+  "0000000000000000000000000000000000000000000000000000000000000000" +
+  "0000000000000000000000000000000000000000000000000000000000000000";
+
 export async function hashPassword(
   password: string
 ): Promise<string> {
@@ -78,5 +83,16 @@ export async function verifyPassword(
   return timingSafeEqual(
     storedKey,
     derivedKey
+  );
+}
+
+export async function verifyPasswordOrDummy(
+  password: string,
+  storedHash?: string | null
+): Promise<boolean> {
+  return verifyPassword(
+    password,
+    storedHash ||
+      DUMMY_PASSWORD_HASH
   );
 }

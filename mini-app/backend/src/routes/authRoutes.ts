@@ -8,7 +8,7 @@ import { prisma } from "../prisma.js";
 
 import {
   hashPassword,
-  verifyPassword,
+  verifyPasswordOrDummy,
 } from "../services/passwordAuth.js";
 
 import {
@@ -569,14 +569,18 @@ router.post(
               providerUserId: email,
             },
           },
-          include: {
-            user: true,
-          },
         });
+
+      const passwordValid =
+        await verifyPasswordOrDummy(
+          password,
+          identity?.passwordHash
+        );
 
       if (
         !identity ||
-        !identity.passwordHash
+        !identity.passwordHash ||
+        !passwordValid
       ) {
         return res.status(401).json({
           success: false,
@@ -585,13 +589,14 @@ router.post(
         });
       }
 
-      const passwordValid =
-        await verifyPassword(
-          password,
-          identity.passwordHash
-        );
+      const user =
+        await prisma.user.findUnique({
+          where: {
+            id: identity.userId,
+          },
+        });
 
-      if (!passwordValid) {
+      if (!user) {
         return res.status(401).json({
           success: false,
           message:
@@ -621,7 +626,7 @@ router.post(
         },
 
         user:
-          serializeUser(identity.user),
+          serializeUser(user),
       });
     } catch (error) {
       console.error(
