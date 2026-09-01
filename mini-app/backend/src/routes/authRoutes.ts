@@ -643,14 +643,48 @@ router.post(
             )
           );
 
-      const sessionToken =
-        cookieValue
-          ? decodeURIComponent(
+      const headerSessionToken =
+        req.header(
+          "x-ironage-session"
+        )?.trim() || "";
+
+      let cookieSessionToken = "";
+
+      if (
+        cookieValue &&
+        !headerSessionToken
+      ) {
+        try {
+          cookieSessionToken =
+            decodeURIComponent(
               cookieValue.slice(
                 SESSION_COOKIE_NAME.length + 1
               )
-            )
-          : "";
+            );
+        } catch {
+          res.clearCookie(
+            SESSION_COOKIE_NAME,
+            {
+              httpOnly: true,
+              secure:
+                process.env.NODE_ENV ===
+                "production",
+              sameSite: "lax",
+              path: "/",
+            }
+          );
+
+          return res.status(400).json({
+            success: false,
+            message:
+              "Invalid IRONAGE session cookie",
+          });
+        }
+      }
+
+      const sessionToken =
+        headerSessionToken ||
+        cookieSessionToken;
 
       if (sessionToken) {
         await revokeAuthSession(
