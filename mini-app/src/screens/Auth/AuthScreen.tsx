@@ -5,12 +5,15 @@ import {
 
 import {
   loginEmail,
+  loginGoogle,
   registerEmail,
 } from "../../api/client";
 
 import {
   useUser,
 } from "../../context/UserContext";
+
+import GoogleSignInButton from "../../components/auth/GoogleSignInButton";
 
 import "./AuthScreen.css";
 
@@ -112,21 +115,38 @@ export default function AuthScreen({
         if (
           mode === "register"
         ) {
-          await registerEmail(
-            normalizedEmail,
-            password,
-            normalizedFirstName
-          );
-        } else {
-          await loginEmail(
-            normalizedEmail,
-            password
+          const result =
+            await registerEmail(
+              normalizedEmail,
+              password,
+              normalizedFirstName
+            );
+
+          if (
+            result.emailVerificationRequired
+          ) {
+            setMessage(
+              "CHECK YOUR EMAIL TO VERIFY YOUR ACCOUNT"
+            );
+
+            setPassword("");
+
+            return;
+          }
+
+          throw new Error(
+            "Email verification was not requested"
           );
         }
 
+        await loginEmail(
+          normalizedEmail,
+          password
+        );
+
         /*
-         * Backend has now created the
-         * HttpOnly session cookie.
+         * Login creates the HttpOnly
+         * session cookie.
          *
          * Reload authenticated user
          * through /api/users/me.
@@ -143,6 +163,39 @@ export default function AuthScreen({
           error instanceof Error
             ? error.message.toUpperCase()
             : "AUTHENTICATION FAILED"
+        );
+      } finally {
+        setSubmitting(false);
+      }
+    };
+
+  const handleGoogleCredential =
+    async (
+      credential: string
+    ) => {
+      if (submitting) {
+        return;
+      }
+
+      try {
+        setSubmitting(true);
+        setMessage("");
+
+        await loginGoogle(
+          credential
+        );
+
+        await refreshUser();
+      } catch (error) {
+        console.error(
+          "IRONAGE: Google auth error:",
+          error
+        );
+
+        setMessage(
+          error instanceof Error
+            ? error.message.toUpperCase()
+            : "GOOGLE AUTHENTICATION FAILED"
         );
       } finally {
         setSubmitting(false);
@@ -203,22 +256,13 @@ export default function AuthScreen({
           </p>
 
           <div className="iron-auth__providers">
-            <button
-              type="button"
-              className="iron-auth__provider"
+            <GoogleSignInButton
               disabled={submitting}
-              onClick={() =>
-                setMessage(
-                  "GOOGLE AUTH COMING SOON"
-                )
+              onCredential={
+                handleGoogleCredential
               }
-            >
-              <span className="iron-auth__provider-icon">
-                G
-              </span>
-
-              CONTINUE WITH GOOGLE
-            </button>
+              onError={setMessage}
+            />
 
             <button
               type="button"
@@ -361,11 +405,23 @@ export default function AuthScreen({
 
           <p className="iron-auth__legal">
             By continuing you agree to the{" "}
-            <button type="button">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href =
+                  "/terms";
+              }}
+            >
               Terms
             </button>{" "}
             and{" "}
-            <button type="button">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href =
+                  "/privacy";
+              }}
+            >
               Privacy Policy
             </button>
             .

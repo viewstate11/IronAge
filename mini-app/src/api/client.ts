@@ -922,7 +922,13 @@ export default api;
    EMAIL AUTH
 ========================================================= */
 
-export type EmailAuthResult = {
+export type EmailRegistrationResult = {
+  success: boolean;
+  emailVerificationRequired: true;
+  user: ApiUser;
+};
+
+export type EmailLoginResult = {
   success: boolean;
   authType: "session";
   user: ApiUser;
@@ -932,8 +938,8 @@ export async function registerEmail(
   email: string,
   password: string,
   firstName: string
-): Promise<EmailAuthResult> {
-  return api.post<EmailAuthResult>(
+): Promise<EmailRegistrationResult> {
+  return api.post<EmailRegistrationResult>(
     "/auth/email/register",
     {
       email: email.trim().toLowerCase(),
@@ -946,12 +952,41 @@ export async function registerEmail(
 export async function loginEmail(
   email: string,
   password: string
-): Promise<EmailAuthResult> {
-  return api.post<EmailAuthResult>(
+): Promise<EmailLoginResult> {
+  return api.post<EmailLoginResult>(
     "/auth/email/login",
     {
       email: email.trim().toLowerCase(),
       password,
+    }
+  );
+}
+
+export type EmailVerificationResult = {
+  success: boolean;
+  authType: "session";
+  emailVerified: true;
+  session: {
+    expiresAt: string;
+  };
+};
+
+export async function verifyEmail(
+  token: string
+): Promise<EmailVerificationResult> {
+  const normalizedToken =
+    token.trim();
+
+  if (!normalizedToken) {
+    throw new Error(
+      "Verification token is required"
+    );
+  }
+
+  return api.post<EmailVerificationResult>(
+    "/auth/email/verify",
+    {
+      token: normalizedToken,
     }
   );
 }
@@ -1007,4 +1042,37 @@ export async function logoutCurrentSession(): Promise<void> {
       "Logout failed"
     );
   }
+}
+
+/* =========================================================
+   GOOGLE AUTH
+========================================================= */
+
+export type GoogleLoginResult = {
+  success: boolean;
+  authType: "session";
+  session: {
+    expiresAt: string;
+  };
+  user: ApiUser;
+};
+
+export async function loginGoogle(
+  idToken: string
+): Promise<GoogleLoginResult> {
+  const normalizedToken =
+    idToken.trim();
+
+  if (!normalizedToken) {
+    throw new Error(
+      "Google credential is required"
+    );
+  }
+
+  return api.post<GoogleLoginResult>(
+    "/auth/google",
+    {
+      idToken: normalizedToken,
+    }
+  );
 }

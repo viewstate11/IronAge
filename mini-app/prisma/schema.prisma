@@ -8,40 +8,41 @@ datasource db {
 }
 
 model User {
-  id                  Int                 @id @default(autoincrement())
-  telegramId          BigInt?             @unique
-  username            String?
-  firstName           String
-  lastName            String?
-  languageCode        String?
-  age                 Int?
-  gender              Gender?
-  weight              Float?
-  height              Float?
-  goal                Goal?
-  onboardingCompleted Boolean             @default(false)
-  level               Int                 @default(1)
-  xp                  Int                 @default(0)
-  workouts            Int                 @default(0)
-  streak              Int                 @default(0)
-  premiumPlan         String?
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-  webId               String?             @unique
-  nutritionDays       NutritionDay[]
-  progress            Progress[]
-  workoutSessions     WorkoutSession[]
-  coachProfile        CoachProfile?
-  coachRelationships  CoachClient[]       @relation("CoachUser")
-  coachInvites        CoachInvite[]       @relation("CoachInvites")
-  clientRelationships CoachClient[]       @relation("ClientUser")
-  trainingWorkouts    TrainingWorkout[]   @relation("TrainingWorkoutCoach")
-  trainingPrograms    TrainingProgram[]   @relation("TrainingProgramCoach")
-  programAssignments  ProgramAssignment[] @relation("ProgramClient")
-  assignedPrograms    ProgramAssignment[] @relation("ProgramAssignedBy")
-  subscriptions       Subscription[]
-  authIdentities      AuthIdentity[]
-  authSessions        AuthSession[]
+  id                      Int                      @id @default(autoincrement())
+  telegramId              BigInt?                  @unique
+  username                String?
+  firstName               String
+  lastName                String?
+  languageCode            String?
+  age                     Int?
+  gender                  Gender?
+  weight                  Float?
+  height                  Float?
+  goal                    Goal?
+  onboardingCompleted     Boolean                  @default(false)
+  level                   Int                      @default(1)
+  xp                      Int                      @default(0)
+  workouts                Int                      @default(0)
+  streak                  Int                      @default(0)
+  premiumPlan             String?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  webId                   String?                  @unique
+  nutritionDays           NutritionDay[]
+  progress                Progress[]
+  workoutSessions         WorkoutSession[]
+  coachProfile            CoachProfile?
+  coachRelationships      CoachClient[]            @relation("CoachUser")
+  coachInvites            CoachInvite[]            @relation("CoachInvites")
+  clientRelationships     CoachClient[]            @relation("ClientUser")
+  trainingWorkouts        TrainingWorkout[]        @relation("TrainingWorkoutCoach")
+  trainingPrograms        TrainingProgram[]        @relation("TrainingProgramCoach")
+  programAssignments      ProgramAssignment[]      @relation("ProgramClient")
+  assignedPrograms        ProgramAssignment[]      @relation("ProgramAssignedBy")
+  subscriptions           Subscription[]
+  authIdentities          AuthIdentity[]
+  authSessions            AuthSession[]
+  emailVerificationTokens EmailVerificationToken[]
 
   @@index([createdAt])
 }
@@ -100,6 +101,19 @@ model AuthIdentity {
   @@unique([provider, providerUserId])
   @@index([userId])
   @@index([email])
+}
+
+model EmailVerificationToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model AuthSession {

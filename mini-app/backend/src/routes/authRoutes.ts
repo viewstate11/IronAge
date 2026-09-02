@@ -11,6 +11,8 @@ import type {
 import {
   emailRegisterRateLimit,
   emailLoginRateLimit,
+  googleLoginRateLimit,
+  emailVerificationResendRateLimit,
 } from "../services/authRateLimit.js";
 
 import { prisma } from "../prisma.js";
@@ -28,6 +30,20 @@ import {
 import {
   validateTelegramInitData,
 } from "../services/telegramAuth.js";
+
+import {
+  createEmailVerificationToken,
+  createEmailVerificationTokenInTransaction,
+  verifyEmailWithToken,
+} from "../services/emailVerification.js";
+
+import {
+  sendEmailVerification,
+} from "../services/emailSender.js";
+
+import {
+  verifyGoogleIdToken,
+} from "../services/googleAuth.js";
 
 const router = Router();
 
@@ -55,6 +71,83 @@ function setSessionCookie(
         SESSION_COOKIE_MAX_AGE_MS,
     }
   );
+}
+
+async function enforceEmailVerificationResendRateLimit(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const forwardedFor =
+      req.headers["x-forwarded-for"];
+
+    const realIp =
+      req.headers["x-real-ip"];
+
+    const identifier =
+      (
+        typeof forwardedFor === "string"
+          ? forwardedFor.split(",")[0]?.trim()
+          : Array.isArray(forwardedFor)
+            ? forwardedFor[0]
+            : undefined
+      ) ||
+      (
+        typeof realIp === "string"
+          ? realIp.trim()
+          : Array.isArray(realIp)
+            ? realIp[0]
+            : undefined
+      ) ||
+      req.ip ||
+      "unknown";
+
+    const result =
+      await emailVerificationResendRateLimit.limit(
+        identifier
+      );
+
+    res.setHeader(
+      "RateLimit-Limit",
+      String(result.limit)
+    );
+
+    res.setHeader(
+      "RateLimit-Remaining",
+      String(result.remaining)
+    );
+
+    res.setHeader(
+      "RateLimit-Reset",
+      String(
+        Math.ceil(
+          result.reset / 1000
+        )
+      )
+    );
+
+    if (!result.success) {
+      return res.status(429).json({
+        success: false,
+        message:
+          "Too many verification email requests. Please try again later.",
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error(
+      "IRONAGE EMAIL VERIFICATION RATE LIMIT ERROR:",
+      error
+    );
+
+    return res.status(503).json({
+      success: false,
+      message:
+        "Authentication service temporarily unavailable",
+    });
+  }
 }
 
 async function enforceAuthRateLimit(
@@ -167,6 +260,86 @@ const enforceEmailLoginRateLimit =
       next,
       "login"
     );
+
+const enforceGoogleLoginRateLimit =
+  async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const forwardedFor =
+        req.headers["x-forwarded-for"];
+
+      const realIp =
+        req.headers["x-real-ip"];
+
+      const identifier =
+        (
+          typeof forwardedFor === "string"
+            ? forwardedFor
+                .split(",")[0]
+                ?.trim()
+            : Array.isArray(forwardedFor)
+              ? forwardedFor[0]
+              : undefined
+        ) ||
+        (
+          typeof realIp === "string"
+            ? realIp.trim()
+            : Array.isArray(realIp)
+              ? realIp[0]
+              : undefined
+        ) ||
+        req.ip ||
+        "unknown";
+
+      const result =
+        await googleLoginRateLimit.limit(
+          identifier
+        );
+
+      res.setHeader(
+        "RateLimit-Limit",
+        String(result.limit)
+      );
+
+      res.setHeader(
+        "RateLimit-Remaining",
+        String(result.remaining)
+      );
+
+      res.setHeader(
+        "RateLimit-Reset",
+        String(
+          Math.ceil(
+            result.reset / 1000
+          )
+        )
+      );
+
+      if (!result.success) {
+        return res.status(429).json({
+          success: false,
+          message:
+            "Too many Google login attempts. Please try again later.",
+        });
+      }
+
+      next();
+    } catch (error) {
+      console.error(
+        "IRONAGE GOOGLE RATE LIMIT ERROR:",
+        error
+      );
+
+      return res.status(503).json({
+        success: false,
+        message:
+          "Authentication service temporarily unavailable",
+      });
+    }
+  };
 
 /* =========================================================
    SERIALIZE USER
@@ -554,7 +727,7 @@ router.post(
 
       const {
         user,
-        session,
+        verificationToken,
       } =
         await prisma.$transaction(
           async (tx) => {
@@ -592,35 +765,31 @@ router.post(
               },
             });
 
-            const createdSession =
-              await createAuthSession(
+            const verification =
+              await createEmailVerificationTokenInTransaction(
                 createdUser.id,
                 tx
               );
 
             return {
               user: createdUser,
-              session:
-                createdSession,
+              verificationToken:
+                verification.token,
             };
           }
         );
 
-      setSessionCookie(
-        res,
-        session.token
-      );
+      await sendEmailVerification({
+        email,
+        token:
+          verificationToken,
+      });
 
       return res.status(201).json({
         success: true,
 
-        authType:
-          "session",
-
-        session: {
-          expiresAt:
-            session.expiresAt,
-        },
+        emailVerificationRequired:
+          true,
 
         user:
           serializeUser(user),
@@ -649,6 +818,81 @@ router.post(
 
         message:
           "Email registration failed",
+      });
+    }
+  }
+);
+
+
+/* =========================================================
+   RESEND EMAIL VERIFICATION
+   POST /api/auth/email/resend-verification
+========================================================= */
+
+router.post(
+  "/email/resend-verification",
+  enforceEmailVerificationResendRateLimit,
+  async (req, res) => {
+    const genericResponse = () =>
+      res.status(200).json({
+        success: true,
+        message:
+          "If the account exists and requires verification, a verification email has been sent.",
+      });
+
+    try {
+      const email =
+        typeof req.body?.email === "string"
+          ? req.body.email
+              .trim()
+              .toLowerCase()
+          : "";
+
+      if (!email) {
+        return genericResponse();
+      }
+
+      const identity =
+        await prisma.authIdentity.findFirst({
+          where: {
+            provider: "EMAIL",
+            email,
+          },
+          select: {
+            userId: true,
+            emailVerified: true,
+          },
+        });
+
+      if (
+        !identity ||
+        identity.emailVerified
+      ) {
+        return genericResponse();
+      }
+
+      const verification =
+        await createEmailVerificationToken(
+          identity.userId
+        );
+
+      await sendEmailVerification({
+        email,
+        token:
+          verification.token,
+      });
+
+      return genericResponse();
+    } catch (error) {
+      console.error(
+        "IRONAGE EMAIL VERIFICATION RESEND ERROR:",
+        error
+      );
+
+      return res.status(503).json({
+        success: false,
+        message:
+          "Verification email service temporarily unavailable",
       });
     }
   }
@@ -711,6 +955,16 @@ router.post(
         });
       }
 
+      if (!identity.emailVerified) {
+        return res.status(403).json({
+          success: false,
+          emailVerificationRequired:
+            true,
+          message:
+            "Email verification is required",
+        });
+      }
+
       const user =
         await prisma.user.findUnique({
           where: {
@@ -760,6 +1014,186 @@ router.post(
         success: false,
         message:
           "Email login failed",
+      });
+    }
+  }
+);
+
+
+/* =========================================================
+   GOOGLE LOGIN
+   POST /api/auth/google
+========================================================= */
+
+router.post(
+  "/google",
+  enforceGoogleLoginRateLimit,
+  async (req, res) => {
+    try {
+      const idToken =
+        typeof req.body?.idToken === "string"
+          ? req.body.idToken.trim()
+          : "";
+
+      if (!idToken) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Google ID token is required",
+        });
+      }
+
+      const google =
+        await verifyGoogleIdToken(
+          idToken
+        );
+
+      let identity =
+        await prisma.authIdentity.findUnique({
+          where: {
+            provider_providerUserId: {
+              provider: "GOOGLE",
+              providerUserId:
+                google.providerUserId,
+            },
+          },
+          include: {
+            user: true,
+          },
+        });
+
+      if (!identity) {
+        const emailIdentity =
+          await prisma.authIdentity.findFirst({
+            where: {
+              provider: "EMAIL",
+              email: google.email,
+              emailVerified: true,
+            },
+            select: {
+              userId: true,
+            },
+          });
+
+        const userId =
+          await prisma.$transaction(
+            async (tx) => {
+              if (emailIdentity) {
+                await tx.authIdentity.create({
+                  data: {
+                    userId:
+                      emailIdentity.userId,
+
+                    provider:
+                      "GOOGLE",
+
+                    providerUserId:
+                      google.providerUserId,
+
+                    email:
+                      google.email,
+
+                    emailVerified:
+                      true,
+                  },
+                });
+
+                return emailIdentity.userId;
+              }
+
+              const user =
+                await tx.user.create({
+                  data: {
+                    firstName:
+                      google.firstName,
+
+                    lastName: null,
+                    username: null,
+                    languageCode: "uk",
+                  },
+                });
+
+              await tx.authIdentity.create({
+                data: {
+                  userId:
+                    user.id,
+
+                  provider:
+                    "GOOGLE",
+
+                  providerUserId:
+                    google.providerUserId,
+
+                  email:
+                    google.email,
+
+                  emailVerified:
+                    true,
+                },
+              });
+
+              return user.id;
+            }
+          );
+
+        identity =
+          await prisma.authIdentity.findUnique({
+            where: {
+              provider_providerUserId: {
+                provider: "GOOGLE",
+                providerUserId:
+                  google.providerUserId,
+              },
+            },
+            include: {
+              user: true,
+            },
+          });
+
+        if (
+          !identity ||
+          identity.userId !== userId
+        ) {
+          throw new Error(
+            "Google identity creation failed"
+          );
+        }
+      }
+
+      const session =
+        await createAuthSession(
+          identity.userId
+        );
+
+      setSessionCookie(
+        res,
+        session.token
+      );
+
+      return res.status(200).json({
+        success: true,
+
+        authType:
+          "session",
+
+        session: {
+          expiresAt:
+            session.expiresAt,
+        },
+
+        user:
+          serializeUser(identity.user),
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE GOOGLE AUTH ERROR:",
+        error
+      );
+
+      return res.status(401).json({
+        success: false,
+        message:
+          "Google authentication failed",
       });
     }
   }
@@ -865,6 +1299,75 @@ router.post(
         success: false,
         message:
           "Logout failed",
+      });
+    }
+  }
+);
+
+router.post(
+  "/email/verify",
+  async (req, res) => {
+    try {
+      const token =
+        typeof req.body?.token === "string"
+          ? req.body.token.trim()
+          : "";
+
+      if (!token) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Verification token is required",
+        });
+      }
+
+      const userId =
+        await verifyEmailWithToken(
+          token
+        );
+
+      if (!userId) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Invalid or expired verification token",
+        });
+      }
+
+      const session =
+        await createAuthSession(
+          userId
+        );
+
+      setSessionCookie(
+        res,
+        session.token
+      );
+
+      return res.status(200).json({
+        success: true,
+
+        authType:
+          "session",
+
+        emailVerified:
+          true,
+
+        session: {
+          expiresAt:
+            session.expiresAt,
+        },
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE EMAIL VERIFY ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Email verification failed",
       });
     }
   }

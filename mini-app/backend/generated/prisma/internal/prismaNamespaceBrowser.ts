@@ -55,6 +55,7 @@ export const ModelName = {
   CoachProfile: 'CoachProfile',
   CoachClient: 'CoachClient',
   AuthIdentity: 'AuthIdentity',
+  EmailVerificationToken: 'EmailVerificationToken',
   AuthSession: 'AuthSession',
   WorkoutSession: 'WorkoutSession',
   WorkoutSet: 'WorkoutSet',
@@ -154,6 +155,17 @@ export const AuthIdentityScalarFieldEnum = {
 } as const
 
 export type AuthIdentityScalarFieldEnum = (typeof AuthIdentityScalarFieldEnum)[keyof typeof AuthIdentityScalarFieldEnum]
+
+
+export const EmailVerificationTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailVerificationTokenScalarFieldEnum = (typeof EmailVerificationTokenScalarFieldEnum)[keyof typeof EmailVerificationTokenScalarFieldEnum]
 
 
 export const AuthSessionScalarFieldEnum = {

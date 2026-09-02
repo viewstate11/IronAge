@@ -19,6 +19,11 @@ import MainApp from "./screens/MainApp/MainApp";
 import Onboarding from "./screens/Onboarding/Onboarding";
 import Welcome from "./screens/Welcome/Welcome";
 import AuthScreen from "./screens/Auth/AuthScreen";
+import VerifyEmail from "./screens/VerifyEmail/VerifyEmail";
+import {
+  TermsPage,
+  PrivacyPage,
+} from "./screens/Legal/LegalPages";
 
 function AuthenticatedApp() {
   return (
@@ -31,6 +36,22 @@ function AuthenticatedApp() {
 }
 
 function AppContent() {
+  const currentPath =
+    typeof window !== "undefined"
+      ? window.location.pathname
+      : "/";
+
+  const isTermsPage =
+    currentPath === "/terms";
+
+  const isPrivacyPage =
+    currentPath === "/privacy";
+
+  const isEmailVerificationPage =
+    typeof window !== "undefined" &&
+    window.location.pathname ===
+      "/verify-email";
+
   const {
     user,
     authenticated,
@@ -43,6 +64,18 @@ function AppContent() {
     authScreenOpen,
     setAuthScreenOpen,
   ] = useState(false);
+
+  if (isTermsPage) {
+    return <TermsPage />;
+  }
+
+  if (isPrivacyPage) {
+    return <PrivacyPage />;
+  }
+
+  if (isEmailVerificationPage) {
+    return <VerifyEmail />;
+  }
 
   if (loading) {
     return (

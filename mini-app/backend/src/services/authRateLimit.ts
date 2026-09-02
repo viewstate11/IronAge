@@ -31,3 +31,33 @@ export const emailLoginRateLimit =
     prefix:
       "ironage:rate-limit:login",
   });
+
+export const googleLoginRateLimit =
+  new Ratelimit({
+    redis,
+
+    limiter:
+      Ratelimit.slidingWindow(
+        10,
+        "15 m"
+      ),
+
+    prefix:
+      "ironage:rate-limit:google-login",
+  });
+
+
+
+export const emailVerificationResendRateLimit =
+  new Ratelimit({
+    redis,
+
+    limiter:
+      Ratelimit.slidingWindow(
+        3,
+        "15 m"
+      ),
+
+    prefix:
+      "ironage:rate-limit:email-verification-resend",
+  });

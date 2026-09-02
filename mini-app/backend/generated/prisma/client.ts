@@ -62,6 +62,11 @@ export type CoachClient = Prisma.CoachClientModel
  */
 export type AuthIdentity = Prisma.AuthIdentityModel
 /**
+ * Model EmailVerificationToken
+ * 
+ */
+export type EmailVerificationToken = Prisma.EmailVerificationTokenModel
+/**
  * Model AuthSession
  * 
  */
