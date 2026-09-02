@@ -16,6 +16,7 @@ import coachInviteRoutes from "./routes/coachInviteRoutes.js";
 import myProgramRoutes from "./routes/myProgramRoutes.js";
 
 const app = express();
+app.disable("x-powered-by");
 
 /* =========================================================
    CORS
