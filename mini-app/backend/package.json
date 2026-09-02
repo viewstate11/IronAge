@@ -26,7 +26,6 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.10.2",
-    "prisma": "^7.9.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
