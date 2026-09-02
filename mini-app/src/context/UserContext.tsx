@@ -15,7 +15,6 @@ import {
   createOrUpdateUser,
   getUser,
   getSessionUser,
-  getIronAgeWebId,
   isWebAuth,
   updateCurrentUser,
   logoutCurrentSession,
@@ -607,9 +606,8 @@ export function UserProvider({
            * WEB MODE
            * =====================================================
            *
-           * Browser/Vercel does not have Telegram initData.
-           * In that case api/client.ts automatically uses
-           * the persistent Web identity stored in localStorage.
+           * Browser/Vercel authenticates through
+           * the HttpOnly session cookie.
            */
 
           if (
@@ -641,18 +639,6 @@ export function UserProvider({
 
               return;
             } catch {
-              /*
-               * No valid session.
-               *
-               * Keep the legacy webId path
-               * temporarily for existing users.
-               */
-            }
-
-            const webId =
-              getIronAgeWebId();
-
-            if (!webId) {
               setUser(
                 createDefaultUser()
               );
@@ -661,25 +647,6 @@ export function UserProvider({
 
               return;
             }
-
-            const apiUser =
-              await getUser(
-                null,
-                null
-              );
-
-            const normalized =
-              normalizeUser(
-                apiUser
-              );
-
-            setUser(
-              normalized
-            );
-
-            setAuthenticated(true);
-
-            return;
           }
 
           const telegramUser =
@@ -848,21 +815,10 @@ export function UserProvider({
               apiUser =
                 await getSessionUser();
             } catch {
-              const webId =
-                getIronAgeWebId();
+              setAuthenticated(false);
+              setError(null);
 
-              if (!webId) {
-                setAuthenticated(false);
-                setError(null);
-
-                return;
-              }
-
-              apiUser =
-                await getUser(
-                  null,
-                  null
-                );
+              return;
             }
           } else {
             apiUser =
@@ -1148,17 +1104,10 @@ export function UserProvider({
               ? null
               : getEffectiveTelegramId();
 
-          const webId =
-            webAuth
-              ? getIronAgeWebId()
-              : null;
-
           const apiUser =
             await createOrUpdateUser(
               {
                 telegramId,
-
-                webId,
 
                 username:
                   telegramUser?.username ??

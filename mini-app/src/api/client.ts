@@ -204,45 +204,6 @@ export async function getPremiumPlan(): Promise<
 }
 
 /* =========================================================
-   WEB IDENTITY
-========================================================= */
-
-const WEB_ID_STORAGE_KEY =
-  "ironage.web.id";
-
-/**
- * Returns the persistent browser identity.
- *
- * This is NOT a Telegram ID.
- *
- * It is only used when IRONAGE
- * is opened directly on the web.
- */
-function getWebId(): string {
-  if (
-    typeof window === "undefined"
-  ) {
-    return "";
-  }
-
-  try {
-    const existing =
-      window.localStorage.getItem(
-        WEB_ID_STORAGE_KEY
-      );
-
-    return existing?.trim() || "";
-  } catch (error) {
-    console.error(
-      "IRONAGE: Failed to read web identity:",
-      error
-    );
-
-    return "";
-  }
-}
-
-/* =========================================================
    REQUEST
 ========================================================= */
 
@@ -475,16 +436,12 @@ export function telegramAuthOptions(
    * 1. Explicit Telegram initData
    * 2. Current Telegram initData
    * 3. Cached Telegram initData
-   * 4. Web ID
+   * 4. HttpOnly Web session cookie
    */
 
   const value =
     initData?.trim() ||
     readTelegramInitData();
-
-  /* =======================================================
-     TELEGRAM
-  ======================================================= */
 
   if (value) {
     return {
@@ -495,77 +452,12 @@ export function telegramAuthOptions(
     };
   }
 
-  /* =======================================================
-     WEB
-  ======================================================= */
-
-  const webId =
-    getWebId();
-
   /*
-   * Legacy Web identity.
-   *
-   * Keep this temporarily for existing
-   * users created before session auth.
-   */
-  if (webId) {
-    return {
-      headers: {
-        "x-ironage-web-id":
-          webId,
-      },
-    };
-  }
-
-  /*
-   * New Web authentication.
-   *
-   * No JS-readable credential is required.
-   * The HttpOnly session cookie is sent
-   * automatically by request().
+   * Web authentication uses the HttpOnly
+   * session cookie sent automatically
+   * by request().
    */
   return {};
-}
-
-/* =========================================================
-   AUTH HEADERS
-========================================================= */
-
-export function getAuthHeaders(
-  initData?: string | null
-): HeadersInit {
-  const value =
-    initData?.trim() ||
-    readTelegramInitData();
-
-  /*
-   * TELEGRAM
-   */
-
-  if (value) {
-    return {
-      "x-telegram-init-data":
-        value,
-    };
-  }
-
-  /*
-   * WEB
-   */
-
-  const webId =
-    getWebId();
-
-  if (!webId) {
-    throw new Error(
-      "IRONAGE web identity could not be created."
-    );
-  }
-
-  return {
-    "x-ironage-web-id":
-      webId,
-  };
 }
 
 /* =========================================================
@@ -622,28 +514,10 @@ export async function getUser(
   }
 
   /* =======================================================
-     WEB
+     WEB SESSION
   ======================================================= */
 
-  const response =
-    await api.get<{
-      success: boolean;
-      user: ApiUser;
-    }>(
-      "/users/web/me",
-      telegramAuthOptions()
-    );
-
-  if (
-    !response ||
-    !response.user
-  ) {
-    throw new Error(
-      "Invalid Web user response from API"
-    );
-  }
-
-  return response.user;
+  return getSessionUser();
 }
 
 /* =========================================================
@@ -689,35 +563,19 @@ export async function createOrUpdateUser(
   }
 
   /* =======================================================
-     WEB
+     WEB SESSION
   ======================================================= */
 
-  const webId =
-    getWebId();
-
-  if (!webId) {
-    throw new Error(
-      "IRONAGE web identity could not be created."
-    );
-  }
-
-  const webData: CreateOrUpdateUserInput = {
-    ...data,
-
-    telegramId:
-      null,
-
-    webId,
-  };
-
   const response =
-    await api.post<{
+    await api.patch<{
       success: boolean;
       user: ApiUser;
     }>(
-      "/users/web",
-      webData,
-      telegramAuthOptions()
+      "/users/me",
+      data,
+      {
+        credentials: "include",
+      }
     );
 
   if (
@@ -725,7 +583,7 @@ export async function createOrUpdateUser(
     !response.user
   ) {
     throw new Error(
-      "Invalid Web user response from API"
+      "Invalid session user update response from API"
     );
   }
 
@@ -805,7 +663,7 @@ export async function getCurrentUser(): Promise<ApiUser> {
  * IRONAGE user.
  *
  * WEB:
- *   x-ironage-web-id
+ *   HttpOnly session cookie
  *
  * TELEGRAM:
  *   x-telegram-init-data
@@ -879,17 +737,6 @@ export async function getProgressHistory(): Promise<
 /* =========================================================
    PREMIUM API
 ========================================================= */
-
-/* =========================================================
-   WEB ID
-========================================================= */
-
-export function getIronAgeWebId(): string | null {
-  const webId =
-    getWebId();
-
-  return webId || null;
-}
 
 /* =========================================================
    IS TELEGRAM

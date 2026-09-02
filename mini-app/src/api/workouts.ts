@@ -382,7 +382,7 @@ export async function createWorkout(
         x-telegram-init-data
      
      2. Web
-        x-ironage-web-id
+        HttpOnly session cookie
      
      Backend decides the authenticated identity.
   ======================================================= */
