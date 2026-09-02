@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
@@ -17,6 +18,7 @@ import myProgramRoutes from "./routes/myProgramRoutes.js";
 
 const app = express();
 app.disable("x-powered-by");
+app.use(helmet());
 
 /* =========================================================
    CORS
