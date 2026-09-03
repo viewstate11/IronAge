@@ -73,6 +73,23 @@ function setSessionCookie(
   );
 }
 
+function isNativeIosRequest(
+  req: Request
+): boolean {
+  const origin =
+    req.header("origin")?.trim();
+
+  const nativePlatform =
+    req.header(
+      "x-ironage-native-platform"
+    )?.trim().toLowerCase();
+
+  return (
+    origin === "capacitor://localhost" &&
+    nativePlatform === "ios"
+  );
+}
+
 async function enforceEmailVerificationResendRateLimit(
   req: Request,
   res: Response,
@@ -913,6 +930,13 @@ router.post(
         session: {
           expiresAt:
             session.expiresAt,
+
+          ...(isNativeIosRequest(req)
+            ? {
+                token:
+                  session.token,
+              }
+            : {}),
         },
 
         user:
@@ -1093,6 +1117,13 @@ router.post(
         session: {
           expiresAt:
             session.expiresAt,
+
+          ...(isNativeIosRequest(req)
+            ? {
+                token:
+                  session.token,
+              }
+            : {}),
         },
 
         user:
@@ -1270,6 +1301,13 @@ router.post(
         session: {
           expiresAt:
             session.expiresAt,
+
+          ...(isNativeIosRequest(req)
+            ? {
+                token:
+                  session.token,
+              }
+            : {}),
         },
       });
     } catch (error) {

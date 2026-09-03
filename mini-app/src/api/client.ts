@@ -1,3 +1,12 @@
+import { Capacitor } from "@capacitor/core";
+
+import {
+  getNativeSessionToken,
+  removeNativeSessionToken,
+  saveNativeSessionToken,
+  usesNativeSessionStorage,
+} from "../native/nativeSessionStorage";
+
 const API_URL =
   import.meta.env.VITE_API_URL || "/api";
 
@@ -217,6 +226,39 @@ async function request<T>(
     ...fetchOptions
   } = options;
 
+  const requestHeaders =
+    new Headers(headers);
+
+  if (
+    Capacitor.isNativePlatform() &&
+    Capacitor.getPlatform() === "ios"
+  ) {
+    requestHeaders.set(
+      "x-ironage-native-platform",
+      "ios"
+    );
+  }
+
+  const hasTelegramHeader =
+    requestHeaders.has(
+      "x-telegram-init-data"
+    );
+
+  if (
+    !token &&
+    !hasTelegramHeader
+  ) {
+    const nativeSessionToken =
+      await getNativeSessionToken();
+
+    if (nativeSessionToken) {
+      requestHeaders.set(
+        "x-ironage-session",
+        nativeSessionToken
+      );
+    }
+  }
+
   const response =
     await fetch(
       `${API_URL}${path}`,
@@ -236,7 +278,9 @@ async function request<T>(
               }
             : {}),
 
-          ...headers,
+          ...Object.fromEntries(
+            requestHeaders.entries()
+          ),
         },
       }
     );
@@ -778,6 +822,10 @@ export type EmailRegistrationResult = {
 export type EmailLoginResult = {
   success: boolean;
   authType: "session";
+  session: {
+    expiresAt: string;
+    token?: string;
+  };
   user: ApiUser;
 };
 
@@ -800,13 +848,31 @@ export async function loginEmail(
   email: string,
   password: string
 ): Promise<EmailLoginResult> {
-  return api.post<EmailLoginResult>(
-    "/auth/email/login",
-    {
-      email: email.trim().toLowerCase(),
-      password,
+  const response =
+    await api.post<EmailLoginResult>(
+      "/auth/email/login",
+      {
+        email: email.trim().toLowerCase(),
+        password,
+      }
+    );
+
+  if (usesNativeSessionStorage()) {
+    const sessionToken =
+      response.session?.token?.trim();
+
+    if (!sessionToken) {
+      throw new Error(
+        "Native session token missing"
+      );
     }
-  );
+
+    await saveNativeSessionToken(
+      sessionToken
+    );
+  }
+
+  return response;
 }
 
 export type EmailVerificationResult = {
@@ -815,6 +881,7 @@ export type EmailVerificationResult = {
   emailVerified: true;
   session: {
     expiresAt: string;
+    token?: string;
   };
 };
 
@@ -830,12 +897,30 @@ export async function verifyEmail(
     );
   }
 
-  return api.post<EmailVerificationResult>(
-    "/auth/email/verify",
-    {
-      token: normalizedToken,
+  const response =
+    await api.post<EmailVerificationResult>(
+      "/auth/email/verify",
+      {
+        token: normalizedToken,
+      }
+    );
+
+  if (usesNativeSessionStorage()) {
+    const sessionToken =
+      response.session?.token?.trim();
+
+    if (!sessionToken) {
+      throw new Error(
+        "Native session token missing"
+      );
     }
-  );
+
+    await saveNativeSessionToken(
+      sessionToken
+    );
+  }
+
+  return response;
 }
 
 /* =========================================================
@@ -889,6 +974,8 @@ export async function logoutCurrentSession(): Promise<void> {
       "Logout failed"
     );
   }
+
+  await removeNativeSessionToken();
 }
 
 /* =========================================================
@@ -900,6 +987,7 @@ export type GoogleLoginResult = {
   authType: "session";
   session: {
     expiresAt: string;
+    token?: string;
   };
   user: ApiUser;
 };
@@ -916,10 +1004,28 @@ export async function loginGoogle(
     );
   }
 
-  return api.post<GoogleLoginResult>(
-    "/auth/google",
-    {
-      idToken: normalizedToken,
+  const response =
+    await api.post<GoogleLoginResult>(
+      "/auth/google",
+      {
+        idToken: normalizedToken,
+      }
+    );
+
+  if (usesNativeSessionStorage()) {
+    const sessionToken =
+      response.session?.token?.trim();
+
+    if (!sessionToken) {
+      throw new Error(
+        "Native session token missing"
+      );
     }
-  );
+
+    await saveNativeSessionToken(
+      sessionToken
+    );
+  }
+
+  return response;
 }
