@@ -168,6 +168,20 @@ app.use(
     res: express.Response,
     _next: express.NextFunction
   ) => {
+    if (
+      error instanceof Error &&
+      error.message === "IRONAGE CORS origin denied"
+    ) {
+      res.setHeader("Cache-Control", "no-store");
+
+      res.status(403).json({
+        success: false,
+        message: "CORS origin denied",
+      });
+
+      return;
+    }
+
     console.error(
       "❌ IRONAGE API ERROR:",
       error
@@ -176,10 +190,6 @@ app.use(
     res.status(500).json({
       success: false,
       message: "Internal server error",
-      error:
-        error instanceof Error
-          ? error.message
-          : String(error),
     });
   }
 );
