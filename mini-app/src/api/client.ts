@@ -10,6 +10,28 @@ import {
 const API_URL =
   import.meta.env.VITE_API_URL || "/api";
 
+async function sessionFingerprint(
+  token: string
+): Promise<string> {
+  const bytes =
+    new TextEncoder().encode(token);
+
+  const digest =
+    await crypto.subtle.digest(
+      "SHA-256",
+      bytes
+    );
+
+  return Array.from(
+    new Uint8Array(digest)
+  )
+    .map(value =>
+      value.toString(16).padStart(2, "0")
+    )
+    .join("")
+    .slice(0, 8);
+}
+
 /* =========================================================
    TYPES
 ========================================================= */
@@ -256,6 +278,15 @@ async function request<T>(
         "x-ironage-session",
         nativeSessionToken
       );
+
+      if (path === "/users/me") {
+        console.log(
+          "IRONAGE SESSION OUT:",
+          await sessionFingerprint(
+            nativeSessionToken
+          )
+        );
+      }
     }
   }
 
@@ -867,6 +898,13 @@ export async function loginEmail(
       );
     }
 
+    console.log(
+      "IRONAGE SESSION GOOGLE:",
+      await sessionFingerprint(
+        sessionToken
+      )
+    );
+
     await saveNativeSessionToken(
       sessionToken
     );
@@ -958,24 +996,26 @@ export async function updateCurrentUser(
 ========================================================= */
 
 export async function logoutCurrentSession(): Promise<void> {
-  const response =
-    await api.post<{
-      success: boolean;
-    }>(
-      "/auth/logout",
-      {}
-    );
+  try {
+    const response =
+      await api.post<{
+        success: boolean;
+      }>(
+        "/auth/logout",
+        {}
+      );
 
-  if (
-    !response ||
-    response.success !== true
-  ) {
-    throw new Error(
-      "Logout failed"
-    );
+    if (
+      !response ||
+      response.success !== true
+    ) {
+      throw new Error(
+        "Logout failed"
+      );
+    }
+  } finally {
+    await removeNativeSessionToken();
   }
-
-  await removeNativeSessionToken();
 }
 
 /* =========================================================
@@ -1002,6 +1042,10 @@ export async function loginGoogle(
     throw new Error(
       "Google credential is required"
     );
+  }
+
+  if (usesNativeSessionStorage()) {
+    await removeNativeSessionToken();
   }
 
   const response =

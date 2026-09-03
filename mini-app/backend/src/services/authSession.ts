@@ -35,17 +35,60 @@ export async function createAuthSession(
         SESSION_LIFETIME_MS
     );
 
-  await db.authSession.create({
-    data: {
-      userId,
-      tokenHash,
-      expiresAt,
-    },
-  });
+  const created =
+    await db.authSession.create({
+      data: {
+        userId,
+        tokenHash,
+        expiresAt,
+      },
+      select: {
+        id: true,
+        userId: true,
+        tokenHash: true,
+        expiresAt: true,
+      },
+    });
+
+  if (
+    created.userId !== userId ||
+    created.tokenHash !== tokenHash
+  ) {
+    throw new Error(
+      "Auth session persistence mismatch"
+    );
+  }
+
+  const persisted =
+    await db.authSession.findUnique({
+      where: {
+        tokenHash,
+      },
+      select: {
+        id: true,
+        userId: true,
+        expiresAt: true,
+      },
+    });
+
+  if (!persisted) {
+    throw new Error(
+      "Auth session was not persisted"
+    );
+  }
+
+  if (
+    persisted.userId !== userId
+  ) {
+    throw new Error(
+      "Auth session user mismatch"
+    );
+  }
 
   return {
     token,
-    expiresAt,
+    expiresAt:
+      persisted.expiresAt,
   };
 }
 
