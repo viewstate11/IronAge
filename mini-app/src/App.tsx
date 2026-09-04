@@ -31,7 +31,7 @@ import {
 } from "./screens/Legal/LegalPages";
 
 import {
-  isTelegramWebApp,
+  getTelegramInitData,
 } from "./services/telegramService";
 
 function AuthenticatedApp() {
@@ -49,7 +49,9 @@ function AppContent() {
 
   const isTelegram =
     typeof window !== "undefined" &&
-    isTelegramWebApp();
+    Boolean(
+      getTelegramInitData()?.trim()
+    );
 
   const currentPath =
     typeof window !== "undefined"
