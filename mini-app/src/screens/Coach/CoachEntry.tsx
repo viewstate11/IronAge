@@ -412,6 +412,101 @@ type EditCopy = {
   savingChanges: string;
 };
 
+
+type RejectedCopy = {
+  title: string;
+  status: string;
+  text: string;
+  edit: string;
+  resubmit: string;
+  resubmitting: string;
+};
+
+const REJECTED_COPY: Record<
+  AppLanguage,
+  RejectedCopy
+> = {
+  en: {
+    title: "APPLICATION NOT APPROVED",
+    status: "PROFILE REJECTED",
+    text:
+      "Your coach profile was not approved. Update your information and submit it again for review.",
+    edit: "EDIT & RESUBMIT",
+    resubmit: "RESUBMIT FOR REVIEW",
+    resubmitting: "RESUBMITTING...",
+  },
+
+  es: {
+    title: "SOLICITUD NO APROBADA",
+    status: "PERFIL RECHAZADO",
+    text:
+      "Tu perfil de entrenador no fue aprobado. Actualiza la información y envíalo nuevamente para revisión.",
+    edit: "EDITAR Y REENVIAR",
+    resubmit: "REENVIAR PARA REVISIÓN",
+    resubmitting: "REENVIANDO...",
+  },
+
+  uk: {
+    title: "ЗАЯВКУ НЕ СХВАЛЕНО",
+    status: "ПРОФІЛЬ ВІДХИЛЕНО",
+    text:
+      "Твій профіль тренера не схвалено. Відредагуй інформацію та надішли заявку на повторну перевірку.",
+    edit: "РЕДАГУВАТИ ТА ПОДАТИ ЗНОВУ",
+    resubmit: "ПОДАТИ НА ПОВТОРНУ ПЕРЕВІРКУ",
+    resubmitting: "ПОВТОРНЕ ПОДАННЯ...",
+  },
+
+  ru: {
+    title: "ЗАЯВКА НЕ ОДОБРЕНА",
+    status: "ПРОФИЛЬ ОТКЛОНЁН",
+    text:
+      "Твой профиль тренера не одобрен. Отредактируй информацию и отправь заявку на повторную проверку.",
+    edit: "ИЗМЕНИТЬ И ОТПРАВИТЬ СНОВА",
+    resubmit: "ОТПРАВИТЬ НА ПОВТОРНУЮ ПРОВЕРКУ",
+    resubmitting: "ПОВТОРНАЯ ОТПРАВКА...",
+  },
+
+  fr: {
+    title: "CANDIDATURE NON APPROUVÉE",
+    status: "PROFIL REFUSÉ",
+    text:
+      "Votre profil coach n'a pas été approuvé. Modifiez vos informations et soumettez-le de nouveau.",
+    edit: "MODIFIER ET RESOUMETTRE",
+    resubmit: "RESOUMETTRE POUR VALIDATION",
+    resubmitting: "RENVOI...",
+  },
+
+  de: {
+    title: "ANTRAG NICHT FREIGEGEBEN",
+    status: "PROFIL ABGELEHNT",
+    text:
+      "Dein Coach-Profil wurde nicht freigegeben. Aktualisiere deine Angaben und reiche es erneut ein.",
+    edit: "BEARBEITEN & ERNEUT EINREICHEN",
+    resubmit: "ERNEUT ZUR PRÜFUNG EINREICHEN",
+    resubmitting: "WIRD ERNEUT EINGEREICHT...",
+  },
+
+  pt: {
+    title: "SOLICITAÇÃO NÃO APROVADA",
+    status: "PERFIL REJEITADO",
+    text:
+      "Seu perfil de treinador não foi aprovado. Atualize as informações e envie novamente para análise.",
+    edit: "EDITAR E REENVIAR",
+    resubmit: "REENVIAR PARA ANÁLISE",
+    resubmitting: "REENVIANDO...",
+  },
+
+  bg: {
+    title: "ЗАЯВКАТА НЕ Е ОДОБРЕНА",
+    status: "ПРОФИЛЪТ Е ОТХВЪРЛЕН",
+    text:
+      "Профилът ти на треньор не е одобрен. Редактирай информацията и го изпрати отново за преглед.",
+    edit: "РЕДАКТИРАЙ И ИЗПРАТИ ОТНОВО",
+    resubmit: "ИЗПРАТИ ОТНОВО ЗА ПРЕГЛЕД",
+    resubmitting: "ПОВТОРНО ИЗПРАЩАНЕ...",
+  },
+};
+
 const EDIT_COPY: Record<AppLanguage, EditCopy> = {
   en: {
     editTitle: "EDIT COACH PROFILE",
@@ -486,6 +581,12 @@ export default function CoachEntry({
   const editCopy =
     useMemo(
       () => EDIT_COPY[language],
+      [language]
+    );
+
+  const rejectedCopy =
+    useMemo(
+      () => REJECTED_COPY[language],
       [language]
     );
 
@@ -612,6 +713,12 @@ export default function CoachEntry({
             photoUrl:
               photoUrl.trim() ||
               null,
+
+            resubmit:
+              Boolean(
+                coach &&
+                coach.isActive === false
+              ),
           },
           telegramAuthOptions()
         );
@@ -701,6 +808,117 @@ export default function CoachEntry({
   if (
     coach &&
     !coach.isVerified &&
+    !coach.isActive &&
+    !editing
+  ) {
+    return (
+      <main className="coach-entry">
+        <div className="coach-entry__shell">
+          <header className="coach-entry__header">
+            <button
+              type="button"
+              onClick={onBack}
+              aria-label="Back"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>
+                {copy.eyebrow}
+              </span>
+
+              <h1>
+                {rejectedCopy.title}
+              </h1>
+
+              <p>
+                {rejectedCopy.status}
+              </p>
+            </div>
+          </header>
+
+          <section className="coach-entry__intro">
+            <div className="coach-entry__badge">
+              ×
+            </div>
+
+            <div>
+              <strong>
+                {rejectedCopy.status}
+              </strong>
+
+              <p>
+                {rejectedCopy.text}
+              </p>
+            </div>
+          </section>
+
+          <section className="coach-entry__form">
+            <label>
+              <span>
+                {copy.displayName}
+              </span>
+
+              <strong>
+                {coach.displayName}
+              </strong>
+            </label>
+
+            {coach.specialization && (
+              <label>
+                <span>
+                  {copy.specialization}
+                </span>
+
+                <strong>
+                  {coach.specialization}
+                </strong>
+              </label>
+            )}
+          </section>
+
+          <button
+            type="button"
+            className="coach-entry__submit"
+            onClick={() => {
+              setDisplayName(
+                coach.displayName ?? ""
+              );
+
+              setSpecialization(
+                coach.specialization ?? ""
+              );
+
+              setBio(
+                coach.bio ?? ""
+              );
+
+              setPhotoUrl(
+                coach.photoUrl ?? ""
+              );
+
+              setSaveError(null);
+              setEditing(true);
+            }}
+          >
+            <span>
+              {rejectedCopy.edit}
+            </span>
+
+            <b>
+              →
+            </b>
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  if (
+    coach &&
+    !coach.isVerified &&
+    coach.isActive &&
     !editing
   ) {
     return (
@@ -865,13 +1083,17 @@ export default function CoachEntry({
 
             <h1>
               {editing
-                ? editCopy.editTitle
+                ? coach?.isActive === false
+                  ? rejectedCopy.title
+                  : editCopy.editTitle
                 : copy.title}
             </h1>
 
             <p>
               {editing
-                ? editCopy.editSubtitle
+                ? coach?.isActive === false
+                  ? rejectedCopy.text
+                  : editCopy.editSubtitle
                 : copy.subtitle}
             </p>
           </div>

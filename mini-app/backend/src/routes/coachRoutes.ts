@@ -74,6 +74,7 @@ router.post(
         bio,
         specialization,
         photoUrl,
+        resubmit,
       } = req.body ?? {};
 
       const normalizedDisplayName =
@@ -128,6 +129,13 @@ router.post(
               normalizeOptionalString(
                 photoUrl
               ),
+
+            ...(resubmit === true
+              ? {
+                  isActive: true,
+                  isVerified: false,
+                }
+              : {}),
           },
 
           include: {
