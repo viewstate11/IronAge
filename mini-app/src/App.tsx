@@ -30,6 +30,10 @@ import {
   PrivacyPage,
 } from "./screens/Legal/LegalPages";
 
+import {
+  isTelegramWebApp,
+} from "./services/telegramService";
+
 function AuthenticatedApp() {
   return (
     <AppEntitlementsProvider>
@@ -42,6 +46,10 @@ function AuthenticatedApp() {
 
 function AppContent() {
   const { t } = useLanguage();
+
+  const isTelegram =
+    typeof window !== "undefined" &&
+    isTelegramWebApp();
 
   const currentPath =
     typeof window !== "undefined"
@@ -127,6 +135,83 @@ function AppContent() {
   }
 
   if (!authenticated) {
+    /*
+     * Telegram Mini App authentication
+     * is automatic through Telegram initData.
+     *
+     * Never show Google / email authentication
+     * inside Telegram.
+     */
+    if (isTelegram) {
+      return (
+        <div
+          style={{
+            minHeight: "100dvh",
+            background: "#050505",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "Arial, sans-serif",
+            padding: 24,
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 420,
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 28,
+                fontWeight: 800,
+                letterSpacing: 3,
+                marginBottom: 18,
+              }}
+            >
+              IRONAGE
+            </div>
+
+            <div
+              style={{
+                color: error
+                  ? "#ff6666"
+                  : "#aaa",
+                lineHeight: 1.5,
+                marginBottom: 20,
+              }}
+            >
+              {error ||
+                t("app.authenticationError")}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                void refreshUser();
+              }}
+              style={{
+                width: "100%",
+                padding: "14px 18px",
+                border: 0,
+                borderRadius: 12,
+                background: "#d4af37",
+                color: "#050505",
+                fontWeight: 800,
+                fontSize: 16,
+                cursor: "pointer",
+              }}
+            >
+              {t("common.retry")}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     if (authScreenOpen) {
       return (
         <AuthScreen
