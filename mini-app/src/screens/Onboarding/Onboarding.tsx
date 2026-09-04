@@ -9,6 +9,10 @@ import {
   type ProfileData,
 } from "../../context/UserContext";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
 import type {
   Gender,
   Goal,
@@ -111,6 +115,8 @@ export default function Onboarding() {
     user,
     completeOnboarding,
   } = useUser();
+
+  const { t } = useLanguage();
 
   const [step, setStep] =
     useState<number>(0);
@@ -256,7 +262,7 @@ export default function Onboarding() {
         !profile.name.trim()
       ) {
         setError(
-          "Введи своє ім'я"
+          t("onboarding.error.name")
         );
 
         setStep(0);
@@ -274,7 +280,7 @@ export default function Onboarding() {
         profile.age > 100
       ) {
         setError(
-          "Вкажи коректний вік"
+          t("onboarding.error.age")
         );
 
         setStep(1);
@@ -290,7 +296,7 @@ export default function Onboarding() {
         !profile.gender
       ) {
         setError(
-          "Обери стать"
+          t("onboarding.error.gender")
         );
 
         setStep(2);
@@ -308,7 +314,7 @@ export default function Onboarding() {
         profile.height > 250
       ) {
         setError(
-          "Вкажи коректний зріст"
+          t("onboarding.error.height")
         );
 
         setStep(3);
@@ -326,7 +332,7 @@ export default function Onboarding() {
         profile.weight > 300
       ) {
         setError(
-          "Вкажи коректну вагу"
+          t("onboarding.error.weight")
         );
 
         setStep(4);
@@ -342,7 +348,7 @@ export default function Onboarding() {
         !profile.goal
       ) {
         setError(
-          "Обери свою ціль"
+          t("onboarding.error.goal")
         );
 
         setStep(5);
@@ -371,7 +377,7 @@ export default function Onboarding() {
         setError(
           err instanceof Error
             ? err.message
-            : "Не вдалося зберегти профіль"
+            : t("onboarding.error.save")
         );
       } finally {
         setSaving(false);
@@ -608,7 +614,7 @@ export default function Onboarding() {
                 0.9,
             }}
           >
-            ЗБЕРІГАЄМО ПРОФІЛЬ...
+            {t("onboarding.saving")}
           </div>
         )}
 
@@ -648,7 +654,7 @@ export default function Onboarding() {
                   "14px",
               }}
             >
-              НАЗАД
+              {t("common.back")}
             </button>
           )}
 

@@ -29,6 +29,11 @@ export async function createAuthSession(
   const tokenHash =
     hashSessionToken(token);
 
+  console.log(
+    "IRONAGE SESSION SERVER CREATE:",
+    tokenHash.slice(0, 8)
+  );
+
   const expiresAt =
     new Date(
       Date.now() +
@@ -101,6 +106,11 @@ export async function getAuthSessionUser(
 
   const tokenHash =
     hashSessionToken(token);
+
+  console.log(
+    "IRONAGE SESSION SERVER LOOKUP:",
+    tokenHash.slice(0, 8)
+  );
 
   const session =
     await prisma.authSession.findUnique({

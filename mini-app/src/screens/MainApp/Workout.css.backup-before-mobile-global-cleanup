@@ -1,0 +1,1305 @@
+/* =========================================================
+   IRONAGE — WORKOUT PAGE
+   PREMIUM BLACK × GOLD
+========================================================= */
+
+.workout-page {
+  position: relative;
+
+  width: 100%;
+  max-width: 100%;
+
+  min-height: 100%;
+
+  margin: 0;
+  padding: 0 0 80px;
+
+  overflow-x: clip;
+
+  background: #050505;
+
+  color: #fff;
+
+  box-sizing: border-box;
+}
+
+.workout-page *,
+.workout-page *::before,
+.workout-page *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.workout-hero {
+  position: relative;
+
+  width: 100%;
+  max-width: 100%;
+
+  height: 520px;
+  min-height: 520px;
+
+  margin: 0;
+
+  overflow: hidden;
+
+  background: #050505;
+}
+
+
+/* =========================================================
+   HERO IMAGE
+========================================================= */
+
+.workout-hero-image {
+  position: absolute;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  height: 100%;
+  min-height: 0;
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  object-fit: cover;
+  object-position: center center;
+
+  pointer-events: none;
+  user-select: none;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   HERO OVERLAY
+========================================================= */
+
+.workout-hero::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.12) 30%,
+      rgba(0, 0, 0, 0.48) 65%,
+      rgba(5, 5, 5, 0.98) 100%
+    );
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.workout-hero-content {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1100px;
+
+  height: 100%;
+
+  margin: 0 auto;
+
+  padding:
+    calc(28px + env(safe-area-inset-top))
+    32px
+    30px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   HERO TOP
+========================================================= */
+
+.workout-top {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 14px;
+}
+
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.workout-eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+
+  color: #d4af37;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: 0.20em;
+
+  text-transform: uppercase;
+}
+
+.workout-eyebrow::before {
+  content: "";
+
+  width: 18px;
+  height: 1px;
+
+  flex: 0 0 18px;
+
+  background: #d4af37;
+
+  box-shadow:
+    0 0 8px rgba(212, 175, 55, 0.35);
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.workout-top h1 {
+  margin: 13px 0 0;
+
+  max-width: 100%;
+
+  color: #f5f2e8;
+
+  font-family:
+    Montserrat,
+    Inter,
+    Arial,
+    sans-serif;
+
+  font-size: clamp(46px, 14vw, 82px);
+
+  line-height: 0.84;
+
+  font-weight: 900;
+
+  letter-spacing: -0.065em;
+
+  text-transform: uppercase;
+}
+
+.workout-top h1 span {
+  color: #d4af37;
+
+  text-shadow:
+    0 0 35px rgba(212, 175, 55, 0.15);
+}
+
+
+/* =========================================================
+   COUNTER
+========================================================= */
+
+.workout-counter {
+  flex: 0 0 auto;
+
+  margin-top: 3px;
+
+  padding: 8px 9px;
+
+  border:
+    1px solid rgba(212, 175, 55, 0.35);
+
+  background:
+    rgba(0, 0, 0, 0.38);
+
+  color: #d4af37;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  white-space: nowrap;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+
+/* =========================================================
+   HERO BOTTOM
+========================================================= */
+
+.workout-hero-bottom {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+.workout-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex: 0 0 auto;
+
+  color:
+    rgba(255, 255, 255, 0.72);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.16em;
+
+  white-space: nowrap;
+}
+
+.workout-status-dot {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 7px;
+
+  border-radius: 50%;
+
+  background: #d4af37;
+
+  box-shadow:
+    0 0 12px rgba(212, 175, 55, 0.8);
+}
+
+.workout-intro {
+  max-width: 190px;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.55);
+
+  font-size: 10px;
+
+  line-height: 1.6;
+
+  text-align: right;
+}
+
+
+/* =========================================================
+   PROGRAM
+========================================================= */
+
+.workout-program {
+  width: 100%;
+  max-width: 760px;
+  min-width: 0;
+
+  margin: 0 auto;
+
+  padding:
+    0 18px;
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.workout-section-heading {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+}
+
+.workout-section-heading > div {
+  min-width: 0;
+}
+
+.workout-heading-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #d4af37;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.20em;
+}
+
+.workout-section-heading h2 {
+  margin: 0;
+
+  color: #f5f2e8;
+
+  font-family:
+    Montserrat,
+    Inter,
+    Arial,
+    sans-serif;
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
+}
+
+.workout-week {
+  flex: 0 0 auto;
+
+  color:
+    rgba(255, 255, 255, 0.35);
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   WORKOUT LIST
+========================================================= */
+
+.workout-list {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr);
+
+  gap: 9px;
+}
+
+
+/* =========================================================
+   WORKOUT CARD
+========================================================= */
+
+.workout-card {
+  position: relative;
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  min-height: 116px;
+
+  margin: 0;
+  padding: 17px 15px;
+
+  display: grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr)
+    26px;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.075);
+
+  border-radius: 2px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.012)
+    );
+
+  color: #fff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  -webkit-tap-highlight-color: transparent;
+
+  touch-action: manipulation;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+
+/* =========================================================
+   CARD GOLD LINE
+========================================================= */
+
+.workout-card::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 2px;
+
+  background: transparent;
+
+  transition:
+    background 180ms ease;
+}
+
+
+/* =========================================================
+   CARD GLOW
+========================================================= */
+
+.workout-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 120px;
+  height: 120px;
+
+  right: -70px;
+  top: -60px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(212, 175, 55, 0.08);
+
+  filter: blur(22px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   DESKTOP HOVER
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .workout-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+      rgba(212, 175, 55, 0.38);
+
+    background:
+      linear-gradient(
+        110deg,
+        rgba(212, 175, 55, 0.075),
+        rgba(255, 255, 255, 0.015)
+      );
+
+    box-shadow:
+      0 12px 35px rgba(0, 0, 0, 0.32),
+      0 0 25px rgba(212, 175, 55, 0.045);
+  }
+
+  .workout-card:hover::before {
+    background: #d4af37;
+  }
+
+  .workout-card:hover
+  .workout-card-arrow {
+    color: #d4af37;
+
+    transform:
+      translateX(3px);
+  }
+}
+
+
+/* =========================================================
+   MOBILE ACTIVE
+========================================================= */
+
+.workout-card:active {
+  transform:
+    scale(0.985);
+
+  border-color:
+    rgba(212, 175, 55, 0.32);
+}
+
+.workout-card-active {
+  border-color:
+    rgba(212, 175, 55, 0.28);
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(212, 175, 55, 0.075),
+      rgba(255, 255, 255, 0.012)
+    );
+}
+
+.workout-card-active::before {
+  background: #d4af37;
+}
+
+
+/* =========================================================
+   CARD NUMBER
+========================================================= */
+
+.workout-card-number {
+  align-self: start;
+
+  color:
+    rgba(255, 255, 255, 0.22);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.workout-card-active
+.workout-card-number {
+  color: #d4af37;
+}
+
+
+/* =========================================================
+   CARD INFO
+========================================================= */
+
+.workout-card-info {
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+.workout-card-info > span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  overflow: hidden;
+
+  color:
+    rgba(255, 255, 255, 0.38);
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.workout-card-active
+.workout-card-info > span {
+  color: #d4af37;
+}
+
+.workout-card-info h3 {
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #f5f2e8;
+
+  font-family:
+    Montserrat,
+    Inter,
+    Arial,
+    sans-serif;
+
+  font-size: 19px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.03em;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.workout-card-info p {
+  margin: 8px 0 0;
+
+  overflow: hidden;
+
+  color:
+    rgba(255, 255, 255, 0.42);
+
+  font-size: 9px;
+
+  line-height: 1.4;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   CARD ARROW
+========================================================= */
+
+.workout-card-arrow {
+  align-self: center;
+
+  color:
+    rgba(255, 255, 255, 0.28);
+
+  font-size: 20px;
+
+  font-weight: 300;
+
+  line-height: 1;
+
+  text-align: right;
+
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+
+/* =========================================================
+   WEEKLY PROGRESS
+========================================================= */
+
+.workout-progress {
+  width: calc(100% - 36px);
+  max-width: 724px;
+
+  margin: 34px auto 0;
+
+  padding: 20px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.075);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.012)
+    );
+}
+
+.workout-progress-header,
+.workout-progress-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  min-width: 0;
+}
+
+.workout-progress-header span,
+.workout-progress-footer span {
+  min-width: 0;
+
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.15em;
+}
+
+.workout-progress-header strong {
+  flex: 0 0 auto;
+
+  color: #d4af37;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.workout-progress-bar {
+  width: 100%;
+
+  height: 3px;
+
+  margin: 17px 0 12px;
+
+  overflow: hidden;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+.workout-progress-fill {
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #8e6f1f,
+      #d4af37,
+      #f0d675
+    );
+
+  box-shadow:
+    0 0 12px rgba(212, 175, 55, 0.35);
+
+  transition:
+    width 500ms ease;
+}
+
+
+/* =========================================================
+   QUOTE
+========================================================= */
+
+.workout-quote {
+  position: relative;
+
+  width: calc(100% - 36px);
+  max-width: 724px;
+
+  margin: 34px auto 0;
+
+  padding: 28px 4px 30px;
+
+  border-top:
+    1px solid rgba(212, 175, 55, 0.25);
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.06);
+
+  overflow: hidden;
+}
+
+.workout-quote::before {
+  content: "IRON";
+
+  position: absolute;
+
+  right: -18px;
+  bottom: -34px;
+
+  color:
+    rgba(255, 255, 255, 0.018);
+
+  font-size: 100px;
+
+  line-height: 1;
+
+  font-weight: 900;
+
+  letter-spacing: -0.08em;
+
+  pointer-events: none;
+}
+
+.workout-quote > span {
+  position: relative;
+
+  z-index: 1;
+
+  color: #d4af37;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.22em;
+}
+
+.workout-quote h2 {
+  position: relative;
+
+  z-index: 1;
+
+  margin: 13px 0 10px;
+
+  color: #f5f2e8;
+
+  font-family:
+    Montserrat,
+    Inter,
+    Arial,
+    sans-serif;
+
+  font-size: 36px;
+
+  line-height: 0.92;
+
+  font-weight: 800;
+
+  letter-spacing: -0.05em;
+}
+
+.workout-quote h2 strong {
+  display: block;
+
+  color: #d4af37;
+}
+
+.workout-quote p {
+  position: relative;
+
+  z-index: 1;
+
+  max-width: 280px;
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  font-size: 10px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .workout-hero {
+    height: 540px;
+    min-height: 500px;
+  }
+
+  .workout-hero-image {
+    object-position: center 20%;
+  }
+
+  .workout-hero-content {
+    padding:
+      calc(22px + env(safe-area-inset-top))
+      15px
+      25px;
+  }
+
+  .workout-top {
+    gap: 8px;
+  }
+
+  .workout-eyebrow {
+    font-size: 8px;
+
+    letter-spacing: 0.17em;
+  }
+
+  .workout-top h1 {
+    font-size: 43px;
+  }
+
+  .workout-counter {
+    padding: 7px;
+
+    font-size: 8px;
+  }
+
+  .workout-intro {
+    max-width: 145px;
+
+    font-size: 9px;
+  }
+
+  .workout-program {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .workout-section-heading h2 {
+    font-size: 21px;
+  }
+
+  .workout-card {
+    grid-template-columns:
+      29px
+      minmax(0, 1fr)
+      22px;
+
+    gap: 8px;
+
+    min-height: 108px;
+
+    padding: 15px 13px;
+  }
+
+  .workout-card-info h3 {
+    font-size: 17px;
+  }
+
+  .workout-card-info p {
+    font-size: 8px;
+  }
+
+  .workout-progress,
+  .workout-quote {
+    width: calc(100% - 28px);
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (min-width: 600px) {
+
+  .workout-hero {
+    height: 560px;
+    min-height: 560px;
+  }
+
+  .workout-hero-content {
+    padding:
+      40px
+      32px
+      40px;
+  }
+
+  .workout-top h1 {
+    font-size:
+      clamp(58px, 9vw, 82px);
+  }
+
+  .workout-program {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .workout-list {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .workout-card {
+    min-height: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    padding: 20px;
+  }
+
+  .workout-card-info {
+    width: 100%;
+  }
+
+  .workout-card-info h3 {
+    font-size: 22px;
+  }
+
+  .workout-card-info p {
+    white-space: normal;
+  }
+
+  .workout-card-arrow {
+    align-self: flex-end;
+  }
+
+  .workout-progress,
+  .workout-quote {
+    width: calc(100% - 48px);
+  }
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 900px) {
+
+  .workout-page {
+    padding-bottom: 120px;
+  }
+
+  .workout-hero {
+    height: 600px;
+    min-height: 600px;
+  }
+
+  .workout-hero-content {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .workout-program {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .workout-progress,
+  .workout-quote {
+    width: 760px;
+  }
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .workout-hero {
+    height: 620px;
+    min-height: 620px;
+  }
+
+  .workout-hero-image {
+    object-position: center 24%;
+  }
+
+  .workout-hero-content {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+
+
+/* =========================================================
+   TELEGRAM WEBVIEW HARD RESET
+========================================================= */
+
+@media (max-width: 599px) {
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+  }
+
+  .workout-page {
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    margin-left: 0;
+    margin-right: 0;
+
+    overflow-x: clip;
+  }
+
+  .workout-hero {
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    margin-left: 0;
+    margin-right: 0;
+
+    overflow: hidden;
+  }
+
+  .workout-hero-image {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    height: 100%;
+    max-height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    object-fit: cover;
+  }
+
+  .workout-hero-content {
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    margin-left: 0;
+    margin-right: 0;
+
+    overflow: hidden;
+  }
+
+  .workout-program {
+    width: 100%;
+    max-width: 760px;
+
+    min-width: 0;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .workout-list {
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+  }
+
+  .workout-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .workout-progress,
+  .workout-quote {
+    margin-left: auto;
+    margin-right: auto;
+
+    max-width: calc(100% - 28px);
+  }
+}
+
+
+/* =========================================================
+   GLOBAL WORKOUT OVERFLOW SAFETY
+========================================================= */
+
+.workout-page,
+.workout-hero,
+.workout-hero-content,
+.workout-program,
+.workout-list {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .workout-card,
+  .workout-card-arrow,
+  .workout-progress-fill,
+  .workout-hero-image {
+    transition: none;
+    animation: none;
+  }
+}

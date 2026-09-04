@@ -1,0 +1,57 @@
+import { Capacitor } from "@capacitor/core";
+import {
+  LocalNotifications,
+  type PermissionStatus,
+} from "@capacitor/local-notifications";
+
+export function isNativeNotificationsAvailable(): boolean {
+  return Capacitor.isNativePlatform();
+}
+
+export async function getNotificationPermission(): Promise<PermissionStatus> {
+  return LocalNotifications.checkPermissions();
+}
+
+export async function requestNotificationPermission(): Promise<PermissionStatus> {
+  return LocalNotifications.requestPermissions();
+}
+
+export async function ensureNotificationPermission(): Promise<boolean> {
+  if (!isNativeNotificationsAvailable()) {
+    return false;
+  }
+
+  let status =
+    await LocalNotifications.checkPermissions();
+
+  if (status.display === "prompt") {
+    status =
+      await LocalNotifications.requestPermissions();
+  }
+
+  return status.display === "granted";
+}
+
+export async function sendTestIronageNotification(): Promise<boolean> {
+  const granted =
+    await ensureNotificationPermission();
+
+  if (!granted) {
+    return false;
+  }
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: 900001,
+        title: "IRONAGE",
+        body: "Notifications are active. Time to keep moving.",
+        schedule: {
+          at: new Date(Date.now() + 5000),
+        },
+      },
+    ],
+  });
+
+  return true;
+}

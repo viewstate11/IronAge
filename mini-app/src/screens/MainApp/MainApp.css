@@ -297,3 +297,117 @@
   padding-bottom:
     calc(100px + env(safe-area-inset-bottom));
 }
+
+
+/* =========================================================
+   WORKOUT SAVE ERROR
+========================================================= */
+
+.mainapp-save-error {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 9999;
+
+  padding: 14px 16px;
+
+  background: #120909;
+  border: 1px solid #8b0000;
+  border-radius: 10px;
+
+  color: #ffffff;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.mainapp-save-error__title {
+  display: block;
+  margin-bottom: 4px;
+}
+
+
+/* =========================================================
+   COMPLETE FALLBACK
+========================================================= */
+
+.mainapp-complete-fallback {
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  padding: 24px;
+
+  background: #050505;
+  color: #d4af37;
+
+  font-family: Montserrat, sans-serif;
+  text-align: center;
+}
+
+.mainapp-complete-fallback__title {
+  font-size: 20px;
+  letter-spacing: 0.08em;
+}
+
+.mainapp-complete-fallback__button {
+  padding: 16px 24px;
+
+  border: 1px solid #d4af37;
+  border-radius: 10px;
+
+  background: #d4af37;
+  color: #050505;
+
+  font-family: Montserrat, sans-serif;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SAVING OVERLAY
+========================================================= */
+
+.mainapp-saving-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.82);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  color: #d4af37;
+  font-family: Montserrat, sans-serif;
+}
+
+.mainapp-saving-overlay__content {
+  padding: 24px;
+  text-align: center;
+}
+
+.mainapp-saving-overlay__brand {
+  margin-bottom: 12px;
+
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.mainapp-saving-overlay__text {
+  color: #ffffff;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+

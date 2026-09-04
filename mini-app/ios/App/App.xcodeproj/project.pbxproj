@@ -114,7 +114,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 504EC2FF1FED79650016851F /* Build configuration list for PBXProject "IronAge" */;
+			buildConfigurationList = 504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -179,7 +179,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		504EC3141FED79650016851F /* Debug configuration for PBXProject "IronAge" */ = {
+		504EC3141FED79650016851F /* Debug configuration for PBXProject "App" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
 			buildSettings = {
@@ -241,7 +241,7 @@
 			};
 			name = Debug;
 		};
-		504EC3151FED79650016851F /* Release configuration for PBXProject "IronAge" */ = {
+		504EC3151FED79650016851F /* Release configuration for PBXProject "App" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -347,11 +347,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		504EC2FF1FED79650016851F /* Build configuration list for PBXProject "IronAge" */ = {
+		504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				504EC3141FED79650016851F /* Debug configuration for PBXProject "IronAge" */,
-				504EC3151FED79650016851F /* Release configuration for PBXProject "IronAge" */,
+				504EC3141FED79650016851F /* Debug configuration for PBXProject "App" */,
+				504EC3151FED79650016851F /* Release configuration for PBXProject "App" */,
 			);
 			defaultConfigurationName = Release;
 		};

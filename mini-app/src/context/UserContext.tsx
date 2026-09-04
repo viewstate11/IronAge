@@ -36,6 +36,10 @@ import {
   waitForTelegram,
 } from "../services/telegramService";
 
+import {
+  sendProgressUpdateNotification,
+} from "../native/nativeNotifications";
+
 /* =========================================================
    DEVELOPMENT
 ========================================================= */
@@ -814,9 +818,21 @@ export function UserProvider({
             try {
               apiUser =
                 await getSessionUser();
-            } catch {
+            } catch (err) {
+              console.error(
+                "IRONAGE: Session refresh failed:",
+                err instanceof Error
+                  ? err.message
+                  : String(err)
+              );
+
               setAuthenticated(false);
-              setError(null);
+
+              setError(
+                err instanceof Error
+                  ? err.message
+                  : "Session refresh failed"
+              );
 
               return;
             }
@@ -1340,6 +1356,64 @@ export function UserProvider({
               updatedApiUser
             );
 
+          /* =================================================
+             IRONAGE PROGRESS NOTIFICATION
+          ================================================= */
+
+          try {
+            const rawProgressSettings =
+              localStorage.getItem(
+                "ironage_notification_settings"
+              );
+
+            const progressSettings =
+              rawProgressSettings
+                ? JSON.parse(
+                    rawProgressSettings
+                  )
+                : null;
+
+            if (
+              progressSettings?.progressUpdates ===
+              true
+            ) {
+              const previousLevel =
+                Number(user.level || 1);
+
+              const previousStreak =
+                Number(user.streak || 0);
+
+              const nextLevel =
+                Number(
+                  updatedUser.level || 1
+                );
+
+              const nextStreak =
+                Number(
+                  updatedUser.streak || 0
+                );
+
+              await sendProgressUpdateNotification({
+                xp: earnedXp,
+                level: nextLevel,
+                streak: nextStreak,
+
+                levelUp:
+                  nextLevel >
+                  previousLevel,
+
+                streakIncreased:
+                  nextStreak >
+                  previousStreak,
+              });
+            }
+          } catch (notificationError) {
+            console.error(
+              "IRONAGE: Progress notification failed:",
+              notificationError
+            );
+          }
+
           /*
            * NEVER lose onboarding state.
            */
@@ -1379,6 +1453,10 @@ export function UserProvider({
         user.id,
 
         user.telegramId,
+
+        user.level,
+
+        user.streak,
 
         getEffectiveTelegramId,
 

@@ -337,14 +337,14 @@
 }
 
 .progress-stat-time {
-  font-size: 22px !important;
+  font-size: 22px;
 }
 
 .progress-stat-target {
-  display: inline !important;
-  margin: 0 !important;
-  color: rgba(255, 255, 255, 0.32) !important;
-  font-size: 14px !important;
+  display: inline;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 14px;
 }
 
 
@@ -801,7 +801,7 @@
   }
 
   .progress-stat-time {
-    font-size: 20px !important;
+    font-size: 20px;
   }
 
   .progress-section,

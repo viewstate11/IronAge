@@ -15,6 +15,11 @@ import {
   FeatureAccessProvider,
 } from "./context/FeatureAccessContext";
 
+import {
+  LanguageProvider,
+  useLanguage,
+} from "./context/LanguageContext";
+
 import MainApp from "./screens/MainApp/MainApp";
 import Onboarding from "./screens/Onboarding/Onboarding";
 import Welcome from "./screens/Welcome/Welcome";
@@ -36,6 +41,8 @@ function AuthenticatedApp() {
 }
 
 function AppContent() {
+  const { t } = useLanguage();
+
   const currentPath =
     typeof window !== "undefined"
       ? window.location.pathname
@@ -112,7 +119,7 @@ function AppContent() {
               color: "#aaa",
             }}
           >
-            Loading...
+            {t("common.loading")}
           </div>
         </div>
       </div>
@@ -184,7 +191,7 @@ function AppContent() {
                 marginBottom: 12,
               }}
             >
-              Authentication Error
+              {t("app.authenticationError")}
             </div>
 
             <div
@@ -215,7 +222,7 @@ function AppContent() {
                 cursor: "pointer",
               }}
             >
-              RETRY
+              {t("common.retry")}
             </button>
           </div>
         </div>
@@ -232,8 +239,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <UserProvider>
-      <AppContent />
-    </UserProvider>
+    <LanguageProvider>
+      <UserProvider>
+        <AppContent />
+      </UserProvider>
+    </LanguageProvider>
   );
 }

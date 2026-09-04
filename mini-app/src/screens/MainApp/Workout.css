@@ -1162,18 +1162,7 @@
 
 @media (max-width: 599px) {
 
-  html,
-  body {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  #root {
-    width: 100%;
-    max-width: 100%;
-
-    min-width: 0;
-  }
+  
 
   .workout-page {
     position: relative;
@@ -1276,17 +1265,7 @@
 }
 
 
-/* =========================================================
-   GLOBAL WORKOUT OVERFLOW SAFETY
-========================================================= */
 
-.workout-page,
-.workout-hero,
-.workout-hero-content,
-.workout-program,
-.workout-list {
-  min-width: 0;
-}
 
 
 /* =========================================================

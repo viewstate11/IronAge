@@ -444,7 +444,9 @@
     flex: 1;
   }
 
-}.nutrition-day-nav {
+}
+
+.nutrition-day-nav {
   display: grid;
   grid-template-columns: 42px 1fr 42px;
   align-items: center;
@@ -592,7 +594,7 @@
 }
 
 .nutrition-history-adherence strong {
-  font-size: 12px !important;
+  font-size: 12px;
 }
 
 .nutrition-history-average {

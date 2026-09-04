@@ -40,6 +40,47 @@ async function initializeSecureStorage(): Promise<void> {
   initialized = true;
 }
 
+function normalizeStoredToken(
+  value: string
+): string | null {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return null;
+  }
+
+  /*
+   * SecureStorage may return a JSON-encoded
+   * string, e.g.
+   *
+   *   "\"abc123\""
+   *
+   * Convert it back to:
+   *
+   *   abc123
+   */
+  if (
+    trimmed.startsWith('"') &&
+    trimmed.endsWith('"')
+  ) {
+    try {
+      const parsed =
+        JSON.parse(trimmed);
+
+      if (
+        typeof parsed === "string" &&
+        parsed.trim()
+      ) {
+        return parsed.trim();
+      }
+    } catch {
+      // Fall through to raw value.
+    }
+  }
+
+  return trimmed;
+}
+
 export async function saveNativeSessionToken(
   token: string
 ): Promise<void> {
@@ -82,13 +123,14 @@ export async function getNativeSessionToken(): Promise<
     );
 
   if (
-    typeof value !== "string" ||
-    !value.trim()
+    typeof value !== "string"
   ) {
     return null;
   }
 
-  return value.trim();
+  return normalizeStoredToken(
+    value
+  );
 }
 
 export async function removeNativeSessionToken(): Promise<void> {

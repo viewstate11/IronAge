@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
 import { useUser } from "../../context/UserContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 import {
   workoutPrograms,
@@ -19,31 +20,7 @@ type Props = {
    WORKOUT PRESENTATION DATA
 ========================================================= */
 
-const workoutMeta: Record<
-  string,
-  {
-    meta: string;
-    description: string;
-  }
-> = {
-  upper: {
-    meta: "TODAY / 45 MIN",
-    description:
-      "Chest • Shoulders • Arms",
-  },
 
-  lower: {
-    meta: "48 MIN",
-    description:
-      "Legs • Glutes • Core",
-  },
-
-  full: {
-    meta: "52 MIN",
-    description:
-      "Strength • Power • Conditioning",
-  },
-};
 
 /* =========================================================
    COMPONENT
@@ -53,6 +30,7 @@ export default function Workout({
   startWorkout,
 }: Props) {
   const { user } = useUser();
+  const { t } = useLanguage();
 
   /* =======================================================
      WORKOUT LIST
@@ -62,7 +40,34 @@ export default function Workout({
     return workoutPrograms.map(
       (workout, index) => {
         const presentation =
-          workoutMeta[workout.id];
+          workout.id === "upper"
+            ? {
+                meta:
+                  t("workout.today45"),
+                title:
+                  t("workout.upperTitle"),
+                description:
+                  t("workout.upperDescription"),
+              }
+            : workout.id === "lower"
+              ? {
+                  meta:
+                    t("workout.48min"),
+                  title:
+                    t("workout.lowerTitle"),
+                  description:
+                    t("workout.lowerDescription"),
+                }
+              : workout.id === "full"
+                ? {
+                    meta:
+                      t("workout.52min"),
+                    title:
+                      t("workout.fullTitle"),
+                    description:
+                      t("workout.fullDescription"),
+                  }
+                : null;
 
         return {
           ...workout,
@@ -71,20 +76,25 @@ export default function Workout({
             index + 1
           ).padStart(2, "0"),
 
+          title:
+            presentation?.title ??
+            workout.title,
+
           meta:
             presentation?.meta ??
-            "WORKOUT",
+            "",
 
           description:
             presentation?.description ??
-            "Strength • Conditioning",
+            workout.description ??
+            "",
 
           active:
             index === 0,
         };
       }
     );
-  }, []);
+  }, [t]);
 
   /* =======================================================
      COMPLETED WORKOUTS
@@ -172,7 +182,7 @@ export default function Workout({
 
         <img
           src={vasylPhoto}
-          alt="IRONAGE athlete"
+          alt={t("dashboard.athlete")}
           className="workout-hero-image"
         />
 
@@ -185,14 +195,14 @@ export default function Workout({
             <div>
 
               <span className="workout-eyebrow">
-                IRONAGE PROGRAM
+                {t("workout.program")}
               </span>
 
               <h1>
-                YOUR
+                {t("workout.your")}
                 <br />
                 <span>
-                  WORKOUTS.
+                  {t("workout.workouts")}
                 </span>
               </h1>
 
@@ -213,14 +223,14 @@ export default function Workout({
 
               <span className="workout-status-dot" />
 
-              SYSTEM ACTIVE
+              {t("workout.systemActive")}
 
             </div>
 
             <p className="workout-intro">
-              Train with purpose.
+              {t("workout.trainPurpose")}
               <br />
-              Build something stronger.
+              {t("workout.buildStronger")}
             </p>
 
           </div>
@@ -240,17 +250,17 @@ export default function Workout({
           <div>
 
             <span className="workout-heading-label">
-              THIS WEEK
+              {t("workout.thisWeek")}
             </span>
 
             <h2>
-              Training Program
+              {t("workout.trainingProgram")}
             </h2>
 
           </div>
 
           <span className="workout-week">
-            WEEK 01
+            {t("workout.week")}
           </span>
 
         </div>
@@ -315,7 +325,7 @@ export default function Workout({
         <div className="workout-progress-header">
 
           <span>
-            WEEKLY PROGRESS
+            {t("workout.weeklyProgress")}
           </span>
 
           <strong>
@@ -345,12 +355,12 @@ export default function Workout({
 
           <span>
             {completedWorkouts === 0
-              ? "START YOUR JOURNEY"
+              ? t("workout.startJourney")
               : `${completedWorkouts} WORKOUT${
                   completedWorkouts === 1
                     ? ""
                     : "S"
-                } COMPLETED`}
+                } ${t("workout.completed")}`}
           </span>
 
           <span>
@@ -368,20 +378,18 @@ export default function Workout({
       <section className="workout-quote">
 
         <span>
-          IRONAGE / MINDSET
+          {t("workout.mindset")}
         </span>
 
         <h2>
-          NO
+          {t("workout.no")}
           <strong>
-            EXCUSES.
+            {t("workout.excuses")}
           </strong>
         </h2>
 
         <p>
-          Discipline creates the
-          version of you that others
-          cannot stop.
+          {t("workout.quote")}
         </p>
 
       </section>

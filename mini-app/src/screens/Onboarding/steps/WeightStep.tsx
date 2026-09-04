@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   value: number;
   onChange: (value: number) => void;
@@ -9,6 +13,8 @@ export default function WeightStep({
   onChange,
   next,
 }: Props) {
+  const { t } = useLanguage();
+
   const decrease = () => {
     onChange(Math.max(35, value - 1));
   };
@@ -23,17 +29,16 @@ export default function WeightStep({
       <div className="onboarding-step-content">
 
         <div className="onboarding-eyebrow">
-          BODY METRICS
+          {t("onboarding.bodyMetrics")}
         </div>
 
         <h1 className="onboarding-title">
-          WHAT IS
-          <strong>YOUR WEIGHT?</strong>
+          {t("onboarding.weight.title1")}
+          <strong>{t("onboarding.weight.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          This helps IRONAGE create a more precise
-          training and nutrition system for you.
+          {t("onboarding.weight.description")}
         </p>
 
         <div className="height-selector">
@@ -42,7 +47,7 @@ export default function WeightStep({
             type="button"
             className="height-control"
             onClick={decrease}
-            aria-label="Decrease weight"
+            aria-label={t("onboarding.weight.decrease")}
           >
             −
           </button>
@@ -56,7 +61,7 @@ export default function WeightStep({
             type="button"
             className="height-control"
             onClick={increase}
-            aria-label="Increase weight"
+            aria-label={t("onboarding.weight.increase")}
           >
             +
           </button>
@@ -88,12 +93,12 @@ export default function WeightStep({
           className="onboarding-button"
           onClick={next}
         >
-          <span>CONTINUE</span>
+          <span>{t("onboarding.continue")}</span>
           <strong>→</strong>
         </button>
 
         <div className="onboarding-footer">
-          IRONAGE ATHLETE SYSTEM
+          {t("onboarding.athleteSystem")}
         </div>
 
       </div>

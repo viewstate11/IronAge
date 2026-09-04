@@ -1,0 +1,3786 @@
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+
+import {
+  localizeDocument,
+  type RuntimeLanguage,
+} from "../i18n/runtimeTranslator";
+
+export const LANGUAGE_OPTIONS = [
+  { id: "en", label: "English", flag: "🇬🇧" },
+  { id: "es", label: "Español", flag: "🇪🇸" },
+  { id: "uk", label: "Українська", flag: "🇺🇦" },
+  { id: "ru", label: "Русский", flag: "🇷🇺" },
+  { id: "fr", label: "Français", flag: "🇫🇷" },
+  { id: "de", label: "Deutsch", flag: "🇩🇪" },
+  { id: "pt", label: "Português", flag: "🇵🇹" },
+  { id: "bg", label: "Български", flag: "🇧🇬" },
+] as const;
+
+export type AppLanguage =
+  (typeof LANGUAGE_OPTIONS)[number]["id"];
+
+type TranslationSet =
+  Record<AppLanguage, string>;
+
+const translations:
+  Record<string, TranslationSet> = {
+
+  /* =====================================================
+     COMMON
+  ===================================================== */
+
+  "common.back": {
+    en: "Back",
+    es: "Atrás",
+    uk: "Назад",
+    ru: "Назад",
+    fr: "Retour",
+    de: "Zurück",
+    pt: "Voltar",
+    bg: "Назад",
+  },
+
+  "common.loading": {
+    en: "Loading...",
+    es: "Cargando...",
+    uk: "Завантаження...",
+    ru: "Загрузка...",
+    fr: "Chargement...",
+    de: "Laden...",
+    pt: "Carregando...",
+    bg: "Зареждане...",
+  },
+
+  "common.retry": {
+    en: "RETRY",
+    es: "REINTENTAR",
+    uk: "СПРОБУВАТИ ЗНОВУ",
+    ru: "ПОВТОРИТЬ",
+    fr: "RÉESSAYER",
+    de: "ERNEUT VERSUCHEN",
+    pt: "TENTAR NOVAMENTE",
+    bg: "ОПИТАЙ ОТНОВО",
+  },
+
+  /* =====================================================
+     APP
+  ===================================================== */
+
+  "app.authenticationError": {
+    en: "Authentication Error",
+    es: "Error de autenticación",
+    uk: "Помилка авторизації",
+    ru: "Ошибка авторизации",
+    fr: "Erreur d’authentification",
+    de: "Authentifizierungsfehler",
+    pt: "Erro de autenticação",
+    bg: "Грешка при удостоверяване",
+  },
+
+  /* =====================================================
+     SETTINGS
+  ===================================================== */
+
+  "settings.title": {
+    en: "SETTINGS",
+    es: "AJUSTES",
+    uk: "НАЛАШТУВАННЯ",
+    ru: "НАСТРОЙКИ",
+    fr: "RÉGLAGES",
+    de: "EINSTELLUNGEN",
+    pt: "CONFIGURAÇÕES",
+    bg: "НАСТРОЙКИ",
+  },
+
+  "settings.subtitle": {
+    en: "APP · EXPERIENCE · SYSTEM",
+    es: "APP · EXPERIENCIA · SISTEMA",
+    uk: "ДОДАТОК · ДОСВІД · СИСТЕМА",
+    ru: "ПРИЛОЖЕНИЕ · ОПЫТ · СИСТЕМА",
+    fr: "APP · EXPÉRIENCE · SYSTÈME",
+    de: "APP · ERLEBNIS · SYSTEM",
+    pt: "APP · EXPERIÊNCIA · SISTEMA",
+    bg: "ПРИЛОЖЕНИЕ · ИЗЖИВЯВАНЕ · СИСТЕМА",
+  },
+
+  "settings.appControl": {
+    en: "APP CONTROL",
+    es: "CONTROL DE LA APP",
+    uk: "КЕРУВАННЯ ДОДАТКОМ",
+    ru: "УПРАВЛЕНИЕ ПРИЛОЖЕНИЕМ",
+    fr: "CONTRÔLE DE L’APP",
+    de: "APP-STEUERUNG",
+    pt: "CONTROLE DO APP",
+    bg: "УПРАВЛЕНИЕ НА ПРИЛОЖЕНИЕТО",
+  },
+
+  "settings.yourApp": {
+    en: "YOUR APP.",
+    es: "TU APP.",
+    uk: "ТВІЙ ДОДАТОК.",
+    ru: "ТВОЁ ПРИЛОЖЕНИЕ.",
+    fr: "TON APP.",
+    de: "DEINE APP.",
+    pt: "SEU APP.",
+    bg: "ТВОЕТО ПРИЛОЖЕНИЕ.",
+  },
+
+  "settings.yourRules": {
+    en: "YOUR RULES.",
+    es: "TUS REGLAS.",
+    uk: "ТВОЇ ПРАВИЛА.",
+    ru: "ТВОИ ПРАВИЛА.",
+    fr: "TES RÈGLES.",
+    de: "DEINE REGELN.",
+    pt: "SUAS REGRAS.",
+    bg: "ТВОИТЕ ПРАВИЛА.",
+  },
+
+  "settings.description": {
+    en: "Configure the IRONAGE experience for the way you train.",
+    es: "Configura IRONAGE según tu forma de entrenar.",
+    uk: "Налаштуй IRONAGE під свій стиль тренувань.",
+    ru: "Настрой IRONAGE под свой стиль тренировок.",
+    fr: "Configure IRONAGE selon ta façon de t’entraîner.",
+    de: "Passe IRONAGE an deine Trainingsweise an.",
+    pt: "Configure o IRONAGE para a sua forma de treinar.",
+    bg: "Настрой IRONAGE според начина, по който тренираш.",
+  },
+
+  "settings.haptics": {
+    en: "HAPTIC FEEDBACK",
+    es: "RESPUESTA HÁPTICA",
+    uk: "ТАКТИЛЬНИЙ ВІДГУК",
+    ru: "ТАКТИЛЬНАЯ ОТДАЧА",
+    fr: "RETOUR HAPTIQUE",
+    de: "HAPTISCHES FEEDBACK",
+    pt: "FEEDBACK HÁPTICO",
+    bg: "ТАКТИЛНА ОБРАТНА ВРЪЗКА",
+  },
+
+  "settings.hapticsDescription": {
+    en: "Vibration feedback for important actions",
+    es: "Vibración para acciones importantes",
+    uk: "Вібрація для важливих дій",
+    ru: "Вибрация для важных действий",
+    fr: "Vibration pour les actions importantes",
+    de: "Vibration bei wichtigen Aktionen",
+    pt: "Vibração para ações importantes",
+    bg: "Вибрация при важни действия",
+  },
+
+  "settings.sounds": {
+    en: "APP SOUNDS",
+    es: "SONIDOS DE LA APP",
+    uk: "ЗВУКИ ДОДАТКА",
+    ru: "ЗВУКИ ПРИЛОЖЕНИЯ",
+    fr: "SONS DE L’APP",
+    de: "APP-TÖNE",
+    pt: "SONS DO APP",
+    bg: "ЗВУЦИ В ПРИЛОЖЕНИЕТО",
+  },
+
+  "settings.soundsDescription": {
+    en: "Enable interface and workout sounds",
+    es: "Activa sonidos de interfaz y entrenamiento",
+    uk: "Увімкнути звуки інтерфейсу та тренувань",
+    ru: "Включить звуки интерфейса и тренировок",
+    fr: "Activer les sons de l’interface et des entraînements",
+    de: "Interface- und Trainingssounds aktivieren",
+    pt: "Ativar sons da interface e dos treinos",
+    bg: "Включи звуците на интерфейса и тренировките",
+  },
+
+  "settings.autoStart": {
+    en: "AUTO START WORKOUT",
+    es: "INICIO AUTOMÁTICO",
+    uk: "АВТОЗАПУСК ТРЕНУВАННЯ",
+    ru: "АВТОЗАПУСК ТРЕНИРОВКИ",
+    fr: "DÉMARRAGE AUTOMATIQUE",
+    de: "TRAINING AUTOMATISCH STARTEN",
+    pt: "INÍCIO AUTOMÁTICO",
+    bg: "АВТОМАТИЧЕН СТАРТ",
+  },
+
+  "settings.autoStartDescription": {
+    en: "Start workout immediately after selection",
+    es: "Iniciar el entrenamiento justo después de elegirlo",
+    uk: "Починати тренування одразу після вибору",
+    ru: "Начинать тренировку сразу после выбора",
+    fr: "Démarrer l’entraînement immédiatement après la sélection",
+    de: "Training direkt nach der Auswahl starten",
+    pt: "Iniciar o treino imediatamente após a seleção",
+    bg: "Започни тренировката веднага след избора",
+  },
+
+  "settings.language": {
+    en: "LANGUAGE",
+    es: "IDIOMA",
+    uk: "МОВА",
+    ru: "ЯЗЫК",
+    fr: "LANGUE",
+    de: "SPRACHE",
+    pt: "IDIOMA",
+    bg: "ЕЗИК",
+  },
+
+  /* =====================================================
+     LANGUAGE
+  ===================================================== */
+
+  "language.title": {
+    en: "LANGUAGE",
+    es: "IDIOMA",
+    uk: "МОВА",
+    ru: "ЯЗЫК",
+    fr: "LANGUE",
+    de: "SPRACHE",
+    pt: "IDIOMA",
+    bg: "ЕЗИК",
+  },
+
+  "language.subtitle": {
+    en: "CHOOSE YOUR LANGUAGE",
+    es: "ELIGE TU IDIOMA",
+    uk: "ОБЕРИ СВОЮ МОВУ",
+    ru: "ВЫБЕРИ СВОЙ ЯЗЫК",
+    fr: "CHOISIS TA LANGUE",
+    de: "WÄHLE DEINE SPRACHE",
+    pt: "ESCOLHA SEU IDIOMA",
+    bg: "ИЗБЕРИ СВОЯ ЕЗИК",
+  },
+
+  "language.control": {
+    en: "LANGUAGE CONTROL",
+    es: "CONTROL DE IDIOMA",
+    uk: "НАЛАШТУВАННЯ МОВИ",
+    ru: "НАСТРОЙКА ЯЗЫКА",
+    fr: "RÉGLAGE DE LA LANGUE",
+    de: "SPRACHEINSTELLUNG",
+    pt: "CONFIGURAÇÃO DE IDIOMA",
+    bg: "НАСТРОЙКА НА ЕЗИКА",
+  },
+
+  "language.yourLanguage": {
+    en: "YOUR LANGUAGE.",
+    es: "TU IDIOMA.",
+    uk: "ТВОЯ МОВА.",
+    ru: "ТВОЙ ЯЗЫК.",
+    fr: "TA LANGUE.",
+    de: "DEINE SPRACHE.",
+    pt: "SEU IDIOMA.",
+    bg: "ТВОЯТ ЕЗИК.",
+  },
+
+  "language.yourIronage": {
+    en: "YOUR IRONAGE.",
+    es: "TU IRONAGE.",
+    uk: "ТВІЙ IRONAGE.",
+    ru: "ТВОЙ IRONAGE.",
+    fr: "TON IRONAGE.",
+    de: "DEIN IRONAGE.",
+    pt: "SEU IRONAGE.",
+    bg: "ТВОЯТ IRONAGE.",
+  },
+
+  "language.description": {
+    en: "Choose the language you want to use throughout IRONAGE.",
+    es: "Elige el idioma que quieres usar en IRONAGE.",
+    uk: "Обери мову, якою хочеш користуватися в IRONAGE.",
+    ru: "Выбери язык, который хочешь использовать в IRONAGE.",
+    fr: "Choisis la langue que tu veux utiliser dans IRONAGE.",
+    de: "Wähle die Sprache, die du in IRONAGE verwenden möchtest.",
+    pt: "Escolha o idioma que deseja usar no IRONAGE.",
+    bg: "Избери езика, който искаш да използваш в IRONAGE.",
+  },
+
+  /* =====================================================
+     WELCOME
+  ===================================================== */
+
+  "welcome.athleteSystem": {
+    en: "ATHLETE SYSTEM",
+    es: "SISTEMA DEL ATLETA",
+    uk: "СИСТЕМА АТЛЕТА",
+    ru: "СИСТЕМА АТЛЕТА",
+    fr: "SYSTÈME ATHLÈTE",
+    de: "ATHLETEN-SYSTEM",
+    pt: "SISTEMA DO ATLETA",
+    bg: "СИСТЕМА ЗА АТЛЕТИ",
+  },
+
+  "welcome.buildYourself": {
+    en: "BUILD YOURSELF",
+    es: "CONSTRÚYETE",
+    uk: "СТВОРИ СЕБЕ",
+    ru: "СОЗДАЙ СЕБЯ",
+    fr: "CONSTRUIS-TOI",
+    de: "FORME DICH",
+    pt: "CONSTRUA-SE",
+    bg: "ИЗГРАДИ СЕБЕ СИ",
+  },
+
+  "welcome.become": {
+    en: "BECOME",
+    es: "VUÉLVETE",
+    uk: "СТАНЬ",
+    ru: "СТАНЬ",
+    fr: "DEVIENS",
+    de: "WERDE",
+    pt: "TORNE-SE",
+    bg: "СТАНИ",
+  },
+
+  "welcome.unstoppable": {
+    en: "UNSTOPPABLE.",
+    es: "IMPARABLE.",
+    uk: "НЕСТРИМНИМ.",
+    ru: "НЕОСТАНОВИМЫМ.",
+    fr: "INARRÊTABLE.",
+    de: "UNAUFHALTSAM.",
+    pt: "IMPARÁVEL.",
+    bg: "НЕСПИРАЕМ.",
+  },
+
+  "welcome.disciplineMoment": {
+    en: "Discipline is not a moment.",
+    es: "La disciplina no es un momento.",
+    uk: "Дисципліна — це не момент.",
+    ru: "Дисциплина — это не момент.",
+    fr: "La discipline n’est pas un moment.",
+    de: "Disziplin ist kein Moment.",
+    pt: "Disciplina não é um momento.",
+    bg: "Дисциплината не е момент.",
+  },
+
+  "welcome.lifestyle": {
+    en: "It is a lifestyle.",
+    es: "Es un estilo de vida.",
+    uk: "Це стиль життя.",
+    ru: "Это образ жизни.",
+    fr: "C’est un mode de vie.",
+    de: "Sie ist ein Lebensstil.",
+    pt: "É um estilo de vida.",
+    bg: "Тя е начин на живот.",
+  },
+
+  "welcome.enter": {
+    en: "ENTER IRONAGE",
+    es: "ENTRAR EN IRONAGE",
+    uk: "УВІЙТИ В IRONAGE",
+    ru: "ВОЙТИ В IRONAGE",
+    fr: "ENTRER DANS IRONAGE",
+    de: "IRONAGE BETRETEN",
+    pt: "ENTRAR NO IRONAGE",
+    bg: "ВЛЕЗ В IRONAGE",
+  },
+
+  "welcome.premiumSystem": {
+    en: "PREMIUM FITNESS SYSTEM",
+    es: "SISTEMA FITNESS PREMIUM",
+    uk: "ПРЕМІАЛЬНА ФІТНЕС-СИСТЕМА",
+    ru: "ПРЕМИАЛЬНАЯ ФИТНЕС-СИСТЕМА",
+    fr: "SYSTÈME FITNESS PREMIUM",
+    de: "PREMIUM-FITNESS-SYSTEM",
+    pt: "SISTEMA FITNESS PREMIUM",
+    bg: "ПРЕМИУМ ФИТНЕС СИСТЕМА",
+  },
+
+  /* =====================================================
+     AUTH
+  ===================================================== */
+
+  "auth.athleteSystem": {
+    en: "ATHLETE SYSTEM",
+    es: "SISTEMA DEL ATLETA",
+    uk: "СИСТЕМА АТЛЕТА",
+    ru: "СИСТЕМА АТЛЕТА",
+    fr: "SYSTÈME ATHLÈTE",
+    de: "ATHLETEN-SYSTEM",
+    pt: "SISTEMA DO ATLETA",
+    bg: "СИСТЕМА ЗА АТЛЕТИ",
+  },
+
+  "auth.joinSystem": {
+    en: "JOIN THE SYSTEM",
+    es: "ÚNETE AL SISTEMA",
+    uk: "ПРИЄДНУЙСЯ ДО СИСТЕМИ",
+    ru: "ПРИСОЕДИНЯЙСЯ К СИСТЕМЕ",
+    fr: "REJOINS LE SYSTÈME",
+    de: "TRITT DEM SYSTEM BEI",
+    pt: "ENTRE NO SISTEMA",
+    bg: "ПРИСЪЕДИНИ СЕ КЪМ СИСТЕМАТА",
+  },
+
+  "auth.welcomeBack": {
+    en: "WELCOME BACK",
+    es: "BIENVENIDO DE NUEVO",
+    uk: "З ПОВЕРНЕННЯМ",
+    ru: "С ВОЗВРАЩЕНИЕМ",
+    fr: "BON RETOUR",
+    de: "WILLKOMMEN ZURÜCK",
+    pt: "BEM-VINDO DE VOLTA",
+    bg: "ДОБРЕ ДОШЪЛ ОТНОВО",
+  },
+
+  "auth.readyRegister1": {
+    en: "ARE YOU READY",
+    es: "¿ESTÁS LISTO",
+    uk: "ТИ ГОТОВИЙ",
+    ru: "ТЫ ГОТОВ",
+    fr: "ES-TU PRÊT",
+    de: "BIST DU BEREIT",
+    pt: "VOCÊ ESTÁ PRONTO",
+    bg: "ГОТОВ ЛИ СИ",
+  },
+
+  "auth.readyRegister2": {
+    en: "TO WORK?",
+    es: "PARA TRABAJAR?",
+    uk: "ПРАЦЮВАТИ?",
+    ru: "РАБОТАТЬ?",
+    fr: "À TRAVAILLER ?",
+    de: "ZU ARBEITEN?",
+    pt: "PARA TRABALHAR?",
+    bg: "ДА РАБОТИШ?",
+  },
+
+  "auth.readyLogin1": {
+    en: "READY TO",
+    es: "LISTO PARA",
+    uk: "ГОТОВИЙ",
+    ru: "ГОТОВ",
+    fr: "PRÊT À",
+    de: "BEREIT",
+    pt: "PRONTO PARA",
+    bg: "ГОТОВ ДА",
+  },
+
+  "auth.readyLogin2": {
+    en: "CONTINUE?",
+    es: "CONTINUAR?",
+    uk: "ПРОДОВЖИТИ?",
+    ru: "ПРОДОЛЖИТЬ?",
+    fr: "CONTINUER ?",
+    de: "WEITERZUMACHEN?",
+    pt: "CONTINUAR?",
+    bg: "ПРОДЪЛЖИШ?",
+  },
+
+  "auth.registerIntro": {
+    en: "Build discipline. Track progress. Become stronger every day.",
+    es: "Construye disciplina. Sigue tu progreso. Hazte más fuerte cada día.",
+    uk: "Будуй дисципліну. Відстежуй прогрес. Ставай сильнішим щодня.",
+    ru: "Строй дисциплину. Следи за прогрессом. Становись сильнее каждый день.",
+    fr: "Construis ta discipline. Suis tes progrès. Deviens plus fort chaque jour.",
+    de: "Baue Disziplin auf. Verfolge deinen Fortschritt. Werde jeden Tag stärker.",
+    pt: "Construa disciplina. Acompanhe o progresso. Fique mais forte a cada dia.",
+    bg: "Изгради дисциплина. Следи прогреса. Ставай по-силен всеки ден.",
+  },
+
+  "auth.loginIntro": {
+    en: "Sign in and continue your IRONAGE journey.",
+    es: "Inicia sesión y continúa tu camino en IRONAGE.",
+    uk: "Увійди та продовж свій шлях в IRONAGE.",
+    ru: "Войди и продолжи свой путь в IRONAGE.",
+    fr: "Connecte-toi et continue ton parcours IRONAGE.",
+    de: "Melde dich an und setze deine IRONAGE-Reise fort.",
+    pt: "Entre e continue sua jornada IRONAGE.",
+    bg: "Влез и продължи пътя си в IRONAGE.",
+  },
+
+  "auth.continueGoogle": {
+    en: "CONTINUE WITH GOOGLE",
+    es: "CONTINUAR CON GOOGLE",
+    uk: "ПРОДОВЖИТИ З GOOGLE",
+    ru: "ПРОДОЛЖИТЬ С GOOGLE",
+    fr: "CONTINUER AVEC GOOGLE",
+    de: "MIT GOOGLE FORTFAHREN",
+    pt: "CONTINUAR COM GOOGLE",
+    bg: "ПРОДЪЛЖИ С GOOGLE",
+  },
+
+  "auth.continueApple": {
+    en: "CONTINUE WITH APPLE",
+    es: "CONTINUAR CON APPLE",
+    uk: "ПРОДОВЖИТИ З APPLE",
+    ru: "ПРОДОЛЖИТЬ С APPLE",
+    fr: "CONTINUER AVEC APPLE",
+    de: "MIT APPLE FORTFAHREN",
+    pt: "CONTINUAR COM APPLE",
+    bg: "ПРОДЪЛЖИ С APPLE",
+  },
+
+  "auth.appleComingSoon": {
+    en: "APPLE AUTH COMING SOON",
+    es: "APPLE AUTH PRÓXIMAMENTE",
+    uk: "ВХІД ЧЕРЕЗ APPLE СКОРО",
+    ru: "ВХОД ЧЕРЕЗ APPLE СКОРО",
+    fr: "CONNEXION APPLE BIENTÔT DISPONIBLE",
+    de: "APPLE-ANMELDUNG KOMMT BALD",
+    pt: "LOGIN COM APPLE EM BREVE",
+    bg: "ВХОДЪТ С APPLE ОЧАКВАЙТЕ СКОРО",
+  },
+
+  "auth.or": {
+    en: "OR",
+    es: "O",
+    uk: "АБО",
+    ru: "ИЛИ",
+    fr: "OU",
+    de: "ODER",
+    pt: "OU",
+    bg: "ИЛИ",
+  },
+
+  "auth.firstName": {
+    en: "FIRST NAME",
+    es: "NOMBRE",
+    uk: "ІМ'Я",
+    ru: "ИМЯ",
+    fr: "PRÉNOM",
+    de: "VORNAME",
+    pt: "NOME",
+    bg: "ИМЕ",
+  },
+
+  "auth.namePlaceholder": {
+    en: "Your name",
+    es: "Tu nombre",
+    uk: "Твоє ім'я",
+    ru: "Твоё имя",
+    fr: "Ton prénom",
+    de: "Dein Name",
+    pt: "Seu nome",
+    bg: "Твоето име",
+  },
+
+  "auth.email": {
+    en: "EMAIL",
+    es: "EMAIL",
+    uk: "EMAIL",
+    ru: "EMAIL",
+    fr: "EMAIL",
+    de: "E-MAIL",
+    pt: "EMAIL",
+    bg: "EMAIL",
+  },
+
+  "auth.password": {
+    en: "PASSWORD",
+    es: "CONTRASEÑA",
+    uk: "ПАРОЛЬ",
+    ru: "ПАРОЛЬ",
+    fr: "MOT DE PASSE",
+    de: "PASSWORT",
+    pt: "SENHA",
+    bg: "ПАРОЛА",
+  },
+
+  "auth.passwordPlaceholder": {
+    en: "Minimum 8 characters",
+    es: "Mínimo 8 caracteres",
+    uk: "Мінімум 8 символів",
+    ru: "Минимум 8 символов",
+    fr: "Minimum 8 caractères",
+    de: "Mindestens 8 Zeichen",
+    pt: "Mínimo de 8 caracteres",
+    bg: "Минимум 8 символа",
+  },
+
+  "auth.pleaseWait": {
+    en: "PLEASE WAIT...",
+    es: "ESPERA...",
+    uk: "ЗАЧЕКАЙ...",
+    ru: "ПОДОЖДИ...",
+    fr: "PATIENTE...",
+    de: "BITTE WARTEN...",
+    pt: "AGUARDE...",
+    bg: "МОЛЯ, ИЗЧАКАЙ...",
+  },
+
+  "auth.createAccount": {
+    en: "CREATE ACCOUNT",
+    es: "CREAR CUENTA",
+    uk: "СТВОРИТИ АКАУНТ",
+    ru: "СОЗДАТЬ АККАУНТ",
+    fr: "CRÉER UN COMPTE",
+    de: "KONTO ERSTELLEN",
+    pt: "CRIAR CONTA",
+    bg: "СЪЗДАЙ АКАУНТ",
+  },
+
+  "auth.signIn": {
+    en: "SIGN IN",
+    es: "INICIAR SESIÓN",
+    uk: "УВІЙТИ",
+    ru: "ВОЙТИ",
+    fr: "SE CONNECTER",
+    de: "ANMELDEN",
+    pt: "ENTRAR",
+    bg: "ВХОД",
+  },
+
+  "auth.haveAccount": {
+    en: "ALREADY HAVE AN ACCOUNT? SIGN IN",
+    es: "¿YA TIENES CUENTA? INICIA SESIÓN",
+    uk: "ВЖЕ Є АКАУНТ? УВІЙТИ",
+    ru: "УЖЕ ЕСТЬ АККАУНТ? ВОЙТИ",
+    fr: "DÉJÀ UN COMPTE ? SE CONNECTER",
+    de: "SCHON EIN KONTO? ANMELDEN",
+    pt: "JÁ TEM CONTA? ENTRAR",
+    bg: "ВЕЧЕ ИМАШ АКАУНТ? ВЛЕЗ",
+  },
+
+  "auth.noAccount": {
+    en: "DON'T HAVE AN ACCOUNT? CREATE ACCOUNT",
+    es: "¿NO TIENES CUENTA? CREA UNA",
+    uk: "НЕМАЄ АКАУНТА? СТВОРИТИ",
+    ru: "НЕТ АККАУНТА? СОЗДАТЬ",
+    fr: "PAS DE COMPTE ? CRÉER UN COMPTE",
+    de: "NOCH KEIN KONTO? KONTO ERSTELLEN",
+    pt: "NÃO TEM CONTA? CRIAR CONTA",
+    bg: "НЯМАШ АКАУНТ? СЪЗДАЙ",
+  },
+
+  "auth.legalPrefix": {
+    en: "By continuing you agree to the",
+    es: "Al continuar aceptas los",
+    uk: "Продовжуючи, ти погоджуєшся з",
+    ru: "Продолжая, ты соглашаешься с",
+    fr: "En continuant, tu acceptes les",
+    de: "Wenn du fortfährst, stimmst du den",
+    pt: "Ao continuar, você concorda com os",
+    bg: "Продължавайки, се съгласяваш с",
+  },
+
+  "auth.terms": {
+    en: "Terms",
+    es: "Términos",
+    uk: "Умовами",
+    ru: "Условиями",
+    fr: "Conditions",
+    de: "Bedingungen",
+    pt: "Termos",
+    bg: "Условията",
+  },
+
+  "auth.and": {
+    en: "and",
+    es: "y",
+    uk: "та",
+    ru: "и",
+    fr: "et la",
+    de: "und der",
+    pt: "e a",
+    bg: "и",
+  },
+
+  "auth.privacy": {
+    en: "Privacy Policy",
+    es: "Política de privacidad",
+    uk: "Політикою конфіденційності",
+    ru: "Политикой конфиденциальности",
+    fr: "Politique de confidentialité",
+    de: "Datenschutzerklärung",
+    pt: "Política de Privacidade",
+    bg: "Политиката за поверителност",
+  },
+
+  "auth.footer": {
+    en: "IRONAGE FITNESS SYSTEM",
+    es: "SISTEMA FITNESS IRONAGE",
+    uk: "ФІТНЕС-СИСТЕМА IRONAGE",
+    ru: "ФИТНЕС-СИСТЕМА IRONAGE",
+    fr: "SYSTÈME FITNESS IRONAGE",
+    de: "IRONAGE FITNESS-SYSTEM",
+    pt: "SISTEMA FITNESS IRONAGE",
+    bg: "ФИТНЕС СИСТЕМА IRONAGE",
+  },
+
+  "auth.enterName": {
+    en: "ENTER YOUR NAME",
+    es: "INTRODUCE TU NOMBRE",
+    uk: "ВВЕДИ СВОЄ ІМ'Я",
+    ru: "ВВЕДИ СВОЁ ИМЯ",
+    fr: "ENTRE TON PRÉNOM",
+    de: "GIB DEINEN NAMEN EIN",
+    pt: "DIGITE SEU NOME",
+    bg: "ВЪВЕДИ ИМЕТО СИ",
+  },
+
+  "auth.enterEmail": {
+    en: "ENTER YOUR EMAIL",
+    es: "INTRODUCE TU EMAIL",
+    uk: "ВВЕДИ EMAIL",
+    ru: "ВВЕДИ EMAIL",
+    fr: "ENTRE TON EMAIL",
+    de: "GIB DEINE E-MAIL EIN",
+    pt: "DIGITE SEU EMAIL",
+    bg: "ВЪВЕДИ EMAIL",
+  },
+
+  "auth.passwordMin": {
+    en: "PASSWORD MUST BE AT LEAST 8 CHARACTERS",
+    es: "LA CONTRASEÑA DEBE TENER AL MENOS 8 CARACTERES",
+    uk: "ПАРОЛЬ МАЄ МІСТИТИ ЩОНАЙМЕНШЕ 8 СИМВОЛІВ",
+    ru: "ПАРОЛЬ ДОЛЖЕН СОДЕРЖАТЬ НЕ МЕНЕЕ 8 СИМВОЛОВ",
+    fr: "LE MOT DE PASSE DOIT CONTENIR AU MOINS 8 CARACTÈRES",
+    de: "DAS PASSWORT MUSS MINDESTENS 8 ZEICHEN HABEN",
+    pt: "A SENHA DEVE TER PELO MENOS 8 CARACTERES",
+    bg: "ПАРОЛАТА ТРЯБВА ДА Е ПОНЕ 8 СИМВОЛА",
+  },
+
+  "auth.verifyEmail": {
+    en: "CHECK YOUR EMAIL TO VERIFY YOUR ACCOUNT",
+    es: "REVISA TU EMAIL PARA VERIFICAR TU CUENTA",
+    uk: "ПЕРЕВІР EMAIL, ЩОБ ПІДТВЕРДИТИ АКАУНТ",
+    ru: "ПРОВЕРЬ EMAIL, ЧТОБЫ ПОДТВЕРДИТЬ АККАУНТ",
+    fr: "VÉRIFIE TON EMAIL POUR CONFIRMER TON COMPTE",
+    de: "PRÜFE DEINE E-MAIL, UM DEIN KONTO ZU BESTÄTIGEN",
+    pt: "VERIFIQUE SEU EMAIL PARA CONFIRMAR SUA CONTA",
+    bg: "ПРОВЕРИ EMAIL-А СИ, ЗА ДА ПОТВЪРДИШ АКАУНТА",
+  },
+
+  "auth.failed": {
+    en: "AUTHENTICATION FAILED",
+    es: "ERROR DE AUTENTICACIÓN",
+    uk: "ПОМИЛКА АВТОРИЗАЦІЇ",
+    ru: "ОШИБКА АВТОРИЗАЦИИ",
+    fr: "ÉCHEC DE L’AUTHENTIFICATION",
+    de: "AUTHENTIFIZIERUNG FEHLGESCHLAGEN",
+    pt: "FALHA NA AUTENTICAÇÃO",
+    bg: "НЕУСПЕШНО УДОСТОВЕРЯВАНЕ",
+  },
+
+  "auth.googleFailed": {
+    en: "GOOGLE AUTHENTICATION FAILED",
+    es: "ERROR DE AUTENTICACIÓN DE GOOGLE",
+    uk: "ПОМИЛКА ВХОДУ ЧЕРЕЗ GOOGLE",
+    ru: "ОШИБКА ВХОДА ЧЕРЕЗ GOOGLE",
+    fr: "ÉCHEC DE LA CONNEXION GOOGLE",
+    de: "GOOGLE-ANMELDUNG FEHLGESCHLAGEN",
+    pt: "FALHA NO LOGIN COM GOOGLE",
+    bg: "НЕУСПЕШЕН ВХОД С GOOGLE",
+  },
+
+  /* =====================================================
+     VERIFY EMAIL
+  ===================================================== */
+
+  "verify.verifying": {
+    en: "VERIFYING YOUR EMAIL...",
+    es: "VERIFICANDO TU EMAIL...",
+    uk: "ПІДТВЕРДЖУЄМО EMAIL...",
+    ru: "ПОДТВЕРЖДАЕМ EMAIL...",
+    fr: "VÉRIFICATION DE TON EMAIL...",
+    de: "E-MAIL WIRD BESTÄTIGT...",
+    pt: "VERIFICANDO SEU EMAIL...",
+    bg: "ПОТВЪРЖДАВАМЕ EMAIL-А...",
+  },
+
+  "verify.invalid": {
+    en: "VERIFICATION LINK IS INVALID",
+    es: "EL ENLACE DE VERIFICACIÓN NO ES VÁLIDO",
+    uk: "ПОСИЛАННЯ ДЛЯ ПІДТВЕРДЖЕННЯ НЕДІЙСНЕ",
+    ru: "ССЫЛКА ПОДТВЕРЖДЕНИЯ НЕДЕЙСТВИТЕЛЬНА",
+    fr: "LE LIEN DE VÉRIFICATION EST INVALIDE",
+    de: "DER BESTÄTIGUNGSLINK IST UNGÜLTIG",
+    pt: "O LINK DE VERIFICAÇÃO É INVÁLIDO",
+    bg: "ЛИНКЪТ ЗА ПОТВЪРЖДЕНИЕ Е НЕВАЛИДЕН",
+  },
+
+  "verify.verified": {
+    en: "EMAIL VERIFIED",
+    es: "EMAIL VERIFICADO",
+    uk: "EMAIL ПІДТВЕРДЖЕНО",
+    ru: "EMAIL ПОДТВЕРЖДЁН",
+    fr: "EMAIL VÉRIFIÉ",
+    de: "E-MAIL BESTÄTIGT",
+    pt: "EMAIL VERIFICADO",
+    bg: "EMAIL-А Е ПОТВЪРДЕН",
+  },
+
+  "verify.failed": {
+    en: "EMAIL VERIFICATION FAILED",
+    es: "ERROR AL VERIFICAR EL EMAIL",
+    uk: "НЕ ВДАЛОСЯ ПІДТВЕРДИТИ EMAIL",
+    ru: "НЕ УДАЛОСЬ ПОДТВЕРДИТЬ EMAIL",
+    fr: "ÉCHEC DE LA VÉRIFICATION DE L’EMAIL",
+    de: "E-MAIL-BESTÄTIGUNG FEHLGESCHLAGEN",
+    pt: "FALHA NA VERIFICAÇÃO DO EMAIL",
+    bg: "ПОТВЪРЖДЕНИЕТО НА EMAIL-А Е НЕУСПЕШНО",
+  },
+
+  "verify.wait": {
+    en: "Please wait while we activate your IRONAGE account.",
+    es: "Espera mientras activamos tu cuenta IRONAGE.",
+    uk: "Зачекай, поки ми активуємо твій акаунт IRONAGE.",
+    ru: "Подожди, пока мы активируем твой аккаунт IRONAGE.",
+    fr: "Patiente pendant l’activation de ton compte IRONAGE.",
+    de: "Bitte warte, während wir dein IRONAGE-Konto aktivieren.",
+    pt: "Aguarde enquanto ativamos sua conta IRONAGE.",
+    bg: "Изчакай, докато активираме твоя IRONAGE акаунт.",
+  },
+
+  "verify.active": {
+    en: "Your account is active. IRONAGE is loading your profile.",
+    es: "Tu cuenta está activa. IRONAGE está cargando tu perfil.",
+    uk: "Твій акаунт активний. IRONAGE завантажує профіль.",
+    ru: "Твой аккаунт активен. IRONAGE загружает профиль.",
+    fr: "Ton compte est actif. IRONAGE charge ton profil.",
+    de: "Dein Konto ist aktiv. IRONAGE lädt dein Profil.",
+    pt: "Sua conta está ativa. O IRONAGE está carregando seu perfil.",
+    bg: "Акаунтът ти е активен. IRONAGE зарежда профила ти.",
+  },
+
+  "verify.expired": {
+    en: "The link may be invalid or expired. Return to IRONAGE and request a new verification email.",
+    es: "El enlace puede ser inválido o haber caducado. Vuelve a IRONAGE y solicita otro email.",
+    uk: "Посилання може бути недійсним або простроченим. Повернись в IRONAGE та запроси новий лист.",
+    ru: "Ссылка может быть недействительной или просроченной. Вернись в IRONAGE и запроси новое письмо.",
+    fr: "Le lien peut être invalide ou expiré. Retourne dans IRONAGE et demande un nouvel email.",
+    de: "Der Link ist möglicherweise ungültig oder abgelaufen. Kehre zu IRONAGE zurück und fordere eine neue E-Mail an.",
+    pt: "O link pode ser inválido ou ter expirado. Volte ao IRONAGE e solicite um novo email.",
+    bg: "Линкът може да е невалиден или изтекъл. Върни се в IRONAGE и поискай нов email.",
+  },
+
+  "verify.return": {
+    en: "RETURN TO IRONAGE",
+    es: "VOLVER A IRONAGE",
+    uk: "ПОВЕРНУТИСЯ В IRONAGE",
+    ru: "ВЕРНУТЬСЯ В IRONAGE",
+    fr: "RETOURNER À IRONAGE",
+    de: "ZURÜCK ZU IRONAGE",
+    pt: "VOLTAR AO IRONAGE",
+    bg: "ВЪРНИ СЕ В IRONAGE",
+  },
+
+  /* =====================================================
+     ONBOARDING COMMON
+  ===================================================== */
+
+  "onboarding.profile": {
+    en: "YOUR PROFILE",
+    es: "TU PERFIL",
+    uk: "ТВІЙ ПРОФІЛЬ",
+    ru: "ТВОЙ ПРОФИЛЬ",
+    fr: "TON PROFIL",
+    de: "DEIN PROFIL",
+    pt: "SEU PERFIL",
+    bg: "ТВОЯТ ПРОФИЛ",
+  },
+
+  "onboarding.bodyMetrics": {
+    en: "BODY METRICS",
+    es: "DATOS CORPORALES",
+    uk: "ПАРАМЕТРИ ТІЛА",
+    ru: "ПАРАМЕТРЫ ТЕЛА",
+    fr: "MESURES CORPORELLES",
+    de: "KÖRPERWERTE",
+    pt: "MEDIDAS CORPORAIS",
+    bg: "ТЕЛЕСНИ ПОКАЗАТЕЛИ",
+  },
+
+  "onboarding.mission": {
+    en: "YOUR MISSION",
+    es: "TU MISIÓN",
+    uk: "ТВОЯ МІСІЯ",
+    ru: "ТВОЯ МИССИЯ",
+    fr: "TA MISSION",
+    de: "DEINE MISSION",
+    pt: "SUA MISSÃO",
+    bg: "ТВОЯТА МИСИЯ",
+  },
+
+  "onboarding.continue": {
+    en: "CONTINUE",
+    es: "CONTINUAR",
+    uk: "ПРОДОВЖИТИ",
+    ru: "ПРОДОЛЖИТЬ",
+    fr: "CONTINUER",
+    de: "WEITER",
+    pt: "CONTINUAR",
+    bg: "ПРОДЪЛЖИ",
+  },
+
+  "onboarding.athleteSystem": {
+    en: "IRONAGE ATHLETE SYSTEM",
+    es: "SISTEMA DEL ATLETA IRONAGE",
+    uk: "СИСТЕМА АТЛЕТА IRONAGE",
+    ru: "СИСТЕМА АТЛЕТА IRONAGE",
+    fr: "SYSTÈME ATHLÈTE IRONAGE",
+    de: "IRONAGE ATHLETEN-SYSTEM",
+    pt: "SISTEMA DO ATLETA IRONAGE",
+    bg: "СИСТЕМА ЗА АТЛЕТИ IRONAGE",
+  },
+
+  "onboarding.saving": {
+    en: "SAVING PROFILE...",
+    es: "GUARDANDO PERFIL...",
+    uk: "ЗБЕРІГАЄМО ПРОФІЛЬ...",
+    ru: "СОХРАНЯЕМ ПРОФИЛЬ...",
+    fr: "ENREGISTREMENT DU PROFIL...",
+    de: "PROFIL WIRD GESPEICHERT...",
+    pt: "SALVANDO PERFIL...",
+    bg: "ЗАПАЗВАМЕ ПРОФИЛА...",
+  },
+
+  /* NAME */
+
+  "onboarding.name.eyebrow": {
+    en: "LET'S GET STARTED",
+    es: "EMPECEMOS",
+    uk: "ПОЧИНАЙМО",
+    ru: "НАЧНЁМ",
+    fr: "COMMENÇONS",
+    de: "LOS GEHT'S",
+    pt: "VAMOS COMEÇAR",
+    bg: "ДА ЗАПОЧВАМЕ",
+  },
+
+  "onboarding.name.title1": {
+    en: "WHAT'S",
+    es: "¿CUÁL ES",
+    uk: "ЯК",
+    ru: "КАК",
+    fr: "QUEL EST",
+    de: "WIE IST",
+    pt: "QUAL É",
+    bg: "КАК",
+  },
+
+  "onboarding.name.title2": {
+    en: "YOUR NAME?",
+    es: "TU NOMBRE?",
+    uk: "ТЕБЕ ЗВАТИ?",
+    ru: "ТЕБЯ ЗОВУТ?",
+    fr: "TON PRÉNOM ?",
+    de: "DEIN NAME?",
+    pt: "SEU NOME?",
+    bg: "СЕ КАЗВАШ?",
+  },
+
+  "onboarding.name.desc1": {
+    en: "Your journey starts with one decision.",
+    es: "Tu camino comienza con una decisión.",
+    uk: "Твій шлях починається з одного рішення.",
+    ru: "Твой путь начинается с одного решения.",
+    fr: "Ton parcours commence par une décision.",
+    de: "Deine Reise beginnt mit einer Entscheidung.",
+    pt: "Sua jornada começa com uma decisão.",
+    bg: "Твоят път започва с едно решение.",
+  },
+
+  "onboarding.name.desc2": {
+    en: "Let's make it count.",
+    es: "Haz que cuente.",
+    uk: "Нехай воно буде важливим.",
+    ru: "Пусть оно имеет значение.",
+    fr: "Fais en sorte qu’elle compte.",
+    de: "Mach sie bedeutend.",
+    pt: "Faça valer a pena.",
+    bg: "Нека има значение.",
+  },
+
+  "onboarding.name.label": {
+    en: "YOUR NAME",
+    es: "TU NOMBRE",
+    uk: "ТВОЄ ІМ'Я",
+    ru: "ТВОЁ ИМЯ",
+    fr: "TON PRÉNOM",
+    de: "DEIN NAME",
+    pt: "SEU NOME",
+    bg: "ТВОЕТО ИМЕ",
+  },
+
+  "onboarding.name.placeholder": {
+    en: "Enter your name",
+    es: "Escribe tu nombre",
+    uk: "Введи своє ім'я",
+    ru: "Введи своё имя",
+    fr: "Entre ton prénom",
+    de: "Gib deinen Namen ein",
+    pt: "Digite seu nome",
+    bg: "Въведи името си",
+  },
+
+  /* AGE */
+
+  "onboarding.age.title1": {
+    en: "HOW",
+    es: "¿QUÉ",
+    uk: "СКІЛЬКИ",
+    ru: "СКОЛЬКО",
+    fr: "QUEL",
+    de: "WIE",
+    pt: "QUAL",
+    bg: "НА КОЛКО",
+  },
+
+  "onboarding.age.title2": {
+    en: "OLD ARE YOU?",
+    es: "EDAD TIENES?",
+    uk: "ТОБІ РОКІВ?",
+    ru: "ТЕБЕ ЛЕТ?",
+    fr: "ÂGE AS-TU ?",
+    de: "ALT BIST DU?",
+    pt: "É A SUA IDADE?",
+    bg: "ГОДИНИ СИ?",
+  },
+
+  "onboarding.age.description": {
+    en: "Your age helps IRONAGE build a training system designed specifically for you.",
+    es: "Tu edad ayuda a IRONAGE a crear un sistema de entrenamiento específico para ti.",
+    uk: "Твій вік допомагає IRONAGE створити систему тренувань саме для тебе.",
+    ru: "Твой возраст помогает IRONAGE создать систему тренировок именно для тебя.",
+    fr: "Ton âge aide IRONAGE à créer un système d’entraînement adapté à toi.",
+    de: "Dein Alter hilft IRONAGE, ein Trainingssystem speziell für dich zu erstellen.",
+    pt: "Sua idade ajuda o IRONAGE a criar um sistema de treino específico para você.",
+    bg: "Възрастта ти помага на IRONAGE да създаде тренировъчна система специално за теб.",
+  },
+
+  "onboarding.age.label": {
+    en: "AGE",
+    es: "EDAD",
+    uk: "ВІК",
+    ru: "ВОЗРАСТ",
+    fr: "ÂGE",
+    de: "ALTER",
+    pt: "IDADE",
+    bg: "ВЪЗРАСТ",
+  },
+
+  /* GENDER */
+
+  "onboarding.gender.title1": {
+    en: "CHOOSE",
+    es: "ELIGE",
+    uk: "ОБЕРИ",
+    ru: "ВЫБЕРИ",
+    fr: "CHOISIS",
+    de: "WÄHLE",
+    pt: "ESCOLHA",
+    bg: "ИЗБЕРИ",
+  },
+
+  "onboarding.gender.title2": {
+    en: "YOUR PATH.",
+    es: "TU CAMINO.",
+    uk: "СВІЙ ШЛЯХ.",
+    ru: "СВОЙ ПУТЬ.",
+    fr: "TON PARCOURS.",
+    de: "DEINEN WEG.",
+    pt: "SEU CAMINHO.",
+    bg: "СВОЯ ПЪТ.",
+  },
+
+  "onboarding.gender.description": {
+    en: "Select your profile so IRONAGE can personalize your training experience.",
+    es: "Selecciona tu perfil para que IRONAGE personalice tu entrenamiento.",
+    uk: "Обери свій профіль, щоб IRONAGE персоналізував тренування.",
+    ru: "Выбери профиль, чтобы IRONAGE персонализировал тренировки.",
+    fr: "Sélectionne ton profil pour qu’IRONAGE personnalise ton entraînement.",
+    de: "Wähle dein Profil, damit IRONAGE dein Training personalisieren kann.",
+    pt: "Selecione seu perfil para que o IRONAGE personalize seu treino.",
+    bg: "Избери профила си, за да може IRONAGE да персонализира тренировките ти.",
+  },
+
+  "onboarding.gender.male": {
+    en: "MALE",
+    es: "HOMBRE",
+    uk: "ЧОЛОВІК",
+    ru: "МУЖЧИНА",
+    fr: "HOMME",
+    de: "MÄNNLICH",
+    pt: "HOMEM",
+    bg: "МЪЖ",
+  },
+
+  "onboarding.gender.female": {
+    en: "FEMALE",
+    es: "MUJER",
+    uk: "ЖІНКА",
+    ru: "ЖЕНЩИНА",
+    fr: "FEMME",
+    de: "WEIBLICH",
+    pt: "MULHER",
+    bg: "ЖЕНА",
+  },
+
+  /* HEIGHT */
+
+  "onboarding.height.title1": {
+    en: "HOW",
+    es: "¿CUÁN",
+    uk: "ЯКИЙ",
+    ru: "КАКОЙ",
+    fr: "QUELLE",
+    de: "WIE",
+    pt: "QUAL",
+    bg: "КОЛКО",
+  },
+
+  "onboarding.height.title2": {
+    en: "TALL ARE YOU?",
+    es: "ALTO ERES?",
+    uk: "У ТЕБЕ ЗРІСТ?",
+    ru: "У ТЕБЯ РОСТ?",
+    fr: "EST TA TAILLE ?",
+    de: "GROSS BIST DU?",
+    pt: "É A SUA ALTURA?",
+    bg: "СИ ВИСОК?",
+  },
+
+  "onboarding.height.description": {
+    en: "Your height helps us calculate your ideal training and nutrition targets.",
+    es: "Tu altura nos ayuda a calcular tus objetivos ideales de entrenamiento y nutrición.",
+    uk: "Твій зріст допомагає розрахувати оптимальні цілі тренувань і харчування.",
+    ru: "Твой рост помогает рассчитать оптимальные цели тренировок и питания.",
+    fr: "Ta taille nous aide à calculer tes objectifs idéaux d’entraînement et de nutrition.",
+    de: "Deine Größe hilft uns, optimale Trainings- und Ernährungsziele zu berechnen.",
+    pt: "Sua altura nos ajuda a calcular metas ideais de treino e nutrição.",
+    bg: "Ръстът ти ни помага да изчислим оптималните цели за тренировки и хранене.",
+  },
+
+  "onboarding.height.decrease": {
+    en: "Decrease height",
+    es: "Disminuir altura",
+    uk: "Зменшити зріст",
+    ru: "Уменьшить рост",
+    fr: "Diminuer la taille",
+    de: "Größe verringern",
+    pt: "Diminuir altura",
+    bg: "Намали ръста",
+  },
+
+  "onboarding.height.increase": {
+    en: "Increase height",
+    es: "Aumentar altura",
+    uk: "Збільшити зріст",
+    ru: "Увеличить рост",
+    fr: "Augmenter la taille",
+    de: "Größe erhöhen",
+    pt: "Aumentar altura",
+    bg: "Увеличи ръста",
+  },
+
+  /* WEIGHT */
+
+  "onboarding.weight.title1": {
+    en: "WHAT IS",
+    es: "¿CUÁL ES",
+    uk: "ЯКА",
+    ru: "КАКОЙ",
+    fr: "QUEL EST",
+    de: "WIE HOCH IST",
+    pt: "QUAL É",
+    bg: "КАКВО Е",
+  },
+
+  "onboarding.weight.title2": {
+    en: "YOUR WEIGHT?",
+    es: "TU PESO?",
+    uk: "ТВОЯ ВАГА?",
+    ru: "ТВОЙ ВЕС?",
+    fr: "TON POIDS ?",
+    de: "DEIN GEWICHT?",
+    pt: "SEU PESO?",
+    bg: "ТЕГЛОТО ТИ?",
+  },
+
+  "onboarding.weight.description": {
+    en: "This helps IRONAGE create a more precise training and nutrition system for you.",
+    es: "Esto ayuda a IRONAGE a crear un sistema de entrenamiento y nutrición más preciso para ti.",
+    uk: "Це допомагає IRONAGE створити точнішу систему тренувань і харчування для тебе.",
+    ru: "Это помогает IRONAGE создать более точную систему тренировок и питания для тебя.",
+    fr: "Cela aide IRONAGE à créer un système d’entraînement et de nutrition plus précis pour toi.",
+    de: "Dies hilft IRONAGE, ein präziseres Trainings- und Ernährungssystem für dich zu erstellen.",
+    pt: "Isso ajuda o IRONAGE a criar um sistema de treino e nutrição mais preciso para você.",
+    bg: "Това помага на IRONAGE да създаде по-точна система за тренировки и хранене за теб.",
+  },
+
+  "onboarding.weight.decrease": {
+    en: "Decrease weight",
+    es: "Disminuir peso",
+    uk: "Зменшити вагу",
+    ru: "Уменьшить вес",
+    fr: "Diminuer le poids",
+    de: "Gewicht verringern",
+    pt: "Diminuir peso",
+    bg: "Намали теглото",
+  },
+
+  "onboarding.weight.increase": {
+    en: "Increase weight",
+    es: "Aumentar peso",
+    uk: "Збільшити вагу",
+    ru: "Увеличить вес",
+    fr: "Augmenter le poids",
+    de: "Gewicht erhöhen",
+    pt: "Aumentar peso",
+    bg: "Увеличи теглото",
+  },
+
+  /* GOAL */
+
+  "onboarding.goal.title1": {
+    en: "WHAT DO YOU",
+    es: "¿QUÉ QUIERES",
+    uk: "ЩО ТИ ХОЧЕШ",
+    ru: "ЧТО ТЫ ХОЧЕШЬ",
+    fr: "QUE VEUX-TU",
+    de: "WAS WILLST DU",
+    pt: "O QUE VOCÊ QUER",
+    bg: "КАКВО ИСКАШ",
+  },
+
+  "onboarding.goal.title2": {
+    en: "WANT TO BUILD?",
+    es: "CONSTRUIR?",
+    uk: "ПОБУДУВАТИ?",
+    ru: "ПОСТРОИТЬ?",
+    fr: "CONSTRUIRE ?",
+    de: "AUFBAUEN?",
+    pt: "CONSTRUIR?",
+    bg: "ДА ИЗГРАДИШ?",
+  },
+
+  "onboarding.goal.description": {
+    en: "Choose your primary goal. IRONAGE will adapt your system around it.",
+    es: "Elige tu objetivo principal. IRONAGE adaptará tu sistema a él.",
+    uk: "Обери головну ціль. IRONAGE адаптує систему під неї.",
+    ru: "Выбери главную цель. IRONAGE адаптирует систему под неё.",
+    fr: "Choisis ton objectif principal. IRONAGE adaptera ton système autour de celui-ci.",
+    de: "Wähle dein Hauptziel. IRONAGE passt dein System daran an.",
+    pt: "Escolha seu objetivo principal. O IRONAGE adaptará seu sistema a ele.",
+    bg: "Избери основната си цел. IRONAGE ще адаптира системата според нея.",
+  },
+
+  "onboarding.goal.muscle": {
+    en: "BUILD MUSCLE",
+    es: "GANAR MÚSCULO",
+    uk: "НАБРАТИ М'ЯЗИ",
+    ru: "НАБРАТЬ МЫШЦЫ",
+    fr: "PRENDRE DU MUSCLE",
+    de: "MUSKELN AUFBAUEN",
+    pt: "GANHAR MÚSCULO",
+    bg: "ИЗГРАДИ МУСКУЛИ",
+  },
+
+  "onboarding.goal.muscleSub": {
+    en: "SIZE & PHYSIQUE",
+    es: "VOLUMEN Y FÍSICO",
+    uk: "ОБ'ЄМ І ФОРМА",
+    ru: "ОБЪЁМ И ФОРМА",
+    fr: "VOLUME & PHYSIQUE",
+    de: "MASSE & KÖRPERBAU",
+    pt: "VOLUME & FÍSICO",
+    bg: "ОБЕМ И ФИЗИКА",
+  },
+
+  "onboarding.goal.fat": {
+    en: "LOSE FAT",
+    es: "PERDER GRASA",
+    uk: "СПАЛИТИ ЖИР",
+    ru: "СЖЕЧЬ ЖИР",
+    fr: "PERDRE DU GRAS",
+    de: "FETT VERLIEREN",
+    pt: "PERDER GORDURA",
+    bg: "ИЗГОРИ МАЗНИНИ",
+  },
+
+  "onboarding.goal.fatSub": {
+    en: "LEAN & DEFINED",
+    es: "DEFINIDO Y SECO",
+    uk: "СУХІСТЬ І РЕЛЬЄФ",
+    ru: "СУХОСТЬ И РЕЛЬЕФ",
+    fr: "SEC & DÉFINI",
+    de: "DEFINIERT & SCHLANK",
+    pt: "SECO & DEFINIDO",
+    bg: "СТЕГНАТ И РЕЛЕФЕН",
+  },
+
+  "onboarding.goal.strength": {
+    en: "GET STRONGER",
+    es: "SER MÁS FUERTE",
+    uk: "СТАТИ СИЛЬНІШИМ",
+    ru: "СТАТЬ СИЛЬНЕЕ",
+    fr: "DEVENIR PLUS FORT",
+    de: "STÄRKER WERDEN",
+    pt: "FICAR MAIS FORTE",
+    bg: "СТАНИ ПО-СИЛЕН",
+  },
+
+  "onboarding.goal.strengthSub": {
+    en: "POWER & PERFORMANCE",
+    es: "FUERZA Y RENDIMIENTO",
+    uk: "СИЛА І РЕЗУЛЬТАТ",
+    ru: "СИЛА И РЕЗУЛЬТАТ",
+    fr: "PUISSANCE & PERFORMANCE",
+    de: "KRAFT & LEISTUNG",
+    pt: "FORÇA & DESEMPENHO",
+    bg: "СИЛА И ПРЕДСТАВЯНЕ",
+  },
+
+  "onboarding.goal.fitness": {
+    en: "STAY FIT",
+    es: "MANTENERSE EN FORMA",
+    uk: "БУТИ У ФОРМІ",
+    ru: "БЫТЬ В ФОРМЕ",
+    fr: "RESTER EN FORME",
+    de: "FIT BLEIBEN",
+    pt: "FICAR EM FORMA",
+    bg: "БЪДИ ВЪВ ФОРМА",
+  },
+
+  "onboarding.goal.fitnessSub": {
+    en: "HEALTH & CONDITIONING",
+    es: "SALUD Y CONDICIÓN",
+    uk: "ЗДОРОВ'Я І ФОРМА",
+    ru: "ЗДОРОВЬЕ И ФОРМА",
+    fr: "SANTÉ & CONDITION",
+    de: "GESUNDHEIT & FITNESS",
+    pt: "SAÚDE & CONDICIONAMENTO",
+    bg: "ЗДРАВЕ И КОНДИЦИЯ",
+  },
+
+  /* FINISH */
+
+  "onboarding.finish.activated": {
+    en: "ATHLETE SYSTEM ACTIVATED",
+    es: "SISTEMA DEL ATLETA ACTIVADO",
+    uk: "СИСТЕМУ АТЛЕТА АКТИВОВАНО",
+    ru: "СИСТЕМА АТЛЕТА АКТИВИРОВАНА",
+    fr: "SYSTÈME ATHLÈTE ACTIVÉ",
+    de: "ATHLETEN-SYSTEM AKTIVIERT",
+    pt: "SISTEMA DO ATLETA ATIVADO",
+    bg: "СИСТЕМАТА ЗА АТЛЕТИ Е АКТИВИРАНА",
+  },
+
+  "onboarding.finish.title1": {
+    en: "YOU'RE",
+    es: "ESTÁS",
+    uk: "ТИ",
+    ru: "ТЫ",
+    fr: "TU ES",
+    de: "DU BIST",
+    pt: "VOCÊ ESTÁ",
+    bg: "ТИ СИ",
+  },
+
+  "onboarding.finish.title2": {
+    en: "READY.",
+    es: "LISTO.",
+    uk: "ГОТОВИЙ.",
+    ru: "ГОТОВ.",
+    fr: "PRÊT.",
+    de: "BEREIT.",
+    pt: "PRONTO.",
+    bg: "ГОТОВ.",
+  },
+
+  "onboarding.finish.journey": {
+    en: "Your IRONAGE journey starts now.",
+    es: "Tu camino IRONAGE comienza ahora.",
+    uk: "Твій шлях IRONAGE починається зараз.",
+    ru: "Твой путь IRONAGE начинается сейчас.",
+    fr: "Ton parcours IRONAGE commence maintenant.",
+    de: "Deine IRONAGE-Reise beginnt jetzt.",
+    pt: "Sua jornada IRONAGE começa agora.",
+    bg: "Твоят път в IRONAGE започва сега.",
+  },
+
+  "onboarding.finish.noExcuses": {
+    en: "No excuses. No looking back.",
+    es: "Sin excusas. Sin mirar atrás.",
+    uk: "Без виправдань. Без погляду назад.",
+    ru: "Без оправданий. Без оглядки назад.",
+    fr: "Pas d’excuses. Pas de retour en arrière.",
+    de: "Keine Ausreden. Kein Zurückblicken.",
+    pt: "Sem desculpas. Sem olhar para trás.",
+    bg: "Без оправдания. Без поглед назад.",
+  },
+
+  "onboarding.finish.discipline": {
+    en: "DISCIPLINE",
+    es: "DISCIPLINA",
+    uk: "ДИСЦИПЛІНА",
+    ru: "ДИСЦИПЛИНА",
+    fr: "DISCIPLINE",
+    de: "DISZIPLIN",
+    pt: "DISCIPLINA",
+    bg: "ДИСЦИПЛИНА",
+  },
+
+  "onboarding.finish.strength": {
+    en: "STRENGTH",
+    es: "FUERZA",
+    uk: "СИЛА",
+    ru: "СИЛА",
+    fr: "FORCE",
+    de: "STÄRKE",
+    pt: "FORÇA",
+    bg: "СИЛА",
+  },
+
+  "onboarding.finish.results": {
+    en: "RESULTS",
+    es: "RESULTADOS",
+    uk: "РЕЗУЛЬТАТИ",
+    ru: "РЕЗУЛЬТАТЫ",
+    fr: "RÉSULTATS",
+    de: "ERGEBNISSE",
+    pt: "RESULTADOS",
+    bg: "РЕЗУЛТАТИ",
+  },
+
+  "onboarding.finish.enter": {
+    en: "ENTER IRONAGE",
+    es: "ENTRAR EN IRONAGE",
+    uk: "УВІЙТИ В IRONAGE",
+    ru: "ВОЙТИ В IRONAGE",
+    fr: "ENTRER DANS IRONAGE",
+    de: "IRONAGE BETRETEN",
+    pt: "ENTRAR NO IRONAGE",
+    bg: "ВЛЕЗ В IRONAGE",
+  },
+
+  "onboarding.finish.welcome": {
+    en: "WELCOME TO THE IRONAGE SYSTEM",
+    es: "BIENVENIDO AL SISTEMA IRONAGE",
+    uk: "ЛАСКАВО ПРОСИМО ДО СИСТЕМИ IRONAGE",
+    ru: "ДОБРО ПОЖАЛОВАТЬ В СИСТЕМУ IRONAGE",
+    fr: "BIENVENUE DANS LE SYSTÈME IRONAGE",
+    de: "WILLKOMMEN IM IRONAGE-SYSTEM",
+    pt: "BEM-VINDO AO SISTEMA IRONAGE",
+    bg: "ДОБРЕ ДОШЪЛ В СИСТЕМАТА IRONAGE",
+  },
+
+  /* VALIDATION */
+
+  "onboarding.error.name": {
+    en: "Enter your name",
+    es: "Introduce tu nombre",
+    uk: "Введи своє ім'я",
+    ru: "Введи своё имя",
+    fr: "Entre ton prénom",
+    de: "Gib deinen Namen ein",
+    pt: "Digite seu nome",
+    bg: "Въведи името си",
+  },
+
+  "onboarding.error.age": {
+    en: "Enter a valid age",
+    es: "Introduce una edad válida",
+    uk: "Вкажи коректний вік",
+    ru: "Укажи корректный возраст",
+    fr: "Entre un âge valide",
+    de: "Gib ein gültiges Alter ein",
+    pt: "Informe uma idade válida",
+    bg: "Въведи коректна възраст",
+  },
+
+  "onboarding.error.gender": {
+    en: "Choose your gender",
+    es: "Elige tu género",
+    uk: "Обери стать",
+    ru: "Выбери пол",
+    fr: "Choisis ton sexe",
+    de: "Wähle dein Geschlecht",
+    pt: "Escolha seu gênero",
+    bg: "Избери пол",
+  },
+
+  "onboarding.error.height": {
+    en: "Enter a valid height",
+    es: "Introduce una altura válida",
+    uk: "Вкажи коректний зріст",
+    ru: "Укажи корректный рост",
+    fr: "Entre une taille valide",
+    de: "Gib eine gültige Größe ein",
+    pt: "Informe uma altura válida",
+    bg: "Въведи коректен ръст",
+  },
+
+  "onboarding.error.weight": {
+    en: "Enter a valid weight",
+    es: "Introduce un peso válido",
+    uk: "Вкажи коректну вагу",
+    ru: "Укажи корректный вес",
+    fr: "Entre un poids valide",
+    de: "Gib ein gültiges Gewicht ein",
+    pt: "Informe um peso válido",
+    bg: "Въведи коректно тегло",
+  },
+
+  "onboarding.error.goal": {
+    en: "Choose your goal",
+    es: "Elige tu objetivo",
+    uk: "Обери свою ціль",
+    ru: "Выбери свою цель",
+    fr: "Choisis ton objectif",
+    de: "Wähle dein Ziel",
+    pt: "Escolha seu objetivo",
+    bg: "Избери своята цел",
+  },
+
+  "onboarding.error.save": {
+    en: "Failed to save profile",
+    es: "No se pudo guardar el perfil",
+    uk: "Не вдалося зберегти профіль",
+    ru: "Не удалось сохранить профиль",
+    fr: "Impossible d’enregistrer le profil",
+    de: "Profil konnte nicht gespeichert werden",
+    pt: "Não foi possível salvar o perfil",
+    bg: "Профилът не можа да бъде запазен",
+  },
+
+  /* =====================================================
+     TAB BAR
+  ===================================================== */
+
+  "tab.home": {
+    en: "Home",
+    es: "Inicio",
+    uk: "Головна",
+    ru: "Главная",
+    fr: "Accueil",
+    de: "Start",
+    pt: "Início",
+    bg: "Начало",
+  },
+
+  "tab.workout": {
+    en: "Workout",
+    es: "Entreno",
+    uk: "Тренування",
+    ru: "Тренировка",
+    fr: "Entraînement",
+    de: "Training",
+    pt: "Treino",
+    bg: "Тренировка",
+  },
+
+  "tab.nutrition": {
+    en: "Nutrition",
+    es: "Nutrición",
+    uk: "Харчування",
+    ru: "Питание",
+    fr: "Nutrition",
+    de: "Ernährung",
+    pt: "Nutrição",
+    bg: "Хранене",
+  },
+
+  "tab.progress": {
+    en: "Progress",
+    es: "Progreso",
+    uk: "Прогрес",
+    ru: "Прогресс",
+    fr: "Progrès",
+    de: "Fortschritt",
+    pt: "Progresso",
+    bg: "Прогрес",
+  },
+
+  "tab.profile": {
+    en: "Profile",
+    es: "Perfil",
+    uk: "Профіль",
+    ru: "Профиль",
+    fr: "Profil",
+    de: "Profil",
+    pt: "Perfil",
+    bg: "Профил",
+  },
+
+  "tab.ai": {
+    en: "AI",
+    es: "IA",
+    uk: "AI",
+    ru: "ИИ",
+    fr: "IA",
+    de: "KI",
+    pt: "IA",
+    bg: "AI",
+  },
+
+  "tab.navigation": {
+    en: "Main navigation",
+    es: "Navegación principal",
+    uk: "Головна навігація",
+    ru: "Главная навигация",
+    fr: "Navigation principale",
+    de: "Hauptnavigation",
+    pt: "Navegação principal",
+    bg: "Основна навигация",
+  },
+
+  /* =====================================================
+     DASHBOARD
+  ===================================================== */
+
+  "dashboard.athlete": {
+    en: "ATHLETE",
+    es: "ATLETA",
+    uk: "АТЛЕТ",
+    ru: "АТЛЕТ",
+    fr: "ATHLÈTE",
+    de: "ATHLET",
+    pt: "ATLETA",
+    bg: "АТЛЕТ",
+  },
+
+  "dashboard.athleteSystem": {
+    en: "ATHLETE SYSTEM / 01",
+    es: "SISTEMA DEL ATLETA / 01",
+    uk: "СИСТЕМА АТЛЕТА / 01",
+    ru: "СИСТЕМА АТЛЕТА / 01",
+    fr: "SYSTÈME ATHLÈTE / 01",
+    de: "ATHLETEN-SYSTEM / 01",
+    pt: "SISTEMA DO ATLETA / 01",
+    bg: "СИСТЕМА ЗА АТЛЕТИ / 01",
+  },
+
+  "dashboard.openProfile": {
+    en: "Open profile",
+    es: "Abrir perfil",
+    uk: "Відкрити профіль",
+    ru: "Открыть профиль",
+    fr: "Ouvrir le profil",
+    de: "Profil öffnen",
+    pt: "Abrir perfil",
+    bg: "Отвори профила",
+  },
+
+  "dashboard.missionComplete": {
+    en: "MISSION COMPLETE",
+    es: "MISIÓN COMPLETADA",
+    uk: "МІСІЮ ВИКОНАНО",
+    ru: "МИССИЯ ВЫПОЛНЕНА",
+    fr: "MISSION ACCOMPLIE",
+    de: "MISSION ERFÜLLT",
+    pt: "MISSÃO CONCLUÍDA",
+    bg: "МИСИЯТА Е ИЗПЪЛНЕНА",
+  },
+
+  "dashboard.welcomeBack": {
+    en: "WELCOME BACK",
+    es: "BIENVENIDO DE NUEVO",
+    uk: "З ПОВЕРНЕННЯМ",
+    ru: "С ВОЗВРАЩЕНИЕМ",
+    fr: "BON RETOUR",
+    de: "WILLKOMMEN ZURÜCK",
+    pt: "BEM-VINDO DE VOLTA",
+    bg: "ДОБРЕ ДОШЪЛ ОТНОВО",
+  },
+
+  "dashboard.build": {
+    en: "BUILD.",
+    es: "CONSTRUYE.",
+    uk: "БУДУЙ.",
+    ru: "СТРОЙ.",
+    fr: "CONSTRUIS.",
+    de: "BAUE.",
+    pt: "CONSTRUA.",
+    bg: "ИЗГРАЖДАЙ.",
+  },
+
+  "dashboard.disciplineToday": {
+    en: "Discipline today.",
+    es: "Disciplina hoy.",
+    uk: "Дисципліна сьогодні.",
+    ru: "Дисциплина сегодня.",
+    fr: "Discipline aujourd’hui.",
+    de: "Disziplin heute.",
+    pt: "Disciplina hoje.",
+    bg: "Дисциплина днес.",
+  },
+
+  "dashboard.strengthTomorrow": {
+    en: "Strength tomorrow.",
+    es: "Fuerza mañana.",
+    uk: "Сила завтра.",
+    ru: "Сила завтра.",
+    fr: "Force demain.",
+    de: "Stärke morgen.",
+    pt: "Força amanhã.",
+    bg: "Сила утре.",
+  },
+
+  "dashboard.trainAgain": {
+    en: "TRAIN AGAIN",
+    es: "ENTRENAR DE NUEVO",
+    uk: "ТРЕНУВАТИСЯ ЗНОВУ",
+    ru: "ТРЕНИРОВАТЬСЯ СНОВА",
+    fr: "S’ENTRAÎNER À NOUVEAU",
+    de: "NOCHMAL TRAINIEREN",
+    pt: "TREINAR NOVAMENTE",
+    bg: "ТРЕНИРАЙ ОТНОВО",
+  },
+
+  "dashboard.startToday": {
+    en: "START TODAY'S WORKOUT",
+    es: "EMPEZAR EL ENTRENAMIENTO DE HOY",
+    uk: "ПОЧАТИ СЬОГОДНІШНЄ ТРЕНУВАННЯ",
+    ru: "НАЧАТЬ СЕГОДНЯШНЮЮ ТРЕНИРОВКУ",
+    fr: "COMMENCER L’ENTRAÎNEMENT DU JOUR",
+    de: "HEUTIGES TRAINING STARTEN",
+    pt: "INICIAR O TREINO DE HOJE",
+    bg: "ЗАПОЧНИ ДНЕШНАТА ТРЕНИРОВКА",
+  },
+
+  "dashboard.streak": {
+    en: "STREAK",
+    es: "RACHA",
+    uk: "СЕРІЯ",
+    ru: "СЕРИЯ",
+    fr: "SÉRIE",
+    de: "SERIE",
+    pt: "SEQUÊNCIA",
+    bg: "СЕРИЯ",
+  },
+
+  "dashboard.days": {
+    en: "DAYS",
+    es: "DÍAS",
+    uk: "ДНІВ",
+    ru: "ДНЕЙ",
+    fr: "JOURS",
+    de: "TAGE",
+    pt: "DIAS",
+    bg: "ДНИ",
+  },
+
+  "dashboard.level": {
+    en: "LEVEL",
+    es: "NIVEL",
+    uk: "РІВЕНЬ",
+    ru: "УРОВЕНЬ",
+    fr: "NIVEAU",
+    de: "LEVEL",
+    pt: "NÍVEL",
+    bg: "НИВО",
+  },
+
+  "dashboard.current": {
+    en: "CURRENT",
+    es: "ACTUAL",
+    uk: "ПОТОЧНИЙ",
+    ru: "ТЕКУЩИЙ",
+    fr: "ACTUEL",
+    de: "AKTUELL",
+    pt: "ATUAL",
+    bg: "ТЕКУЩО",
+  },
+
+  "dashboard.points": {
+    en: "POINTS",
+    es: "PUNTOS",
+    uk: "БАЛИ",
+    ru: "ОЧКИ",
+    fr: "POINTS",
+    de: "PUNKTE",
+    pt: "PONTOS",
+    bg: "ТОЧКИ",
+  },
+
+  "dashboard.athleteLevel": {
+    en: "ATHLETE LEVEL",
+    es: "NIVEL DEL ATLETA",
+    uk: "РІВЕНЬ АТЛЕТА",
+    ru: "УРОВЕНЬ АТЛЕТА",
+    fr: "NIVEAU ATHLÈTE",
+    de: "ATHLETEN-LEVEL",
+    pt: "NÍVEL DO ATLETA",
+    bg: "НИВО НА АТЛЕТА",
+  },
+
+  "dashboard.levelPrefix": {
+    en: "Level",
+    es: "Nivel",
+    uk: "Рівень",
+    ru: "Уровень",
+    fr: "Niveau",
+    de: "Level",
+    pt: "Nível",
+    bg: "Ниво",
+  },
+
+  "dashboard.yourProgram": {
+    en: "YOUR PROGRAM",
+    es: "TU PROGRAMA",
+    uk: "ТВОЯ ПРОГРАМА",
+    ru: "ТВОЯ ПРОГРАММА",
+    fr: "TON PROGRAMME",
+    de: "DEIN PROGRAMM",
+    pt: "SEU PROGRAMA",
+    bg: "ТВОЯТА ПРОГРАМА",
+  },
+
+  "dashboard.todayMission": {
+    en: "Today's Mission",
+    es: "Misión de hoy",
+    uk: "Сьогоднішня місія",
+    ru: "Сегодняшняя миссия",
+    fr: "Mission du jour",
+    de: "Heutige Mission",
+    pt: "Missão de hoje",
+    bg: "Днешната мисия",
+  },
+
+  "dashboard.viewAll": {
+    en: "VIEW ALL",
+    es: "VER TODO",
+    uk: "ПЕРЕГЛЯНУТИ ВСЕ",
+    ru: "СМОТРЕТЬ ВСЕ",
+    fr: "TOUT VOIR",
+    de: "ALLE ANZEIGEN",
+    pt: "VER TUDO",
+    bg: "ВИЖ ВСИЧКИ",
+  },
+
+  "dashboard.program": {
+    en: "IRONAGE / PROGRAM",
+    es: "IRONAGE / PROGRAMA",
+    uk: "IRONAGE / ПРОГРАМА",
+    ru: "IRONAGE / ПРОГРАММА",
+    fr: "IRONAGE / PROGRAMME",
+    de: "IRONAGE / PROGRAMM",
+    pt: "IRONAGE / PROGRAMA",
+    bg: "IRONAGE / ПРОГРАМА",
+  },
+
+  "dashboard.upperBody": {
+    en: "UPPER BODY",
+    es: "TREN SUPERIOR",
+    uk: "ВЕРХ ТІЛА",
+    ru: "ВЕРХ ТЕЛА",
+    fr: "HAUT DU CORPS",
+    de: "OBERKÖRPER",
+    pt: "PARTE SUPERIOR",
+    bg: "ГОРНА ЧАСТ",
+  },
+
+  "dashboard.chestShouldersArms": {
+    en: "Chest • Shoulders • Arms",
+    es: "Pecho • Hombros • Brazos",
+    uk: "Груди • Плечі • Руки",
+    ru: "Грудь • Плечи • Руки",
+    fr: "Pectoraux • Épaules • Bras",
+    de: "Brust • Schultern • Arme",
+    pt: "Peito • Ombros • Braços",
+    bg: "Гърди • Рамене • Ръце",
+  },
+
+  "dashboard.trainingHistory": {
+    en: "TRAINING HISTORY",
+    es: "HISTORIAL DE ENTRENAMIENTO",
+    uk: "ІСТОРІЯ ТРЕНУВАНЬ",
+    ru: "ИСТОРИЯ ТРЕНИРОВОК",
+    fr: "HISTORIQUE D’ENTRAÎNEMENT",
+    de: "TRAININGSVERLAUF",
+    pt: "HISTÓRICO DE TREINOS",
+    bg: "ИСТОРИЯ НА ТРЕНИРОВКИТЕ",
+  },
+
+  "dashboard.lastWorkout": {
+    en: "Last Workout",
+    es: "Último entrenamiento",
+    uk: "Останнє тренування",
+    ru: "Последняя тренировка",
+    fr: "Dernier entraînement",
+    de: "Letztes Training",
+    pt: "Último treino",
+    bg: "Последна тренировка",
+  },
+
+  "dashboard.progress": {
+    en: "PROGRESS",
+    es: "PROGRESO",
+    uk: "ПРОГРЕС",
+    ru: "ПРОГРЕСС",
+    fr: "PROGRÈS",
+    de: "FORTSCHRITT",
+    pt: "PROGRESSO",
+    bg: "ПРОГРЕС",
+  },
+
+  "dashboard.completed": {
+    en: "COMPLETED",
+    es: "COMPLETADO",
+    uk: "ЗАВЕРШЕНО",
+    ru: "ЗАВЕРШЕНО",
+    fr: "TERMINÉ",
+    de: "ABGESCHLOSSEN",
+    pt: "CONCLUÍDO",
+    bg: "ЗАВЪРШЕНО",
+  },
+
+  "dashboard.min": {
+    en: "min",
+    es: "min",
+    uk: "хв",
+    ru: "мин",
+    fr: "min",
+    de: "Min",
+    pt: "min",
+    bg: "мин",
+  },
+
+  "dashboard.quote1": {
+    en: "THE BODY ACHIEVES",
+    es: "EL CUERPO CONSIGUE",
+    uk: "ТІЛО ДОСЯГАЄ",
+    ru: "ТЕЛО ДОСТИГАЕТ",
+    fr: "LE CORPS ACCOMPLIT",
+    de: "DER KÖRPER ERREICHT",
+    pt: "O CORPO ALCANÇA",
+    bg: "ТЯЛОТО ПОСТИГА",
+  },
+
+  "dashboard.quote2": {
+    en: "WHAT THE MIND",
+    es: "LO QUE LA MENTE",
+    uk: "ТЕ, ВІД ЧОГО РОЗУМ",
+    ru: "ТО, ОТ ЧЕГО РАЗУМ",
+    fr: "CE QUE L’ESPRIT",
+    de: "WAS DER GEIST",
+    pt: "O QUE A MENTE",
+    bg: "ТОВА, ОТ КОЕТО УМЪТ",
+  },
+
+  "dashboard.quote3": {
+    en: "REFUSES TO GIVE UP ON.",
+    es: "SE NIEGA A RENDIRSE.",
+    uk: "ВІДМОВЛЯЄТЬСЯ ЗДАВАТИСЯ.",
+    ru: "ОТКАЗЫВАЕТСЯ СДАВАТЬСЯ.",
+    fr: "REFUSE D’ABANDONNER.",
+    de: "NICHT AUFGIBT.",
+    pt: "SE RECUSA A DESISTIR.",
+    bg: "ОТКАЗВА ДА СЕ ПРЕДАДЕ.",
+  },
+
+  "dashboard.principle": {
+    en: "IRONAGE PRINCIPLE / 001",
+    es: "PRINCIPIO IRONAGE / 001",
+    uk: "ПРИНЦИП IRONAGE / 001",
+    ru: "ПРИНЦИП IRONAGE / 001",
+    fr: "PRINCIPE IRONAGE / 001",
+    de: "IRONAGE PRINZIP / 001",
+    pt: "PRINCÍPIO IRONAGE / 001",
+    bg: "ПРИНЦИП IRONAGE / 001",
+  },
+
+  "dashboard.nutrition": {
+    en: "NUTRITION",
+    es: "NUTRICIÓN",
+    uk: "ХАРЧУВАННЯ",
+    ru: "ПИТАНИЕ",
+    fr: "NUTRITION",
+    de: "ERNÄHRUNG",
+    pt: "NUTRIÇÃO",
+    bg: "ХРАНЕНЕ",
+  },
+
+  "dashboard.aiTrainer": {
+    en: "AI TRAINER",
+    es: "ENTRENADOR IA",
+    uk: "AI ТРЕНЕР",
+    ru: "ИИ ТРЕНЕР",
+    fr: "COACH IA",
+    de: "KI-TRAINER",
+    pt: "TREINADOR IA",
+    bg: "AI ТРЕНЬОР",
+  },
+
+  /* =====================================================
+     WORKOUT
+  ===================================================== */
+
+  "workout.program": {
+    en: "IRONAGE PROGRAM",
+    es: "PROGRAMA IRONAGE",
+    uk: "ПРОГРАМА IRONAGE",
+    ru: "ПРОГРАММА IRONAGE",
+    fr: "PROGRAMME IRONAGE",
+    de: "IRONAGE PROGRAMM",
+    pt: "PROGRAMA IRONAGE",
+    bg: "ПРОГРАМА IRONAGE",
+  },
+
+  "workout.your": {
+    en: "YOUR",
+    es: "TUS",
+    uk: "ТВОЇ",
+    ru: "ТВОИ",
+    fr: "TES",
+    de: "DEINE",
+    pt: "SEUS",
+    bg: "ТВОИТЕ",
+  },
+
+  "workout.workouts": {
+    en: "WORKOUTS.",
+    es: "ENTRENAMIENTOS.",
+    uk: "ТРЕНУВАННЯ.",
+    ru: "ТРЕНИРОВКИ.",
+    fr: "ENTRAÎNEMENTS.",
+    de: "TRAININGS.",
+    pt: "TREINOS.",
+    bg: "ТРЕНИРОВКИ.",
+  },
+
+  "workout.systemActive": {
+    en: "SYSTEM ACTIVE",
+    es: "SISTEMA ACTIVO",
+    uk: "СИСТЕМА АКТИВНА",
+    ru: "СИСТЕМА АКТИВНА",
+    fr: "SYSTÈME ACTIF",
+    de: "SYSTEM AKTIV",
+    pt: "SISTEMA ATIVO",
+    bg: "СИСТЕМАТА Е АКТИВНА",
+  },
+
+  "workout.trainPurpose": {
+    en: "Train with purpose.",
+    es: "Entrena con propósito.",
+    uk: "Тренуйся з метою.",
+    ru: "Тренируйся с целью.",
+    fr: "Entraîne-toi avec un objectif.",
+    de: "Trainiere mit einem Ziel.",
+    pt: "Treine com propósito.",
+    bg: "Тренирай с цел.",
+  },
+
+  "workout.buildStronger": {
+    en: "Build something stronger.",
+    es: "Construye algo más fuerte.",
+    uk: "Будуй щось сильніше.",
+    ru: "Создавай что-то сильнее.",
+    fr: "Construis quelque chose de plus fort.",
+    de: "Baue etwas Stärkeres auf.",
+    pt: "Construa algo mais forte.",
+    bg: "Изгради нещо по-силно.",
+  },
+
+  "workout.thisWeek": {
+    en: "THIS WEEK",
+    es: "ESTA SEMANA",
+    uk: "ЦЬОГО ТИЖНЯ",
+    ru: "НА ЭТОЙ НЕДЕЛЕ",
+    fr: "CETTE SEMAINE",
+    de: "DIESE WOCHE",
+    pt: "ESTA SEMANA",
+    bg: "ТАЗИ СЕДМИЦА",
+  },
+
+  "workout.trainingProgram": {
+    en: "Training Program",
+    es: "Programa de entrenamiento",
+    uk: "Програма тренувань",
+    ru: "Программа тренировок",
+    fr: "Programme d’entraînement",
+    de: "Trainingsprogramm",
+    pt: "Programa de treino",
+    bg: "Тренировъчна програма",
+  },
+
+  "workout.week": {
+    en: "WEEK 01",
+    es: "SEMANA 01",
+    uk: "ТИЖДЕНЬ 01",
+    ru: "НЕДЕЛЯ 01",
+    fr: "SEMAINE 01",
+    de: "WOCHE 01",
+    pt: "SEMANA 01",
+    bg: "СЕДМИЦА 01",
+  },
+
+  "workout.today45": {
+    en: "TODAY / 45 MIN",
+    es: "HOY / 45 MIN",
+    uk: "СЬОГОДНІ / 45 ХВ",
+    ru: "СЕГОДНЯ / 45 МИН",
+    fr: "AUJOURD’HUI / 45 MIN",
+    de: "HEUTE / 45 MIN",
+    pt: "HOJE / 45 MIN",
+    bg: "ДНЕС / 45 МИН",
+  },
+
+  "workout.48min": {
+    en: "48 MIN",
+    es: "48 MIN",
+    uk: "48 ХВ",
+    ru: "48 МИН",
+    fr: "48 MIN",
+    de: "48 MIN",
+    pt: "48 MIN",
+    bg: "48 МИН",
+  },
+
+  "workout.52min": {
+    en: "52 MIN",
+    es: "52 MIN",
+    uk: "52 ХВ",
+    ru: "52 МИН",
+    fr: "52 MIN",
+    de: "52 MIN",
+    pt: "52 MIN",
+    bg: "52 МИН",
+  },
+
+  "workout.upperTitle": {
+    en: "UPPER BODY",
+    es: "TREN SUPERIOR",
+    uk: "ВЕРХ ТІЛА",
+    ru: "ВЕРХ ТЕЛА",
+    fr: "HAUT DU CORPS",
+    de: "OBERKÖRPER",
+    pt: "PARTE SUPERIOR",
+    bg: "ГОРНА ЧАСТ",
+  },
+
+  "workout.upperDescription": {
+    en: "Chest • Shoulders • Arms",
+    es: "Pecho • Hombros • Brazos",
+    uk: "Груди • Плечі • Руки",
+    ru: "Грудь • Плечи • Руки",
+    fr: "Pectoraux • Épaules • Bras",
+    de: "Brust • Schultern • Arme",
+    pt: "Peito • Ombros • Braços",
+    bg: "Гърди • Рамене • Ръце",
+  },
+
+  "workout.lowerTitle": {
+    en: "LOWER BODY",
+    es: "TREN INFERIOR",
+    uk: "НИЗ ТІЛА",
+    ru: "НИЗ ТЕЛА",
+    fr: "BAS DU CORPS",
+    de: "UNTERKÖRPER",
+    pt: "PARTE INFERIOR",
+    bg: "ДОЛНА ЧАСТ",
+  },
+
+  "workout.lowerDescription": {
+    en: "Legs • Glutes • Core",
+    es: "Piernas • Glúteos • Core",
+    uk: "Ноги • Сідниці • Кор",
+    ru: "Ноги • Ягодицы • Кор",
+    fr: "Jambes • Fessiers • Gainage",
+    de: "Beine • Gesäß • Core",
+    pt: "Pernas • Glúteos • Core",
+    bg: "Крака • Седалище • Кор",
+  },
+
+  "workout.fullTitle": {
+    en: "FULL BODY",
+    es: "CUERPO COMPLETO",
+    uk: "ВСЕ ТІЛО",
+    ru: "ВСЁ ТЕЛО",
+    fr: "CORPS ENTIER",
+    de: "GANZKÖRPER",
+    pt: "CORPO INTEIRO",
+    bg: "ЦЯЛО ТЯЛО",
+  },
+
+  "workout.fullDescription": {
+    en: "Strength • Power • Conditioning",
+    es: "Fuerza • Potencia • Condición",
+    uk: "Сила • Потужність • Витривалість",
+    ru: "Сила • Мощность • Выносливость",
+    fr: "Force • Puissance • Condition",
+    de: "Kraft • Power • Kondition",
+    pt: "Força • Potência • Condicionamento",
+    bg: "Сила • Мощ • Кондиция",
+  },
+
+  "workout.weeklyProgress": {
+    en: "WEEKLY PROGRESS",
+    es: "PROGRESO SEMANAL",
+    uk: "ПРОГРЕС ЗА ТИЖДЕНЬ",
+    ru: "ПРОГРЕСС ЗА НЕДЕЛЮ",
+    fr: "PROGRÈS HEBDOMADAIRE",
+    de: "WOCHENFORTSCHRITT",
+    pt: "PROGRESSO SEMANAL",
+    bg: "СЕДМИЧЕН ПРОГРЕС",
+  },
+
+  "workout.startJourney": {
+    en: "START YOUR JOURNEY",
+    es: "EMPIEZA TU CAMINO",
+    uk: "ПОЧНИ СВІЙ ШЛЯХ",
+    ru: "НАЧНИ СВОЙ ПУТЬ",
+    fr: "COMMENCE TON PARCOURS",
+    de: "STARTE DEINE REISE",
+    pt: "COMECE SUA JORNADA",
+    bg: "ЗАПОЧНИ СВОЯ ПЪТ",
+  },
+
+  "workout.completed": {
+    en: "COMPLETED",
+    es: "COMPLETADOS",
+    uk: "ЗАВЕРШЕНО",
+    ru: "ЗАВЕРШЕНО",
+    fr: "TERMINÉS",
+    de: "ABGESCHLOSSEN",
+    pt: "CONCLUÍDOS",
+    bg: "ЗАВЪРШЕНИ",
+  },
+
+  "workout.mindset": {
+    en: "IRONAGE / MINDSET",
+    es: "IRONAGE / MENTALIDAD",
+    uk: "IRONAGE / МИСЛЕННЯ",
+    ru: "IRONAGE / МЫШЛЕНИЕ",
+    fr: "IRONAGE / MENTALITÉ",
+    de: "IRONAGE / MINDSET",
+    pt: "IRONAGE / MENTALIDADE",
+    bg: "IRONAGE / НАГЛАСА",
+  },
+
+  "workout.no": {
+    en: "NO",
+    es: "SIN",
+    uk: "БЕЗ",
+    ru: "БЕЗ",
+    fr: "PAS",
+    de: "KEINE",
+    pt: "SEM",
+    bg: "БЕЗ",
+  },
+
+  "workout.excuses": {
+    en: "EXCUSES.",
+    es: "EXCUSAS.",
+    uk: "ВИПРАВДАНЬ.",
+    ru: "ОПРАВДАНИЙ.",
+    fr: "D’EXCUSES.",
+    de: "AUSREDEN.",
+    pt: "DESCULPAS.",
+    bg: "ОПРАВДАНИЯ.",
+  },
+
+  "workout.quote": {
+    en: "Discipline creates the version of you that others cannot stop.",
+    es: "La disciplina crea una versión de ti que nadie puede detener.",
+    uk: "Дисципліна створює версію тебе, яку інші не зможуть зупинити.",
+    ru: "Дисциплина создаёт версию тебя, которую другие не смогут остановить.",
+    fr: "La discipline crée une version de toi que personne ne peut arrêter.",
+    de: "Disziplin erschafft eine Version von dir, die niemand stoppen kann.",
+    pt: "A disciplina cria uma versão de você que ninguém consegue parar.",
+    bg: "Дисциплината създава версия на теб, която никой не може да спре.",
+  },
+
+
+  /* =====================================================
+     NUTRITION
+  ===================================================== */
+
+  "nutrition.program": {
+    en: "IRONAGE PROGRAM",
+    es: "PROGRAMA IRONAGE",
+    uk: "ПРОГРАМА IRONAGE",
+    ru: "ПРОГРАММА IRONAGE",
+    fr: "PROGRAMME IRONAGE",
+    de: "IRONAGE PROGRAMM",
+    pt: "PROGRAMA IRONAGE",
+    bg: "ПРОГРАМА IRONAGE",
+  },
+
+  "nutrition.title": {
+    en: "NUTRITION",
+    es: "NUTRICIÓN",
+    uk: "ХАРЧУВАННЯ",
+    ru: "ПИТАНИЕ",
+    fr: "NUTRITION",
+    de: "ERNÄHRUNG",
+    pt: "NUTRIÇÃO",
+    bg: "ХРАНЕНЕ",
+  },
+
+  "nutrition.fuel": {
+    en: "Fuel your body.",
+    es: "Alimenta tu cuerpo.",
+    uk: "Живи своє тіло.",
+    ru: "Питай своё тело.",
+    fr: "Nourris ton corps.",
+    de: "Versorge deinen Körper.",
+    pt: "Alimente seu corpo.",
+    bg: "Зареди тялото си.",
+  },
+
+  "nutrition.buildStrength": {
+    en: "Build your strength.",
+    es: "Construye tu fuerza.",
+    uk: "Будуй свою силу.",
+    ru: "Развивай свою силу.",
+    fr: "Développe ta force.",
+    de: "Baue deine Stärke auf.",
+    pt: "Construa sua força.",
+    bg: "Изгради силата си.",
+  },
+
+  "nutrition.today": {
+    en: "TODAY",
+    es: "HOY",
+    uk: "СЬОГОДНІ",
+    ru: "СЕГОДНЯ",
+    fr: "AUJOURD’HUI",
+    de: "HEUTE",
+    pt: "HOJE",
+    bg: "ДНЕС",
+  },
+
+  "nutrition.yesterday": {
+    en: "YESTERDAY",
+    es: "AYER",
+    uk: "ВЧОРА",
+    ru: "ВЧЕРА",
+    fr: "HIER",
+    de: "GESTERN",
+    pt: "ONTEM",
+    bg: "ВЧЕРА",
+  },
+
+  "nutrition.backToday": {
+    en: "BACK TO TODAY",
+    es: "VOLVER A HOY",
+    uk: "ПОВЕРНУТИСЯ ДО СЬОГОДНІ",
+    ru: "ВЕРНУТЬСЯ К СЕГОДНЯ",
+    fr: "REVENIR À AUJOURD’HUI",
+    de: "ZURÜCK ZU HEUTE",
+    pt: "VOLTAR PARA HOJE",
+    bg: "ОБРАТНО КЪМ ДНЕС",
+  },
+
+  "nutrition.calories": {
+    en: "CALORIES",
+    es: "CALORÍAS",
+    uk: "КАЛОРІЇ",
+    ru: "КАЛОРИИ",
+    fr: "CALORIES",
+    de: "KALORIEN",
+    pt: "CALORIAS",
+    bg: "КАЛОРИИ",
+  },
+
+  "nutrition.remaining": {
+    en: "kcal remaining",
+    es: "kcal restantes",
+    uk: "ккал залишилось",
+    ru: "ккал осталось",
+    fr: "kcal restantes",
+    de: "kcal verbleibend",
+    pt: "kcal restantes",
+    bg: "ккал остават",
+  },
+
+  "nutrition.adherence": {
+    en: "ADHERENCE",
+    es: "CUMPLIMIENTO",
+    uk: "ДОТРИМАННЯ",
+    ru: "СОБЛЮДЕНИЕ",
+    fr: "ADHÉRENCE",
+    de: "EINHALTUNG",
+    pt: "ADESÃO",
+    bg: "СПАЗВАНЕ",
+  },
+
+  "nutrition.macronutrients": {
+    en: "MACRONUTRIENTS",
+    es: "MACRONUTRIENTES",
+    uk: "МАКРОНУТРІЄНТИ",
+    ru: "МАКРОНУТРИЕНТЫ",
+    fr: "MACRONUTRIMENTS",
+    de: "MAKRONÄHRSTOFFE",
+    pt: "MACRONUTRIENTES",
+    bg: "МАКРОНУТРИЕНТИ",
+  },
+
+  "nutrition.daily": {
+    en: "DAILY",
+    es: "DIARIO",
+    uk: "ЩОДНЯ",
+    ru: "ЕЖЕДНЕВНО",
+    fr: "QUOTIDIEN",
+    de: "TÄGLICH",
+    pt: "DIÁRIO",
+    bg: "ДНЕВНО",
+  },
+
+  "nutrition.protein": {
+    en: "PROTEIN",
+    es: "PROTEÍNA",
+    uk: "БІЛОК",
+    ru: "БЕЛОК",
+    fr: "PROTÉINES",
+    de: "PROTEIN",
+    pt: "PROTEÍNA",
+    bg: "ПРОТЕИН",
+  },
+
+  "nutrition.carbs": {
+    en: "CARBS",
+    es: "CARBOHIDRATOS",
+    uk: "ВУГЛЕВОДИ",
+    ru: "УГЛЕВОДЫ",
+    fr: "GLUCIDES",
+    de: "KOHLENHYDRATE",
+    pt: "CARBOIDRATOS",
+    bg: "ВЪГЛЕХИДРАТИ",
+  },
+
+  "nutrition.fat": {
+    en: "FAT",
+    es: "GRASAS",
+    uk: "ЖИРИ",
+    ru: "ЖИРЫ",
+    fr: "LIPIDES",
+    de: "FETT",
+    pt: "GORDURAS",
+    bg: "МАЗНИНИ",
+  },
+
+  "nutrition.dailyTarget": {
+    en: "DAILY TARGET",
+    es: "OBJETIVO DIARIO",
+    uk: "ДЕННА ЦІЛЬ",
+    ru: "ДНЕВНАЯ ЦЕЛЬ",
+    fr: "OBJECTIF QUOTIDIEN",
+    de: "TAGESZIEL",
+    pt: "META DIÁRIA",
+    bg: "ДНЕВНА ЦЕЛ",
+  },
+
+  "nutrition.hydration": {
+    en: "HYDRATION",
+    es: "HIDRATACIÓN",
+    uk: "ГІДРАТАЦІЯ",
+    ru: "ГИДРАТАЦИЯ",
+    fr: "HYDRATATION",
+    de: "HYDRATION",
+    pt: "HIDRATAÇÃO",
+    bg: "ХИДРАТАЦИЯ",
+  },
+
+  "nutrition.addFood": {
+    en: "ADD FOOD",
+    es: "AÑADIR COMIDA",
+    uk: "ДОДАТИ ЇЖУ",
+    ru: "ДОБАВИТЬ ЕДУ",
+    fr: "AJOUTER UN ALIMENT",
+    de: "LEBENSMITTEL HINZUFÜGEN",
+    pt: "ADICIONAR ALIMENTO",
+    bg: "ДОБАВИ ХРАНА",
+  },
+
+  "nutrition.foodName": {
+    en: "Food name",
+    es: "Nombre del alimento",
+    uk: "Назва продукту",
+    ru: "Название продукта",
+    fr: "Nom de l’aliment",
+    de: "Lebensmittelname",
+    pt: "Nome do alimento",
+    bg: "Име на храната",
+  },
+
+  "nutrition.caloriesPlaceholder": {
+    en: "Calories",
+    es: "Calorías",
+    uk: "Калорії",
+    ru: "Калории",
+    fr: "Calories",
+    de: "Kalorien",
+    pt: "Calorias",
+    bg: "Калории",
+  },
+
+  "nutrition.proteinPlaceholder": {
+    en: "Protein g",
+    es: "Proteína g",
+    uk: "Білок г",
+    ru: "Белок г",
+    fr: "Protéines g",
+    de: "Protein g",
+    pt: "Proteína g",
+    bg: "Протеин г",
+  },
+
+  "nutrition.fatPlaceholder": {
+    en: "Fat g",
+    es: "Grasas g",
+    uk: "Жири г",
+    ru: "Жиры г",
+    fr: "Lipides g",
+    de: "Fett g",
+    pt: "Gordura g",
+    bg: "Мазнини г",
+  },
+
+  "nutrition.carbsPlaceholder": {
+    en: "Carbs g",
+    es: "Carbohidratos g",
+    uk: "Вуглеводи г",
+    ru: "Углеводы г",
+    fr: "Glucides g",
+    de: "Kohlenhydrate g",
+    pt: "Carboidratos g",
+    bg: "Въглехидрати г",
+  },
+
+  "nutrition.mealsToday": {
+    en: "TODAY'S MEALS",
+    es: "COMIDAS DE HOY",
+    uk: "СЬОГОДНІШНІ ПРИЙОМИ ЇЖІ",
+    ru: "СЕГОДНЯШНИЕ ПРИЁМЫ ПИЩИ",
+    fr: "REPAS DU JOUR",
+    de: "HEUTIGE MAHLZEITEN",
+    pt: "REFEIÇÕES DE HOJE",
+    bg: "ДНЕШНИ ХРАНЕНИЯ",
+  },
+
+  "nutrition.noMeals": {
+    en: "No meals added yet.",
+    es: "Aún no hay comidas añadidas.",
+    uk: "Ще не додано жодного прийому їжі.",
+    ru: "Приёмы пищи ещё не добавлены.",
+    fr: "Aucun repas ajouté.",
+    de: "Noch keine Mahlzeiten hinzugefügt.",
+    pt: "Nenhuma refeição adicionada.",
+    bg: "Все още няма добавени хранения.",
+  },
+
+  "nutrition.history7": {
+    en: "7 DAY HISTORY",
+    es: "HISTORIAL DE 7 DÍAS",
+    uk: "ІСТОРІЯ ЗА 7 ДНІВ",
+    ru: "ИСТОРИЯ ЗА 7 ДНЕЙ",
+    fr: "HISTORIQUE SUR 7 JOURS",
+    de: "7-TAGE-VERLAUF",
+    pt: "HISTÓRICO DE 7 DIAS",
+    bg: "ИСТОРИЯ ЗА 7 ДНИ",
+  },
+
+  "nutrition.average": {
+    en: "AVERAGE",
+    es: "PROMEDIO",
+    uk: "СЕРЕДНЄ",
+    ru: "СРЕДНЕЕ",
+    fr: "MOYENNE",
+    de: "DURCHSCHNITT",
+    pt: "MÉDIA",
+    bg: "СРЕДНО",
+  },
+
+  "nutrition.avgCalories": {
+    en: "AVG CALORIES",
+    es: "CALORÍAS PROM.",
+    uk: "СЕР. КАЛОРІЇ",
+    ru: "СР. КАЛОРИИ",
+    fr: "CALORIES MOY.",
+    de: "Ø KALORIEN",
+    pt: "CALORIAS MÉD.",
+    bg: "СР. КАЛОРИИ",
+  },
+
+  "nutrition.avgProtein": {
+    en: "AVG PROTEIN",
+    es: "PROTEÍNA PROM.",
+    uk: "СЕР. БІЛОК",
+    ru: "СР. БЕЛОК",
+    fr: "PROTÉINES MOY.",
+    de: "Ø PROTEIN",
+    pt: "PROTEÍNA MÉD.",
+    bg: "СР. ПРОТЕИН",
+  },
+
+  "nutrition.avgWater": {
+    en: "AVG WATER",
+    es: "AGUA PROM.",
+    uk: "СЕР. ВОДА",
+    ru: "СР. ВОДА",
+    fr: "EAU MOY.",
+    de: "Ø WASSER",
+    pt: "ÁGUA MÉD.",
+    bg: "СР. ВОДА",
+  },
+
+  "nutrition.breakfast": {
+    en: "Breakfast",
+    es: "Desayuno",
+    uk: "Сніданок",
+    ru: "Завтрак",
+    fr: "Petit-déjeuner",
+    de: "Frühstück",
+    pt: "Café da manhã",
+    bg: "Закуска",
+  },
+
+  "nutrition.lunch": {
+    en: "Lunch",
+    es: "Almuerzo",
+    uk: "Обід",
+    ru: "Обед",
+    fr: "Déjeuner",
+    de: "Mittagessen",
+    pt: "Almoço",
+    bg: "Обяд",
+  },
+
+  "nutrition.dinner": {
+    en: "Dinner",
+    es: "Cena",
+    uk: "Вечеря",
+    ru: "Ужин",
+    fr: "Dîner",
+    de: "Abendessen",
+    pt: "Jantar",
+    bg: "Вечеря",
+  },
+
+  "nutrition.snack": {
+    en: "Snack",
+    es: "Merienda",
+    uk: "Перекус",
+    ru: "Перекус",
+    fr: "Collation",
+    de: "Snack",
+    pt: "Lanche",
+    bg: "Междинно хранене",
+  },
+
+  "nutrition.delete": {
+    en: "Delete",
+    es: "Eliminar",
+    uk: "Видалити",
+    ru: "Удалить",
+    fr: "Supprimer",
+    de: "Löschen",
+    pt: "Excluir",
+    bg: "Изтрий",
+  },
+
+  "nutrition.target": {
+    en: "target",
+    es: "objetivo",
+    uk: "ціль",
+    ru: "цель",
+    fr: "objectif",
+    de: "Ziel",
+    pt: "meta",
+    bg: "цел",
+  },
+
+
+  /* =====================================================
+     PROGRESS
+  ===================================================== */
+
+  "progress.performanceSystem": {
+    en: "IRONAGE / PERFORMANCE",
+    es: "IRONAGE / RENDIMIENTO",
+    uk: "IRONAGE / РЕЗУЛЬТАТИ",
+    ru: "IRONAGE / РЕЗУЛЬТАТЫ",
+    fr: "IRONAGE / PERFORMANCE",
+    de: "IRONAGE / LEISTUNG",
+    pt: "IRONAGE / DESEMPENHO",
+    bg: "IRONAGE / ПРЕДСТАВЯНЕ",
+  },
+
+  "progress.your": {
+    en: "YOUR",
+    es: "TU",
+    uk: "ТВІЙ",
+    ru: "ТВОЙ",
+    fr: "TON",
+    de: "DEIN",
+    pt: "SEU",
+    bg: "ТВОЯТ",
+  },
+
+  "progress.title": {
+    en: "PROGRESS.",
+    es: "PROGRESO.",
+    uk: "ПРОГРЕС.",
+    ru: "ПРОГРЕСС.",
+    fr: "PROGRÈS.",
+    de: "FORTSCHRITT.",
+    pt: "PROGRESSO.",
+    bg: "ПРОГРЕС.",
+  },
+
+  "progress.level": {
+    en: "LEVEL",
+    es: "NIVEL",
+    uk: "РІВЕНЬ",
+    ru: "УРОВЕНЬ",
+    fr: "NIVEAU",
+    de: "LEVEL",
+    pt: "NÍVEL",
+    bg: "НИВО",
+  },
+
+  "progress.currentLevel": {
+    en: "CURRENT LEVEL",
+    es: "NIVEL ACTUAL",
+    uk: "ПОТОЧНИЙ РІВЕНЬ",
+    ru: "ТЕКУЩИЙ УРОВЕНЬ",
+    fr: "NIVEAU ACTUEL",
+    de: "AKTUELLES LEVEL",
+    pt: "NÍVEL ATUAL",
+    bg: "ТЕКУЩО НИВО",
+  },
+
+  "progress.totalXp": {
+    en: "TOTAL XP",
+    es: "XP TOTAL",
+    uk: "ВСЬОГО XP",
+    ru: "ВСЕГО XP",
+    fr: "XP TOTAL",
+    de: "GESAMT-XP",
+    pt: "XP TOTAL",
+    bg: "ОБЩО XP",
+  },
+
+  "progress.levelUpAhead": {
+    en: "LEVEL UP AHEAD",
+    es: "PRÓXIMO NIVEL CERCA",
+    uk: "ПОПЕРЕДУ НОВИЙ РІВЕНЬ",
+    ru: "ВПЕРЕДИ НОВЫЙ УРОВЕНЬ",
+    fr: "PROCHAIN NIVEAU EN VUE",
+    de: "NÄCHSTES LEVEL VORAUS",
+    pt: "PRÓXIMO NÍVEL À FRENTE",
+    bg: "СЛЕДВАЩО НИВО НАПРЕД",
+  },
+
+  "progress.toNextLevel": {
+    en: "XP TO NEXT LEVEL",
+    es: "XP PARA EL PRÓXIMO NIVEL",
+    uk: "XP ДО НАСТУПНОГО РІВНЯ",
+    ru: "XP ДО СЛЕДУЮЩЕГО УРОВНЯ",
+    fr: "XP JUSQU’AU PROCHAIN NIVEAU",
+    de: "XP BIS ZUM NÄCHSTEN LEVEL",
+    pt: "XP PARA O PRÓXIMO NÍVEL",
+    bg: "XP ДО СЛЕДВАЩО НИВО",
+  },
+
+  "progress.workouts": {
+    en: "WORKOUTS",
+    es: "ENTRENAMIENTOS",
+    uk: "ТРЕНУВАННЯ",
+    ru: "ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENTS",
+    de: "TRAININGS",
+    pt: "TREINOS",
+    bg: "ТРЕНИРОВКИ",
+  },
+
+  "progress.allTime": {
+    en: "ALL TIME",
+    es: "TODO EL TIEMPO",
+    uk: "ЗА ВЕСЬ ЧАС",
+    ru: "ЗА ВСЁ ВРЕМЯ",
+    fr: "DEPUIS LE DÉBUT",
+    de: "INSGESAMT",
+    pt: "TODO O PERÍODO",
+    bg: "ЗА ЦЕЛИЯ ПЕРИОД",
+  },
+
+  "progress.thisWeek": {
+    en: "THIS WEEK",
+    es: "ESTA SEMANA",
+    uk: "ЦЬОГО ТИЖНЯ",
+    ru: "НА ЭТОЙ НЕДЕЛЕ",
+    fr: "CETTE SEMAINE",
+    de: "DIESE WOCHE",
+    pt: "ESTA SEMANA",
+    bg: "ТАЗИ СЕДМИЦА",
+  },
+
+  "progress.trainingTarget": {
+    en: "TRAINING TARGET",
+    es: "OBJETIVO DE ENTRENAMIENTO",
+    uk: "ЦІЛЬ ТРЕНУВАНЬ",
+    ru: "ЦЕЛЬ ТРЕНИРОВОК",
+    fr: "OBJECTIF D’ENTRAÎNEMENT",
+    de: "TRAININGSZIEL",
+    pt: "META DE TREINO",
+    bg: "ТРЕНИРОВЪЧНА ЦЕЛ",
+  },
+
+  "progress.totalTime": {
+    en: "TOTAL TIME",
+    es: "TIEMPO TOTAL",
+    uk: "ЗАГАЛЬНИЙ ЧАС",
+    ru: "ОБЩЕЕ ВРЕМЯ",
+    fr: "TEMPS TOTAL",
+    de: "GESAMTZEIT",
+    pt: "TEMPO TOTAL",
+    bg: "ОБЩО ВРЕМЕ",
+  },
+
+  "progress.training": {
+    en: "TRAINING",
+    es: "ENTRENAMIENTO",
+    uk: "ТРЕНУВАННЯ",
+    ru: "ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENT",
+    de: "TRAINING",
+    pt: "TREINO",
+    bg: "ТРЕНИРОВКИ",
+  },
+
+  "progress.streak": {
+    en: "STREAK",
+    es: "RACHA",
+    uk: "СЕРІЯ",
+    ru: "СЕРИЯ",
+    fr: "SÉRIE",
+    de: "SERIE",
+    pt: "SEQUÊNCIA",
+    bg: "СЕРИЯ",
+  },
+
+  "progress.day": {
+    en: "DAY",
+    es: "DÍA",
+    uk: "ДЕНЬ",
+    ru: "ДЕНЬ",
+    fr: "JOUR",
+    de: "TAG",
+    pt: "DIA",
+    bg: "ДЕН",
+  },
+
+  "progress.days": {
+    en: "DAYS",
+    es: "DÍAS",
+    uk: "ДНІВ",
+    ru: "ДНЕЙ",
+    fr: "JOURS",
+    de: "TAGE",
+    pt: "DIAS",
+    bg: "ДНИ",
+  },
+
+  "progress.trainingActivity": {
+    en: "Training Activity",
+    es: "Actividad de entrenamiento",
+    uk: "Активність тренувань",
+    ru: "Тренировочная активность",
+    fr: "Activité d’entraînement",
+    de: "Trainingsaktivität",
+    pt: "Atividade de treino",
+    bg: "Тренировъчна активност",
+  },
+
+  "progress.completed": {
+    en: "COMPLETED",
+    es: "COMPLETADOS",
+    uk: "ЗАВЕРШЕНО",
+    ru: "ЗАВЕРШЕНО",
+    fr: "TERMINÉS",
+    de: "ABGESCHLOSSEN",
+    pt: "CONCLUÍDOS",
+    bg: "ЗАВЪРШЕНИ",
+  },
+
+  "progress.target": {
+    en: "TARGET",
+    es: "OBJETIVO",
+    uk: "ЦІЛЬ",
+    ru: "ЦЕЛЬ",
+    fr: "OBJECTIF",
+    de: "ZIEL",
+    pt: "META",
+    bg: "ЦЕЛ",
+  },
+
+  "progress.performance": {
+    en: "PERFORMANCE",
+    es: "RENDIMIENTO",
+    uk: "РЕЗУЛЬТАТИ",
+    ru: "РЕЗУЛЬТАТЫ",
+    fr: "PERFORMANCE",
+    de: "LEISTUNG",
+    pt: "DESEMPENHO",
+    bg: "ПРЕДСТАВЯНЕ",
+  },
+
+  "progress.trainingVolume": {
+    en: "Training Volume",
+    es: "Volumen de entrenamiento",
+    uk: "Обсяг тренувань",
+    ru: "Объём тренировок",
+    fr: "Volume d’entraînement",
+    de: "Trainingsvolumen",
+    pt: "Volume de treino",
+    bg: "Тренировъчен обем",
+  },
+
+  "progress.totalSets": {
+    en: "TOTAL SETS",
+    es: "SERIES TOTALES",
+    uk: "ВСЬОГО ПІДХОДІВ",
+    ru: "ВСЕГО ПОДХОДОВ",
+    fr: "SÉRIES TOTALES",
+    de: "SÄTZE GESAMT",
+    pt: "SÉRIES TOTAIS",
+    bg: "ОБЩО СЕРИИ",
+  },
+
+  "progress.currentStreak": {
+    en: "CURRENT STREAK",
+    es: "RACHA ACTUAL",
+    uk: "ПОТОЧНА СЕРІЯ",
+    ru: "ТЕКУЩАЯ СЕРИЯ",
+    fr: "SÉRIE ACTUELLE",
+    de: "AKTUELLE SERIE",
+    pt: "SEQUÊNCIA ATUAL",
+    bg: "ТЕКУЩА СЕРИЯ",
+  },
+
+  "progress.history": {
+    en: "HISTORY",
+    es: "HISTORIAL",
+    uk: "ІСТОРІЯ",
+    ru: "ИСТОРИЯ",
+    fr: "HISTORIQUE",
+    de: "VERLAUF",
+    pt: "HISTÓRICO",
+    bg: "ИСТОРИЯ",
+  },
+
+  "progress.recentWorkouts": {
+    en: "Recent Workouts",
+    es: "Entrenamientos recientes",
+    uk: "Останні тренування",
+    ru: "Последние тренировки",
+    fr: "Entraînements récents",
+    de: "Letzte Trainings",
+    pt: "Treinos recentes",
+    bg: "Последни тренировки",
+  },
+
+  "progress.noWorkouts": {
+    en: "NO WORKOUTS YET",
+    es: "AÚN NO HAY ENTRENAMIENTOS",
+    uk: "ТРЕНУВАНЬ ЩЕ НЕМАЄ",
+    ru: "ТРЕНИРОВОК ЕЩЁ НЕТ",
+    fr: "AUCUN ENTRAÎNEMENT",
+    de: "NOCH KEINE TRAININGS",
+    pt: "AINDA NÃO HÁ TREINOS",
+    bg: "ВСЕ ОЩЕ НЯМА ТРЕНИРОВКИ",
+  },
+
+  "progress.emptyDescription": {
+    en: "Complete your first workout to start building your performance history.",
+    es: "Completa tu primer entrenamiento para empezar a crear tu historial.",
+    uk: "Заверши перше тренування, щоб почати формувати історію своїх результатів.",
+    ru: "Заверши первую тренировку, чтобы начать формировать историю результатов.",
+    fr: "Termine ton premier entraînement pour commencer ton historique.",
+    de: "Schließe dein erstes Training ab, um deinen Verlauf aufzubauen.",
+    pt: "Conclua seu primeiro treino para começar seu histórico.",
+    bg: "Завърши първата си тренировка, за да започнеш историята на резултатите си.",
+  },
+
+  "progress.recent": {
+    en: "RECENT",
+    es: "RECIENTE",
+    uk: "НЕЩОДАВНО",
+    ru: "НЕДАВНО",
+    fr: "RÉCENT",
+    de: "KÜRZLICH",
+    pt: "RECENTE",
+    bg: "СКОРО",
+  },
+
+  "progress.min": {
+    en: "MIN",
+    es: "MIN",
+    uk: "ХВ",
+    ru: "МИН",
+    fr: "MIN",
+    de: "MIN",
+    pt: "MIN",
+    bg: "МИН",
+  },
+
+  "progress.mindset": {
+    en: "IRONAGE / MINDSET",
+    es: "IRONAGE / MENTALIDAD",
+    uk: "IRONAGE / МИСЛЕННЯ",
+    ru: "IRONAGE / МЫШЛЕНИЕ",
+    fr: "IRONAGE / MENTALITÉ",
+    de: "IRONAGE / MINDSET",
+    pt: "IRONAGE / MENTALIDADE",
+    bg: "IRONAGE / НАГЛАСА",
+  },
+
+  "progress.keep": {
+    en: "KEEP",
+    es: "SIGUE",
+    uk: "ПРОДОВЖУЙ",
+    ru: "ПРОДОЛЖАЙ",
+    fr: "CONTINUE",
+    de: "BLEIB",
+    pt: "CONTINUE",
+    bg: "ПРОДЪЛЖАВАЙ",
+  },
+
+  "progress.building": {
+    en: "BUILDING.",
+    es: "CONSTRUYENDO.",
+    uk: "БУДУВАТИ.",
+    ru: "СТРОИТЬ.",
+    fr: "À CONSTRUIRE.",
+    de: "DRAN.",
+    pt: "CONSTRUINDO.",
+    bg: "ДА ИЗГРАЖДАШ.",
+  },
+
+  "progress.quote": {
+    en: "Progress is not about perfection. It is about showing up again.",
+    es: "El progreso no consiste en la perfección. Consiste en volver a aparecer.",
+    uk: "Прогрес — не про ідеальність. Він про те, щоб знову прийти й зробити.",
+    ru: "Прогресс — не про идеальность. Он про то, чтобы снова прийти и сделать.",
+    fr: "Le progrès ne consiste pas à être parfait. Il consiste à revenir.",
+    de: "Fortschritt bedeutet nicht Perfektion. Es bedeutet, wieder aufzutauchen.",
+    pt: "Progresso não é perfeição. É aparecer de novo.",
+    bg: "Прогресът не е съвършенство. Той е да се появиш отново.",
+  },
+
+  "progress.mon": {
+    en: "MON", es: "LUN", uk: "ПН", ru: "ПН",
+    fr: "LUN", de: "MO", pt: "SEG", bg: "ПН",
+  },
+
+  "progress.tue": {
+    en: "TUE", es: "MAR", uk: "ВТ", ru: "ВТ",
+    fr: "MAR", de: "DI", pt: "TER", bg: "ВТ",
+  },
+
+  "progress.wed": {
+    en: "WED", es: "MIÉ", uk: "СР", ru: "СР",
+    fr: "MER", de: "MI", pt: "QUA", bg: "СР",
+  },
+
+  "progress.thu": {
+    en: "THU", es: "JUE", uk: "ЧТ", ru: "ЧТ",
+    fr: "JEU", de: "DO", pt: "QUI", bg: "ЧТ",
+  },
+
+  "progress.fri": {
+    en: "FRI", es: "VIE", uk: "ПТ", ru: "ПТ",
+    fr: "VEN", de: "FR", pt: "SEX", bg: "ПТ",
+  },
+
+  "progress.sat": {
+    en: "SAT", es: "SÁB", uk: "СБ", ru: "СБ",
+    fr: "SAM", de: "SA", pt: "SÁB", bg: "СБ",
+  },
+
+  "progress.sun": {
+    en: "SUN", es: "DOM", uk: "НД", ru: "ВС",
+    fr: "DIM", de: "SO", pt: "DOM", bg: "НД",
+  },
+
+
+  /* =====================================================
+     AI TRAINER
+  ===================================================== */
+
+  "ai.intelligence": {
+    en: "IRONAGE / INTELLIGENCE",
+    es: "IRONAGE / INTELIGENCIA",
+    uk: "IRONAGE / ІНТЕЛЕКТ",
+    ru: "IRONAGE / ИНТЕЛЛЕКТ",
+    fr: "IRONAGE / INTELLIGENCE",
+    de: "IRONAGE / INTELLIGENZ",
+    pt: "IRONAGE / INTELIGÊNCIA",
+    bg: "IRONAGE / ИНТЕЛЕКТ",
+  },
+
+  "ai.title": {
+    en: "TRAINER.",
+    es: "ENTRENADOR.",
+    uk: "ТРЕНЕР.",
+    ru: "ТРЕНЕР.",
+    fr: "COACH.",
+    de: "TRAINER.",
+    pt: "TREINADOR.",
+    bg: "ТРЕНЬОР.",
+  },
+
+  "ai.online": {
+    en: "ONLINE",
+    es: "EN LÍNEA",
+    uk: "ОНЛАЙН",
+    ru: "ОНЛАЙН",
+    fr: "EN LIGNE",
+    de: "ONLINE",
+    pt: "ONLINE",
+    bg: "ОНЛАЙН",
+  },
+
+  "ai.personalCoach": {
+    en: "YOUR PERSONAL COACH",
+    es: "TU ENTRENADOR PERSONAL",
+    uk: "ТВІЙ ПЕРСОНАЛЬНИЙ ТРЕНЕР",
+    ru: "ТВОЙ ПЕРСОНАЛЬНЫЙ ТРЕНЕР",
+    fr: "TON COACH PERSONNEL",
+    de: "DEIN PERSÖNLICHER TRAINER",
+    pt: "SEU TREINADOR PESSOAL",
+    bg: "ТВОЯТ ЛИЧЕН ТРЕНЬОР",
+  },
+
+  "ai.coach": {
+    en: "COACH",
+    es: "ENTRENADOR",
+    uk: "ТРЕНЕР",
+    ru: "ТРЕНЕР",
+    fr: "COACH",
+    de: "TRAINER",
+    pt: "TREINADOR",
+    bg: "ТРЕНЬОР",
+  },
+
+  "ai.loadingProfile": {
+    en: "Loading your athlete profile...",
+    es: "Cargando tu perfil de atleta...",
+    uk: "Завантажуємо твій профіль атлета...",
+    ru: "Загружаем твой профиль атлета...",
+    fr: "Chargement de ton profil d’athlète...",
+    de: "Dein Athletenprofil wird geladen...",
+    pt: "Carregando seu perfil de atleta...",
+    bg: "Зареждаме профила ти на атлет...",
+  },
+
+  "ai.startRecommended": {
+    en: "START RECOMMENDED WORKOUT",
+    es: "INICIAR ENTRENAMIENTO RECOMENDADO",
+    uk: "ПОЧАТИ РЕКОМЕНДОВАНЕ ТРЕНУВАННЯ",
+    ru: "НАЧАТЬ РЕКОМЕНДОВАННУЮ ТРЕНИРОВКУ",
+    fr: "COMMENCER L’ENTRAÎNEMENT RECOMMANDÉ",
+    de: "EMPFOHLENES TRAINING STARTEN",
+    pt: "INICIAR TREINO RECOMENDADO",
+    bg: "ЗАПОЧНИ ПРЕПОРЪЧАНАТА ТРЕНИРОВКА",
+  },
+
+  "ai.quickCoach": {
+    en: "QUICK COACH",
+    es: "COACH RÁPIDO",
+    uk: "ШВИДКИЙ ТРЕНЕР",
+    ru: "БЫСТРЫЙ ТРЕНЕР",
+    fr: "COACH RAPIDE",
+    de: "SCHNELLER COACH",
+    pt: "COACH RÁPIDO",
+    bg: "БЪРЗ ТРЕНЬОР",
+  },
+
+  "ai.whatNeed": {
+    en: "What do you need?",
+    es: "¿Qué necesitas?",
+    uk: "Що тобі потрібно?",
+    ru: "Что тебе нужно?",
+    fr: "De quoi as-tu besoin ?",
+    de: "Was brauchst du?",
+    pt: "Do que você precisa?",
+    bg: "От какво имаш нужда?",
+  },
+
+  "ai.createWorkout": {
+    en: "CREATE WORKOUT",
+    es: "CREAR ENTRENAMIENTO",
+    uk: "СТВОРИТИ ТРЕНУВАННЯ",
+    ru: "СОЗДАТЬ ТРЕНИРОВКУ",
+    fr: "CRÉER UN ENTRAÎNEMENT",
+    de: "TRAINING ERSTELLEN",
+    pt: "CRIAR TREINO",
+    bg: "СЪЗДАЙ ТРЕНИРОВКА",
+  },
+
+  "ai.buildSession": {
+    en: "Build today's session",
+    es: "Crea la sesión de hoy",
+    uk: "Створи сьогоднішню сесію",
+    ru: "Создай сегодняшнюю сессию",
+    fr: "Crée la séance du jour",
+    de: "Erstelle die heutige Einheit",
+    pt: "Crie a sessão de hoje",
+    bg: "Създай днешната сесия",
+  },
+
+  "ai.nutritionAdvice": {
+    en: "NUTRITION ADVICE",
+    es: "CONSEJOS DE NUTRICIÓN",
+    uk: "ПОРАДИ З ХАРЧУВАННЯ",
+    ru: "СОВЕТЫ ПО ПИТАНИЮ",
+    fr: "CONSEILS NUTRITION",
+    de: "ERNÄHRUNGSBERATUNG",
+    pt: "CONSELHOS DE NUTRIÇÃO",
+    bg: "СЪВЕТИ ЗА ХРАНЕНЕ",
+  },
+
+  "ai.improveMeals": {
+    en: "Improve today's meals",
+    es: "Mejora las comidas de hoy",
+    uk: "Покращ сьогоднішнє харчування",
+    ru: "Улучши сегодняшнее питание",
+    fr: "Améliore les repas du jour",
+    de: "Verbessere deine heutigen Mahlzeiten",
+    pt: "Melhore as refeições de hoje",
+    bg: "Подобри днешното хранене",
+  },
+
+  "ai.recovery": {
+    en: "RECOVERY",
+    es: "RECUPERACIÓN",
+    uk: "ВІДНОВЛЕННЯ",
+    ru: "ВОССТАНОВЛЕНИЕ",
+    fr: "RÉCUPÉRATION",
+    de: "ERHOLUNG",
+    pt: "RECUPERAÇÃO",
+    bg: "ВЪЗСТАНОВЯВАНЕ",
+  },
+
+  "ai.recoveryTips": {
+    en: "Sleep & recovery tips",
+    es: "Consejos de sueño y recuperación",
+    uk: "Поради щодо сну та відновлення",
+    ru: "Советы по сну и восстановлению",
+    fr: "Conseils sommeil & récupération",
+    de: "Tipps zu Schlaf & Erholung",
+    pt: "Dicas de sono e recuperação",
+    bg: "Съвети за сън и възстановяване",
+  },
+
+  "ai.ask": {
+    en: "ASK IRONAGE AI",
+    es: "PREGUNTA A IRONAGE AI",
+    uk: "ЗАПИТАЙ IRONAGE AI",
+    ru: "СПРОСИ IRONAGE AI",
+    fr: "DEMANDE À IRONAGE AI",
+    de: "FRAGE IRONAGE AI",
+    pt: "PERGUNTE AO IRONAGE AI",
+    bg: "ПОПИТАЙ IRONAGE AI",
+  },
+
+  "ai.nextMove": {
+    en: "Your next move.",
+    es: "Tu próximo paso.",
+    uk: "Твій наступний крок.",
+    ru: "Твой следующий шаг.",
+    fr: "Ton prochain mouvement.",
+    de: "Dein nächster Schritt.",
+    pt: "Seu próximo passo.",
+    bg: "Твоят следващ ход.",
+  },
+
+  "ai.thinking": {
+    en: "IRONAGE AI is thinking...",
+    es: "IRONAGE AI está pensando...",
+    uk: "IRONAGE AI думає...",
+    ru: "IRONAGE AI думает...",
+    fr: "IRONAGE AI réfléchit...",
+    de: "IRONAGE AI denkt nach...",
+    pt: "IRONAGE AI está pensando...",
+    bg: "IRONAGE AI мисли...",
+  },
+
+  "ai.askAnything": {
+    en: "Ask your coach anything...",
+    es: "Pregunta lo que quieras a tu entrenador...",
+    uk: "Запитай свого тренера про будь-що...",
+    ru: "Спроси своего тренера о чём угодно...",
+    fr: "Demande n’importe quoi à ton coach...",
+    de: "Frag deinen Trainer alles...",
+    pt: "Pergunte qualquer coisa ao seu treinador...",
+    bg: "Попитай треньора си за всичко...",
+  },
+
+  "ai.askCoach": {
+    en: "Ask coach",
+    es: "Preguntar al entrenador",
+    uk: "Запитати тренера",
+    ru: "Спросить тренера",
+    fr: "Demander au coach",
+    de: "Trainer fragen",
+    pt: "Perguntar ao treinador",
+    bg: "Попитай треньора",
+  },
+
+  "ai.powered": {
+    en: "POWERED BY IRONAGE INTELLIGENCE",
+    es: "IMPULSADO POR IRONAGE INTELLIGENCE",
+    uk: "ПРАЦЮЄ НА IRONAGE INTELLIGENCE",
+    ru: "РАБОТАЕТ НА IRONAGE INTELLIGENCE",
+    fr: "PROPULSÉ PAR IRONAGE INTELLIGENCE",
+    de: "POWERED BY IRONAGE INTELLIGENCE",
+    pt: "DESENVOLVIDO POR IRONAGE INTELLIGENCE",
+    bg: "ЗАДВИЖВАНО ОТ IRONAGE INTELLIGENCE",
+  },
+
+  "ai.unavailable": {
+    en: "IRONAGE AI is temporarily unavailable. Please try again.",
+    es: "IRONAGE AI no está disponible temporalmente. Inténtalo de nuevo.",
+    uk: "IRONAGE AI тимчасово недоступний. Спробуй ще раз.",
+    ru: "IRONAGE AI временно недоступен. Попробуй снова.",
+    fr: "IRONAGE AI est temporairement indisponible. Réessaie.",
+    de: "IRONAGE AI ist vorübergehend nicht verfügbar. Versuche es erneut.",
+    pt: "IRONAGE AI está temporariamente indisponível. Tente novamente.",
+    bg: "IRONAGE AI временно не е наличен. Опитай отново.",
+  },
+
+  "ai.foundation": {
+    en: "You're building your foundation. The goal is simple: train consistently and become stronger every day.",
+    es: "Estás construyendo tu base. El objetivo es simple: entrena con constancia y hazte más fuerte cada día.",
+    uk: "Ти будуєш свою основу. Ціль проста: тренуйся регулярно і ставай сильнішим щодня.",
+    ru: "Ты строишь свою основу. Цель проста: тренируйся регулярно и становись сильнее каждый день.",
+    fr: "Tu construis tes bases. L’objectif est simple : entraîne-toi régulièrement et deviens plus fort chaque jour.",
+    de: "Du baust dein Fundament. Das Ziel ist einfach: trainiere konsequent und werde jeden Tag stärker.",
+    pt: "Você está construindo sua base. O objetivo é simples: treine com consistência e fique mais forte todos os dias.",
+    bg: "Изграждаш основата си. Целта е проста: тренирай редовно и ставай по-силен всеки ден.",
+  },
+
+  "ai.streakStrong": {
+    en: "You're on a {count}-day streak. That's serious discipline. Today we keep the momentum going.",
+    es: "Llevas una racha de {count} días. Eso es disciplina seria. Hoy mantenemos el impulso.",
+    uk: "У тебе серія {count} днів. Це серйозна дисципліна. Сьогодні зберігаємо темп.",
+    ru: "У тебя серия {count} дней. Это серьёзная дисциплина. Сегодня сохраняем темп.",
+    fr: "Tu es sur une série de {count} jours. C’est une vraie discipline. Aujourd’hui, on garde l’élan.",
+    de: "Du hast eine Serie von {count} Tagen. Das ist echte Disziplin. Heute halten wir den Schwung.",
+    pt: "Você está em uma sequência de {count} dias. Isso é disciplina séria. Hoje mantemos o ritmo.",
+    bg: "Имаш серия от {count} дни. Това е сериозна дисциплина. Днес запазваме темпото.",
+  },
+
+  "ai.streakBuilding": {
+    en: "You're building a {count}-day streak. Stay consistent today and keep moving forward.",
+    es: "Estás construyendo una racha de {count} días. Mantén la constancia hoy y sigue adelante.",
+    uk: "Ти будуєш серію з {count} днів. Сьогодні тримай дисципліну й рухайся далі.",
+    ru: "Ты строишь серию из {count} дней. Сегодня держи дисциплину и двигайся дальше.",
+    fr: "Tu construis une série de {count} jours. Reste régulier aujourd’hui et continue d’avancer.",
+    de: "Du baust eine Serie von {count} Tagen auf. Bleib heute konsequent und mach weiter.",
+    pt: "Você está construindo uma sequência de {count} dias. Mantenha a consistência hoje e siga em frente.",
+    bg: "Изграждаш серия от {count} дни. Бъди постоянен днес и продължавай напред.",
+  },
+
+  "ai.workoutsDone": {
+    en: "You've already completed {count} workouts. Keep building your strength and consistency.",
+    es: "Ya has completado {count} entrenamientos. Sigue construyendo fuerza y constancia.",
+    uk: "Ти вже завершив {count} тренувань. Продовжуй будувати силу та стабільність.",
+    ru: "Ты уже завершил {count} тренировок. Продолжай развивать силу и стабильность.",
+    fr: "Tu as déjà terminé {count} entraînements. Continue de développer ta force et ta régularité.",
+    de: "Du hast bereits {count} Trainings abgeschlossen. Baue weiter Kraft und Beständigkeit auf.",
+    pt: "Você já concluiu {count} treinos. Continue construindo força e consistência.",
+    bg: "Вече си завършил {count} тренировки. Продължавай да изграждаш сила и постоянство.",
+  },
+
+  "ai.workoutResponse": {
+    en: "Based on your current level {level} and goal \"{goal}\", complete today's workout with controlled reps, strong technique and consistent intensity.",
+    es: "Según tu nivel actual {level} y objetivo \"{goal}\", completa el entrenamiento de hoy con repeticiones controladas, buena técnica e intensidad constante.",
+    uk: "З огляду на твій рівень {level} і ціль \"{goal}\", виконай сьогоднішнє тренування з контрольованими повтореннями, правильною технікою та стабільною інтенсивністю.",
+    ru: "С учётом твоего уровня {level} и цели \"{goal}\", выполни сегодняшнюю тренировку с контролируемыми повторениями, хорошей техникой и стабильной интенсивностью.",
+    fr: "Selon ton niveau actuel {level} et ton objectif \"{goal}\", réalise l’entraînement du jour avec des répétitions contrôlées, une bonne technique et une intensité régulière.",
+    de: "Basierend auf deinem aktuellen Level {level} und Ziel \"{goal}\" absolviere das heutige Training mit kontrollierten Wiederholungen, sauberer Technik und gleichmäßiger Intensität.",
+    pt: "Com base no seu nível atual {level} e objetivo \"{goal}\", faça o treino de hoje com repetições controladas, boa técnica e intensidade consistente.",
+    bg: "Според текущото ти ниво {level} и цел \"{goal}\", изпълни днешната тренировка с контролирани повторения, добра техника и постоянна интензивност.",
+  },
+
+  "ai.nutritionResponse": {
+    en: "Your nutrition should support your goal \"{goal}\". Prioritize enough protein, quality food, hydration and consistent calorie intake.",
+    es: "Tu alimentación debe apoyar tu objetivo \"{goal}\". Prioriza suficiente proteína, alimentos de calidad, hidratación y una ingesta calórica constante.",
+    uk: "Харчування має підтримувати твою ціль \"{goal}\". Пріоритет: достатньо білка, якісна їжа, вода та стабільне споживання калорій.",
+    ru: "Питание должно поддерживать твою цель \"{goal}\". Приоритет: достаточно белка, качественная еда, вода и стабильное потребление калорий.",
+    fr: "Ton alimentation doit soutenir ton objectif \"{goal}\". Priorité aux protéines, à une alimentation de qualité, à l’hydratation et à un apport calorique régulier.",
+    de: "Deine Ernährung sollte dein Ziel \"{goal}\" unterstützen. Achte auf genug Protein, hochwertige Lebensmittel, Flüssigkeit und eine konstante Kalorienzufuhr.",
+    pt: "Sua alimentação deve apoiar seu objetivo \"{goal}\". Priorize proteína suficiente, alimentos de qualidade, hidratação e ingestão calórica consistente.",
+    bg: "Храненето ти трябва да подкрепя целта \"{goal}\". Дай приоритет на достатъчно протеин, качествена храна, хидратация и постоянен калориен прием.",
+  },
+
+  "ai.recoveryResponse": {
+    en: "Recovery is part of the program. Focus on quality sleep, hydration and enough time for your muscles to recover between hard sessions.",
+    es: "La recuperación forma parte del programa. Prioriza un sueño de calidad, hidratación y suficiente tiempo para recuperar los músculos.",
+    uk: "Відновлення — частина програми. Зосередься на якісному сні, воді та достатньому часі для відновлення м’язів між важкими тренуваннями.",
+    ru: "Восстановление — часть программы. Сосредоточься на качественном сне, воде и достаточном времени для восстановления мышц.",
+    fr: "La récupération fait partie du programme. Privilégie un sommeil de qualité, l’hydratation et assez de temps pour récupérer.",
+    de: "Erholung ist Teil des Programms. Achte auf guten Schlaf, Flüssigkeit und genügend Erholungszeit zwischen harten Einheiten.",
+    pt: "A recuperação faz parte do programa. Foque em sono de qualidade, hidratação e tempo suficiente para os músculos se recuperarem.",
+    bg: "Възстановяването е част от програмата. Фокусирай се върху качествен сън, хидратация и достатъчно време за възстановяване.",
+  },
+
+  "ai.keepGoing": {
+    en: "Stay consistent and keep moving forward.",
+    es: "Mantén la constancia y sigue adelante.",
+    uk: "Будь стабільним і продовжуй рухатися вперед.",
+    ru: "Будь стабильным и продолжай двигаться вперёд.",
+    fr: "Reste régulier et continue d’avancer.",
+    de: "Bleib konsequent und mach weiter.",
+    pt: "Mantenha a consistência e siga em frente.",
+    bg: "Бъди постоянен и продължавай напред.",
+  },
+
+  /* =====================================================
+     PREMIUM
+  ===================================================== */
+
+  "premium.backProfile": {
+    en: "← PROFILE",
+    es: "← PERFIL",
+    uk: "← ПРОФІЛЬ",
+    ru: "← ПРОФИЛЬ",
+    fr: "← PROFIL",
+    de: "← PROFIL",
+    pt: "← PERFIL",
+    bg: "← ПРОФИЛ",
+  },
+
+  "premium.eyebrow": {
+    en: "IRONAGE PREMIUM",
+    es: "IRONAGE PREMIUM",
+    uk: "IRONAGE PREMIUM",
+    ru: "IRONAGE PREMIUM",
+    fr: "IRONAGE PREMIUM",
+    de: "IRONAGE PREMIUM",
+    pt: "IRONAGE PREMIUM",
+    bg: "IRONAGE PREMIUM",
+  },
+
+  "premium.break": {
+    en: "BREAK",
+    es: "ROMPE",
+    uk: "ЗЛАМАЙ",
+    ru: "СЛОМАЙ",
+    fr: "DÉPASSE",
+    de: "SPRENG",
+    pt: "SUPERE",
+    bg: "ПРЕОДОЛЕЙ",
+  },
+
+  "premium.limits": {
+    en: "YOUR LIMITS.",
+    es: "TUS LÍMITES.",
+    uk: "СВОЇ МЕЖІ.",
+    ru: "СВОИ ПРЕДЕЛЫ.",
+    fr: "TES LIMITES.",
+    de: "DEINE GRENZEN.",
+    pt: "SEUS LIMITES.",
+    bg: "СВОИТЕ ГРАНИЦИ.",
+  },
+
+  "premium.unlock": {
+    en: "Unlock the complete IRONAGE experience.",
+    es: "Desbloquea la experiencia completa de IRONAGE.",
+    uk: "Відкрий повний досвід IRONAGE.",
+    ru: "Открой полный опыт IRONAGE.",
+    fr: "Débloque toute l’expérience IRONAGE.",
+    de: "Schalte das vollständige IRONAGE-Erlebnis frei.",
+    pt: "Desbloqueie a experiência completa do IRONAGE.",
+    bg: "Отключи пълното изживяване IRONAGE.",
+  },
+
+  "premium.access": {
+    en: "PREMIUM ACCESS",
+    es: "ACCESO PREMIUM",
+    uk: "PREMIUM ДОСТУП",
+    ru: "PREMIUM ДОСТУП",
+    fr: "ACCÈS PREMIUM",
+    de: "PREMIUM-ZUGANG",
+    pt: "ACESSO PREMIUM",
+    bg: "PREMIUM ДОСТЪП",
+  },
+
+  "premium.securePayment": {
+    en: "SECURE APP STORE PAYMENT",
+    es: "PAGO SEGURO EN APP STORE",
+    uk: "БЕЗПЕЧНА ОПЛАТА ЧЕРЕЗ APP STORE",
+    ru: "БЕЗОПАСНАЯ ОПЛАТА ЧЕРЕЗ APP STORE",
+    fr: "PAIEMENT APP STORE SÉCURISÉ",
+    de: "SICHERE APP-STORE-ZAHLUNG",
+    pt: "PAGAMENTO SEGURO NA APP STORE",
+    bg: "СИГУРНО ПЛАЩАНЕ ПРЕЗ APP STORE",
+  },
+
+  "premium.currentPlan": {
+    en: "CURRENT PLAN",
+    es: "PLAN ACTUAL",
+    uk: "ПОТОЧНИЙ ПЛАН",
+    ru: "ТЕКУЩИЙ ПЛАН",
+    fr: "FORMULE ACTUELLE",
+    de: "AKTUELLER PLAN",
+    pt: "PLANO ATUAL",
+    bg: "ТЕКУЩ ПЛАН",
+  },
+
+  "premium.free": {
+    en: "FREE", es: "GRATIS", uk: "БЕЗКОШТОВНИЙ", ru: "БЕСПЛАТНЫЙ",
+    fr: "GRATUIT", de: "KOSTENLOS", pt: "GRÁTIS", bg: "БЕЗПЛАТЕН",
+  },
+
+  "premium.monthly": {
+    en: "MONTHLY", es: "MENSUAL", uk: "МІСЯЧНИЙ", ru: "МЕСЯЧНЫЙ",
+    fr: "MENSUEL", de: "MONATLICH", pt: "MENSAL", bg: "МЕСЕЧЕН",
+  },
+
+  "premium.yearly": {
+    en: "YEARLY", es: "ANUAL", uk: "РІЧНИЙ", ru: "ГОДОВОЙ",
+    fr: "ANNUEL", de: "JÄHRLICH", pt: "ANUAL", bg: "ГОДИШЕН",
+  },
+
+  "premium.flexible": {
+    en: "FLEXIBLE", es: "FLEXIBLE", uk: "ГНУЧКИЙ", ru: "ГИБКИЙ",
+    fr: "FLEXIBLE", de: "FLEXIBEL", pt: "FLEXÍVEL", bg: "ГЪВКАВ",
+  },
+
+  "premium.bestValue": {
+    en: "BEST VALUE", es: "MEJOR PRECIO", uk: "НАЙВИГІДНІШЕ", ru: "ЛУЧШАЯ ЦЕНА",
+    fr: "MEILLEUR CHOIX", de: "BESTER WERT", pt: "MELHOR VALOR", bg: "НАЙ-ДОБРА СТОЙНОСТ",
+  },
+
+  "premium.included": {
+    en: "INCLUDED", es: "INCLUIDO", uk: "ВКЛЮЧЕНО", ru: "ВКЛЮЧЕНО",
+    fr: "INCLUS", de: "ENTHALTEN", pt: "INCLUÍDO", bg: "ВКЛЮЧЕНО",
+  },
+
+  "premium.featureWorkouts": {
+    en: "FULL WORKOUT ACCESS", es: "ACCESO COMPLETO A ENTRENAMIENTOS", uk: "ПОВНИЙ ДОСТУП ДО ТРЕНУВАНЬ", ru: "ПОЛНЫЙ ДОСТУП К ТРЕНИРОВКАМ",
+    fr: "ACCÈS COMPLET AUX ENTRAÎNEMENTS", de: "VOLLER TRAININGSZUGANG", pt: "ACESSO COMPLETO AOS TREINOS", bg: "ПЪЛЕН ДОСТЪП ДО ТРЕНИРОВКИ",
+  },
+
+  "premium.featureProgress": {
+    en: "ADVANCED PROGRESS TRACKING", es: "SEGUIMIENTO AVANZADO DEL PROGRESO", uk: "РОЗШИРЕНЕ ВІДСТЕЖЕННЯ ПРОГРЕСУ", ru: "РАСШИРЕННОЕ ОТСЛЕЖИВАНИЕ ПРОГРЕССА",
+    fr: "SUIVI AVANCÉ DES PROGRÈS", de: "ERWEITERTE FORTSCHRITTSVERFOLGUNG", pt: "ACOMPANHAMENTO AVANÇADO DO PROGRESSO", bg: "РАЗШИРЕНО ПРОСЛЕДЯВАНЕ НА ПРОГРЕСА",
+  },
+
+  "premium.featureNutrition": {
+    en: "PREMIUM NUTRITION TOOLS", es: "HERRAMIENTAS PREMIUM DE NUTRICIÓN", uk: "PREMIUM ІНСТРУМЕНТИ ХАРЧУВАННЯ", ru: "PREMIUM ИНСТРУМЕНТЫ ПИТАНИЯ",
+    fr: "OUTILS NUTRITION PREMIUM", de: "PREMIUM-ERNÄHRUNGSTOOLS", pt: "FERRAMENTAS PREMIUM DE NUTRIÇÃO", bg: "PREMIUM ИНСТРУМЕНТИ ЗА ХРАНЕНЕ",
+  },
+
+  "premium.featureAi": {
+    en: "AI TRAINER ACCESS", es: "ACCESO AL ENTRENADOR IA", uk: "ДОСТУП ДО AI ТРЕНЕРА", ru: "ДОСТУП К ИИ ТРЕНЕРУ",
+    fr: "ACCÈS AU COACH IA", de: "ZUGANG ZUM KI-TRAINER", pt: "ACESSO AO TREINADOR IA", bg: "ДОСТЪП ДО AI ТРЕНЬОР",
+  },
+
+  "premium.featureExperience": {
+    en: "IRONAGE PREMIUM EXPERIENCE", es: "EXPERIENCIA IRONAGE PREMIUM", uk: "PREMIUM ДОСВІД IRONAGE", ru: "PREMIUM ОПЫТ IRONAGE",
+    fr: "EXPÉRIENCE IRONAGE PREMIUM", de: "IRONAGE PREMIUM-ERLEBNIS", pt: "EXPERIÊNCIA IRONAGE PREMIUM", bg: "PREMIUM ИЗЖИВЯВАНЕ IRONAGE",
+  },
+
+  "premium.iosOnly": {
+    en: "APP STORE PAYMENT IS AVAILABLE IN THE IRONAGE IOS APP",
+    es: "EL PAGO DE APP STORE ESTÁ DISPONIBLE EN LA APP IOS DE IRONAGE",
+    uk: "ОПЛАТА ЧЕРЕЗ APP STORE ДОСТУПНА В IOS-ДОДАТКУ IRONAGE",
+    ru: "ОПЛАТА ЧЕРЕЗ APP STORE ДОСТУПНА В IOS-ПРИЛОЖЕНИИ IRONAGE",
+    fr: "LE PAIEMENT APP STORE EST DISPONIBLE DANS L’APP IOS IRONAGE",
+    de: "APP-STORE-ZAHLUNG IST IN DER IRONAGE-IOS-APP VERFÜGBAR",
+    pt: "O PAGAMENTO PELA APP STORE ESTÁ DISPONÍVEL NO APP IOS IRONAGE",
+    bg: "ПЛАЩАНЕТО ПРЕЗ APP STORE Е ДОСТЪПНО В IOS ПРИЛОЖЕНИЕТО IRONAGE",
+  },
+
+  "premium.cancelled": {
+    en: "PURCHASE CANCELLED", es: "COMPRA CANCELADA", uk: "ПОКУПКУ СКАСОВАНО", ru: "ПОКУПКА ОТМЕНЕНА",
+    fr: "ACHAT ANNULÉ", de: "KAUF ABGEBROCHEN", pt: "COMPRA CANCELADA", bg: "ПОКУПКАТА Е ОТМЕНЕНА",
+  },
+
+  "premium.pending": {
+    en: "PURCHASE PENDING", es: "COMPRA PENDIENTE", uk: "ПОКУПКА ОЧІКУЄ ПІДТВЕРДЖЕННЯ", ru: "ПОКУПКА ОЖИДАЕТ ПОДТВЕРЖДЕНИЯ",
+    fr: "ACHAT EN ATTENTE", de: "KAUF AUSSTEHEND", pt: "COMPRA PENDENTE", bg: "ПОКУПКАТА Е В ИЗЧАКВАНЕ",
+  },
+
+  "premium.activated": {
+    en: "PREMIUM ACTIVATED", es: "PREMIUM ACTIVADO", uk: "PREMIUM АКТИВОВАНО", ru: "PREMIUM АКТИВИРОВАН",
+    fr: "PREMIUM ACTIVÉ", de: "PREMIUM AKTIVIERT", pt: "PREMIUM ATIVADO", bg: "PREMIUM Е АКТИВИРАН",
+  },
+
+  "premium.purchaseFailed": {
+    en: "Premium purchase failed", es: "La compra Premium ha fallado", uk: "Не вдалося придбати Premium", ru: "Не удалось приобрести Premium",
+    fr: "L’achat Premium a échoué", de: "Premium-Kauf fehlgeschlagen", pt: "Falha na compra Premium", bg: "Покупката на Premium е неуспешна",
+  },
+
+  "premium.signedMissing": {
+    en: "Apple signed transaction missing", es: "Falta la transacción firmada de Apple", uk: "Відсутня підписана транзакція Apple", ru: "Отсутствует подписанная транзакция Apple",
+    fr: "Transaction Apple signée manquante", de: "Signierte Apple-Transaktion fehlt", pt: "Transação Apple assinada ausente", bg: "Липсва подписана Apple транзакция",
+  },
+
+  "premium.active": {
+    en: "ACTIVE", es: "ACTIVO", uk: "АКТИВНИЙ", ru: "АКТИВЕН",
+    fr: "ACTIF", de: "AKTIV", pt: "ATIVO", bg: "АКТИВЕН",
+  },
+
+  "premium.availableIos": {
+    en: "AVAILABLE IN IOS APP", es: "DISPONIBLE EN LA APP IOS", uk: "ДОСТУПНО В IOS-ДОДАТКУ", ru: "ДОСТУПНО В IOS-ПРИЛОЖЕНИИ",
+    fr: "DISPONIBLE DANS L’APP IOS", de: "IN DER IOS-APP VERFÜGBAR", pt: "DISPONÍVEL NO APP IOS", bg: "ДОСТЪПНО В IOS ПРИЛОЖЕНИЕТО",
+  },
+
+  "premium.processing": {
+    en: "PROCESSING...", es: "PROCESANDO...", uk: "ОБРОБКА...", ru: "ОБРАБОТКА...",
+    fr: "TRAITEMENT...", de: "VERARBEITUNG...", pt: "PROCESSANDO...", bg: "ОБРАБОТВА СЕ...",
+  },
+
+  "premium.continuePayment": {
+    en: "CONTINUE TO PAYMENT", es: "CONTINUAR AL PAGO", uk: "ПЕРЕЙТИ ДО ОПЛАТИ", ru: "ПЕРЕЙТИ К ОПЛАТЕ",
+    fr: "CONTINUER VERS LE PAIEMENT", de: "WEITER ZUR ZAHLUNG", pt: "CONTINUAR PARA PAGAMENTO", bg: "ПРОДЪЛЖИ КЪМ ПЛАЩАНЕ",
+  },
+
+};
+
+type LanguageContextValue = {
+  language: AppLanguage;
+  setLanguage: (
+    language: AppLanguage
+  ) => void;
+  t: (
+    key: string
+  ) => string;
+};
+
+const LanguageContext =
+  createContext<LanguageContextValue | null>(
+    null
+  );
+
+function getInitialLanguage(): AppLanguage {
+  try {
+    const saved =
+      localStorage.getItem(
+        "ironage_language"
+      );
+
+    if (
+      LANGUAGE_OPTIONS.some(
+        item => item.id === saved
+      )
+    ) {
+      return saved as AppLanguage;
+    }
+  } catch {
+    // Storage may be unavailable.
+  }
+
+  return "uk";
+}
+
+export function LanguageProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const [
+    language,
+    setLanguageState,
+  ] = useState<AppLanguage>(
+    getInitialLanguage
+  );
+
+  const setLanguage = (
+    nextLanguage: AppLanguage
+  ) => {
+    setLanguageState(nextLanguage);
+
+    try {
+      localStorage.setItem(
+        "ironage_language",
+        nextLanguage
+      );
+    } catch {
+      // Storage may be unavailable.
+    }
+  };
+
+  useEffect(() => {
+    document.documentElement.lang =
+      language;
+
+    return localizeDocument(
+      language as RuntimeLanguage
+    );
+  }, [language]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void import(
+      "../native/nativeNotifications"
+    )
+      .then((module) => {
+        if (
+          !cancelled &&
+          module.rescheduleLocalizedNotifications
+        ) {
+          return module
+            .rescheduleLocalizedNotifications();
+        }
+
+        return undefined;
+      })
+      .catch((error) => {
+        console.error(
+          "IRONAGE: Notification relocalization failed:",
+          error
+        );
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [language]);
+
+  const value =
+    useMemo<LanguageContextValue>(
+      () => ({
+        language,
+        setLanguage,
+
+        t: (key: string) => {
+          const entry =
+            translations[key];
+
+          if (!entry) {
+            return key;
+          }
+
+          return (
+            entry[language] ||
+            entry.en ||
+            key
+          );
+        },
+      }),
+      [language]
+    );
+
+  return (
+    <LanguageContext.Provider
+      value={value}
+    >
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage():
+  LanguageContextValue {
+  const context =
+    useContext(LanguageContext);
+
+  if (!context) {
+    throw new Error(
+      "useLanguage must be used inside LanguageProvider"
+    );
+  }
+
+  return context;
+}
+

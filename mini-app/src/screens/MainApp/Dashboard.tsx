@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
 import { useUser } from "../../context/UserContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 import "./Dashboard.css";
 
@@ -16,13 +17,14 @@ export default function Dashboard({
   startWorkout,
 }: Props) {
   const { user } = useUser();
+  const { t } = useLanguage();
 
   /*
    * USER
    */
 
   const displayName =
-    user.name?.trim() || "ATHLETE";
+    user.name?.trim() || t("dashboard.athlete");
 
   /*
    * XP
@@ -71,7 +73,7 @@ export default function Dashboard({
 
         <img
           src={vasylPhoto}
-          alt="IRONAGE athlete"
+          alt={t("dashboard.athlete")}
           className="dashboard-hero-image"
         />
 
@@ -90,7 +92,7 @@ export default function Dashboard({
               </div>
 
               <div className="dashboard-edition">
-                ATHLETE SYSTEM / 01
+                {t("dashboard.athleteSystem")}
               </div>
 
             </div>
@@ -101,7 +103,7 @@ export default function Dashboard({
                 changeTab("profile")
               }
               type="button"
-              aria-label="Open profile"
+              aria-label={t("dashboard.openProfile")}
             >
               <img
                 src={vasylPhoto}
@@ -118,8 +120,8 @@ export default function Dashboard({
 
             <span className="dashboard-eyebrow">
               {trainedToday
-                ? "MISSION COMPLETE"
-                : "WELCOME BACK"}
+                ? t("dashboard.missionComplete")
+                : t("dashboard.welcomeBack")}
             </span>
 
             <h1>
@@ -129,15 +131,15 @@ export default function Dashboard({
               <br />
 
               <strong>
-                BUILD.
+                {t("dashboard.build")}
               </strong>
 
             </h1>
 
             <p>
-              Discipline today.
+              {t("dashboard.disciplineToday")}
               <br />
-              Strength tomorrow.
+              {t("dashboard.strengthTomorrow")}
             </p>
 
           </div>
@@ -155,8 +157,8 @@ export default function Dashboard({
 
             <span>
               {trainedToday
-                ? "TRAIN AGAIN"
-                : "START TODAY'S WORKOUT"}
+                ? t("dashboard.trainAgain")
+                : t("dashboard.startToday")}
             </span>
 
             <strong>
@@ -179,7 +181,7 @@ export default function Dashboard({
         <div className="dashboard-stat">
 
           <span>
-            STREAK
+            {t("dashboard.streak")}
           </span>
 
           <strong>
@@ -189,7 +191,7 @@ export default function Dashboard({
           </strong>
 
           <small>
-            DAYS
+            {t("dashboard.days")}
           </small>
 
         </div>
@@ -198,7 +200,7 @@ export default function Dashboard({
         <div className="dashboard-stat">
 
           <span>
-            LEVEL
+            {t("dashboard.level")}
           </span>
 
           <strong>
@@ -208,7 +210,7 @@ export default function Dashboard({
           </strong>
 
           <small>
-            CURRENT
+            {t("dashboard.current")}
           </small>
 
         </div>
@@ -225,7 +227,7 @@ export default function Dashboard({
           </strong>
 
           <small>
-            POINTS
+            {t("dashboard.points")}
           </small>
 
         </div>
@@ -244,52 +246,33 @@ export default function Dashboard({
           <div>
 
             <span>
-              ATHLETE LEVEL
+              {t("dashboard.athleteLevel")}
             </span>
 
             <h2>
-              Level {user.level}
+              {t("dashboard.levelPrefix")} {user.level}
             </h2>
 
           </div>
 
-          <strong
-            style={{
-              color: "#D4AF37",
-              fontSize: "8px",
-              letterSpacing: "0.12em",
-            }}
-          >
+          <strong className="dashboard-xp-value">
             {xpInLevel} / 1000 XP
           </strong>
 
         </div>
 
 
-        <div
-          style={{
-            width: "100%",
-            height: "4px",
-            background:
-              "rgba(255,255,255,0.10)",
-            overflow: "hidden",
-          }}
-        >
+        <div className="dashboard-xp-track">
 
-          <div
-            style={{
-              width: `${Math.max(
-                3,
-                xpProgress
-              )}%`,
-              height: "100%",
-              background: "#D4AF37",
-              boxShadow:
-                "0 0 14px rgba(212,175,55,0.65)",
-              transition:
-                "width 300ms ease",
-            }}
-          />
+            <div
+              className="dashboard-xp-fill"
+              style={{
+                width: `${Math.max(
+                  3,
+                  xpProgress
+                )}%`,
+              }}
+            />
 
         </div>
 
@@ -307,11 +290,11 @@ export default function Dashboard({
           <div>
 
             <span>
-              YOUR PROGRAM
+              {t("dashboard.yourProgram")}
             </span>
 
             <h2>
-              Today's Mission
+              {t("dashboard.todayMission")}
             </h2>
 
           </div>
@@ -322,7 +305,7 @@ export default function Dashboard({
               changeTab("workout")
             }
           >
-            VIEW ALL
+            {t("dashboard.viewAll")}
           </button>
 
         </div>
@@ -343,15 +326,15 @@ export default function Dashboard({
           <div className="mission-info">
 
             <span>
-              IRONAGE / PROGRAM
+              {t("dashboard.program")}
             </span>
 
             <h3>
-              UPPER BODY
+              {t("dashboard.upperBody")}
             </h3>
 
             <p>
-              Chest • Shoulders • Arms
+              {t("dashboard.chestShouldersArms")}
             </p>
 
           </div>
@@ -377,11 +360,11 @@ export default function Dashboard({
             <div>
 
               <span>
-                TRAINING HISTORY
+                {t("dashboard.trainingHistory")}
               </span>
 
               <h2>
-                Last Workout
+                {t("dashboard.lastWorkout")}
               </h2>
 
             </div>
@@ -392,18 +375,13 @@ export default function Dashboard({
                 changeTab("progress")
               }
             >
-              PROGRESS
+              {t("dashboard.progress")}
             </button>
 
           </div>
 
 
-          <div
-            className="dashboard-mission"
-            style={{
-              cursor: "default",
-            }}
-          >
+          <div className="dashboard-mission dashboard-mission--static">
 
             <div className="mission-number">
               ✓
@@ -412,7 +390,7 @@ export default function Dashboard({
             <div className="mission-info">
 
               <span>
-                COMPLETED
+                {t("dashboard.completed")}
               </span>
 
               <h3>
@@ -420,7 +398,7 @@ export default function Dashboard({
               </h3>
 
               <p>
-                {lastWorkout.duration} min
+                {lastWorkout.duration} {t("dashboard.min")}
                 {" • "}
                 +{lastWorkout.xp} XP
               </p>
@@ -446,18 +424,18 @@ export default function Dashboard({
         <div className="quote-accent" />
 
         <p>
-          THE BODY ACHIEVES
+          {t("dashboard.quote1")}
           <br />
-          WHAT THE MIND
+          {t("dashboard.quote2")}
           <br />
 
           <strong>
-            REFUSES TO GIVE UP ON.
+            {t("dashboard.quote3")}
           </strong>
         </p>
 
         <span>
-          IRONAGE PRINCIPLE / 001
+          {t("dashboard.principle")}
         </span>
 
       </section>
@@ -476,7 +454,7 @@ export default function Dashboard({
           }
         >
           <span>
-            PROGRESS
+            {t("dashboard.progress")}
           </span>
 
           <strong>
@@ -493,7 +471,7 @@ export default function Dashboard({
           }
         >
           <span>
-            NUTRITION
+            {t("dashboard.nutrition")}
           </span>
 
           <strong>
@@ -510,7 +488,7 @@ export default function Dashboard({
           }
         >
           <span>
-            AI TRAINER
+            {t("dashboard.aiTrainer")}
           </span>
 
           <strong>

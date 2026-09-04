@@ -7,6 +7,11 @@ import {
 import { useUser } from "../../context/UserContext";
 
 import {
+  useLanguage,
+  type AppLanguage,
+} from "../../context/LanguageContext";
+
+import {
   calculateNutrition,
   calculateNutritionAdherence,
 } from "../../services/nutritionService";
@@ -44,12 +49,24 @@ import "./Nutrition.css";
    CONSTANTS
 ========================================================= */
 
-const MEAL_LABELS: Record<MealType, string> = {
-  BREAKFAST: "Breakfast",
-  LUNCH: "Lunch",
-  DINNER: "Dinner",
-  SNACK: "Snack",
+const MEAL_LABEL_KEYS: Record<MealType, string> = {
+  BREAKFAST: "nutrition.breakfast",
+  LUNCH: "nutrition.lunch",
+  DINNER: "nutrition.dinner",
+  SNACK: "nutrition.snack",
 };
+
+const LANGUAGE_LOCALES:
+  Record<AppLanguage, string> = {
+    en: "en-US",
+    es: "es-ES",
+    uk: "uk-UA",
+    ru: "ru-RU",
+    fr: "fr-FR",
+    de: "de-DE",
+    pt: "pt-PT",
+    bg: "bg-BG",
+  };
 
 const WATER_TARGET = 2500;
 
@@ -117,10 +134,11 @@ function normalizeGoal(
 ========================================================= */
 
 function formatDate(
-  date: Date
+  date: Date,
+  language: AppLanguage
 ): string {
   return date.toLocaleDateString(
-    "en-US",
+    LANGUAGE_LOCALES[language],
     {
       month: "short",
       day: "numeric",
@@ -129,7 +147,9 @@ function formatDate(
 }
 
 function getDayLabel(
-  date: Date
+  date: Date,
+  language: AppLanguage,
+  t: (key: string) => string
 ): string {
   const today =
     new Date();
@@ -138,7 +158,7 @@ function getDayLabel(
     today.toDateString() ===
     date.toDateString()
   ) {
-    return "TODAY";
+    return t("nutrition.today");
   }
 
   const yesterday =
@@ -152,11 +172,12 @@ function getDayLabel(
     yesterday.toDateString() ===
     date.toDateString()
   ) {
-    return "YESTERDAY";
+    return t("nutrition.yesterday");
   }
 
   return formatDate(
-    date
+    date,
+    language
   ).toUpperCase();
 }
 
@@ -186,6 +207,11 @@ function dateToKey(
 export default function Nutrition() {
   const { user } =
     useUser();
+
+  const {
+    language,
+    t,
+  } = useLanguage();
 
   /* =======================================================
      NORMALIZE USER
@@ -1057,24 +1083,26 @@ export default function Nutrition() {
         <div>
 
           <div className="nutrition-eyebrow">
-            IRONAGE PROGRAM
+            {t("nutrition.program")}
           </div>
 
           <h1>
-            NUTRITION
+            {t("nutrition.title")}
           </h1>
 
           <p>
-            Fuel your body.
+            {t("nutrition.fuel")}
             <br />
-            Build your strength.
+            {t("nutrition.buildStrength")}
           </p>
 
         </div>
 
         <div className="nutrition-date">
           {getDayLabel(
-            selectedDate
+            selectedDate,
+            language,
+            t
           )}
         </div>
 
@@ -1097,13 +1125,16 @@ export default function Nutrition() {
 
           <strong>
             {getDayLabel(
-              selectedDate
+              selectedDate,
+              language,
+              t
             )}
           </strong>
 
           <span>
             {formatDate(
-              selectedDate
+              selectedDate,
+              language
             )}
           </span>
 
@@ -1127,7 +1158,7 @@ export default function Nutrition() {
           goToday
         }
       >
-        BACK TO TODAY
+        {t("nutrition.backToday")}
       </button>
 
       {/* CALORIES */}
@@ -1139,7 +1170,7 @@ export default function Nutrition() {
           <div>
 
             <span>
-              CALORIES
+              {t("nutrition.calories")}
             </span>
 
             <strong>
@@ -1179,11 +1210,11 @@ export default function Nutrition() {
               plan.calories -
                 totals.calories
             )}{" "}
-            kcal remaining
+            {t("nutrition.remaining")}
           </span>
 
           <span>
-            {adherence}% ADHERENCE
+            {adherence}% {t("nutrition.adherence")}
           </span>
 
         </div>
@@ -1197,11 +1228,11 @@ export default function Nutrition() {
         <div className="nutrition-section-title">
 
           <span>
-            MACRONUTRIENTS
+            {t("nutrition.macronutrients")}
           </span>
 
           <span>
-            DAILY
+            {t("nutrition.daily")}
           </span>
 
         </div>
@@ -1209,7 +1240,7 @@ export default function Nutrition() {
         <div className="nutrition-macros">
 
           <MacroCard
-            label="PROTEIN"
+            label={t("nutrition.protein")}
             current={
               Math.round(
                 totals.protein
@@ -1225,7 +1256,7 @@ export default function Nutrition() {
           />
 
           <MacroCard
-            label="CARBS"
+            label={t("nutrition.carbs")}
             current={
               Math.round(
                 totals.carbs
@@ -1241,7 +1272,7 @@ export default function Nutrition() {
           />
 
           <MacroCard
-            label="FAT"
+            label={t("nutrition.fat")}
             current={
               Math.round(
                 totals.fat
@@ -1266,7 +1297,7 @@ export default function Nutrition() {
 
         <div>
           <span>
-            DAILY TARGET
+            {t("nutrition.dailyTarget")}
           </span>
 
           <strong>
@@ -1303,7 +1334,7 @@ export default function Nutrition() {
         <div>
 
           <span className="nutrition-water-label">
-            HYDRATION
+            {t("nutrition.hydration")}
           </span>
 
           <strong>
@@ -1359,7 +1390,7 @@ export default function Nutrition() {
         <div className="nutrition-section-title">
 
           <span>
-            ADD FOOD
+            {t("nutrition.addFood")}
           </span>
 
         </div>
@@ -1377,7 +1408,7 @@ export default function Nutrition() {
                 event.target.value
               )
             }
-            placeholder="Food name"
+            placeholder={t("nutrition.foodName")}
           />
 
           <select
@@ -1395,7 +1426,7 @@ export default function Nutrition() {
           >
 
             {Object.entries(
-              MEAL_LABELS
+              MEAL_LABEL_KEYS
             ).map(
               ([
                 value,
@@ -1409,7 +1440,7 @@ export default function Nutrition() {
                     value
                   }
                 >
-                  {label}
+                  {t(label)}
                 </option>
               )
             )}
@@ -1431,7 +1462,7 @@ export default function Nutrition() {
                   event.target.value
                 )
               }
-              placeholder="Calories"
+              placeholder={t("nutrition.caloriesPlaceholder")}
             />
 
             <input
@@ -1447,7 +1478,7 @@ export default function Nutrition() {
                   event.target.value
                 )
               }
-              placeholder="Protein g"
+              placeholder={t("nutrition.proteinPlaceholder")}
             />
 
             <input
@@ -1463,7 +1494,7 @@ export default function Nutrition() {
                   event.target.value
                 )
               }
-              placeholder="Fat g"
+              placeholder={t("nutrition.fatPlaceholder")}
             />
 
             <input
@@ -1479,7 +1510,7 @@ export default function Nutrition() {
                   event.target.value
                 )
               }
-              placeholder="Carbs g"
+              placeholder={t("nutrition.carbsPlaceholder")}
             />
 
           </div>
@@ -1491,7 +1522,7 @@ export default function Nutrition() {
               handleAddFood
             }
           >
-            ADD FOOD
+            {t("nutrition.addFood")}
           </button>
 
         </div>
@@ -1505,7 +1536,7 @@ export default function Nutrition() {
         <div className="nutrition-section-title">
 
           <span>
-            TODAY'S MEALS
+            {t("nutrition.mealsToday")}
           </span>
 
           <span>
@@ -1518,7 +1549,7 @@ export default function Nutrition() {
 
           {day.meals.length === 0 && (
             <div className="nutrition-empty">
-              No meals added yet.
+              {t("nutrition.noMeals")}
             </div>
           )}
 
@@ -1551,11 +1582,11 @@ export default function Nutrition() {
         <div className="nutrition-section-title">
 
           <span>
-            7 DAY HISTORY
+            {t("nutrition.history7")}
           </span>
 
           <span>
-            AVERAGE
+            {t("nutrition.average")}
           </span>
 
         </div>
@@ -1592,7 +1623,7 @@ export default function Nutrition() {
           <div>
 
             <span>
-              AVG CALORIES
+              {t("nutrition.avgCalories")}
             </span>
 
             <strong>
@@ -1606,7 +1637,7 @@ export default function Nutrition() {
           <div>
 
             <span>
-              AVG PROTEIN
+              {t("nutrition.avgProtein")}
             </span>
 
             <strong>
@@ -1620,7 +1651,7 @@ export default function Nutrition() {
           <div>
 
             <span>
-              AVG WATER
+              {t("nutrition.avgWater")}
             </span>
 
             <strong>
@@ -1700,6 +1731,8 @@ function FoodRow({
     id: number
   ) => void;
 }) {
+  const { t } = useLanguage();
+
   return (
     <article className="nutrition-food-row">
 
@@ -1711,9 +1744,11 @@ function FoodRow({
 
         <span>
           {
-            MEAL_LABELS[
-              item.meal
-            ]
+            t(
+              MEAL_LABEL_KEYS[
+                item.meal
+              ]
+            )
           }
         </span>
 
@@ -1761,7 +1796,7 @@ function FoodRow({
           )
         }
         aria-label={
-          `Delete ${item.name}`
+          `${t("nutrition.delete")} ${item.name}`
         }
       >
         ×
@@ -1784,6 +1819,11 @@ function HistoryRow({
   targetCalories: number;
   onSelect: () => void;
 }) {
+  const {
+    language,
+    t,
+  } = useLanguage();
+
   const calories =
     day.meals.reduce(
       (
@@ -1841,13 +1881,16 @@ function HistoryRow({
 
         <strong>
           {getDayLabel(
-            parsedDate
+            parsedDate,
+            language,
+            t
           )}
         </strong>
 
         <span>
           {formatDate(
-            parsedDate
+            parsedDate,
+            language
           )}
         </span>
 
@@ -1876,7 +1919,7 @@ function HistoryRow({
         </strong>
 
         <span>
-          protein
+          {t("nutrition.protein").toLowerCase()}
         </span>
 
       </div>
@@ -1888,7 +1931,7 @@ function HistoryRow({
         </strong>
 
         <span>
-          target
+          {t("nutrition.target")}
         </span>
 
       </div>

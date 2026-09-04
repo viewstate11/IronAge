@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   value: string;
   onChange: (value: string) => void;
@@ -9,30 +13,32 @@ export default function GoalStep({
   onChange,
   next,
 }: Props) {
+  const { t } = useLanguage();
+
   const goals = [
     {
       id: "MUSCLE",
       number: "01",
-      title: "BUILD MUSCLE",
-      subtitle: "SIZE & PHYSIQUE",
+      title: t("onboarding.goal.muscle"),
+      subtitle: t("onboarding.goal.muscleSub"),
     },
     {
       id: "LOSE_WEIGHT",
       number: "02",
-      title: "LOSE FAT",
-      subtitle: "LEAN & DEFINED",
+      title: t("onboarding.goal.fat"),
+      subtitle: t("onboarding.goal.fatSub"),
     },
     {
       id: "STRENGTH",
       number: "03",
-      title: "GET STRONGER",
-      subtitle: "POWER & PERFORMANCE",
+      title: t("onboarding.goal.strength"),
+      subtitle: t("onboarding.goal.strengthSub"),
     },
     {
       id: "FITNESS",
       number: "04",
-      title: "STAY FIT",
-      subtitle: "HEALTH & CONDITIONING",
+      title: t("onboarding.goal.fitness"),
+      subtitle: t("onboarding.goal.fitnessSub"),
     },
   ];
 
@@ -42,17 +48,16 @@ export default function GoalStep({
       <div className="onboarding-step-content">
 
         <div className="onboarding-eyebrow">
-          YOUR MISSION
+          {t("onboarding.mission")}
         </div>
 
         <h1 className="onboarding-title">
-          WHAT DO YOU
-          <strong>WANT TO BUILD?</strong>
+          {t("onboarding.goal.title1")}
+          <strong>{t("onboarding.goal.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          Choose your primary goal.
-          IRONAGE will adapt your system around it.
+          {t("onboarding.goal.description")}
         </p>
 
         <div className="goal-options">
@@ -95,12 +100,12 @@ export default function GoalStep({
           disabled={!value}
           onClick={next}
         >
-          <span>CONTINUE</span>
+          <span>{t("onboarding.continue")}</span>
           <strong>→</strong>
         </button>
 
         <div className="onboarding-footer">
-          IRONAGE ATHLETE SYSTEM
+          {t("onboarding.athleteSystem")}
         </div>
 
       </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Capacitor } from "@capacitor/core";
 
 import { useUser } from "../../context/UserContext";
+import { useLanguage } from "../../context/LanguageContext";
 import { useAppEntitlements } from "../../context/AppEntitlementsContext";
 
 import {
@@ -19,16 +20,17 @@ type Props = {
   onBack: () => void;
 };
 
-const PLAN_FEATURES = [
-  "FULL WORKOUT ACCESS",
-  "ADVANCED PROGRESS TRACKING",
-  "PREMIUM NUTRITION TOOLS",
-  "AI TRAINER ACCESS",
-  "IRONAGE PREMIUM EXPERIENCE",
+const PLAN_FEATURE_KEYS = [
+  "premium.featureWorkouts",
+  "premium.featureProgress",
+  "premium.featureNutrition",
+  "premium.featureAi",
+  "premium.featureExperience",
 ];
 
 export default function Premium({ onBack }: Props) {
   const { refreshUser } = useUser();
+  const { t } = useLanguage();
 
   const isNativeIOS =
     Capacitor.isNativePlatform() &&
@@ -69,7 +71,7 @@ export default function Premium({ onBack }: Props) {
 
     if (!isNativeIOS) {
       setError(
-        "APP STORE PAYMENT IS AVAILABLE IN THE IRONAGE IOS APP"
+        t("premium.iosOnly")
       );
       setMessage(null);
       return;
@@ -94,7 +96,7 @@ export default function Premium({ onBack }: Props) {
         purchase.status === "CANCELLED"
       ) {
         setMessage(
-          "PURCHASE CANCELLED"
+          t("premium.cancelled")
         );
         return;
       }
@@ -103,7 +105,7 @@ export default function Premium({ onBack }: Props) {
         purchase.status === "PENDING"
       ) {
         setMessage(
-          "PURCHASE PENDING"
+          t("premium.pending")
         );
         return;
       }
@@ -112,7 +114,7 @@ export default function Premium({ onBack }: Props) {
         !purchase.signedTransaction
       ) {
         throw new Error(
-          "Apple signed transaction missing"
+          t("premium.signedMissing")
         );
       }
 
@@ -129,7 +131,11 @@ export default function Premium({ onBack }: Props) {
       await refreshUser();
 
       setMessage(
-        `${verification.premiumPlan} PREMIUM ACTIVATED`
+        `${
+          verification.premiumPlan === "MONTHLY"
+            ? t("premium.monthly")
+            : t("premium.yearly")
+        } ${t("premium.activated")}`
       );
     } catch (checkoutError) {
       console.error(
@@ -140,7 +146,7 @@ export default function Premium({ onBack }: Props) {
       setError(
         checkoutError instanceof Error
           ? checkoutError.message
-          : "Premium purchase failed"
+          : t("premium.purchaseFailed")
       );
     } finally {
       setIsPurchasing(false);
@@ -171,7 +177,7 @@ export default function Premium({ onBack }: Props) {
           <h1>
             BREAK
             <br />
-            <strong>YOUR LIMITS.</strong>
+            <strong>{t("premium.limits")}</strong>
           </h1>
 
           <p>
@@ -180,16 +186,20 @@ export default function Premium({ onBack }: Props) {
         </section>
 
         <section className="premium-dev-notice">
-          <strong>PREMIUM ACCESS</strong>
-          <span>SECURE APP STORE PAYMENT</span>
+          <strong>{t("premium.access")}</strong>
+          <span>{t("premium.securePayment")}</span>
         </section>
 
         <section className="premium-status">
-          <span>CURRENT PLAN</span>
+          <span>{t("premium.currentPlan")}</span>
           <strong>
             {entitlementLoading
-              ? "LOADING..."
-              : premiumPlan ?? "FREE"}
+              ? t("common.loading")
+              : premiumPlan === "MONTHLY"
+                ? t("premium.monthly")
+                : premiumPlan === "YEARLY"
+                  ? t("premium.yearly")
+                  : t("premium.free")}
           </strong>
         </section>
 
@@ -204,8 +214,8 @@ export default function Premium({ onBack }: Props) {
             onClick={() => setSelectedPlan("MONTHLY")}
           >
             <div>
-              <span>MONTHLY</span>
-              <strong>FLEXIBLE</strong>
+              <span>{t("premium.monthly")}</span>
+              <strong>{t("premium.flexible")}</strong>
             </div>
             <b>{selectedPlan === "MONTHLY" ? "✓" : "○"}</b>
           </button>
@@ -220,8 +230,8 @@ export default function Premium({ onBack }: Props) {
             onClick={() => setSelectedPlan("YEARLY")}
           >
             <div>
-              <span>YEARLY</span>
-              <strong>BEST VALUE</strong>
+              <span>{t("premium.yearly")}</span>
+              <strong>{t("premium.bestValue")}</strong>
             </div>
             <b>{selectedPlan === "YEARLY" ? "✓" : "○"}</b>
           </button>
@@ -232,7 +242,7 @@ export default function Premium({ onBack }: Props) {
             INCLUDED
           </span>
 
-          {PLAN_FEATURES.map((feature) => (
+          {PLAN_FEATURE_KEYS.map((feature) => (
             <div
               key={feature}
               className="premium-feature"
@@ -270,12 +280,16 @@ export default function Premium({ onBack }: Props) {
           }
         >
           {premiumPlan === selectedPlan
-            ? `${selectedPlan} ACTIVE`
+            ? `${
+                selectedPlan === "MONTHLY"
+                  ? t("premium.monthly")
+                  : t("premium.yearly")
+              } ${t("premium.active")}`
             : !isNativeIOS
-              ? "AVAILABLE IN IOS APP"
+              ? t("premium.availableIos")
               : isPurchasing
-                ? "PROCESSING..."
-                : "CONTINUE TO PAYMENT"}
+                ? t("premium.processing")
+                : t("premium.continuePayment")}
         </button>
 
       </div>

@@ -7,9 +7,26 @@ import {
 import "./Progress.css";
 
 import { useUser } from "../../context/UserContext";
+import {
+  useLanguage,
+  type AppLanguage,
+} from "../../context/LanguageContext";
+
+const PROGRESS_LOCALES:
+  Record<AppLanguage, string> = {
+    en: "en-US",
+    es: "es-ES",
+    uk: "uk-UA",
+    ru: "ru-RU",
+    fr: "fr-FR",
+    de: "de-DE",
+    pt: "pt-PT",
+    bg: "bg-BG",
+  };
 
 export default function Progress() {
   const { user } = useUser();
+  const { language, t } = useLanguage();
 
   const history = Array.isArray(user.history)
     ? user.history
@@ -214,31 +231,31 @@ export default function Progress() {
   const weeklyChart = useMemo(() => {
     const days = [
       {
-        label: "MON",
+        label: t("progress.mon"),
         date: 0,
       },
       {
-        label: "TUE",
+        label: t("progress.tue"),
         date: 1,
       },
       {
-        label: "WED",
+        label: t("progress.wed"),
         date: 2,
       },
       {
-        label: "THU",
+        label: t("progress.thu"),
         date: 3,
       },
       {
-        label: "FRI",
+        label: t("progress.fri"),
         date: 4,
       },
       {
-        label: "SAT",
+        label: t("progress.sat"),
         date: 5,
       },
       {
-        label: "SUN",
+        label: t("progress.sun"),
         date: 6,
       },
     ];
@@ -281,6 +298,7 @@ export default function Progress() {
   }, [
     startOfWeek,
     weeklyWorkouts,
+    t,
   ]);
 
   const maxChartValue =
@@ -366,12 +384,12 @@ export default function Progress() {
         date.getTime()
       )
     ) {
-      return "RECENT";
+      return t("progress.recent");
     }
 
     return date
       .toLocaleDateString(
-        "en-US",
+        PROGRESS_LOCALES[language],
         {
           month: "short",
           day: "numeric",
@@ -396,13 +414,13 @@ export default function Progress() {
         <div>
 
           <span className="progress-eyebrow">
-            IRONAGE / PERFORMANCE
+            {t("progress.performanceSystem")}
           </span>
 
           <h1>
-            YOUR
+            {t("progress.your")}
             <br />
-            <span>PROGRESS.</span>
+            <span>{t("progress.title")}</span>
           </h1>
 
         </div>
@@ -410,7 +428,7 @@ export default function Progress() {
         <div className="progress-level-badge">
 
           <span>
-            LEVEL
+            {t("progress.level")}
           </span>
 
           <strong>
@@ -438,11 +456,11 @@ export default function Progress() {
           <div>
 
             <span>
-              CURRENT LEVEL
+              {t("progress.currentLevel")}
             </span>
 
             <strong>
-              LEVEL{" "}
+              {t("progress.level")}{" "}
               {String(
                 currentLevel
               ).padStart(
@@ -456,7 +474,7 @@ export default function Progress() {
           <div className="progress-xp-total">
 
             <span>
-              TOTAL XP
+              {t("progress.totalXp")}
             </span>
 
             <strong>
@@ -493,8 +511,8 @@ export default function Progress() {
           <span>
             {xpToNextLevel ===
             1000
-              ? "LEVEL UP AHEAD"
-              : `${xpToNextLevel} XP TO NEXT LEVEL`}
+              ? t("progress.levelUpAhead")
+              : `${xpToNextLevel} ${t("progress.toNextLevel")}`}
           </span>
 
         </div>
@@ -511,7 +529,7 @@ export default function Progress() {
         <article className="progress-stat-card">
 
           <span>
-            WORKOUTS
+            {t("progress.workouts")}
           </span>
 
           <strong>
@@ -519,7 +537,7 @@ export default function Progress() {
           </strong>
 
           <small>
-            ALL TIME
+            {t("progress.allTime")}
           </small>
 
         </article>
@@ -527,7 +545,7 @@ export default function Progress() {
         <article className="progress-stat-card">
 
           <span>
-            THIS WEEK
+            {t("progress.thisWeek")}
           </span>
 
           <strong>
@@ -539,7 +557,7 @@ export default function Progress() {
           </strong>
 
           <small>
-            TRAINING TARGET
+            {t("progress.trainingTarget")}
           </small>
 
         </article>
@@ -547,7 +565,7 @@ export default function Progress() {
         <article className="progress-stat-card">
 
           <span>
-            TOTAL TIME
+            {t("progress.totalTime")}
           </span>
 
           <strong className="progress-stat-time">
@@ -555,7 +573,7 @@ export default function Progress() {
           </strong>
 
           <small>
-            TRAINING
+            {t("progress.training")}
           </small>
 
         </article>
@@ -563,7 +581,7 @@ export default function Progress() {
         <article className="progress-stat-card">
 
           <span>
-            STREAK
+            {t("progress.streak")}
           </span>
 
           <strong>
@@ -572,8 +590,8 @@ export default function Progress() {
 
           <small>
             {user.streak === 1
-              ? "DAY"
-              : "DAYS"}
+              ? t("progress.day")
+              : t("progress.days")}
           </small>
 
         </article>
@@ -592,11 +610,11 @@ export default function Progress() {
           <div>
 
             <span>
-              THIS WEEK
+              {t("progress.thisWeek")}
             </span>
 
             <h2>
-              Training Activity
+              {t("progress.trainingActivity")}
             </h2>
 
           </div>
@@ -668,7 +686,7 @@ export default function Progress() {
 
           <span>
             {weeklyWorkouts.length}{" "}
-            WORKOUT
+            {t("progress.workouts")}
             {weeklyWorkouts.length ===
             1
               ? ""
@@ -676,7 +694,7 @@ export default function Progress() {
           </span>
 
           <span>
-            TARGET{" "}
+            {t("progress.target")}{" "}
             {weeklyTarget}
           </span>
 
@@ -696,11 +714,11 @@ export default function Progress() {
           <div>
 
             <span>
-              PERFORMANCE
+              {t("progress.performance")}
             </span>
 
             <h2>
-              Training Volume
+              {t("progress.trainingVolume")}
             </h2>
 
           </div>
@@ -712,7 +730,7 @@ export default function Progress() {
           <div>
 
             <span>
-              TOTAL SETS
+              {t("progress.totalSets")}
             </span>
 
             <strong>
@@ -736,7 +754,7 @@ export default function Progress() {
           <div>
 
             <span>
-              CURRENT STREAK
+              {t("progress.currentStreak")}
             </span>
 
             <strong>
@@ -761,11 +779,11 @@ export default function Progress() {
           <div>
 
             <span>
-              HISTORY
+              {t("progress.history")}
             </span>
 
             <h2>
-              Recent Workouts
+              {t("progress.recentWorkouts")}
             </h2>
 
           </div>
@@ -777,14 +795,11 @@ export default function Progress() {
           <div className="progress-empty">
 
             <span>
-              NO WORKOUTS YET
+              {t("progress.noWorkouts")}
             </span>
 
             <p>
-              Complete your first
-              workout to start
-              building your
-              performance history.
+              {t("progress.emptyDescription")}
             </p>
 
           </div>
@@ -850,21 +865,19 @@ export default function Progress() {
       <section className="progress-mindset">
 
         <span>
-          IRONAGE / MINDSET
+          {t("progress.mindset")}
         </span>
 
         <h2>
-          KEEP
+          {t("progress.keep")}
           <br />
           <strong>
-            BUILDING.
+            {t("progress.building")}
           </strong>
         </h2>
 
         <p>
-          Progress is not about
-          perfection. It is about
-          showing up again.
+          {t("progress.quote")}
         </p>
 
       </section>

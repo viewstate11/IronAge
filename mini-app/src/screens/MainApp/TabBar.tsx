@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import "./TabBar.css";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
 export type Tab =
   | "home"
   | "workout"
@@ -23,7 +27,7 @@ type TabItem = {
 const tabs: TabItem[] = [
   {
     id: "home",
-    label: "Home",
+    label: "tab.home",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M3 10.5 12 3l9 7.5" />
@@ -34,7 +38,7 @@ const tabs: TabItem[] = [
   },
   {
     id: "workout",
-    label: "Workout",
+    label: "tab.workout",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M6 9v6" />
@@ -49,7 +53,7 @@ const tabs: TabItem[] = [
   },
   {
     id: "nutrition",
-    label: "Nutrition",
+    label: "tab.nutrition",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 21C7 18.5 4 14.5 4 9.5 8.5 9 11 11 12 14c1-3 3.5-5 8-4.5 0 5-3 9-8 11.5Z" />
@@ -59,7 +63,7 @@ const tabs: TabItem[] = [
   },
   {
     id: "progress",
-    label: "Progress",
+    label: "tab.progress",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M4 19V5" />
@@ -70,7 +74,7 @@ const tabs: TabItem[] = [
   },
   {
     id: "profile",
-    label: "Profile",
+    label: "tab.profile",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="8" r="3.5" />
@@ -80,7 +84,7 @@ const tabs: TabItem[] = [
   },
   {
     id: "ai",
-    label: "AI",
+    label: "tab.ai",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 3v4" />
@@ -101,10 +105,12 @@ export default function TabBar({
   active,
   onChange,
 }: Props) {
+  const { t } = useLanguage();
+
   return (
     <nav
       className="ironage-tabbar"
-      aria-label="Main navigation"
+      aria-label={t("tab.navigation")}
     >
       <div className="ironage-tabbar__inner">
         {tabs.map((tab) => {
@@ -131,7 +137,7 @@ export default function TabBar({
               </span>
 
               <span className="ironage-tab__label">
-                {tab.label}
+                {t(tab.label)}
               </span>
 
               <span className="ironage-tab__indicator" />

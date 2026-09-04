@@ -3,12 +3,15 @@ import "./Welcome.css";
 
 import vasylPhoto from "../../assets/vasyl-ua.jpg";
 import LuxuryButton from "../../components/ui/LuxuryButton";
+import { useLanguage } from "../../context/LanguageContext";
 
 type Props = {
   start: () => void;
 };
 
 export default function Welcome({ start }: Props) {
+  const { t } = useLanguage();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -42,7 +45,7 @@ export default function Welcome({ start }: Props) {
           </div>
 
           <div className="welcome-edition">
-            ATHLETE SYSTEM
+            {t("welcome.athleteSystem")}
             <strong>01</strong>
           </div>
         </header>
@@ -53,19 +56,19 @@ export default function Welcome({ start }: Props) {
 
           <div className="welcome-eyebrow">
             <span className="gold-line" />
-            BUILD YOURSELF
+            {t("welcome.buildYourself")}
             <span className="gold-line" />
           </div>
 
           <h1 className="welcome-title">
-            <span>BECOME</span>
-            <strong>UNSTOPPABLE.</strong>
+            <span>{t("welcome.become")}</span>
+            <strong>{t("welcome.unstoppable")}</strong>
           </h1>
 
           <p className="welcome-description">
-            Discipline is not a moment.
+            {t("welcome.disciplineMoment")}
             <br />
-            It is a lifestyle.
+            {t("welcome.lifestyle")}
           </p>
 
         </section>
@@ -75,12 +78,12 @@ export default function Welcome({ start }: Props) {
         <footer className="welcome-footer">
 
           <LuxuryButton onClick={start}>
-            ENTER IRONAGE
+            {t("welcome.enter")}
           </LuxuryButton>
 
           <div className="welcome-system">
             <span />
-            PREMIUM FITNESS SYSTEM
+            {t("welcome.premiumSystem")}
             <span />
           </div>
 

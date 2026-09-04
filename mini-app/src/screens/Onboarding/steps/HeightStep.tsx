@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   value: number;
   onChange: (value: number) => void;
@@ -9,6 +13,8 @@ export default function HeightStep({
   onChange,
   next,
 }: Props) {
+  const { t } = useLanguage();
+
   const decrease = () => {
     onChange(Math.max(120, value - 1));
   };
@@ -23,17 +29,16 @@ export default function HeightStep({
       <div className="onboarding-step-content">
 
         <div className="onboarding-eyebrow">
-          BODY METRICS
+          {t("onboarding.bodyMetrics")}
         </div>
 
         <h1 className="onboarding-title">
-          HOW
-          <strong>TALL ARE YOU?</strong>
+          {t("onboarding.height.title1")}
+          <strong>{t("onboarding.height.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          Your height helps us calculate your
-          ideal training and nutrition targets.
+          {t("onboarding.height.description")}
         </p>
 
         <div className="height-selector">
@@ -42,7 +47,7 @@ export default function HeightStep({
             type="button"
             className="height-control"
             onClick={decrease}
-            aria-label="Decrease height"
+            aria-label={t("onboarding.height.decrease")}
           >
             −
           </button>
@@ -56,7 +61,7 @@ export default function HeightStep({
             type="button"
             className="height-control"
             onClick={increase}
-            aria-label="Increase height"
+            aria-label={t("onboarding.height.increase")}
           >
             +
           </button>
@@ -88,12 +93,12 @@ export default function HeightStep({
           className="onboarding-button"
           onClick={next}
         >
-          <span>CONTINUE</span>
+          <span>{t("onboarding.continue")}</span>
           <strong>→</strong>
         </button>
 
         <div className="onboarding-footer">
-          IRONAGE ATHLETE SYSTEM
+          {t("onboarding.athleteSystem")}
         </div>
 
       </div>

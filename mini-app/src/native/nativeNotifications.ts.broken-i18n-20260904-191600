@@ -1,0 +1,531 @@
+import { Capacitor } from "@capacitor/core";
+import {
+  LocalNotifications,
+  type PermissionStatus,
+} from "@capacitor/local-notifications";
+
+import {
+  getStoredLanguage,
+  translateRaw,
+} from "../i18n/runtimeTranslator";
+
+const WORKOUT_NOTIFICATION_ID = 910001;
+
+const NUTRITION_NOTIFICATION_IDS = [
+  920001,
+  920002,
+  920003,
+];
+
+const MOTIVATION_NOTIFICATION_ID = 930001;
+
+function nt(source: string): string {
+  return translateRaw(
+    source,
+    getStoredLanguage()
+  );
+}
+
+export function isNativeNotificationsAvailable(): boolean {
+  return Capacitor.isNativePlatform();
+}
+
+export async function getNotificationPermission(): Promise<PermissionStatus> {
+  return LocalNotifications.checkPermissions();
+}
+
+export async function requestNotificationPermission(): Promise<PermissionStatus> {
+  return LocalNotifications.requestPermissions();
+}
+
+export async function ensureNotificationPermission(): Promise<boolean> {
+  if (!isNativeNotificationsAvailable()) {
+    return false;
+  }
+
+  let status =
+    await LocalNotifications.checkPermissions();
+
+  if (status.display === "prompt") {
+    status =
+      await LocalNotifications.requestPermissions();
+  }
+
+  return status.display === "granted";
+}
+
+export async function sendTestIronageNotification(): Promise<boolean> {
+  const granted =
+    await ensureNotificationPermission();
+
+  if (!granted) {
+    return false;
+  }
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: 900001,
+        title: "IRONAGE",
+        body: nt("Notifications are active. Time to keep moving."),
+        schedule: {
+          at: new Date(Date.now() + 5000),
+        },
+      },
+    ],
+  });
+
+  return true;
+}
+
+/* =========================================================
+   WORKOUT
+
+export async function scheduleWorkoutReminder(
+  hour = 18,
+  minute = 0
+): Promise<boolean> {
+  const granted =
+    await ensureNotificationPermission();
+
+  if (!granted) {
+    return false;
+  }
+
+  await cancelWorkoutReminder();
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: WORKOUT_NOTIFICATION_ID,
+        title: nt("IRONAGE · WORKOUT"),
+        body: nt("Your workout is waiting. Show up and earn it."),
+        schedule: {
+          on: {
+            hour,
+            minute,
+          },
+        },
+      },
+    ],
+  });
+
+  return true;
+}
+
+export async function cancelWorkoutReminder(): Promise<void> {
+  await LocalNotifications.cancel({
+    notifications: [
+      {
+        id: WORKOUT_NOTIFICATION_ID,
+      },
+    ],
+  });
+}
+
+/* =========================================================
+   NUTRITION
+
+export async function scheduleNutritionReminders(
+  morning = { hour: 9, minute: 0 },
+  afternoon = { hour: 13, minute: 0 },
+  evening = { hour: 19, minute: 0 }
+): Promise<boolean> {
+  const granted =
+    await ensureNotificationPermission();
+
+  if (!granted) {
+    return false;
+  }
+
+  await cancelNutritionReminders();
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: NUTRITION_NOTIFICATION_IDS[0],
+        title: nt("IRONAGE · NUTRITION"),
+        body: nt("Start strong. Fuel your body and drink water."),
+        schedule: {
+          on: {
+            hour: morning.hour,
+            minute: morning.minute,
+          },
+        },
+      },
+      {
+        id: NUTRITION_NOTIFICATION_IDS[1],
+        title: nt("IRONAGE · NUTRITION"),
+        body: nt("Stay on plan. Check your food and hydration."),
+        schedule: {
+          on: {
+            hour: afternoon.hour,
+            minute: afternoon.minute,
+          },
+        },
+      },
+      {
+        id: NUTRITION_NOTIFICATION_IDS[2],
+        title: nt("IRONAGE · NUTRITION"),
+        body: nt("Finish the day disciplined. Hit your nutrition target."),
+        schedule: {
+          on: {
+            hour: evening.hour,
+            minute: evening.minute,
+          },
+        },
+      },
+    ],
+  });
+
+  return true;
+}
+
+export async function cancelNutritionReminders(): Promise<void> {
+  await LocalNotifications.cancel({
+    notifications:
+      NUTRITION_NOTIFICATION_IDS.map((id) => ({
+        id,
+      })),
+  });
+}
+
+/* =========================================================
+   MOTIVATION
+
+export async function scheduleMotivationReminder(
+  hour = 7,
+  minute = 30
+): Promise<boolean> {
+  const granted =
+    await ensureNotificationPermission();
+
+  if (!granted) {
+    return false;
+  }
+
+  await cancelMotivationReminder();
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: MOTIVATION_NOTIFICATION_ID,
+        title: "IRONAGE",
+        body: nt("No excuses. Build the version of you that you came for."),
+        schedule: {
+          on: {
+            hour,
+            minute,
+          },
+        },
+      },
+    ],
+  });
+
+  return true;
+}
+
+export async function cancelMotivationReminder(): Promise<void> {
+  await LocalNotifications.cancel({
+    notifications: [
+      {
+        id: MOTIVATION_NOTIFICATION_ID,
+      },
+    ],
+  });
+}
+
+/* =========================================================
+   PROGRESS EVENT NOTIFICATION
+
+export type ProgressNotificationData = {
+  xp: number;
+  level: number;
+  streak: number;
+  levelUp?: boolean;
+  streakIncreased?: boolean;
+};
+
+export async function sendProgressUpdateNotification(
+  data: ProgressNotificationData
+): Promise<boolean> {
+  const granted =
+    await ensureNotificationPermission();
+
+  if (!granted) {
+    return false;
+  }
+
+  const language =
+    getStoredLanguage();
+
+  const copy = {
+    en: {
+      completed:
+        `Workout completed. +${data.xp} XP earned.`,
+      level:
+        `Level ${data.level} reached. +${data.xp} XP. Keep building.`,
+      streak:
+        `${data.streak}-day streak. +${data.xp} XP. Discipline is building.`,
+    },
+    es: {
+      completed:
+        `Entrenamiento completado. +${data.xp} XP ganados.`,
+      level:
+        `Nivel ${data.level} alcanzado. +${data.xp} XP. Sigue construyendo.`,
+      streak:
+        `Racha de ${data.streak} días. +${data.xp} XP. La disciplina crece.`,
+    },
+    uk: {
+      completed:
+        `Тренування завершено. +${data.xp} XP зароблено.`,
+      level:
+        `Досягнуто рівень ${data.level}. +${data.xp} XP. Продовжуй будувати.`,
+      streak:
+        `Серія ${data.streak} днів. +${data.xp} XP. Дисципліна зростає.`,
+    },
+    ru: {
+      completed:
+        `Тренировка завершена. +${data.xp} XP заработано.`,
+      level:
+        `Достигнут уровень ${data.level}. +${data.xp} XP. Продолжай строить.`,
+      streak:
+        `Серия ${data.streak} дней. +${data.xp} XP. Дисциплина растёт.`,
+    },
+    fr: {
+      completed:
+        `Entraînement terminé. +${data.xp} XP gagnés.`,
+      level:
+        `Niveau ${data.level} atteint. +${data.xp} XP. Continue à construire.`,
+      streak:
+        `Série de ${data.streak} jours. +${data.xp} XP. La discipline grandit.`,
+    },
+    de: {
+      completed:
+        `Training abgeschlossen. +${data.xp} XP verdient.`,
+      level:
+        `Level ${data.level} erreicht. +${data.xp} XP. Weiter aufbauen.`,
+      streak:
+        `${data.streak}-Tage-Serie. +${data.xp} XP. Disziplin wächst.`,
+    },
+    pt: {
+      completed:
+        `Treino concluído. +${data.xp} XP ganhos.`,
+      level:
+        `Nível ${data.level} alcançado. +${data.xp} XP. Continue construindo.`,
+      streak:
+        `Sequência de ${data.streak} dias. +${data.xp} XP. A disciplina cresce.`,
+    },
+    bg: {
+      completed:
+        `Тренировката е завършена. +${data.xp} XP спечелени.`,
+      level:
+        `Достигнато ниво ${data.level}. +${data.xp} XP. Продължавай да изграждаш.`,
+      streak:
+        `Серия от ${data.streak} дни. +${data.xp} XP. Дисциплината расте.`,
+    },
+  }[language];
+
+  let title =
+    nt("IRONAGE · WORKOUT COMPLETE");
+
+  let body =
+    copy.completed;
+
+  if (data.levelUp) {
+    title =
+      nt("IRONAGE · LEVEL UP");
+
+    body =
+      copy.level;
+  } else if (
+    data.streakIncreased &&
+    data.streak > 0
+  ) {
+    title =
+      nt("IRONAGE · STREAK");
+
+    body =
+      copy.streak;
+  }
+
+  await LocalNotifications.schedule({
+    notifications: [
+      {
+        id: 940001,
+        title,
+        body,
+        schedule: {
+          at: new Date(
+            Date.now() + 10000
+          ),
+        },
+      },
+    ],
+  });
+
+  return true;
+}
+
+
+
+
+/* =========================================================
+   RELOCALIZE EXISTING DAILY REMINDERS
+========================================================= */
+
+function parseReminderTime(
+  value: unknown,
+  fallbackHour: number,
+  fallbackMinute: number
+): {
+  hour: number;
+  minute: number;
+} {
+  if (
+    typeof value !== "string" ||
+    !/^\d{2}:\d{2}$/.test(value)
+  ) {
+    return {
+      hour: fallbackHour,
+      minute: fallbackMinute,
+    };
+  }
+
+  const [hour, minute] =
+    value.split(":").map(Number);
+
+  if (
+    !Number.isInteger(hour) ||
+    !Number.isInteger(minute) ||
+    hour < 0 ||
+    hour > 23 ||
+    minute < 0 ||
+    minute > 59
+  ) {
+    return {
+      hour: fallbackHour,
+      minute: fallbackMinute,
+    };
+  }
+
+  return { hour, minute };
+}
+
+export async function rescheduleLocalizedNotifications():
+  Promise<void> {
+  if (
+    !isNativeNotificationsAvailable() ||
+    typeof window === "undefined"
+  ) {
+    return;
+  }
+
+  const permission =
+    await LocalNotifications
+      .checkPermissions();
+
+  if (permission.display !== "granted") {
+    return;
+  }
+
+  let settings = {
+    workoutReminders: true,
+    progressUpdates: true,
+    nutritionReminders: false,
+    motivationalMessages: true,
+  };
+
+  let times = {
+    workout: "18:00",
+    nutritionMorning: "09:00",
+    nutritionAfternoon: "13:00",
+    nutritionEvening: "19:00",
+    motivation: "07:30",
+  };
+
+  try {
+    const rawSettings =
+      localStorage.getItem(
+        "ironage_notification_settings"
+      );
+
+    if (rawSettings) {
+      settings = {
+        ...settings,
+        ...JSON.parse(rawSettings),
+      };
+    }
+
+    const rawTimes =
+      localStorage.getItem(
+        "ironage_notification_times"
+      );
+
+    if (rawTimes) {
+      times = {
+        ...times,
+        ...JSON.parse(rawTimes),
+      };
+    }
+  } catch {
+    // Keep safe defaults.
+  }
+
+  if (settings.workoutReminders) {
+    const workout =
+      parseReminderTime(
+        times.workout,
+        18,
+        0
+      );
+
+    await scheduleWorkoutReminder(
+      workout.hour,
+      workout.minute
+    );
+  }
+
+  if (settings.nutritionReminders) {
+    const morning =
+      parseReminderTime(
+        times.nutritionMorning,
+        9,
+        0
+      );
+
+    const afternoon =
+      parseReminderTime(
+        times.nutritionAfternoon,
+        13,
+        0
+      );
+
+    const evening =
+      parseReminderTime(
+        times.nutritionEvening,
+        19,
+        0
+      );
+
+    await scheduleNutritionReminders(
+      morning,
+      afternoon,
+      evening
+    );
+  }
+
+  if (settings.motivationalMessages) {
+    const motivation =
+      parseReminderTime(
+        times.motivation,
+        7,
+        30
+      );
+
+    await scheduleMotivationReminder(
+      motivation.hour,
+      motivation.minute
+    );
+  }
+}

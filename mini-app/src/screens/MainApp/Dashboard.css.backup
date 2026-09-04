@@ -1,0 +1,673 @@
+/* =========================================
+   IRONAGE DASHBOARD
+   BLACK × GOLD × WHITE
+========================================= */
+
+.dashboard {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: #050505;
+  color: #ffffff;
+  padding-bottom: 110px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.dashboard-hero {
+  position: relative;
+  min-height: 680px;
+  overflow: hidden;
+  background: #050505;
+}
+
+
+.dashboard-hero-image {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+  min-width: 0;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center top;
+
+  transform: none;
+
+  z-index: 0;
+}
+
+
+.dashboard-hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.78) 0%,
+      rgba(5, 5, 5, 0.28) 35%,
+      rgba(5, 5, 5, 0.56) 60%,
+      #050505 100%
+    );
+
+  z-index: 1;
+}
+
+
+.dashboard-hero-overlay::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      transparent 20%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+}
+
+
+/* =========================================
+   HERO CONTENT
+========================================= */
+
+.dashboard-hero-content {
+  position: relative;
+  z-index: 2;
+
+  min-height: 680px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding:
+    max(20px, env(safe-area-inset-top))
+    20px
+    28px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+
+.dashboard-logo {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+
+.dashboard-logo span {
+  color: #d4af37;
+}
+
+
+.dashboard-edition {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+
+.dashboard-avatar {
+  width: 48px;
+  height: 48px;
+
+  padding: 2px;
+
+  border: 1px solid rgba(212, 175, 55, 0.8);
+  border-radius: 50%;
+
+  background: #050505;
+
+  overflow: hidden;
+
+  cursor: pointer;
+}
+
+
+.dashboard-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+
+/* =========================================
+   HERO COPY
+========================================= */
+
+.dashboard-hero-copy {
+  margin-top: auto;
+  margin-bottom: 28px;
+}
+
+
+.dashboard-eyebrow {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #d4af37;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.27em;
+}
+
+
+.dashboard-eyebrow::before {
+  content: "";
+
+  width: 25px;
+  height: 1px;
+
+  background: #d4af37;
+
+  box-shadow:
+    0 0 10px rgba(212, 175, 55, 0.7);
+}
+
+
+.dashboard-hero-copy h1 {
+  margin: 18px 0 0;
+
+  color: #ffffff;
+
+  font-size: clamp(56px, 18vw, 88px);
+
+  font-weight: 900;
+
+  line-height: 0.84;
+
+  letter-spacing: -0.065em;
+}
+
+
+.dashboard-hero-copy h1 strong {
+  color: #d4af37;
+  font-weight: 900;
+}
+
+
+.dashboard-hero-copy p {
+  margin: 22px 0 0;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 14px;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================
+   START BUTTON
+========================================= */
+
+.dashboard-start {
+  width: 100%;
+  height: 64px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 22px;
+
+  border: 1px solid #d4af37;
+  border-radius: 18px;
+
+  background: #d4af37;
+
+  color: #050505;
+
+  font-size: 10px;
+  font-weight: 900;
+
+  letter-spacing: 0.17em;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 16px 45px rgba(212, 175, 55, 0.28);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+
+.dashboard-start strong {
+  font-size: 22px;
+}
+
+
+.dashboard-start:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================================
+   STATS
+========================================= */
+
+.dashboard-stats {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  margin: 0 16px;
+
+  padding: 22px 0;
+
+  border-top:
+    1px solid rgba(212, 175, 55, 0.25);
+
+  border-bottom:
+    1px solid rgba(212, 175, 55, 0.25);
+}
+
+
+.dashboard-stat {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+
+  border-right:
+    1px solid rgba(255, 255, 255, 0.10);
+}
+
+
+.dashboard-stat:last-child {
+  border-right: none;
+}
+
+
+.dashboard-stat span {
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+}
+
+
+.dashboard-stat strong {
+  margin-top: 5px;
+
+  color: #ffffff;
+
+  font-size: 27px;
+
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+
+.dashboard-stat small {
+  margin-top: 5px;
+
+  color: #d4af37;
+
+  font-size: 6px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.dashboard-section {
+  padding: 32px 18px 0;
+}
+
+
+.dashboard-section-heading {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 15px;
+}
+
+
+.dashboard-section-heading > div > span {
+  color: #d4af37;
+
+  font-size: 7px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.22em;
+}
+
+
+.dashboard-section-heading h2 {
+  margin: 7px 0 0;
+
+  color: #ffffff;
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
+}
+
+
+.dashboard-section-heading button {
+  border: none;
+
+  background: transparent;
+
+  color: #d4af37;
+
+  font-size: 7px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.15em;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   MISSION
+========================================= */
+
+.dashboard-mission {
+  width: 100%;
+  min-height: 108px;
+
+  display: grid;
+
+  grid-template-columns:
+    42px
+    minmax(0, 1fr)
+    30px;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  border:
+    1px solid rgba(212, 175, 55, 0.28);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      110deg,
+      rgba(212, 175, 55, 0.10),
+      rgba(5, 5, 5, 0.82)
+    );
+
+  color: #ffffff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+
+.dashboard-mission:active {
+  transform: scale(0.985);
+}
+
+
+.mission-number {
+  color: #d4af37;
+
+  font-size: 20px;
+
+  font-weight: 800;
+}
+
+
+.mission-info {
+  min-width: 0;
+}
+
+
+.mission-info span {
+  color: #d4af37;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+}
+
+
+.mission-info h3 {
+  margin: 5px 0 0;
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.mission-info p {
+  margin: 5px 0 0;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+.mission-arrow {
+  color: #d4af37;
+
+  font-size: 22px;
+
+  text-align: right;
+}
+
+
+/* =========================================
+   QUOTE
+========================================= */
+
+.dashboard-quote {
+  margin: 42px 18px 0;
+
+  padding: 25px 0;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.13);
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.13);
+}
+
+
+.quote-accent {
+  width: 34px;
+  height: 2px;
+
+  margin-bottom: 18px;
+
+  background: #d4af37;
+
+  box-shadow:
+    0 0 10px rgba(212, 175, 55, 0.65);
+}
+
+
+.dashboard-quote p {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.025em;
+}
+
+
+.dashboard-quote p strong {
+  color: #d4af37;
+
+  font-weight: 800;
+}
+
+
+.dashboard-quote > span {
+  display: block;
+
+  margin-top: 18px;
+
+  color: rgba(255, 255, 255, 0.40);
+
+  font-size: 6px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.22em;
+}
+
+
+/* =========================================
+   QUICK ACCESS
+========================================= */
+
+.dashboard-quick {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  padding: 28px 18px 0;
+}
+
+
+.dashboard-quick button {
+  width: 100%;
+  height: 58px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.14);
+
+  border-radius: 16px;
+
+  background: #050505;
+
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+
+.dashboard-quick button span {
+  font-size: 8px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.18em;
+}
+
+
+.dashboard-quick button strong {
+  color: #d4af37;
+
+  font-size: 18px;
+}
+
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 380px) {
+
+  .dashboard-hero,
+  .dashboard-hero-content {
+    min-height: 630px;
+  }
+
+  .dashboard-hero-copy h1 {
+    font-size: 53px;
+  }
+
+  .dashboard-section-heading h2 {
+    font-size: 22px;
+  }
+}

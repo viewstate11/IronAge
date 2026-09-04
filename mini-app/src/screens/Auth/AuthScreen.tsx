@@ -13,6 +13,10 @@ import {
   useUser,
 } from "../../context/UserContext";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
 import GoogleSignInButton from "../../components/auth/GoogleSignInButton";
 
 import "./AuthScreen.css";
@@ -31,6 +35,8 @@ export default function AuthScreen({
   const {
     refreshUser,
   } = useUser();
+
+  const { t } = useLanguage();
 
   const [mode, setMode] =
     useState<AuthMode>(
@@ -84,7 +90,7 @@ export default function AuthScreen({
         !normalizedFirstName
       ) {
         setMessage(
-          "ENTER YOUR NAME"
+          t("auth.enterName")
         );
 
         return;
@@ -92,7 +98,7 @@ export default function AuthScreen({
 
       if (!normalizedEmail) {
         setMessage(
-          "ENTER YOUR EMAIL"
+          t("auth.enterEmail")
         );
 
         return;
@@ -102,7 +108,7 @@ export default function AuthScreen({
         password.length < 8
       ) {
         setMessage(
-          "PASSWORD MUST BE AT LEAST 8 CHARACTERS"
+          t("auth.passwordMin")
         );
 
         return;
@@ -126,7 +132,7 @@ export default function AuthScreen({
             result.emailVerificationRequired
           ) {
             setMessage(
-              "CHECK YOUR EMAIL TO VERIFY YOUR ACCOUNT"
+              t("auth.verifyEmail")
             );
 
             setPassword("");
@@ -162,7 +168,7 @@ export default function AuthScreen({
         setMessage(
           error instanceof Error
             ? error.message.toUpperCase()
-            : "AUTHENTICATION FAILED"
+            : t("auth.failed")
         );
       } finally {
         setSubmitting(false);
@@ -195,7 +201,7 @@ export default function AuthScreen({
         setMessage(
           error instanceof Error
             ? error.message.toUpperCase()
-            : "GOOGLE AUTHENTICATION FAILED"
+            : t("auth.googleFailed")
         );
       } finally {
         setSubmitting(false);
@@ -212,7 +218,7 @@ export default function AuthScreen({
             type="button"
             className="iron-auth__back"
             onClick={back}
-            aria-label="Back"
+            aria-label={t("common.back")}
             disabled={submitting}
           >
             ←
@@ -223,7 +229,7 @@ export default function AuthScreen({
           </div>
 
           <div className="iron-auth__edition">
-            ATHLETE SYSTEM
+            {t("auth.athleteSystem")}
           </div>
         </header>
 
@@ -234,25 +240,25 @@ export default function AuthScreen({
 
           <div className="iron-auth__eyebrow">
             {mode === "register"
-              ? "JOIN THE SYSTEM"
-              : "WELCOME BACK"}
+              ? t("auth.joinSystem")
+              : t("auth.welcomeBack")}
           </div>
 
           <h1>
             {mode === "register"
-              ? "ARE YOU READY"
-              : "READY TO"}
+              ? t("auth.readyRegister1")
+              : t("auth.readyLogin1")}
             <span>
               {mode === "register"
-                ? "TO WORK?"
-                : "CONTINUE?"}
+                ? t("auth.readyRegister2")
+                : t("auth.readyLogin2")}
             </span>
           </h1>
 
           <p className="iron-auth__intro">
             {mode === "register"
-              ? "Build discipline. Track progress. Become stronger every day."
-              : "Sign in and continue your IRONAGE journey."}
+              ? t("auth.registerIntro")
+              : t("auth.loginIntro")}
           </p>
 
           <div className="iron-auth__providers">
@@ -270,7 +276,7 @@ export default function AuthScreen({
               disabled={submitting}
               onClick={() =>
                 setMessage(
-                  "APPLE AUTH COMING SOON"
+                  t("auth.appleComingSoon")
                 )
               }
             >
@@ -278,13 +284,13 @@ export default function AuthScreen({
                 
               </span>
 
-              CONTINUE WITH APPLE
+              {t("auth.continueApple")}
             </button>
           </div>
 
           <div className="iron-auth__divider">
             <span />
-            <strong>OR</strong>
+            <strong>{t("auth.or")}</strong>
             <span />
           </div>
 
@@ -295,7 +301,7 @@ export default function AuthScreen({
             {mode === "register" && (
               <>
                 <label htmlFor="ironage-name">
-                  FIRST NAME
+                  {t("auth.firstName")}
                 </label>
 
                 <input
@@ -309,7 +315,7 @@ export default function AuthScreen({
 
                     setMessage("");
                   }}
-                  placeholder="Your name"
+                  placeholder={t("auth.namePlaceholder")}
                   autoComplete="given-name"
                   maxLength={80}
                   disabled={submitting}
@@ -318,7 +324,7 @@ export default function AuthScreen({
             )}
 
             <label htmlFor="ironage-email">
-              EMAIL
+              {t("auth.email")}
             </label>
 
             <input
@@ -338,7 +344,7 @@ export default function AuthScreen({
             />
 
             <label htmlFor="ironage-password">
-              PASSWORD
+              {t("auth.password")}
             </label>
 
             <input
@@ -352,7 +358,7 @@ export default function AuthScreen({
 
                 setMessage("");
               }}
-              placeholder="Minimum 8 characters"
+              placeholder={t("auth.passwordPlaceholder")}
               autoComplete={
                 mode === "register"
                   ? "new-password"
@@ -369,10 +375,10 @@ export default function AuthScreen({
               disabled={submitting}
             >
               {submitting
-                ? "PLEASE WAIT..."
+                ? t("auth.pleaseWait")
                 : mode === "register"
-                  ? "CREATE ACCOUNT"
-                  : "SIGN IN"}
+                  ? t("auth.createAccount")
+                  : t("auth.signIn")}
 
               {!submitting && (
                 <span>→</span>
@@ -393,8 +399,8 @@ export default function AuthScreen({
             }
           >
             {mode === "register"
-              ? "ALREADY HAVE AN ACCOUNT? SIGN IN"
-              : "DON'T HAVE AN ACCOUNT? CREATE ACCOUNT"}
+              ? t("auth.haveAccount")
+              : t("auth.noAccount")}
           </button>
 
           {message && (
@@ -404,7 +410,7 @@ export default function AuthScreen({
           )}
 
           <p className="iron-auth__legal">
-            By continuing you agree to the{" "}
+            {t("auth.legalPrefix")}{" "}
             <button
               type="button"
               onClick={() => {
@@ -412,9 +418,9 @@ export default function AuthScreen({
                   "/terms";
               }}
             >
-              Terms
+              {t("auth.terms")}
             </button>{" "}
-            and{" "}
+            {t("auth.and")}{" "}
             <button
               type="button"
               onClick={() => {
@@ -422,7 +428,7 @@ export default function AuthScreen({
                   "/privacy";
               }}
             >
-              Privacy Policy
+              {t("auth.privacy")}
             </button>
             .
           </p>
@@ -430,7 +436,7 @@ export default function AuthScreen({
 
         <footer className="iron-auth__footer">
           <span />
-          IRONAGE FITNESS SYSTEM
+          {t("auth.footer")}
           <span />
         </footer>
       </div>

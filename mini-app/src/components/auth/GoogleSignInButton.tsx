@@ -3,6 +3,16 @@ import {
   useRef,
 } from "react";
 
+import {
+  initializeNativeGoogleAuth,
+  loginNativeGoogle,
+  usesNativeGoogleAuth,
+} from "../../native/nativeGoogleAuth";
+
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
 type Props = {
   disabled?: boolean;
   onCredential: (
@@ -133,6 +143,8 @@ export default function GoogleSignInButton({
   onCredential,
   onError,
 }: Props) {
+  const { t } = useLanguage();
+
   const containerRef =
     useRef<HTMLDivElement | null>(
       null
@@ -165,6 +177,149 @@ export default function GoogleSignInButton({
             throw new Error(
               "Google Client ID is not configured"
             );
+          }
+
+          if (usesNativeGoogleAuth()) {
+            const iosClientId =
+              import.meta.env
+                .VITE_GOOGLE_IOS_CLIENT_ID
+                ?.trim();
+
+            if (!iosClientId) {
+              throw new Error(
+                "Google iOS Client ID is not configured"
+              );
+            }
+
+            await initializeNativeGoogleAuth(
+              iosClientId,
+              clientId
+            );
+
+            if (
+              !active ||
+              !containerRef.current
+            ) {
+              return;
+            }
+
+            containerRef.current
+              .replaceChildren();
+
+            const button =
+              document.createElement(
+                "button"
+              );
+
+            button.type = "button";
+            button.disabled =
+              disabled;
+
+            button.innerHTML = `
+              <span style="
+                width: 38px;
+                height: 38px;
+                border-radius: 50%;
+                background: #ffffff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                font-size: 18px;
+                font-weight: 900;
+                color: #111111;
+              ">
+                G
+              </span>
+
+              <span style="
+                flex: 1;
+                text-align: center;
+                padding-right: 38px;
+              ">
+                ${t("auth.continueGoogle")}
+              </span>
+            `;
+
+            button.style.width =
+              "100%";
+
+            button.style.height =
+              "64px";
+
+            button.style.display =
+              "flex";
+
+            button.style.alignItems =
+              "center";
+
+            button.style.padding =
+              "0 20px";
+
+            button.style.border =
+              "1px solid rgba(255,255,255,0.16)";
+
+            button.style.borderRadius =
+              "18px";
+
+            button.style.background =
+              "#0c0c0c";
+
+            button.style.color =
+              "#ffffff";
+
+            button.style.fontSize =
+              "11px";
+
+            button.style.fontWeight =
+              "900";
+
+            button.style.letterSpacing =
+              "0.14em";
+
+            button.style.fontFamily =
+              "Montserrat, -apple-system, BlinkMacSystemFont, sans-serif";
+
+            button.style.cursor =
+              "pointer";
+
+            button.style.boxSizing =
+              "border-box";
+
+
+            button.onclick =
+              async () => {
+                try {
+                  button.disabled =
+                    true;
+
+                  const credential =
+                    await loginNativeGoogle();
+
+                  await callbackRef.current(
+                    credential
+                  );
+                } catch (error) {
+                  console.error(
+                    "IRONAGE: Native Google error:",
+                    error
+                  );
+
+                  errorRef.current(
+                    error instanceof Error
+                      ? error.message.toUpperCase()
+                      : t("auth.googleFailed")
+                  );
+                } finally {
+                  button.disabled =
+                    disabled;
+                }
+              };
+
+            containerRef.current
+              .appendChild(button);
+
+            return;
           }
 
           await loadGoogleScript();
@@ -228,7 +383,7 @@ export default function GoogleSignInButton({
           errorRef.current(
             error instanceof Error
               ? error.message.toUpperCase()
-              : "GOOGLE AUTHENTICATION FAILED"
+              : t("auth.googleFailed")
           );
         }
       };
@@ -238,7 +393,7 @@ export default function GoogleSignInButton({
     return () => {
       active = false;
     };
-  }, []);
+  }, [disabled, t]);
 
   return (
     <div

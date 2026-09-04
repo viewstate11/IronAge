@@ -512,56 +512,11 @@ export default function MainApp() {
 
             <div
               role="alert"
-              style={{
-                position:
-                  "fixed",
-
-                top:
-                  "16px",
-
-                left:
-                  "16px",
-
-                right:
-                  "16px",
-
-                zIndex:
-                  9999,
-
-                padding:
-                  "14px 16px",
-
-                background:
-                  "#120909",
-
-                border:
-                  "1px solid #8B0000",
-
-                color:
-                  "#ffffff",
-
-                borderRadius:
-                  "10px",
-
-                fontFamily:
-                  "Inter, sans-serif",
-
-                fontSize:
-                  "13px",
-
-                lineHeight:
-                  1.4,
-              }}
+                className="mainapp-save-error"
             >
 
               <strong
-                style={{
-                  display:
-                    "block",
-
-                  marginBottom:
-                    "4px",
-                }}
+                  className="mainapp-save-error__title"
               >
                 WORKOUT SAVE ERROR
               </strong>
@@ -771,50 +726,11 @@ export default function MainApp() {
           workoutResult === null && (
 
             <section
-              style={{
-                minHeight:
-                  "100dvh",
-
-                display:
-                  "flex",
-
-                alignItems:
-                  "center",
-
-                justifyContent:
-                  "center",
-
-                flexDirection:
-                  "column",
-
-                gap:
-                  "20px",
-
-                background:
-                  "#050505",
-
-                color:
-                  "#D4AF37",
-
-                fontFamily:
-                  "Montserrat, sans-serif",
-
-                padding:
-                  "24px",
-
-                textAlign:
-                  "center",
-              }}
+                className="mainapp-complete-fallback"
             >
 
               <strong
-                style={{
-                  fontSize:
-                    "20px",
-
-                  letterSpacing:
-                    "0.08em",
-                }}
+                className="mainapp-complete-fallback__title"
               >
                 WORKOUT RESULT
                 <br />
@@ -835,31 +751,7 @@ export default function MainApp() {
                   );
 
                 }}
-                style={{
-                  border:
-                    "1px solid #D4AF37",
-
-                  background:
-                    "#D4AF37",
-
-                  color:
-                    "#050505",
-
-                  padding:
-                    "16px 24px",
-
-                  fontWeight:
-                    800,
-
-                  cursor:
-                    "pointer",
-
-                  borderRadius:
-                    "10px",
-
-                  fontFamily:
-                    "Montserrat, sans-serif",
-                }}
+                  className="mainapp-complete-fallback__button"
               >
                 BACK TO HOME
               </button>
@@ -913,78 +805,22 @@ export default function MainApp() {
         <div
           role="status"
           aria-live="polite"
-          style={{
-
-            position:
-              "fixed",
-
-            inset:
-              0,
-
-            zIndex:
-              10000,
-
-            display:
-              "flex",
-
-            alignItems:
-              "center",
-
-            justifyContent:
-              "center",
-
-            background:
-              "rgba(0, 0, 0, 0.82)",
-
-            backdropFilter:
-              "blur(8px)",
-
-            color:
-              "#D4AF37",
-
-            fontFamily:
-              "Montserrat, sans-serif",
-
-          }}
+            className="mainapp-saving-overlay"
         >
 
           <div
-            style={{
-              textAlign:
-                "center",
-
-              padding:
-                "24px",
-            }}
+            className="mainapp-saving-overlay__content"
           >
 
             <div
-              style={{
-                fontSize:
-                  "28px",
-
-                fontWeight:
-                  800,
-
-                marginBottom:
-                  "12px",
-              }}
+              className="mainapp-saving-overlay__brand"
             >
               IRONAGE
             </div>
 
 
             <div
-              style={{
-                fontSize:
-                  "12px",
-
-                letterSpacing:
-                  "0.16em",
-
-                color:
-                  "#ffffff",
-              }}
+              className="mainapp-saving-overlay__text"
             >
               SAVING WORKOUT...
             </div>

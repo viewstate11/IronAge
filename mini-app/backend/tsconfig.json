@@ -12,5 +12,5 @@
   "include": [
     "src/**/*.ts",
     "generated/**/*.ts"
-  ]
+, "../src/services/index.ts"  ]
 }

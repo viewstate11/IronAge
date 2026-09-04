@@ -12,6 +12,10 @@ import {
   useUser,
 } from "../../context/UserContext";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
 type VerificationState =
   | "verifying"
   | "success"
@@ -21,6 +25,8 @@ export default function VerifyEmail() {
   const {
     refreshUser,
   } = useUser();
+
+  const { t } = useLanguage();
 
   const verificationStarted =
     useRef(false);
@@ -36,7 +42,7 @@ export default function VerifyEmail() {
     message,
     setMessage,
   ] = useState(
-    "VERIFYING YOUR EMAIL..."
+    t("verify.verifying")
   );
 
   useEffect(() => {
@@ -59,7 +65,7 @@ export default function VerifyEmail() {
         setState("error");
 
         setMessage(
-          "VERIFICATION LINK IS INVALID"
+          t("verify.invalid")
         );
 
         return;
@@ -84,7 +90,7 @@ export default function VerifyEmail() {
         setState("success");
 
         setMessage(
-          "EMAIL VERIFIED"
+          t("verify.verified")
         );
 
         window.location.replace("/");
@@ -99,13 +105,13 @@ export default function VerifyEmail() {
         setMessage(
           error instanceof Error
             ? error.message.toUpperCase()
-            : "EMAIL VERIFICATION FAILED"
+            : t("verify.failed")
         );
       }
     }
 
     void run();
-  }, [refreshUser]);
+  }, [refreshUser, t]);
 
   return (
     <main
@@ -193,10 +199,10 @@ export default function VerifyEmail() {
           }}
         >
           {state === "verifying"
-            ? "Please wait while we activate your IRONAGE account."
+            ? t("verify.wait")
             : state === "success"
-              ? "Your account is active. IRONAGE is loading your profile."
-              : "The link may be invalid or expired. Return to IRONAGE and request a new verification email."}
+              ? t("verify.active")
+              : t("verify.expired")}
         </p>
 
         {state === "error" && (
@@ -221,7 +227,7 @@ export default function VerifyEmail() {
               cursor: "pointer",
             }}
           >
-            RETURN TO IRONAGE
+            {t("verify.return")}
           </button>
         )}
       </section>

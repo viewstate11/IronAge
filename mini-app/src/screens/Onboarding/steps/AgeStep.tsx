@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   value: number;
   onChange: (value: number) => void;
@@ -9,6 +13,8 @@ export default function AgeStep({
   onChange,
   next,
 }: Props) {
+  const { t } = useLanguage();
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -33,23 +39,22 @@ export default function AgeStep({
       <div className="onboarding-step-content">
 
         <div className="onboarding-eyebrow">
-          YOUR PROFILE
+          {t("onboarding.profile")}
         </div>
 
         <h1 className="onboarding-title">
-          HOW
-          <strong>OLD ARE YOU?</strong>
+          {t("onboarding.age.title1")}
+          <strong>{t("onboarding.age.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          Your age helps IRONAGE build a training
-          system designed specifically for you.
+          {t("onboarding.age.description")}
         </p>
 
         <div className="onboarding-input-wrapper">
 
           <label htmlFor="age">
-            AGE
+            {t("onboarding.age.label")}
           </label>
 
           <input
@@ -75,12 +80,12 @@ export default function AgeStep({
           disabled={value < 13 || value > 100}
           onClick={handleNext}
         >
-          <span>CONTINUE</span>
+          <span>{t("onboarding.continue")}</span>
           <strong>→</strong>
         </button>
 
         <div className="onboarding-footer">
-          IRONAGE ATHLETE SYSTEM
+          {t("onboarding.athleteSystem")}
         </div>
 
       </div>

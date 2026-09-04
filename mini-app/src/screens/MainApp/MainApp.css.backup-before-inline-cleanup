@@ -1,0 +1,299 @@
+/* =========================================================
+   IRONAGE — MAIN APP LAYOUT
+   Telegram Mini App + Mobile + Desktop
+========================================================= */
+
+.main-app {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+
+  background: #050505;
+  color: #f5f2e8;
+
+  box-sizing: border-box;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+/* =========================================================
+   EVERYTHING INSIDE MAIN APP
+========================================================= */
+
+.main-app,
+.main-app *,
+.main-app *::before,
+.main-app *::after {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.main-app > .page {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+
+  background: transparent;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   IMPORTANT:
+   Prevent children from creating a wider layout
+========================================================= */
+
+.main-app > .page > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   WORKOUT / OTHER FULL WIDTH SCREENS
+========================================================= */
+
+.main-app > .page > .workout-page,
+.main-app > .page > .ai-page,
+.main-app > .page > .nutrition-page,
+.main-app > .page > .progress-page,
+.main-app > .page > .profile-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+/* =========================================================
+   TELEGRAM / MOBILE WEBVIEW
+========================================================= */
+
+@media (max-width: 599px) {
+
+  .main-app {
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+  }
+
+  .main-app > .page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    margin: 0;
+    padding: 0;
+
+    overflow-x: hidden;
+  }
+
+  .main-app > .page > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+}
+
+
+/* =========================================================
+   TELEGRAM SAFE AREA
+========================================================= */
+
+@supports (padding: env(safe-area-inset-left)) {
+
+  .main-app {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 900px) {
+
+  .main-app {
+    width: 100%;
+    max-width: 100%;
+
+    min-width: 0;
+
+    overflow-x: hidden;
+  }
+
+  .main-app > .page {
+    width: 100%;
+    max-width: 100%;
+
+    margin: 0;
+    padding: 0;
+  }
+
+}
+
+
+/* =========================================================
+   ERROR / FALLBACK
+========================================================= */
+
+.ironage-error-screen {
+
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    30px
+    max(30px, env(safe-area-inset-right))
+    calc(30px + env(safe-area-inset-bottom))
+    max(30px, env(safe-area-inset-left));
+
+  margin: 0;
+
+  background: #050505;
+
+  color: #ffffff;
+
+  text-align: center;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+
+.ironage-error-logo {
+
+  color: #ffffff;
+
+  font-size: 28px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.14em;
+}
+
+
+.ironage-error-logo span {
+
+  color: #d4af37;
+}
+
+
+.ironage-error-screen p {
+
+  margin: 15px 0 25px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.2em;
+}
+
+
+.ironage-error-screen button {
+
+  min-width: 220px;
+
+  height: 54px;
+
+  border: 1px solid #d4af37;
+
+  border-radius: 12px;
+
+  background: #d4af37;
+
+  color: #050505;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.15em;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .main-app *,
+  .main-app *::before,
+  .main-app *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+}
+
+/* UNIVERSAL TABBAR CONTENT SPACE */
+
+.main-app > .page {
+  padding-bottom:
+    calc(100px + env(safe-area-inset-bottom));
+}

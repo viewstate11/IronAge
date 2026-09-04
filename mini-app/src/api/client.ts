@@ -996,6 +996,9 @@ export async function updateCurrentUser(
 ========================================================= */
 
 export async function logoutCurrentSession(): Promise<void> {
+  console.error("IRONAGE DEBUG: logoutCurrentSession CALLED");
+  console.trace("IRONAGE DEBUG LOGOUT TRACE");
+
   try {
     const response =
       await api.post<{
@@ -1035,6 +1038,8 @@ export type GoogleLoginResult = {
 export async function loginGoogle(
   idToken: string
 ): Promise<GoogleLoginResult> {
+  console.log("IRONAGE DEBUG: loginGoogle CALLED");
+  console.trace("IRONAGE DEBUG GOOGLE TRACE");
   const normalizedToken =
     idToken.trim();
 
@@ -1065,6 +1070,13 @@ export async function loginGoogle(
         "Native session token missing"
       );
     }
+
+    console.log(
+      "IRONAGE SESSION GOOGLE:",
+      await sessionFingerprint(
+        sessionToken
+      )
+    );
 
     await saveNativeSessionToken(
       sessionToken

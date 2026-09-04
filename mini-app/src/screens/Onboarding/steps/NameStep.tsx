@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   value: string;
   onChange: (value: string) => void;
@@ -9,6 +13,8 @@ export default function NameStep({
   onChange,
   next,
 }: Props) {
+  const { t } = useLanguage();
+
   const handleNext = () => {
     if (!value.trim()) return;
     next();
@@ -20,25 +26,25 @@ export default function NameStep({
 
         <div className="onboarding-eyebrow">
           <span />
-          LET'S GET STARTED
+          {t("onboarding.name.eyebrow")}
           <span />
         </div>
 
         <h1 className="onboarding-title">
-          WHAT'S
+          {t("onboarding.name.title1")}
           <br />
-          <strong>YOUR NAME?</strong>
+          <strong>{t("onboarding.name.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          Your journey starts with one decision.
+          {t("onboarding.name.desc1")}
           <br />
-          Let's make it count.
+          {t("onboarding.name.desc2")}
         </p>
 
         <div className="onboarding-input-wrapper">
           <label htmlFor="name">
-            YOUR NAME
+            {t("onboarding.name.label")}
           </label>
 
           <input
@@ -48,7 +54,7 @@ export default function NameStep({
             onChange={(event) =>
               onChange(event.target.value)
             }
-            placeholder="Enter your name"
+            placeholder={t("onboarding.name.placeholder")}
             autoComplete="name"
           />
         </div>
@@ -63,12 +69,12 @@ export default function NameStep({
           onClick={handleNext}
           disabled={!value.trim()}
         >
-          <span>CONTINUE</span>
+          <span>{t("onboarding.continue")}</span>
           <strong>→</strong>
         </button>
 
         <p className="onboarding-footer">
-          IRONAGE ATHLETE SYSTEM
+          {t("onboarding.athleteSystem")}
         </p>
 
       </div>

@@ -1,5 +1,9 @@
 import type { User } from "../types/user";
 
+import {
+  getStoredLanguage,
+} from "../i18n/runtimeTranslator";
+
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
@@ -13,6 +17,17 @@ type AIResponse = {
 
 const API_URL =
   "/api/ai";
+
+const AI_LANGUAGE_NAMES = {
+  en: "English",
+  es: "Spanish",
+  uk: "Ukrainian",
+  ru: "Russian",
+  fr: "French",
+  de: "German",
+  pt: "Portuguese",
+  bg: "Bulgarian",
+} as const;
 
 export async function getAITrainerResponse(
   user: User,
@@ -30,11 +45,26 @@ export async function getAITrainerResponse(
           "application/json",
       },
 
-      body: JSON.stringify({
-        user,
-        message,
-        history,
-      }),
+      body: JSON.stringify((() => {
+        const language =
+          getStoredLanguage();
+
+        const languageName =
+          AI_LANGUAGE_NAMES[language];
+
+        const localizedMessage =
+          `[IRONAGE LANGUAGE: ${languageName}. ` +
+          `Always answer the athlete in ${languageName}. ` +
+          `Do not switch languages unless the athlete explicitly asks for a translation.]\n\n` +
+          message;
+
+        return {
+          user,
+          message: localizedMessage,
+          history,
+          language,
+        };
+      })()),
     }
   );
 

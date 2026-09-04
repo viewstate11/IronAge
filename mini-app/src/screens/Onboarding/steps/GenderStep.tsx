@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   value: string;
   onChange: (value: string) => void;
@@ -9,23 +13,24 @@ export default function GenderStep({
   onChange,
   next,
 }: Props) {
+  const { t } = useLanguage();
+
   return (
     <section className="onboarding-step">
 
       <div className="onboarding-step-content">
 
         <div className="onboarding-eyebrow">
-          YOUR PROFILE
+          {t("onboarding.profile")}
         </div>
 
         <h1 className="onboarding-title">
-          CHOOSE
-          <strong>YOUR PATH.</strong>
+          {t("onboarding.gender.title1")}
+          <strong>{t("onboarding.gender.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          Select your profile so IRONAGE can
-          personalize your training experience.
+          {t("onboarding.gender.description")}
         </p>
 
         <div className="gender-options">
@@ -38,7 +43,7 @@ export default function GenderStep({
             onClick={() => onChange("MALE")}
           >
             <span className="gender-number">01</span>
-            <span className="gender-name">MALE</span>
+            <span className="gender-name">{t("onboarding.gender.male")}</span>
             <span className="gender-arrow">→</span>
           </button>
 
@@ -50,7 +55,7 @@ export default function GenderStep({
             onClick={() => onChange("FEMALE")}
           >
             <span className="gender-number">02</span>
-            <span className="gender-name">FEMALE</span>
+            <span className="gender-name">{t("onboarding.gender.female")}</span>
             <span className="gender-arrow">→</span>
           </button>
 
@@ -66,12 +71,12 @@ export default function GenderStep({
           disabled={!value}
           onClick={next}
         >
-          <span>CONTINUE</span>
+          <span>{t("onboarding.continue")}</span>
           <strong>→</strong>
         </button>
 
         <div className="onboarding-footer">
-          IRONAGE ATHLETE SYSTEM
+          {t("onboarding.athleteSystem")}
         </div>
 
       </div>

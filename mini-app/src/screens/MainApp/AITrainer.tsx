@@ -9,6 +9,10 @@ import {
   type User as ContextUser,
 } from "../../context/UserContext";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
 import type {
   User as AppUser,
 } from "../../types/user";
@@ -77,6 +81,8 @@ export default function AITrainer({
     loading,
   } = useUser();
 
+  const { t } = useLanguage();
+
   /* =======================================================
      STATE
   ======================================================= */
@@ -143,21 +149,31 @@ export default function AITrainer({
   const coachMessage =
     useMemo(() => {
       if (currentStreak >= 10) {
-        return `You're on a ${currentStreak}-day streak. That's serious discipline. Today we keep the momentum going.`;
+        return t("ai.streakStrong").replace(
+          "{count}",
+          String(currentStreak)
+        );
       }
 
       if (currentStreak >= 5) {
-        return `You're building a ${currentStreak}-day streak. Stay consistent today and keep moving forward.`;
+        return t("ai.streakBuilding").replace(
+          "{count}",
+          String(currentStreak)
+        );
       }
 
       if (completedWorkouts > 0) {
-        return `You've already completed ${completedWorkouts} workouts. Keep building your strength and consistency.`;
+        return t("ai.workoutsDone").replace(
+          "{count}",
+          String(completedWorkouts)
+        );
       }
 
-      return "You're building your foundation. The goal is simple: train consistently and become stronger every day.";
+      return t("ai.foundation");
     }, [
       currentStreak,
       completedWorkouts,
+      t,
     ]);
 
   /* =======================================================
@@ -169,16 +185,19 @@ export default function AITrainer({
   ): string => {
     switch (selectedMode) {
       case "workout":
-        return `Based on your current level ${currentLevel} and goal "${goal}", I'd recommend completing today's workout with controlled reps, strong technique and consistent intensity.`;
+        return t("ai.workoutResponse")
+          .replace("{level}", String(currentLevel))
+          .replace("{goal}", String(goal));
 
       case "nutrition":
-        return `Your nutrition should support your goal "${goal}". Prioritize enough protein, quality food, hydration and a consistent calorie intake.`;
+        return t("ai.nutritionResponse")
+          .replace("{goal}", String(goal));
 
       case "recovery":
-        return "Recovery is part of the program. Focus on quality sleep, hydration and giving your muscles enough time to recover between hard sessions.";
+        return t("ai.recoveryResponse");
 
       default:
-        return "Stay consistent and keep moving forward.";
+        return t("ai.keepGoing");
     }
   };
 
@@ -253,7 +272,7 @@ export default function AITrainer({
         );
 
         setAnswer(
-          "IRONAGE AI is temporarily unavailable. Please try again."
+          t("ai.unavailable")
         );
       } finally {
         setIsLoading(false);
@@ -291,7 +310,7 @@ export default function AITrainer({
 
         <img
           src={vasylPhoto}
-          alt="IRONAGE athlete"
+          alt={t("dashboard.athlete")}
           className="ai-background"
         />
 
@@ -577,16 +596,16 @@ export default function AITrainer({
             }
             placeholder={
               isLoading
-                ? "IRONAGE AI is thinking..."
-                : "Ask your coach anything..."
+                ? t("ai.thinking")
+                : t("ai.askAnything")
             }
-            aria-label="Ask IRONAGE AI"
+            aria-label={t("ai.ask")}
             disabled={isLoading}
           />
 
           <button
             type="submit"
-            aria-label="Ask coach"
+            aria-label={t("ai.askCoach")}
             disabled={
               isLoading ||
               !question.trim()

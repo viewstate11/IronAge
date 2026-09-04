@@ -7,6 +7,21 @@ import type { Goal } from "../../types/user";
 import "./Profile.css";
 import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
+import {
+  LANGUAGE_OPTIONS,
+  useLanguage,
+} from "../../context/LanguageContext";
+import {
+  sendTestIronageNotification,
+  ensureNotificationPermission,
+  scheduleWorkoutReminder,
+  cancelWorkoutReminder,
+  scheduleNutritionReminders,
+  cancelNutritionReminders,
+  scheduleMotivationReminder,
+  cancelMotivationReminder,
+} from "../../native/nativeNotifications";
+
 type Props = {
   onOpenPremium?: () => void;
   onOpenCoach?: () => void;
@@ -16,7 +31,10 @@ type Props = {
 type ProfileView =
   | "main"
   | "personal"
-  | "goals";
+  | "goals"
+  | "notifications"
+  | "settings"
+  | "language";
 
 const goals: Array<{
   id: Goal;
@@ -79,6 +97,12 @@ export default function Profile({
     loading: entitlementLoading,
   } = useAppEntitlements();
 
+  const {
+    language: selectedLanguage,
+    setLanguage: changeLanguage,
+    t,
+  } = useLanguage();
+
   const [view, setView] =
     useState<ProfileView>("main");
 
@@ -112,6 +136,118 @@ export default function Profile({
 
   const [saving, setSaving] =
     useState(false);
+
+  const [notificationTestMessage, setNotificationTestMessage] =
+    useState("");
+
+  const [notificationSettings, setNotificationSettings] =
+    useState(() => {
+      try {
+        const raw = localStorage.getItem(
+          "ironage_notification_settings"
+        );
+
+        return raw
+          ? JSON.parse(raw)
+          : {
+              workoutReminders: true,
+              progressUpdates: true,
+              nutritionReminders: false,
+              motivationalMessages: true,
+            };
+      } catch {
+        return {
+          workoutReminders: true,
+          progressUpdates: true,
+          nutritionReminders: false,
+          motivationalMessages: true,
+        };
+      }
+    });
+
+  const [notificationTimes, setNotificationTimes] =
+    useState(() => {
+      try {
+        const raw = localStorage.getItem(
+          "ironage_notification_times"
+        );
+
+        return raw
+          ? JSON.parse(raw)
+          : {
+              workout: "18:00",
+              nutritionMorning: "09:00",
+              nutritionAfternoon: "13:00",
+              nutritionEvening: "19:00",
+              motivation: "07:30",
+            };
+      } catch {
+        return {
+          workout: "18:00",
+          nutritionMorning: "09:00",
+          nutritionAfternoon: "13:00",
+          nutritionEvening: "19:00",
+          motivation: "07:30",
+        };
+      }
+    });
+
+  const [appSettings, setAppSettings] =
+    useState(() => {
+      try {
+        const raw = localStorage.getItem(
+          "ironage_app_settings"
+        );
+
+        return raw
+          ? JSON.parse(raw)
+          : {
+              haptics: true,
+              sounds: true,
+              autoStartWorkout: false,
+            };
+      } catch {
+        return {
+          haptics: true,
+          sounds: true,
+          autoStartWorkout: false,
+        };
+      }
+    });
+
+  const updateNotificationSetting = (
+    key: string,
+    value: boolean
+  ) => {
+    const next = {
+      ...notificationSettings,
+      [key]: value,
+    };
+
+    setNotificationSettings(next);
+
+    localStorage.setItem(
+      "ironage_notification_settings",
+      JSON.stringify(next)
+    );
+  };
+
+  const updateAppSetting = (
+    key: string,
+    value: boolean
+  ) => {
+    const next = {
+      ...appSettings,
+      [key]: value,
+    };
+
+    setAppSettings(next);
+
+    localStorage.setItem(
+      "ironage_app_settings",
+      JSON.stringify(next)
+    );
+  };
 
   const xpInLevel =
     user.xp % 1000;
@@ -170,6 +306,259 @@ export default function Profile({
     }
   };
 
+  const parseNotificationTime = (
+    value: string
+  ) => {
+    const [hourRaw, minuteRaw] =
+      value.split(":");
+
+    return {
+      hour: Number(hourRaw) || 0,
+      minute: Number(minuteRaw) || 0,
+    };
+  };
+
+  const updateNotificationTime = async (
+    key:
+      | "workout"
+      | "nutritionMorning"
+      | "nutritionAfternoon"
+      | "nutritionEvening"
+      | "motivation",
+    value: string
+  ) => {
+    const next = {
+      ...notificationTimes,
+      [key]: value,
+    };
+
+    setNotificationTimes(next);
+
+    localStorage.setItem(
+      "ironage_notification_times",
+      JSON.stringify(next)
+    );
+
+    try {
+      if (
+        key === "workout" &&
+        notificationSettings.workoutReminders
+      ) {
+        const time =
+          parseNotificationTime(next.workout);
+
+        await scheduleWorkoutReminder(
+          time.hour,
+          time.minute
+        );
+      }
+
+      if (
+        (
+          key === "nutritionMorning" ||
+          key === "nutritionAfternoon" ||
+          key === "nutritionEvening"
+        ) &&
+        notificationSettings.nutritionReminders
+      ) {
+        const morning =
+          parseNotificationTime(
+            next.nutritionMorning
+          );
+
+        const afternoon =
+          parseNotificationTime(
+            next.nutritionAfternoon
+          );
+
+        const evening =
+          parseNotificationTime(
+            next.nutritionEvening
+          );
+
+        await scheduleNutritionReminders(
+          morning,
+          afternoon,
+          evening
+        );
+      }
+
+      if (
+        key === "motivation" &&
+        notificationSettings.motivationalMessages
+      ) {
+        const time =
+          parseNotificationTime(next.motivation);
+
+        await scheduleMotivationReminder(
+          time.hour,
+          time.minute
+        );
+      }
+
+      setNotificationTestMessage(
+        "Reminder time updated."
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Reminder time update failed:",
+        error
+      );
+
+      setNotificationTestMessage(
+        "Could not update reminder time."
+      );
+    }
+  };
+
+  const setRealNotificationSetting = async (
+    key:
+      | "workoutReminders"
+      | "progressUpdates"
+      | "nutritionReminders"
+      | "motivationalMessages",
+    enabled: boolean
+  ) => {
+    try {
+      let success = true;
+
+      if (key === "progressUpdates") {
+        if (enabled) {
+          const permission =
+            await ensureNotificationPermission();
+
+          success = permission;
+        }
+      }
+
+      if (key === "workoutReminders") {
+        if (enabled) {
+          const time =
+            parseNotificationTime(
+              notificationTimes.workout
+            );
+
+          success =
+            await scheduleWorkoutReminder(
+              time.hour,
+              time.minute
+            );
+        } else {
+          await cancelWorkoutReminder();
+        }
+      }
+
+      if (key === "nutritionReminders") {
+        if (enabled) {
+          const morning =
+            parseNotificationTime(
+              notificationTimes.nutritionMorning
+            );
+
+          const afternoon =
+            parseNotificationTime(
+              notificationTimes.nutritionAfternoon
+            );
+
+          const evening =
+            parseNotificationTime(
+              notificationTimes.nutritionEvening
+            );
+
+          success =
+            await scheduleNutritionReminders(
+              morning,
+              afternoon,
+              evening
+            );
+        } else {
+          await cancelNutritionReminders();
+        }
+      }
+
+      if (key === "motivationalMessages") {
+        if (enabled) {
+          const time =
+            parseNotificationTime(
+              notificationTimes.motivation
+            );
+
+          success =
+            await scheduleMotivationReminder(
+              time.hour,
+              time.minute
+            );
+        } else {
+          await cancelMotivationReminder();
+        }
+      }
+
+      if (enabled && !success) {
+        setNotificationTestMessage(
+          "Notification permission is required."
+        );
+
+        updateNotificationSetting(
+          key,
+          false
+        );
+
+        return;
+      }
+
+      updateNotificationSetting(
+        key,
+        enabled
+      );
+
+      setNotificationTestMessage(
+        enabled
+          ? "Reminder activated."
+          : "Reminder disabled."
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Notification setting failed:",
+        error
+      );
+
+      setNotificationTestMessage(
+        "Could not update notification reminder."
+      );
+    }
+  };
+
+  const testNotification = async () => {
+    try {
+      setNotificationTestMessage(
+        "Requesting notification permission..."
+      );
+
+      const ok =
+        await sendTestIronageNotification();
+
+      if (!ok) {
+        setNotificationTestMessage(
+          "Notifications are not allowed on this device."
+        );
+        return;
+      }
+
+      setNotificationTestMessage(
+        "Test notification scheduled. Wait 5 seconds."
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE: Test notification failed:",
+        error
+      );
+
+      setNotificationTestMessage(
+        "Could not schedule notification."
+      );
+    }
+  };
+
   const goalLabel =
     goals.find(
       (item) => item.id === goal
@@ -187,7 +576,7 @@ export default function Profile({
               onClick={() =>
                 setView("main")
               }
-              aria-label="Back"
+              aria-label={t("common.back")}
             >
               ←
             </button>
@@ -493,6 +882,447 @@ export default function Profile({
     );
   }
 
+  if (view === "notifications") {
+    return (
+      <main className="profile-page profile-subpage">
+        <div className="profile-subcontent">
+
+          <header className="profile-subheader">
+            <button
+              type="button"
+              className="profile-back"
+              onClick={() => setView("main")}
+              aria-label="Back"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>IRONAGE CONTROL</span>
+              <h1>NOTIFICATIONS</h1>
+              <p>REMINDERS · UPDATES · CONTROL</p>
+            </div>
+          </header>
+
+          <section className="profile-settings-hero">
+            <span>NOTIFICATION CENTER</span>
+
+            <h2>
+              STAY READY.
+              <br />
+              <strong>STAY CONSISTENT.</strong>
+            </h2>
+
+            <p>
+              Control the reminders and updates you want
+              from IRONAGE.
+            </p>
+          </section>
+
+          <button
+            type="button"
+            className="profile-gold-button"
+            onClick={() => {
+              void testNotification();
+            }}
+          >
+            <span>TEST NOTIFICATION</span>
+            <b>→</b>
+          </button>
+
+          {notificationTestMessage && (
+            <div className="profile-settings-note">
+              <span>NOTIFICATION STATUS</span>
+              <p>{notificationTestMessage}</p>
+            </div>
+          )}
+
+          <section className="profile-settings-list">
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>WORKOUT REMINDERS</strong>
+                <span>Remind me when it is time to train</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={notificationSettings.workoutReminders}
+                onChange={(event) => {
+                  void setRealNotificationSetting(
+                    "workoutReminders",
+                    event.target.checked
+                  );
+                }}
+              />
+              <i />
+            </label>
+
+              <div className="profile-reminder-time">
+                <div>
+                  <span>WORKOUT TIME</span>
+                  <strong>{notificationTimes.workout}</strong>
+                </div>
+
+                <input
+                  type="time"
+                  value={notificationTimes.workout}
+                  onChange={(event) => {
+                    void updateNotificationTime(
+                      "workout",
+                      event.target.value
+                    );
+                  }}
+                  aria-label="Workout reminder time"
+                />
+              </div>
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>PROGRESS UPDATES</strong>
+                <span>Level, XP and weekly progress updates</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={notificationSettings.progressUpdates}
+                onChange={(event) => {
+                  void setRealNotificationSetting(
+                    "progressUpdates",
+                    event.target.checked
+                  );
+                }}
+              />
+              <i />
+            </label>
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>NUTRITION REMINDERS</strong>
+                <span>Water and nutrition reminders</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={notificationSettings.nutritionReminders}
+                onChange={(event) => {
+                  void setRealNotificationSetting(
+                    "nutritionReminders",
+                    event.target.checked
+                  );
+                }}
+              />
+              <i />
+            </label>
+
+              <div className="profile-reminder-times">
+
+                <label>
+                  <span>MORNING</span>
+                  <input
+                    type="time"
+                    value={notificationTimes.nutritionMorning}
+                    onChange={(event) => {
+                      void updateNotificationTime(
+                        "nutritionMorning",
+                        event.target.value
+                      );
+                    }}
+                  />
+                </label>
+
+                <label>
+                  <span>AFTERNOON</span>
+                  <input
+                    type="time"
+                    value={notificationTimes.nutritionAfternoon}
+                    onChange={(event) => {
+                      void updateNotificationTime(
+                        "nutritionAfternoon",
+                        event.target.value
+                      );
+                    }}
+                  />
+                </label>
+
+                <label>
+                  <span>EVENING</span>
+                  <input
+                    type="time"
+                    value={notificationTimes.nutritionEvening}
+                    onChange={(event) => {
+                      void updateNotificationTime(
+                        "nutritionEvening",
+                        event.target.value
+                      );
+                    }}
+                  />
+                </label>
+
+              </div>
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>MOTIVATIONAL MESSAGES</strong>
+                <span>Daily IRONAGE motivation</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={notificationSettings.motivationalMessages}
+                onChange={(event) => {
+                  void setRealNotificationSetting(
+                    "motivationalMessages",
+                    event.target.checked
+                  );
+                }}
+              />
+              <i />
+            </label>
+
+              <div className="profile-reminder-time">
+                <div>
+                  <span>MOTIVATION TIME</span>
+                  <strong>{notificationTimes.motivation}</strong>
+                </div>
+
+                <input
+                  type="time"
+                  value={notificationTimes.motivation}
+                  onChange={(event) => {
+                    void updateNotificationTime(
+                      "motivation",
+                      event.target.value
+                    );
+                  }}
+                  aria-label="Motivation reminder time"
+                />
+              </div>
+
+          </section>
+
+        </div>
+      </main>
+    );
+  }
+
+  if (view === "language") {
+    return (
+      <main className="profile-page profile-subpage">
+        <div className="profile-subcontent">
+
+          <header className="profile-subheader">
+            <button
+              type="button"
+              className="profile-back"
+              onClick={() =>
+                setView("settings")
+              }
+              aria-label="Back"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>IRONAGE SYSTEM</span>
+              <h1>{t("language.title")}</h1>
+              <p>{t("language.subtitle")}</p>
+            </div>
+          </header>
+
+          <section className="profile-settings-hero">
+            <span>{t("language.control")}</span>
+
+            <h2>
+              {t("language.yourLanguage")}
+              <br />
+              <strong>{t("language.yourIronage")}</strong>
+            </h2>
+
+            <p>
+              {t("language.description")}
+            </p>
+          </section>
+
+          <section className="profile-language-list">
+            {LANGUAGE_OPTIONS.map(
+              (language) => {
+                const active =
+                  selectedLanguage ===
+                  language.id;
+
+                return (
+                  <button
+                    key={language.id}
+                    type="button"
+                    className={`profile-language-row ${
+                      active
+                        ? "profile-language-row--active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      changeLanguage(
+                        language.id
+                      )
+                    }
+                  >
+                    <div className="profile-language-main">
+                      <span className="profile-language-flag">
+                        {language.flag}
+                      </span>
+
+                      <strong>
+                        {language.label}
+                      </strong>
+                    </div>
+
+                    <span
+                      className={`profile-language-radio ${
+                        active
+                          ? "profile-language-radio--active"
+                          : ""
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {active ? "✓" : ""}
+                    </span>
+                  </button>
+                );
+              }
+            )}
+          </section>
+
+        </div>
+      </main>
+    );
+  }
+
+  if (view === "settings") {
+    return (
+      <main className="profile-page profile-subpage">
+        <div className="profile-subcontent">
+
+          <header className="profile-subheader">
+            <button
+              type="button"
+              className="profile-back"
+              onClick={() => setView("main")}
+              aria-label="Back"
+            >
+              ←
+            </button>
+
+            <div>
+              <span>IRONAGE SYSTEM</span>
+              <h1>{t("settings.title")}</h1>
+              <p>{t("settings.subtitle")}</p>
+            </div>
+          </header>
+
+          <section className="profile-settings-hero">
+            <span>{t("settings.appControl")}</span>
+
+            <h2>
+              {t("settings.yourApp")}
+              <br />
+              <strong>{t("settings.yourRules")}</strong>
+            </h2>
+
+            <p>
+              {t("settings.description")}
+            </p>
+          </section>
+
+          <section className="profile-settings-list">
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>{t("settings.haptics")}</strong>
+                <span>{t("settings.hapticsDescription")}</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={appSettings.haptics}
+                onChange={(event) =>
+                  updateAppSetting(
+                    "haptics",
+                    event.target.checked
+                  )
+                }
+              />
+              <i />
+            </label>
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>{t("settings.sounds")}</strong>
+                <span>{t("settings.soundsDescription")}</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={appSettings.sounds}
+                onChange={(event) =>
+                  updateAppSetting(
+                    "sounds",
+                    event.target.checked
+                  )
+                }
+              />
+              <i />
+            </label>
+
+            <label className="profile-setting-row">
+              <div>
+                <strong>{t("settings.autoStart")}</strong>
+                <span>{t("settings.autoStartDescription")}</span>
+              </div>
+
+              <input
+                type="checkbox"
+                checked={appSettings.autoStartWorkout}
+                onChange={(event) =>
+                  updateAppSetting(
+                    "autoStartWorkout",
+                    event.target.checked
+                  )
+                }
+              />
+              <i />
+            </label>
+
+              <button
+                type="button"
+                className="profile-language-entry"
+                onClick={() =>
+                  setView("language")
+                }
+              >
+                <div>
+                  <strong>{t("settings.language")}</strong>
+
+                  <span>
+                    {
+                      LANGUAGE_OPTIONS.find(
+                        (item) =>
+                          item.id ===
+                          selectedLanguage
+                      )?.label
+                    }
+                  </span>
+                </div>
+
+                <b>→</b>
+              </button>
+
+          </section>
+
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="profile-page">
 
@@ -734,49 +1564,47 @@ export default function Profile({
             <b>→</b>
           </button>
 
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-          >
-            <div>
-              <span>06</span>
+            <button
+              type="button"
+              onClick={() => setView("notifications")}
+            >
+              <div>
+                <span>06</span>
 
-              <section>
-                <strong>
-                  NOTIFICATIONS
-                </strong>
+                <section>
+                  <strong>
+                    NOTIFICATIONS
+                  </strong>
 
-                <small>
-                  COMING SOON
-                </small>
-              </section>
-            </div>
+                  <small>
+                    REMINDERS · UPDATES · CONTROL
+                  </small>
+                </section>
+              </div>
 
-            <b>SOON</b>
-          </button>
+              <b>→</b>
+            </button>
 
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-          >
-            <div>
-              <span>07</span>
+            <button
+              type="button"
+              onClick={() => setView("settings")}
+            >
+              <div>
+                <span>07</span>
 
-              <section>
-                <strong>
-                  SETTINGS
-                </strong>
+                <section>
+                  <strong>
+                    SETTINGS
+                  </strong>
 
-                <small>
-                  COMING SOON
-                </small>
-              </section>
-            </div>
+                  <small>
+                    APP · EXPERIENCE · SYSTEM
+                  </small>
+                </section>
+              </div>
 
-            <b>SOON</b>
-          </button>
+              <b>→</b>
+            </button>
 
           <button
             type="button"

@@ -1,3 +1,7 @@
+import {
+  useLanguage,
+} from "../../../context/LanguageContext";
+
 type Props = {
   finish: () => void;
 };
@@ -5,43 +9,45 @@ type Props = {
 export default function FinishStep({
   finish,
 }: Props) {
+  const { t } = useLanguage();
+
   return (
     <section className="onboarding-step onboarding-finish">
 
       <div className="onboarding-finish-content">
 
         <div className="onboarding-eyebrow">
-          ATHLETE SYSTEM ACTIVATED
+          {t("onboarding.finish.activated")}
         </div>
 
         <div className="onboarding-finish-line" />
 
         <h1 className="onboarding-title">
-          YOU'RE
-          <strong>READY.</strong>
+          {t("onboarding.finish.title1")}
+          <strong>{t("onboarding.finish.title2")}</strong>
         </h1>
 
         <p className="onboarding-description">
-          Your IRONAGE journey starts now.
+          {t("onboarding.finish.journey")}
           <br />
-          No excuses. No looking back.
+          {t("onboarding.finish.noExcuses")}
         </p>
 
         <div className="onboarding-manifesto">
 
           <div>
             <span>01</span>
-            <strong>DISCIPLINE</strong>
+            <strong>{t("onboarding.finish.discipline")}</strong>
           </div>
 
           <div>
             <span>02</span>
-            <strong>STRENGTH</strong>
+            <strong>{t("onboarding.finish.strength")}</strong>
           </div>
 
           <div>
             <span>03</span>
-            <strong>RESULTS</strong>
+            <strong>{t("onboarding.finish.results")}</strong>
           </div>
 
         </div>
@@ -55,12 +61,12 @@ export default function FinishStep({
           className="onboarding-button onboarding-finish-button"
           onClick={finish}
         >
-          <span>ENTER IRONAGE</span>
+          <span>{t("onboarding.finish.enter")}</span>
           <strong>→</strong>
         </button>
 
         <div className="onboarding-footer">
-          WELCOME TO THE IRONAGE SYSTEM
+          {t("onboarding.finish.welcome")}
         </div>
 
       </div>
