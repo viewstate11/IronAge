@@ -613,7 +613,19 @@ export default function MainApp() {
               setScreen("premium");
             }}
             onOpenCoach={() => {
-              changeTab("coach");
+              /*
+               * CoachEntry must always be reachable.
+               *
+               * It handles:
+               * - Become a Coach
+               * - Pending Review
+               * - Rejected Application
+               * - Verified Coach Dashboard
+               *
+               * Role access must not block the
+               * application/status screen itself.
+               */
+              setScreen("coach");
             }}
             onOpenFindCoach={() => {
               setScreen("find-coach");
