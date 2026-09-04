@@ -15,8 +15,12 @@ import TelegramBackButton from "../../components/TelegramBackButton";
 
 import WorkoutSession from "../WorkoutSession/WorkoutSession";
 import WorkoutComplete from "../WorkoutComplete/WorkoutComplete";
-import CoachDashboard from "../Coach/CoachDashboard";
+import CoachEntry from "../Coach/CoachEntry";
+import FindCoach from "../Coach/FindCoach";
+import CoachProfile from "../Coach/CoachProfile";
 import MyProgram from "../Client/MyProgram";
+import MyCoach from "../Client/MyCoach";
+import AdminCoaches from "../Admin/AdminCoaches";
 
 import type { Tab } from "../../navigation/tabs";
 
@@ -37,7 +41,11 @@ type AppScreen =
   | Tab
   | "premium"
   | "coach"
+  | "find-coach"
+  | "coach-profile"
+  | "my-coach"
   | "my-program"
+  | "admin-coaches"
   | "session"
   | "complete";
 
@@ -66,6 +74,13 @@ export default function MainApp() {
     screen,
     setScreen,
   ] = useState<AppScreen>("home");
+
+  const [
+    selectedCoachId,
+    setSelectedCoachId,
+  ] = useState<number | null>(
+    null
+  );
 
 
   /* =========================================================
@@ -600,12 +615,32 @@ export default function MainApp() {
             onOpenCoach={() => {
               changeTab("coach");
             }}
+            onOpenFindCoach={() => {
+              setScreen("find-coach");
+            }}
+            onOpenMyCoach={() => {
+              setScreen("my-coach");
+            }}
             onOpenMyProgram={() => {
               changeTab("my-program");
+            }}
+            onOpenAdmin={() => {
+              setScreen("admin-coaches");
             }}
           />
 
         )}
+
+        {screen === "admin-coaches" && (
+
+          <AdminCoaches
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
 
         {screen === "premium" && (
 
@@ -618,15 +653,77 @@ export default function MainApp() {
         )}
 
 
+        {screen === "find-coach" && (
+
+          <FindCoach
+            onBack={() => {
+              setScreen("profile");
+            }}
+            onOpenCoach={(coachId) => {
+              setSelectedCoachId(
+                coachId
+              );
+              setScreen(
+                "coach-profile"
+              );
+            }}
+          />
+
+        )}
+
+
+        {screen === "coach-profile" &&
+          selectedCoachId !== null && (
+
+          <CoachProfile
+            coachId={
+              selectedCoachId
+            }
+            onBack={() => {
+              setScreen(
+                "find-coach"
+              );
+            }}
+            onConnected={() => {
+              setScreen(
+                "my-coach"
+              );
+            }}
+          />
+
+        )}
+
+
         {screen === "coach" && (
 
-          <CoachDashboard
+          <CoachEntry
             onBack={() => {
               setScreen("profile");
             }}
           />
 
         )}
+
+        {screen === "my-coach" && (
+
+          <MyCoach
+            onBack={() => {
+              setScreen("profile");
+            }}
+            onFindCoach={() => {
+              setScreen(
+                "find-coach"
+              );
+            }}
+            onOpenProgram={() => {
+              setScreen(
+                "my-program"
+              );
+            }}
+          />
+
+        )}
+
 
         {screen === "my-program" && (
 

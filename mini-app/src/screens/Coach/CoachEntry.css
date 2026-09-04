@@ -1,0 +1,238 @@
+.coach-entry {
+  min-height: 100%;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(212, 175, 55, 0.11),
+      transparent 34%
+    ),
+    #050505;
+  color: #fff;
+}
+
+.coach-entry__shell {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 18px 120px;
+}
+
+.coach-entry__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.coach-entry__header > button {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #d4af37;
+  font-size: 20px;
+}
+
+.coach-entry__header span {
+  color: #d4af37;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.coach-entry__header h1 {
+  margin: 5px 0;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.coach-entry__header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.coach-entry__intro {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.09),
+      rgba(255, 255, 255, 0.02)
+    );
+}
+
+.coach-entry__badge {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid #d4af37;
+  border-radius: 19px;
+  color: #d4af37;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.coach-entry__intro strong {
+  color: #d4af37;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.coach-entry__intro p {
+  margin: 7px 0 4px;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.45;
+}
+
+.coach-entry__intro small {
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.4;
+}
+
+.coach-entry__form {
+  display: grid;
+  gap: 12px;
+}
+
+.coach-entry__form label {
+  display: block;
+  padding: 17px;
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.coach-entry__form label > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+  color: #d4af37;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+}
+
+.coach-entry__form label small {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 8px;
+}
+
+.coach-entry__form input,
+.coach-entry__form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 0;
+  outline: 0;
+  resize: vertical;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+}
+
+.coach-entry__form input {
+  min-height: 34px;
+}
+
+.coach-entry__form input::placeholder,
+.coach-entry__form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.coach-entry__preview {
+  margin-top: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+}
+
+.coach-entry__preview img {
+  width: 100%;
+  max-height: 280px;
+  display: block;
+  object-fit: cover;
+}
+
+.coach-entry__submit {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding: 0 22px;
+  border: 1px solid #d4af37;
+  border-radius: 18px;
+  background: #d4af37;
+  color: #050505;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.coach-entry__submit:disabled {
+  opacity: 0.55;
+}
+
+.coach-entry__error {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255, 100, 100, 0.25);
+  border-radius: 14px;
+  color: #ff9090;
+  font-size: 12px;
+}
+
+.coach-entry__state {
+  padding: 38px 20px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 22px;
+  text-align: center;
+}
+
+.coach-entry__state strong {
+  color: #d4af37;
+}
+
+.coach-entry__state p {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.coach-entry__state button {
+  min-width: 130px;
+  min-height: 42px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  background: transparent;
+  color: #d4af37;
+  font-weight: 800;
+}
+
+.coach-entry__state--error {
+  border-color: rgba(255, 100, 100, 0.25);
+}
+
+@media (max-width: 520px) {
+  .coach-entry__shell {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .coach-entry__header h1 {
+    font-size: 26px;
+  }
+}

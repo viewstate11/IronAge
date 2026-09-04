@@ -15,6 +15,7 @@ import coachWorkoutRoutes from "./routes/coachWorkoutRoutes.js";
 import coachProgramRoutes from "./routes/coachProgramRoutes.js";
 import coachInviteRoutes from "./routes/coachInviteRoutes.js";
 import myProgramRoutes from "./routes/myProgramRoutes.js";
+import adminCoachRoutes from "./routes/adminCoachRoutes.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -145,6 +146,11 @@ app.use("/api/coach-programs", coachProgramRoutes);
 app.use("/api/coach-invites", coachInviteRoutes);
 
 app.use("/api/my-programs", myProgramRoutes);
+
+app.use(
+  "/api/admin/coaches",
+  adminCoachRoutes
+);
 
 /* =========================================================
    API 404

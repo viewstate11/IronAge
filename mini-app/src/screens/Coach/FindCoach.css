@@ -1,0 +1,296 @@
+.find-coach {
+  min-height: 100%;
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(212, 175, 55, 0.08),
+      transparent 34%
+    ),
+    #050505;
+  color: #fff;
+}
+
+.find-coach__content {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 26px 18px 120px;
+}
+
+.find-coach__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.find-coach__back {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #d4af37;
+  font-size: 20px;
+}
+
+.find-coach__header span {
+  display: block;
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.find-coach__header h1 {
+  margin: 4px 0;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.find-coach__header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.find-coach__search {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.find-coach__search > span {
+  color: #d4af37;
+  font-size: 24px;
+}
+
+.find-coach__search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: white;
+  font: inherit;
+}
+
+.find-coach__search input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.find-coach__list {
+  display: grid;
+  gap: 12px;
+}
+
+.find-coach__card {
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    72px minmax(0, 1fr) 22px;
+  gap: 14px;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.07),
+      rgba(255, 255, 255, 0.025)
+    );
+  color: inherit;
+  text-align: left;
+}
+
+.find-coach__photo {
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 20px;
+  background: #0a0a0a;
+  color: #d4af37;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.find-coach__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.find-coach__main {
+  min-width: 0;
+}
+
+.find-coach__name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.find-coach__name strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.find-coach__name span {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #050505;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.find-coach__main > p {
+  margin: 4px 0 0;
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.find-coach__main > small {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 7px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.find-coach__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.find-coach__stats span {
+  display: flex;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.find-coach__stats b {
+  color: #fff;
+}
+
+.find-coach__arrow {
+  color: #d4af37;
+  font-size: 20px;
+}
+
+.find-coach__state {
+  padding: 36px 20px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.025);
+  text-align: center;
+}
+
+.find-coach__state strong {
+  color: #d4af37;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.find-coach__state p {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.find-coach__state button {
+  min-width: 120px;
+  height: 42px;
+  margin-top: 8px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  background: transparent;
+  color: #d4af37;
+  font-weight: 800;
+}
+
+.find-coach__state--error {
+  border-color: rgba(255, 100, 100, 0.22);
+}
+
+.find-coach__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.find-coach__pagination button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #d4af37;
+  font-size: 18px;
+}
+
+.find-coach__pagination button:disabled {
+  opacity: 0.25;
+}
+
+.find-coach__pagination span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 520px) {
+  .find-coach__content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .find-coach__header h1 {
+    font-size: 26px;
+  }
+
+  .find-coach__card {
+    grid-template-columns:
+      60px minmax(0, 1fr) 18px;
+    gap: 12px;
+  }
+
+  .find-coach__photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 17px;
+  }
+
+  .find-coach__stats {
+    gap: 8px;
+  }
+}

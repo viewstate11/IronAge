@@ -14,6 +14,7 @@ import "./CoachDashboard.css";
 
 type Props = {
   onBack: () => void;
+  onEditProfile?: () => void;
 };
 
 type CoachView =
@@ -227,6 +228,7 @@ function getClientName(
 
 export default function CoachDashboard({
   onBack,
+  onEditProfile,
 }: Props) {
   const [view, setView] =
     useState<CoachView>(
@@ -2004,6 +2006,34 @@ export default function CoachDashboard({
           </button>
 
         </section>
+
+        {onEditProfile && (
+          <button
+            type="button"
+            className="coach-dashboard__card"
+            onClick={onEditProfile}
+          >
+            <div className="coach-dashboard__number">
+              04
+            </div>
+
+            <div className="coach-dashboard__card-content">
+              <span>
+                PROFILE
+              </span>
+
+              <strong>
+                EDIT PROFILE
+              </strong>
+
+              <small>
+                Update your coach name, specialization, bio and photo.
+              </small>
+            </div>
+
+            <b>→</b>
+          </button>
+        )}
 
         <section className="coach-dashboard__status">
           <div>

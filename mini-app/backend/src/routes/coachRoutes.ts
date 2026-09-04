@@ -861,4 +861,454 @@ router.delete(
   }
 );
 
+
+/* =========================================================
+   COACH MARKETPLACE
+========================================================= */
+
+router.get(
+  "/marketplace",
+  requireAppAuth,
+  async (req, res) => {
+    try {
+      const currentUserId =
+        getCurrentUserId(
+          req as AppAuthenticatedRequest
+        );
+
+      const pageRaw =
+        Number(req.query.page ?? 1);
+
+      const limitRaw =
+        Number(req.query.limit ?? 20);
+
+      const page =
+        Number.isInteger(pageRaw) &&
+        pageRaw > 0
+          ? pageRaw
+          : 1;
+
+      const limit =
+        Number.isInteger(limitRaw) &&
+        limitRaw > 0
+          ? Math.min(limitRaw, 50)
+          : 20;
+
+      const search =
+        String(
+          req.query.search ?? ""
+        ).trim();
+
+      const specialization =
+        String(
+          req.query.specialization ?? ""
+        ).trim();
+
+      const where = {
+        isActive: true,
+        isVerified: true,
+
+        userId: {
+          not: currentUserId,
+        },
+
+        ...(specialization
+          ? {
+              specialization: {
+                contains:
+                  specialization,
+                mode:
+                  "insensitive" as const,
+              },
+            }
+          : {}),
+
+        ...(search
+          ? {
+              OR: [
+                {
+                  displayName: {
+                    contains:
+                      search,
+                    mode:
+                      "insensitive" as const,
+                  },
+                },
+                {
+                  specialization: {
+                    contains:
+                      search,
+                    mode:
+                      "insensitive" as const,
+                  },
+                },
+                {
+                  bio: {
+                    contains:
+                      search,
+                    mode:
+                      "insensitive" as const,
+                  },
+                },
+              ],
+            }
+          : {}),
+      };
+
+      const [
+        total,
+        coaches,
+      ] =
+        await prisma.$transaction([
+          prisma.coachProfile.count({
+            where,
+          }),
+
+          prisma.coachProfile.findMany({
+            where,
+
+            orderBy: [
+              {
+                isVerified:
+                  "desc",
+              },
+              {
+                createdAt:
+                  "desc",
+              },
+            ],
+
+            skip:
+              (page - 1) *
+              limit,
+
+            take:
+              limit,
+
+            select: {
+              id: true,
+              userId: true,
+              displayName: true,
+              bio: true,
+              specialization: true,
+              photoUrl: true,
+              isVerified: true,
+              isActive: true,
+              createdAt: true,
+
+              user: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  username: true,
+
+                  _count: {
+                    select: {
+                      coachRelationships:
+                        true,
+                      trainingWorkouts:
+                        true,
+                      trainingPrograms:
+                        true,
+                    },
+                  },
+                },
+              },
+            },
+          }),
+        ]);
+
+      return res.json({
+        success: true,
+
+        coaches:
+          coaches.map(
+            (coach) => ({
+              ...coach,
+
+              stats: {
+                clients:
+                  coach.user
+                    ._count
+                    .coachRelationships,
+
+                workouts:
+                  coach.user
+                    ._count
+                    .trainingWorkouts,
+
+                programs:
+                  coach.user
+                    ._count
+                    .trainingPrograms,
+              },
+            })
+          ),
+
+        pagination: {
+          page,
+          limit,
+          total,
+
+          pages:
+            Math.ceil(
+              total / limit
+            ),
+        },
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH MARKETPLACE LOAD ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Coach marketplace load error",
+        error:
+          error instanceof Error
+            ? error.message
+            : String(error),
+      });
+    }
+  }
+);
+
+/* =========================================================
+   COACH MARKETPLACE PROFILE
+========================================================= */
+
+router.get(
+  "/marketplace/:coachId",
+  requireAppAuth,
+  async (req, res) => {
+    try {
+      const coachId =
+        parsePositiveInt(
+          req.params.coachId,
+          "coachId"
+        );
+
+      const coach =
+        await prisma.coachProfile.findUnique({
+          where: {
+            userId:
+              coachId,
+          },
+
+          select: {
+            id: true,
+            userId: true,
+            displayName: true,
+            bio: true,
+            specialization: true,
+            photoUrl: true,
+            isVerified: true,
+            isActive: true,
+            createdAt: true,
+
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                username: true,
+
+                _count: {
+                  select: {
+                    coachRelationships:
+                      true,
+                    trainingWorkouts:
+                      true,
+                    trainingPrograms:
+                      true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+      if (
+        !coach ||
+        !coach.isActive ||
+        !coach.isVerified
+      ) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Coach not found",
+        });
+      }
+
+      return res.json({
+        success: true,
+
+        coach: {
+          ...coach,
+
+          stats: {
+            clients:
+              coach.user
+                ._count
+                .coachRelationships,
+
+            workouts:
+              coach.user
+                ._count
+                .trainingWorkouts,
+
+            programs:
+              coach.user
+                ._count
+                .trainingPrograms,
+          },
+        },
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH MARKETPLACE PROFILE ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Coach marketplace profile load error",
+        error:
+          error instanceof Error
+            ? error.message
+            : String(error),
+      });
+    }
+  }
+);
+
+/* =========================================================
+   ATHLETE CHOOSES COACH
+========================================================= */
+
+router.post(
+  "/:coachId/connect",
+  requireAppAuth,
+  async (req, res) => {
+    try {
+      const clientId =
+        getCurrentUserId(
+          req as AppAuthenticatedRequest
+        );
+
+      const coachId =
+        parsePositiveInt(
+          req.params.coachId,
+          "coachId"
+        );
+
+      if (
+        coachId ===
+        clientId
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "You cannot choose yourself as coach",
+        });
+      }
+
+      const coach =
+        await prisma.coachProfile.findUnique({
+          where: {
+            userId:
+              coachId,
+          },
+
+          select: {
+            userId: true,
+            displayName: true,
+            isActive: true,
+            isVerified: true,
+          },
+        });
+
+      if (
+        !coach ||
+        !coach.isActive ||
+        !coach.isVerified
+      ) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Coach not found, inactive, or not verified",
+        });
+      }
+
+      const existing =
+        await prisma.coachClient.findUnique({
+          where: {
+            clientId,
+          },
+        });
+
+      if (
+        existing &&
+        existing.coachId !==
+          coachId
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "You already have a coach",
+        });
+      }
+
+      if (
+        existing &&
+        existing.coachId ===
+          coachId
+      ) {
+        return res.json({
+          success: true,
+          relationship:
+            existing,
+          alreadyConnected:
+            true,
+        });
+      }
+
+      const relationship =
+        await prisma.coachClient.create({
+          data: {
+            coachId,
+            clientId,
+          },
+        });
+
+      return res.status(201).json({
+        success: true,
+        relationship,
+        alreadyConnected:
+          false,
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE COACH MARKETPLACE CONNECT ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Coach connection error",
+        error:
+          error instanceof Error
+            ? error.message
+            : String(error),
+      });
+    }
+  }
+);
+
+
 export default router;

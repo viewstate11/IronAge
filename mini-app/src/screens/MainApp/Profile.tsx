@@ -1,4 +1,7 @@
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import { useUser } from "../../context/UserContext";
 import { useAppEntitlements } from "../../context/AppEntitlementsContext";
@@ -6,6 +9,10 @@ import type { Goal } from "../../types/user";
 
 import "./Profile.css";
 import vasylPhoto from "../../assets/vasyl-ua.jpg";
+
+import api, {
+  telegramAuthOptions,
+} from "../../api/client";
 
 import {
   LANGUAGE_OPTIONS,
@@ -25,7 +32,10 @@ import {
 type Props = {
   onOpenPremium?: () => void;
   onOpenCoach?: () => void;
+  onOpenFindCoach?: () => void;
+  onOpenMyCoach?: () => void;
   onOpenMyProgram?: () => void;
+  onOpenAdmin?: () => void;
 };
 
 type ProfileView =
@@ -83,7 +93,10 @@ const goals: Array<{
 export default function Profile({
   onOpenPremium,
   onOpenCoach,
+  onOpenFindCoach,
+  onOpenMyCoach,
   onOpenMyProgram,
+  onOpenAdmin,
 }: Props) {
   const {
     user,
@@ -105,6 +118,45 @@ export default function Profile({
 
   const [view, setView] =
     useState<ProfileView>("main");
+
+  const [
+    isAdmin,
+    setIsAdmin,
+  ] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkAdmin() {
+      try {
+        const response =
+          await api.get<{
+            success: boolean;
+            isAdmin: boolean;
+          }>(
+            "/admin/coaches/status",
+            telegramAuthOptions()
+          );
+
+        if (!cancelled) {
+          setIsAdmin(
+            response.success === true &&
+            response.isAdmin === true
+          );
+        }
+      } catch {
+        if (!cancelled) {
+          setIsAdmin(false);
+        }
+      }
+    }
+
+    void checkAdmin();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const [name, setName] =
     useState(user.name);
@@ -1522,11 +1574,55 @@ export default function Profile({
 
           <button
             type="button"
+            onClick={onOpenFindCoach}
+            disabled={!onOpenFindCoach}
+          >
+            <div>
+              <span>04</span>
+
+              <section>
+                <strong>
+                  FIND A COACH
+                </strong>
+
+                <small>
+                  DISCOVER · CHOOSE · TRAIN
+                </small>
+              </section>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenMyCoach}
+            disabled={!onOpenMyCoach}
+          >
+            <div>
+              <span>05</span>
+
+              <section>
+                <strong>
+                  MY COACH
+                </strong>
+
+                <small>
+                  COACH · PLAN · RESULTS
+                </small>
+              </section>
+            </div>
+
+            <b>→</b>
+          </button>
+
+          <button
+            type="button"
             onClick={onOpenCoach}
             disabled={!onOpenCoach}
           >
             <div>
-              <span>04</span>
+              <span>06</span>
 
               <section>
                 <strong>
@@ -1548,7 +1644,7 @@ export default function Profile({
             disabled={!onOpenMyProgram}
           >
             <div>
-              <span>05</span>
+              <span>07</span>
 
               <section>
                 <strong>
@@ -1564,12 +1660,36 @@ export default function Profile({
             <b>→</b>
           </button>
 
+          {isAdmin &&
+            onOpenAdmin && (
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+              >
+                <div>
+                  <span>08</span>
+
+                  <section>
+                    <strong>
+                      ADMIN PANEL
+                    </strong>
+
+                    <small>
+                      COACHES · APPROVALS · CONTROL
+                    </small>
+                  </section>
+                </div>
+
+                <b>→</b>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={() => setView("notifications")}
             >
               <div>
-                <span>06</span>
+                <span>09</span>
 
                 <section>
                   <strong>
@@ -1590,7 +1710,7 @@ export default function Profile({
               onClick={() => setView("settings")}
             >
               <div>
-                <span>07</span>
+                <span>10</span>
 
                 <section>
                   <strong>
@@ -1613,7 +1733,7 @@ export default function Profile({
             }}
           >
             <div>
-              <span>08</span>
+              <span>11</span>
 
               <section>
                 <strong>
