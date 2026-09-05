@@ -660,6 +660,11 @@ export default function CoachEntry({
           telegramAuthOptions()
         );
 
+      console.log(
+        "IRONAGE DEBUG: COACH ME RESPONSE",
+        response
+      );
+
       setCoach(
         response.coach ?? null
       );
