@@ -568,6 +568,9 @@ const EDIT_COPY: Record<AppLanguage, EditCopy> = {
 export default function CoachEntry({
   onBack,
 }: Props) {
+  console.log(
+    "IRONAGE DEBUG: COACH ENTRY RENDER"
+  );
   const {
     language,
   } = useLanguage();

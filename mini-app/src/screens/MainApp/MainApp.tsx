@@ -613,6 +613,10 @@ export default function MainApp() {
               setScreen("premium");
             }}
             onOpenCoach={() => {
+              console.log(
+                "IRONAGE DEBUG: COACH SYSTEM CLICK"
+              );
+
               /*
                * CoachEntry must always be reachable.
                *
