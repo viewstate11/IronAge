@@ -393,7 +393,10 @@ export default function GoogleSignInButton({
     return () => {
       active = false;
     };
-  }, [disabled, t]);
+  // Google Identity Services must not be re-initialized
+  // when submitting/disabled state changes.
+  // The outer wrapper already handles disabled interaction.
+  }, []);
 
   return (
     <div

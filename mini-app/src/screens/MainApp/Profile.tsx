@@ -3,1767 +3,684 @@ import {
   useState,
 } from "react";
 
-import { useUser } from "../../context/UserContext";
-import { useAppEntitlements } from "../../context/AppEntitlementsContext";
-import type { Goal } from "../../types/user";
-
-import "./Profile.css";
-import vasylPhoto from "../../assets/vasyl-ua.jpg";
-
 import api, {
   telegramAuthOptions,
 } from "../../api/client";
 
-import {
-  LANGUAGE_OPTIONS,
-  useLanguage,
-} from "../../context/LanguageContext";
-import {
-  sendTestIronageNotification,
-  ensureNotificationPermission,
-  scheduleWorkoutReminder,
-  cancelWorkoutReminder,
-  scheduleNutritionReminders,
-  cancelNutritionReminders,
-  scheduleMotivationReminder,
-  cancelMotivationReminder,
-} from "../../native/nativeNotifications";
+import "./Profile.css";
 
-type Props = {
-  onOpenPremium?: () => void;
-  onOpenCoach?: () => void;
-  onOpenFindCoach?: () => void;
-  onOpenMyCoach?: () => void;
+type ProfileProps = {
+  user?: any;
+
+  onBack?: () => void;
+
+  onOpenProgram?: () => void;
   onOpenMyProgram?: () => void;
+
+  onOpenProgress?: () => void;
+  onOpenHistory?: () => void;
+  onOpenWorkoutHistory?: () => void;
+
+  onOpenMyCoach?: () => void;
+  onOpenFindCoach?: () => void;
+  onOpenPrograms?: () => void;
+
+  onOpenCoach?: () => void;
+  onOpenCoachPrograms?: () => void;
+  onOpenVideoReviews?: () => void;
+  onOpenEarnings?: () => void;
+
   onOpenAdmin?: () => void;
+  onOpenCoachManagement?: () => void;
+  onOpenProgramManagement?: () => void;
+  onOpenUsers?: () => void;
+  onOpenPayments?: () => void;
+  onOpenAnalytics?: () => void;
+
+  onOpenSubscription?: () => void;
+  onOpenNotifications?: () => void;
+  onOpenSettings?: () => void;
+  onOpenEditProfile?: () => void;
+
+  onLogout?: () => void;
+
+  [key: string]: any;
 };
 
-type ProfileView =
-  | "main"
-  | "personal"
-  | "goals"
-  | "notifications"
-  | "settings"
-  | "language";
+type CoachStatusResponse = {
+  success?: boolean;
 
-const goals: Array<{
-  id: Goal;
+  coach?: {
+    id: number;
+    userId: number;
+
+    displayName: string;
+
+    isVerified: boolean;
+    isActive: boolean;
+  } | null;
+};
+
+type AdminStatusResponse = {
+  success?: boolean;
+  isAdmin?: boolean;
+};
+
+type MenuItemProps = {
+  number: string;
   title: string;
-  description: string;
-  icon: string;
-}> = [
-  {
-    id: "MUSCLE",
-    title: "BUILD MUSCLE",
-    description: "Increase muscle mass and strength",
-    icon: "M",
-  },
-  {
-    id: "LOSE_WEIGHT",
-    title: "LOSE WEIGHT",
-    description: "Burn fat and build a leaner physique",
-    icon: "↓",
-  },
-  {
-    id: "STRENGTH",
-    title: "STRENGTH",
-    description: "Become stronger and more powerful",
-    icon: "+",
-  },
-  {
-    id: "ENDURANCE",
-    title: "ENDURANCE",
-    description: "Improve stamina and performance",
-    icon: "∞",
-  },
-  {
-    id: "FITNESS",
-    title: "GENERAL FITNESS",
-    description: "Build your complete athletic base",
-    icon: "IA",
-  },
-  {
-    id: "MAINTAIN",
-    title: "MAINTAIN",
-    description: "Stay consistent and maintain progress",
-    icon: "=",
-  },
-];
+  subtitle: string;
 
-export default function Profile({
-  onOpenPremium,
-  onOpenCoach,
-  onOpenFindCoach,
-  onOpenMyCoach,
-  onOpenMyProgram,
-  onOpenAdmin,
-}: Props) {
+  onClick?: () => void;
+
+  danger?: boolean;
+};
+
+function MenuItem({
+  number,
+  title,
+  subtitle,
+  onClick,
+  danger = false,
+}: MenuItemProps) {
+  return (
+    <button
+      type="button"
+      className={[
+        "profile-menu-item",
+        danger
+          ? "profile-menu-item--danger"
+          : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      onClick={onClick}
+    >
+      <span className="profile-menu-item__number">
+        {number}
+      </span>
+
+      <span className="profile-menu-item__content">
+        <strong>
+          {title}
+        </strong>
+
+        <small>
+          {subtitle}
+        </small>
+      </span>
+
+      <span className="profile-menu-item__arrow">
+        →
+      </span>
+    </button>
+  );
+}
+
+function SectionTitle({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="profile-section-title">
+      {children}
+    </div>
+  );
+}
+
+export default function Profile(
+  props: ProfileProps
+) {
   const {
     user,
-    updateProfile,
-    logout,
-  } = useUser();
 
-  const {
-    premiumPlan,
-    isPremium,
-    loading: entitlementLoading,
-  } = useAppEntitlements();
+    onBack,
 
-  const {
-    language: selectedLanguage,
-    setLanguage: changeLanguage,
-    t,
-  } = useLanguage();
+    onOpenProgram,
+    onOpenMyProgram,
 
-  const [view, setView] =
-    useState<ProfileView>("main");
+    onOpenProgress,
+    onOpenHistory,
+    onOpenWorkoutHistory,
+
+    onOpenMyCoach,
+    onOpenFindCoach,
+    onOpenPrograms,
+
+    onOpenCoach,
+    onOpenCoachPrograms,
+    onOpenVideoReviews,
+    onOpenEarnings,
+
+    onOpenAdmin,
+    onOpenCoachManagement,
+    onOpenProgramManagement,
+    onOpenUsers,
+    onOpenPayments,
+    onOpenAnalytics,
+
+    onOpenSubscription,
+    onOpenNotifications,
+    onOpenSettings,
+    onOpenEditProfile,
+
+    onLogout,
+  } = props;
 
   const [
     isAdmin,
     setIsAdmin,
   ] = useState(false);
 
+  const [
+    isApprovedCoach,
+    setIsApprovedCoach,
+  ] = useState(false);
+
   useEffect(() => {
-    let cancelled = false;
+    let mounted = true;
 
-    async function checkAdmin() {
+    async function loadAccess() {
       try {
-        const response =
-          await api.get<{
-            success: boolean;
-            isAdmin: boolean;
-          }>(
-            "/admin/coaches/status",
-            telegramAuthOptions()
-          );
+        const [
+          adminResult,
+          coachResult,
+        ] =
+          await Promise.allSettled([
+            api.get<AdminStatusResponse>(
+              "/admin/coaches/status",
+              telegramAuthOptions()
+            ),
 
-        if (!cancelled) {
+            api.get<CoachStatusResponse>(
+              "/coaches/me",
+              telegramAuthOptions()
+            ),
+          ]);
+
+        if (!mounted) {
+          return;
+        }
+
+        if (
+          adminResult.status ===
+          "fulfilled"
+        ) {
           setIsAdmin(
-            response.success === true &&
-            response.isAdmin === true
+            adminResult.value
+              ?.isAdmin === true
+          );
+        }
+
+        if (
+          coachResult.status ===
+          "fulfilled"
+        ) {
+          const coach =
+            coachResult.value
+              ?.coach;
+
+          setIsApprovedCoach(
+            Boolean(
+              coach &&
+              coach.isVerified ===
+                true &&
+              coach.isActive ===
+                true
+            )
           );
         }
       } catch {
-        if (!cancelled) {
-          setIsAdmin(false);
-        }
+        //
       }
     }
 
-    void checkAdmin();
+    void loadAccess();
 
     return () => {
-      cancelled = true;
+      mounted = false;
     };
   }, []);
 
-  const [name, setName] =
-    useState(user.name);
+  const firstName =
+    user?.firstName ||
+    user?.name ||
+    "IRONAGE";
 
-  const [age, setAge] =
-    useState(String(user.age));
+  const lastName =
+    user?.lastName || "";
 
-  const [weight, setWeight] =
-    useState(String(user.weight));
+  const fullName =
+    `${firstName} ${lastName}`
+      .trim()
+      .toUpperCase();
 
-  const [height, setHeight] =
-    useState(String(user.height));
+  const username =
+    user?.username
+      ? `@${user.username}`
+      : user?.email ||
+        "IRONAGE ATHLETE";
 
-  const [goal, setGoal] =
-    useState<Goal>(() => {
-      switch (user.goal) {
-        case "MUSCLE":
-        case "LOSE_WEIGHT":
-        case "MAINTAIN":
-        case "ENDURANCE":
-        case "STRENGTH":
-        case "FITNESS":
-          return user.goal;
-
-        default:
-          return "MUSCLE";
-      }
-    });
-
-  const [saving, setSaving] =
-    useState(false);
-
-  const [notificationTestMessage, setNotificationTestMessage] =
-    useState("");
-
-  const [notificationSettings, setNotificationSettings] =
-    useState(() => {
-      try {
-        const raw = localStorage.getItem(
-          "ironage_notification_settings"
-        );
-
-        return raw
-          ? JSON.parse(raw)
-          : {
-              workoutReminders: true,
-              progressUpdates: true,
-              nutritionReminders: false,
-              motivationalMessages: true,
-            };
-      } catch {
-        return {
-          workoutReminders: true,
-          progressUpdates: true,
-          nutritionReminders: false,
-          motivationalMessages: true,
-        };
-      }
-    });
-
-  const [notificationTimes, setNotificationTimes] =
-    useState(() => {
-      try {
-        const raw = localStorage.getItem(
-          "ironage_notification_times"
-        );
-
-        return raw
-          ? JSON.parse(raw)
-          : {
-              workout: "18:00",
-              nutritionMorning: "09:00",
-              nutritionAfternoon: "13:00",
-              nutritionEvening: "19:00",
-              motivation: "07:30",
-            };
-      } catch {
-        return {
-          workout: "18:00",
-          nutritionMorning: "09:00",
-          nutritionAfternoon: "13:00",
-          nutritionEvening: "19:00",
-          motivation: "07:30",
-        };
-      }
-    });
-
-  const [appSettings, setAppSettings] =
-    useState(() => {
-      try {
-        const raw = localStorage.getItem(
-          "ironage_app_settings"
-        );
-
-        return raw
-          ? JSON.parse(raw)
-          : {
-              haptics: true,
-              sounds: true,
-              autoStartWorkout: false,
-            };
-      } catch {
-        return {
-          haptics: true,
-          sounds: true,
-          autoStartWorkout: false,
-        };
-      }
-    });
-
-  const updateNotificationSetting = (
-    key: string,
-    value: boolean
-  ) => {
-    const next = {
-      ...notificationSettings,
-      [key]: value,
-    };
-
-    setNotificationSettings(next);
-
-    localStorage.setItem(
-      "ironage_notification_settings",
-      JSON.stringify(next)
-    );
-  };
-
-  const updateAppSetting = (
-    key: string,
-    value: boolean
-  ) => {
-    const next = {
-      ...appSettings,
-      [key]: value,
-    };
-
-    setAppSettings(next);
-
-    localStorage.setItem(
-      "ironage_app_settings",
-      JSON.stringify(next)
-    );
-  };
-
-  const xpInLevel =
-    user.xp % 1000;
-
-  const xpProgress =
-    Math.min(
-      100,
-      (xpInLevel / 1000) * 100
+  const level =
+    Number(
+      user?.level ?? 1
     );
 
-  const saveProfile = async (
-    nextView: ProfileView = "main"
-  ) => {
-    if (saving) return;
-
-    try {
-      setSaving(true);
-
-      await updateProfile({
-        name:
-          name.trim() ||
-          user.name,
-
-        age: Math.max(
-          13,
-          Number(age) ||
-            user.age ||
-            0
-        ),
-
-        weight: Math.max(
-          30,
-          Number(weight) ||
-            user.weight ||
-            0
-        ),
-
-        height: Math.max(
-          120,
-          Number(height) ||
-            user.height ||
-            0
-        ),
-
-        goal,
-      });
-
-      setView(nextView);
-    } catch (error) {
-      console.error(
-        "IRONAGE: Profile save failed:",
-        error
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const parseNotificationTime = (
-    value: string
-  ) => {
-    const [hourRaw, minuteRaw] =
-      value.split(":");
-
-    return {
-      hour: Number(hourRaw) || 0,
-      minute: Number(minuteRaw) || 0,
-    };
-  };
-
-  const updateNotificationTime = async (
-    key:
-      | "workout"
-      | "nutritionMorning"
-      | "nutritionAfternoon"
-      | "nutritionEvening"
-      | "motivation",
-    value: string
-  ) => {
-    const next = {
-      ...notificationTimes,
-      [key]: value,
-    };
-
-    setNotificationTimes(next);
-
-    localStorage.setItem(
-      "ironage_notification_times",
-      JSON.stringify(next)
+  const xp =
+    Number(
+      user?.xp ?? 0
     );
 
-    try {
-      if (
-        key === "workout" &&
-        notificationSettings.workoutReminders
-      ) {
-        const time =
-          parseNotificationTime(next.workout);
-
-        await scheduleWorkoutReminder(
-          time.hour,
-          time.minute
-        );
-      }
-
-      if (
-        (
-          key === "nutritionMorning" ||
-          key === "nutritionAfternoon" ||
-          key === "nutritionEvening"
-        ) &&
-        notificationSettings.nutritionReminders
-      ) {
-        const morning =
-          parseNotificationTime(
-            next.nutritionMorning
-          );
-
-        const afternoon =
-          parseNotificationTime(
-            next.nutritionAfternoon
-          );
-
-        const evening =
-          parseNotificationTime(
-            next.nutritionEvening
-          );
-
-        await scheduleNutritionReminders(
-          morning,
-          afternoon,
-          evening
-        );
-      }
-
-      if (
-        key === "motivation" &&
-        notificationSettings.motivationalMessages
-      ) {
-        const time =
-          parseNotificationTime(next.motivation);
-
-        await scheduleMotivationReminder(
-          time.hour,
-          time.minute
-        );
-      }
-
-      setNotificationTestMessage(
-        "Reminder time updated."
-      );
-    } catch (error) {
-      console.error(
-        "IRONAGE: Reminder time update failed:",
-        error
-      );
-
-      setNotificationTestMessage(
-        "Could not update reminder time."
-      );
-    }
-  };
-
-  const setRealNotificationSetting = async (
-    key:
-      | "workoutReminders"
-      | "progressUpdates"
-      | "nutritionReminders"
-      | "motivationalMessages",
-    enabled: boolean
-  ) => {
-    try {
-      let success = true;
-
-      if (key === "progressUpdates") {
-        if (enabled) {
-          const permission =
-            await ensureNotificationPermission();
-
-          success = permission;
-        }
-      }
-
-      if (key === "workoutReminders") {
-        if (enabled) {
-          const time =
-            parseNotificationTime(
-              notificationTimes.workout
-            );
-
-          success =
-            await scheduleWorkoutReminder(
-              time.hour,
-              time.minute
-            );
-        } else {
-          await cancelWorkoutReminder();
-        }
-      }
-
-      if (key === "nutritionReminders") {
-        if (enabled) {
-          const morning =
-            parseNotificationTime(
-              notificationTimes.nutritionMorning
-            );
-
-          const afternoon =
-            parseNotificationTime(
-              notificationTimes.nutritionAfternoon
-            );
-
-          const evening =
-            parseNotificationTime(
-              notificationTimes.nutritionEvening
-            );
-
-          success =
-            await scheduleNutritionReminders(
-              morning,
-              afternoon,
-              evening
-            );
-        } else {
-          await cancelNutritionReminders();
-        }
-      }
-
-      if (key === "motivationalMessages") {
-        if (enabled) {
-          const time =
-            parseNotificationTime(
-              notificationTimes.motivation
-            );
-
-          success =
-            await scheduleMotivationReminder(
-              time.hour,
-              time.minute
-            );
-        } else {
-          await cancelMotivationReminder();
-        }
-      }
-
-      if (enabled && !success) {
-        setNotificationTestMessage(
-          "Notification permission is required."
-        );
-
-        updateNotificationSetting(
-          key,
-          false
-        );
-
-        return;
-      }
-
-      updateNotificationSetting(
-        key,
-        enabled
-      );
-
-      setNotificationTestMessage(
-        enabled
-          ? "Reminder activated."
-          : "Reminder disabled."
-      );
-    } catch (error) {
-      console.error(
-        "IRONAGE: Notification setting failed:",
-        error
-      );
-
-      setNotificationTestMessage(
-        "Could not update notification reminder."
-      );
-    }
-  };
-
-  const testNotification = async () => {
-    try {
-      setNotificationTestMessage(
-        "Requesting notification permission..."
-      );
-
-      const ok =
-        await sendTestIronageNotification();
-
-      if (!ok) {
-        setNotificationTestMessage(
-          "Notifications are not allowed on this device."
-        );
-        return;
-      }
-
-      setNotificationTestMessage(
-        "Test notification scheduled. Wait 5 seconds."
-      );
-    } catch (error) {
-      console.error(
-        "IRONAGE: Test notification failed:",
-        error
-      );
-
-      setNotificationTestMessage(
-        "Could not schedule notification."
-      );
-    }
-  };
-
-  const goalLabel =
-    goals.find(
-      (item) => item.id === goal
-    )?.title || "BUILD MUSCLE";
-
-  if (view === "personal") {
-    return (
-      <main className="profile-page profile-subpage">
-        <div className="profile-subcontent">
-
-          <header className="profile-subheader">
-            <button
-              type="button"
-              className="profile-back"
-              onClick={() =>
-                setView("main")
-              }
-              aria-label={t("common.back")}
-            >
-              ←
-            </button>
-
-            <div>
-              <span>IRONAGE PROFILE</span>
-              <h1>PERSONAL DATA</h1>
-              <p>
-                BUILD YOUR ATHLETE PROFILE
-              </p>
-            </div>
-          </header>
-
-          <section className="profile-intro-card">
-            <div className="profile-ia-mark">
-              IA
-            </div>
-
-            <div>
-              <span>
-                IRONAGE PRINCIPLE
-              </span>
-
-              <h2>
-                YOUR DATA.
-                <br />
-                YOUR PROGRESS.
-              </h2>
-
-              <p>
-                Accurate data helps
-                IRONAGE personalize your
-                training and track your
-                transformation.
-              </p>
-            </div>
-          </section>
-
-          <div className="profile-section-title">
-            <span />
-            <strong>
-              PERSONAL INFORMATION
-            </strong>
-            <span />
-          </div>
-
-          <section className="profile-data-list">
-
-            <label className="profile-data-card">
-              <div className="profile-data-icon">
-                01
-              </div>
-
-              <div className="profile-data-control">
-                <span>NAME</span>
-
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(event) =>
-                    setName(
-                      event.target.value
-                    )
-                  }
-                  placeholder="Your name"
-                />
-              </div>
-            </label>
-
-            <label className="profile-data-card">
-              <div className="profile-data-icon">
-                02
-              </div>
-
-              <div className="profile-data-control">
-                <span>AGE</span>
-
-                <div className="profile-input-unit">
-                  <input
-                    type="number"
-                    inputMode="numeric"
-                    min="13"
-                    value={age}
-                    onChange={(event) =>
-                      setAge(
-                        event.target.value
-                      )
-                    }
-                  />
-
-                  <b>YEARS</b>
-                </div>
-              </div>
-            </label>
-
-          </section>
-
-          <div className="profile-section-title">
-            <span />
-            <strong>
-              PHYSICAL INFORMATION
-            </strong>
-            <span />
-          </div>
-
-          <section className="profile-physical-grid">
-
-            <label className="profile-metric-card">
-              <span>WEIGHT</span>
-
-              <div>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min="30"
-                  value={weight}
-                  onChange={(event) =>
-                    setWeight(
-                      event.target.value
-                    )
-                  }
-                />
-
-                <b>KG</b>
-              </div>
-
-              <small>
-                CURRENT BODY WEIGHT
-              </small>
-            </label>
-
-            <label className="profile-metric-card">
-              <span>HEIGHT</span>
-
-              <div>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min="120"
-                  value={height}
-                  onChange={(event) =>
-                    setHeight(
-                      event.target.value
-                    )
-                  }
-                />
-
-                <b>CM</b>
-              </div>
-
-              <small>
-                ATHLETE HEIGHT
-              </small>
-            </label>
-
-          </section>
-
-          <button
-            type="button"
-            className="profile-gold-button"
-            disabled={saving}
-            onClick={() =>
-              void saveProfile("main")
-            }
-          >
-            <span>
-              {saving
-                ? "SAVING..."
-                : "SAVE PERSONAL DATA"}
-            </span>
-
-            <b>→</b>
-          </button>
-
-        </div>
-      </main>
+  const streak =
+    Number(
+      user?.streak ?? 0
     );
-  }
 
-  if (view === "goals") {
-    return (
-      <main className="profile-page profile-subpage">
-        <div className="profile-subcontent">
-
-          <header className="profile-subheader">
-            <button
-              type="button"
-              className="profile-back"
-              onClick={() =>
-                setView("main")
-              }
-              aria-label="Back"
-            >
-              ←
-            </button>
-
-            <div>
-              <span>IRONAGE ATHLETE</span>
-              <h1>TRAINING GOALS</h1>
-              <p>
-                WHAT'S YOUR MAIN FOCUS?
-              </p>
-            </div>
-          </header>
-
-          <section className="profile-goal-hero">
-            <div className="profile-target">
-              ◎
-            </div>
-
-            <div>
-              <span>YOUR MISSION</span>
-
-              <h2>
-                FOCUS YOUR TRAINING.
-                <br />
-                ACHIEVE MORE.
-              </h2>
-
-              <p>
-                Choose your primary goal.
-                IRONAGE will use it to
-                personalize your training.
-              </p>
-            </div>
-          </section>
-
-          <div className="profile-section-title">
-            <span />
-            <strong>PRIMARY GOAL</strong>
-            <span />
-          </div>
-
-          <section className="profile-goals-list">
-            {goals.map((item) => {
-              const active =
-                goal === item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`profile-goal-card ${
-                    active
-                      ? "profile-goal-card--active"
-                      : ""
-                  }`}
-                  onClick={() =>
-                    setGoal(item.id)
-                  }
-                >
-                  <div className="profile-goal-icon">
-                    {item.icon}
-                  </div>
-
-                  <div className="profile-goal-copy">
-                    <strong>
-                      {item.title}
-                    </strong>
-
-                    <span>
-                      {item.description}
-                    </span>
-                  </div>
-
-                  <div className="profile-goal-check">
-                    {active ? "✓" : ""}
-                  </div>
-                </button>
-              );
-            })}
-          </section>
-
-          <div className="profile-goal-note">
-            <span>i</span>
-
-            <p>
-              You can update your training
-              goal anytime from your
-              IRONAGE profile.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className="profile-gold-button"
-            disabled={saving}
-            onClick={() =>
-              void saveProfile("main")
-            }
-          >
-            <span>
-              {saving
-                ? "SAVING..."
-                : "SAVE TRAINING GOAL"}
-            </span>
-
-            <b>→</b>
-          </button>
-
-        </div>
-      </main>
-    );
-  }
-
-  if (view === "notifications") {
-    return (
-      <main className="profile-page profile-subpage">
-        <div className="profile-subcontent">
-
-          <header className="profile-subheader">
-            <button
-              type="button"
-              className="profile-back"
-              onClick={() => setView("main")}
-              aria-label="Back"
-            >
-              ←
-            </button>
-
-            <div>
-              <span>IRONAGE CONTROL</span>
-              <h1>NOTIFICATIONS</h1>
-              <p>REMINDERS · UPDATES · CONTROL</p>
-            </div>
-          </header>
-
-          <section className="profile-settings-hero">
-            <span>NOTIFICATION CENTER</span>
-
-            <h2>
-              STAY READY.
-              <br />
-              <strong>STAY CONSISTENT.</strong>
-            </h2>
-
-            <p>
-              Control the reminders and updates you want
-              from IRONAGE.
-            </p>
-          </section>
-
-          <button
-            type="button"
-            className="profile-gold-button"
-            onClick={() => {
-              void testNotification();
-            }}
-          >
-            <span>TEST NOTIFICATION</span>
-            <b>→</b>
-          </button>
-
-          {notificationTestMessage && (
-            <div className="profile-settings-note">
-              <span>NOTIFICATION STATUS</span>
-              <p>{notificationTestMessage}</p>
-            </div>
-          )}
-
-          <section className="profile-settings-list">
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>WORKOUT REMINDERS</strong>
-                <span>Remind me when it is time to train</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={notificationSettings.workoutReminders}
-                onChange={(event) => {
-                  void setRealNotificationSetting(
-                    "workoutReminders",
-                    event.target.checked
-                  );
-                }}
-              />
-              <i />
-            </label>
-
-              <div className="profile-reminder-time">
-                <div>
-                  <span>WORKOUT TIME</span>
-                  <strong>{notificationTimes.workout}</strong>
-                </div>
-
-                <input
-                  type="time"
-                  value={notificationTimes.workout}
-                  onChange={(event) => {
-                    void updateNotificationTime(
-                      "workout",
-                      event.target.value
-                    );
-                  }}
-                  aria-label="Workout reminder time"
-                />
-              </div>
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>PROGRESS UPDATES</strong>
-                <span>Level, XP and weekly progress updates</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={notificationSettings.progressUpdates}
-                onChange={(event) => {
-                  void setRealNotificationSetting(
-                    "progressUpdates",
-                    event.target.checked
-                  );
-                }}
-              />
-              <i />
-            </label>
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>NUTRITION REMINDERS</strong>
-                <span>Water and nutrition reminders</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={notificationSettings.nutritionReminders}
-                onChange={(event) => {
-                  void setRealNotificationSetting(
-                    "nutritionReminders",
-                    event.target.checked
-                  );
-                }}
-              />
-              <i />
-            </label>
-
-              <div className="profile-reminder-times">
-
-                <label>
-                  <span>MORNING</span>
-                  <input
-                    type="time"
-                    value={notificationTimes.nutritionMorning}
-                    onChange={(event) => {
-                      void updateNotificationTime(
-                        "nutritionMorning",
-                        event.target.value
-                      );
-                    }}
-                  />
-                </label>
-
-                <label>
-                  <span>AFTERNOON</span>
-                  <input
-                    type="time"
-                    value={notificationTimes.nutritionAfternoon}
-                    onChange={(event) => {
-                      void updateNotificationTime(
-                        "nutritionAfternoon",
-                        event.target.value
-                      );
-                    }}
-                  />
-                </label>
-
-                <label>
-                  <span>EVENING</span>
-                  <input
-                    type="time"
-                    value={notificationTimes.nutritionEvening}
-                    onChange={(event) => {
-                      void updateNotificationTime(
-                        "nutritionEvening",
-                        event.target.value
-                      );
-                    }}
-                  />
-                </label>
-
-              </div>
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>MOTIVATIONAL MESSAGES</strong>
-                <span>Daily IRONAGE motivation</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={notificationSettings.motivationalMessages}
-                onChange={(event) => {
-                  void setRealNotificationSetting(
-                    "motivationalMessages",
-                    event.target.checked
-                  );
-                }}
-              />
-              <i />
-            </label>
-
-              <div className="profile-reminder-time">
-                <div>
-                  <span>MOTIVATION TIME</span>
-                  <strong>{notificationTimes.motivation}</strong>
-                </div>
-
-                <input
-                  type="time"
-                  value={notificationTimes.motivation}
-                  onChange={(event) => {
-                    void updateNotificationTime(
-                      "motivation",
-                      event.target.value
-                    );
-                  }}
-                  aria-label="Motivation reminder time"
-                />
-              </div>
-
-          </section>
-
-        </div>
-      </main>
-    );
-  }
-
-  if (view === "language") {
-    return (
-      <main className="profile-page profile-subpage">
-        <div className="profile-subcontent">
-
-          <header className="profile-subheader">
-            <button
-              type="button"
-              className="profile-back"
-              onClick={() =>
-                setView("settings")
-              }
-              aria-label="Back"
-            >
-              ←
-            </button>
-
-            <div>
-              <span>IRONAGE SYSTEM</span>
-              <h1>{t("language.title")}</h1>
-              <p>{t("language.subtitle")}</p>
-            </div>
-          </header>
-
-          <section className="profile-settings-hero">
-            <span>{t("language.control")}</span>
-
-            <h2>
-              {t("language.yourLanguage")}
-              <br />
-              <strong>{t("language.yourIronage")}</strong>
-            </h2>
-
-            <p>
-              {t("language.description")}
-            </p>
-          </section>
-
-          <section className="profile-language-list">
-            {LANGUAGE_OPTIONS.map(
-              (language) => {
-                const active =
-                  selectedLanguage ===
-                  language.id;
-
-                return (
-                  <button
-                    key={language.id}
-                    type="button"
-                    className={`profile-language-row ${
-                      active
-                        ? "profile-language-row--active"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      changeLanguage(
-                        language.id
-                      )
-                    }
-                  >
-                    <div className="profile-language-main">
-                      <span className="profile-language-flag">
-                        {language.flag}
-                      </span>
-
-                      <strong>
-                        {language.label}
-                      </strong>
-                    </div>
-
-                    <span
-                      className={`profile-language-radio ${
-                        active
-                          ? "profile-language-radio--active"
-                          : ""
-                      }`}
-                      aria-hidden="true"
-                    >
-                      {active ? "✓" : ""}
-                    </span>
-                  </button>
-                );
-              }
-            )}
-          </section>
-
-        </div>
-      </main>
-    );
-  }
-
-  if (view === "settings") {
-    return (
-      <main className="profile-page profile-subpage">
-        <div className="profile-subcontent">
-
-          <header className="profile-subheader">
-            <button
-              type="button"
-              className="profile-back"
-              onClick={() => setView("main")}
-              aria-label="Back"
-            >
-              ←
-            </button>
-
-            <div>
-              <span>IRONAGE SYSTEM</span>
-              <h1>{t("settings.title")}</h1>
-              <p>{t("settings.subtitle")}</p>
-            </div>
-          </header>
-
-          <section className="profile-settings-hero">
-            <span>{t("settings.appControl")}</span>
-
-            <h2>
-              {t("settings.yourApp")}
-              <br />
-              <strong>{t("settings.yourRules")}</strong>
-            </h2>
-
-            <p>
-              {t("settings.description")}
-            </p>
-          </section>
-
-          <section className="profile-settings-list">
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>{t("settings.haptics")}</strong>
-                <span>{t("settings.hapticsDescription")}</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={appSettings.haptics}
-                onChange={(event) =>
-                  updateAppSetting(
-                    "haptics",
-                    event.target.checked
-                  )
-                }
-              />
-              <i />
-            </label>
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>{t("settings.sounds")}</strong>
-                <span>{t("settings.soundsDescription")}</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={appSettings.sounds}
-                onChange={(event) =>
-                  updateAppSetting(
-                    "sounds",
-                    event.target.checked
-                  )
-                }
-              />
-              <i />
-            </label>
-
-            <label className="profile-setting-row">
-              <div>
-                <strong>{t("settings.autoStart")}</strong>
-                <span>{t("settings.autoStartDescription")}</span>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={appSettings.autoStartWorkout}
-                onChange={(event) =>
-                  updateAppSetting(
-                    "autoStartWorkout",
-                    event.target.checked
-                  )
-                }
-              />
-              <i />
-            </label>
-
-              <button
-                type="button"
-                className="profile-language-entry"
-                onClick={() =>
-                  setView("language")
-                }
-              >
-                <div>
-                  <strong>{t("settings.language")}</strong>
-
-                  <span>
-                    {
-                      LANGUAGE_OPTIONS.find(
-                        (item) =>
-                          item.id ===
-                          selectedLanguage
-                      )?.label
-                    }
-                  </span>
-                </div>
-
-                <b>→</b>
-              </button>
-
-          </section>
-
-        </div>
-      </main>
-    );
-  }
+  const goal =
+    String(
+      user?.goal ||
+      "BUILD YOUR BEST FORM"
+    )
+      .replace(/_/g, " ")
+      .toUpperCase();
+
+  const avatar =
+    user?.photoUrl ||
+    user?.photo ||
+    user?.picture ||
+    "";
+
+  const openMyProgram =
+    onOpenMyProgram ||
+    onOpenProgram;
+
+  const openHistory =
+    onOpenWorkoutHistory ||
+    onOpenHistory;
 
   return (
-    <main className="profile-page">
+    <main className="iron-profile">
+      <div className="iron-profile__shell">
 
-      <img
-        src={vasylPhoto}
-        alt="IRONAGE athlete"
-        className="profile-background"
-      />
+        <header className="iron-profile__topbar">
+          {onBack && (
+            <button
+              type="button"
+              className="iron-profile__back"
+              onClick={onBack}
+              aria-label="Back"
+            >
+              ←
+            </button>
+          )}
 
-      <div className="profile-overlay" />
+          <div>
+            <span>
+              IRONAGE
+            </span>
 
-      <div className="profile-content">
-
-        <header className="profile-header">
-          <span>
-            IRONAGE
-          </span>
-
-          <div className="profile-header-mark">
-            IA
+            <h1>
+              PROFILE
+            </h1>
           </div>
         </header>
 
-        <section className="profile-hero">
 
-          <div className="profile-avatar">
-            <img
-              src={vasylPhoto}
-              alt="Profile"
-            />
+        <section className="iron-profile__hero">
 
-            <div className="profile-level-badge">
-              {String(user.level)
-                .padStart(2, "0")}
+          <div className="iron-profile__avatar">
+            {avatar ? (
+              <img
+                src={avatar}
+                alt={fullName}
+              />
+            ) : (
+              <span>
+                {firstName
+                  .charAt(0)
+                  .toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          <div className="iron-profile__identity">
+            <span>
+              ATHLETE PROFILE
+            </span>
+
+            <h2>
+              {fullName}
+            </h2>
+
+            <p>
+              {username}
+            </p>
+          </div>
+
+          <div className="iron-profile__stats">
+            <div>
+              <strong>
+                {level}
+              </strong>
+
+              <span>
+                LEVEL
+              </span>
+            </div>
+
+            <div>
+              <strong>
+                {xp.toLocaleString()}
+              </strong>
+
+              <span>
+                XP
+              </span>
+            </div>
+
+            <div>
+              <strong>
+                {streak}
+              </strong>
+
+              <span>
+                DAY STREAK
+              </span>
             </div>
           </div>
 
-          <span className="profile-eyebrow">
-            IRONAGE ATHLETE
-          </span>
-
-          <h1>
-            {user.name.toUpperCase()}
-          </h1>
-
-          <p>
-            DISCIPLINE • STRENGTH • MINDSET
-          </p>
-
-        </section>
-
-        <section className="profile-xp">
-
-          <div className="profile-xp-top">
+          <div className="iron-profile__goal">
             <span>
-              LEVEL{" "}
-              {String(user.level)
-                .padStart(2, "0")}
+              CURRENT GOAL
             </span>
 
             <strong>
-              {user.xp.toLocaleString()} XP
+              {goal}
             </strong>
           </div>
 
-          <div className="profile-xp-track">
-            <div
-              className="profile-xp-fill"
-              style={{
-                width: `${Math.max(
-                  3,
-                  xpProgress
-                )}%`,
-              }}
+          {onOpenEditProfile && (
+            <button
+              type="button"
+              className="iron-profile__edit"
+              onClick={
+                onOpenEditProfile
+              }
+            >
+              EDIT PROFILE
+            </button>
+          )}
+
+        </section>
+
+
+        <section className="iron-profile__section">
+          <SectionTitle>
+            MY TRAINING
+          </SectionTitle>
+
+          <MenuItem
+            number="01"
+            title="MY PROGRAM"
+            subtitle="Current program, week and progress"
+            onClick={
+              openMyProgram
+            }
+          />
+
+          <MenuItem
+            number="02"
+            title="PROGRESS"
+            subtitle="Weight, measurements, photos and strength"
+            onClick={
+              onOpenProgress
+            }
+          />
+
+          <MenuItem
+            number="03"
+            title="WORKOUT HISTORY"
+            subtitle="Completed workouts and performance"
+            onClick={
+              openHistory
+            }
+          />
+        </section>
+
+
+        <section className="iron-profile__section">
+          <SectionTitle>
+            COACHING
+          </SectionTitle>
+
+          <MenuItem
+            number="04"
+            title="MY COACH"
+            subtitle="Your active coach and coaching status"
+            onClick={
+              onOpenMyCoach
+            }
+          />
+
+          <MenuItem
+            number="05"
+            title="FIND A COACH"
+            subtitle="Browse verified IRONAGE coaches"
+            onClick={
+              onOpenFindCoach
+            }
+          />
+
+          <MenuItem
+            number="06"
+            title="PROGRAMS"
+            subtitle="Explore professional training programs"
+            onClick={
+              onOpenPrograms
+            }
+          />
+        </section>
+
+
+        <section className="iron-profile__section">
+          <SectionTitle>
+            ACCOUNT
+          </SectionTitle>
+
+          <MenuItem
+            number="07"
+            title="SUBSCRIPTION"
+            subtitle="Plan, access and renewal"
+            onClick={
+              onOpenSubscription
+            }
+          />
+
+          <MenuItem
+            number="08"
+            title="PAYMENTS"
+            subtitle="Purchases, payments and receipts"
+            onClick={
+              onOpenPayments
+            }
+          />
+
+          <MenuItem
+            number="09"
+            title="NOTIFICATIONS"
+            subtitle="Workout, coach and account alerts"
+            onClick={
+              onOpenNotifications
+            }
+          />
+
+          <MenuItem
+            number="10"
+            title="SETTINGS"
+            subtitle="Language, privacy and account"
+            onClick={
+              onOpenSettings
+            }
+          />
+        </section>
+
+
+        {isApprovedCoach && (
+          <section className="iron-profile__section">
+            <SectionTitle>
+              COACH TOOLS
+            </SectionTitle>
+
+            <MenuItem
+              number="11"
+              title="COACH SYSTEM"
+              subtitle="Clients, check-ins and feedback"
+              onClick={
+                onOpenCoach
+              }
             />
-          </div>
 
-          <small>
-            {xpInLevel.toLocaleString()}
-            {" / 1,000 XP"}
-          </small>
+            <MenuItem
+              number="12"
+              title="MY COACH PROGRAMS"
+              subtitle="Programs connected to your profile"
+              onClick={
+                onOpenCoachPrograms
+              }
+            />
 
+            <MenuItem
+              number="13"
+              title="VIDEO REVIEWS"
+              subtitle="Review client exercise technique"
+              onClick={
+                onOpenVideoReviews
+              }
+            />
+
+            <MenuItem
+              number="14"
+              title="EARNINGS"
+              subtitle="Revenue, commission and payouts"
+              onClick={
+                onOpenEarnings
+              }
+            />
+          </section>
+        )}
+
+
+        {isAdmin && (
+          <section className="iron-profile__section iron-profile__section--admin">
+            <SectionTitle>
+              IRONAGE ADMIN
+            </SectionTitle>
+
+            <MenuItem
+              number="15"
+              title="ADMIN PANEL"
+              subtitle="IRONAGE Control Center"
+              onClick={
+                onOpenAdmin
+              }
+            />
+
+            <MenuItem
+              number="16"
+              title="COACH MANAGEMENT"
+              subtitle="Applications, approval and coach status"
+              onClick={
+                onOpenCoachManagement ||
+                onOpenAdmin
+              }
+            />
+
+            <MenuItem
+              number="17"
+              title="PROGRAM MANAGEMENT"
+              subtitle="Review, approve and publish programs"
+              onClick={
+                onOpenProgramManagement ||
+                onOpenAdmin
+              }
+            />
+
+            <MenuItem
+              number="18"
+              title="USERS"
+              subtitle="Manage IRONAGE users"
+              onClick={
+                onOpenUsers ||
+                onOpenAdmin
+              }
+            />
+
+            <MenuItem
+              number="19"
+              title="PAYMENTS & SUBSCRIPTIONS"
+              subtitle="Revenue, subscriptions and transactions"
+              onClick={
+                onOpenPayments ||
+                onOpenAdmin
+              }
+            />
+
+            <MenuItem
+              number="20"
+              title="ANALYTICS"
+              subtitle="Users, coaches, growth and revenue"
+              onClick={
+                onOpenAnalytics ||
+                onOpenAdmin
+              }
+            />
+          </section>
+        )}
+
+
+        <section className="iron-profile__section">
+          <SectionTitle>
+            SUPPORT
+          </SectionTitle>
+
+          <MenuItem
+            number="21"
+            title="HELP & SUPPORT"
+            subtitle="IRONAGE assistance"
+          />
+
+          <MenuItem
+            number="22"
+            title="PRIVACY POLICY"
+            subtitle="Your privacy and data"
+          />
+
+          <MenuItem
+            number="23"
+            title="TERMS & CONDITIONS"
+            subtitle="IRONAGE terms of use"
+          />
+
+          <MenuItem
+            number="24"
+            title="DELETE ACCOUNT"
+            subtitle="Permanently delete your account"
+            danger
+          />
         </section>
 
-        <section className="profile-stats">
 
-          <div>
-            <span>WORKOUTS</span>
-            <strong>
-              {user.workouts}
-            </strong>
-          </div>
-
-          <div>
-            <span>STREAK</span>
-            <strong>
-              {user.streak}
-            </strong>
-          </div>
-
-          <div>
-            <span>XP</span>
-            <strong>
-              {user.xp >= 1000
-                ? `${(
-                    user.xp / 1000
-                  ).toFixed(1)}K`
-                : user.xp}
-            </strong>
-          </div>
-
-        </section>
-
-        <div className="profile-section-title profile-main-title">
-          <span />
-          <strong>ATHLETE PROFILE</strong>
-          <span />
-        </div>
-
-        <section className="profile-menu">
-
-          <button
-            type="button"
-            onClick={() =>
-              setView("personal")
-            }
-          >
-            <div>
-              <span>01</span>
-
-              <section>
-                <strong>
-                  PERSONAL DATA
-                </strong>
-
-                <small>
-                  {user.age} YEARS ·{" "}
-                  {user.weight} KG ·{" "}
-                  {user.height} CM
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-          <button
-            type="button"
-            onClick={() =>
-              setView("goals")
-            }
-          >
-            <div>
-              <span>02</span>
-
-              <section>
-                <strong>
-                  TRAINING GOAL
-                </strong>
-
-                <small>
-                  {goalLabel}
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenPremium}
-            disabled={!onOpenPremium}
-          >
-            <div>
-              <span>03</span>
-
-              <section>
-                <strong>
-                  IRONAGE PREMIUM
-                </strong>
-
-                <small>
-                  UNLOCK YOUR FULL POTENTIAL
-                </small>
-              </section>
-            </div>
-
-            <b>
-              {entitlementLoading
-                ? "..."
-                : isPremium
-                  ? premiumPlan
-                  : "→"}
-            </b>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenFindCoach}
-            disabled={!onOpenFindCoach}
-          >
-            <div>
-              <span>04</span>
-
-              <section>
-                <strong>
-                  FIND A COACH
-                </strong>
-
-                <small>
-                  DISCOVER · CHOOSE · TRAIN
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenMyCoach}
-            disabled={!onOpenMyCoach}
-          >
-            <div>
-              <span>05</span>
-
-              <section>
-                <strong>
-                  MY COACH
-                </strong>
-
-                <small>
-                  COACH · PLAN · RESULTS
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenCoach}
-            disabled={!onOpenCoach}
-          >
-            <div>
-              <span>06</span>
-
-              <section>
-                <strong>
-                  COACH SYSTEM
-                </strong>
-
-                <small>
-                  CLIENTS · WORKOUTS · PROGRAMS
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenMyProgram}
-            disabled={!onOpenMyProgram}
-          >
-            <div>
-              <span>07</span>
-
-              <section>
-                <strong>
-                  MY PROGRAM
-                </strong>
-
-                <small>
-                  COACH · PLAN · WORKOUTS
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-          {isAdmin &&
-            onOpenAdmin && (
-              <button
-                type="button"
-                onClick={onOpenAdmin}
-              >
-                <div>
-                  <span>08</span>
-
-                  <section>
-                    <strong>
-                      ADMIN PANEL
-                    </strong>
-
-                    <small>
-                      COACHES · APPROVALS · CONTROL
-                    </small>
-                  </section>
-                </div>
-
-                <b>→</b>
-              </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setView("notifications")}
-            >
-              <div>
-                <span>09</span>
-
-                <section>
-                  <strong>
-                    NOTIFICATIONS
-                  </strong>
-
-                  <small>
-                    REMINDERS · UPDATES · CONTROL
-                  </small>
-                </section>
-              </div>
-
-              <b>→</b>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setView("settings")}
-            >
-              <div>
-                <span>10</span>
-
-                <section>
-                  <strong>
-                    SETTINGS
-                  </strong>
-
-                  <small>
-                    APP · EXPERIENCE · SYSTEM
-                  </small>
-                </section>
-              </div>
-
-              <b>→</b>
-            </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              void logout();
-            }}
-          >
-            <div>
-              <span>11</span>
-
-              <section>
-                <strong>
-                  LOG OUT
-                </strong>
-
-                <small>
-                  END CURRENT SESSION
-                </small>
-              </section>
-            </div>
-
-            <b>→</b>
-          </button>
-
-        </section>
-
-        <section className="profile-quote">
+        <button
+          type="button"
+          className="iron-profile__logout"
+          onClick={onLogout}
+        >
+          LOG OUT
           <span>
-            IRONAGE MINDSET
+            →
           </span>
-
-          <h2>
-            BECOME
-            <br />
-            <strong>
-              UNSTOPPABLE.
-            </strong>
-          </h2>
-        </section>
+        </button>
 
       </div>
     </main>

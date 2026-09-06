@@ -124,11 +124,6 @@ export default function FindCoach({
           telegramAuthOptions()
         );
 
-      console.log(
-        "IRONAGE DEBUG: MARKETPLACE RESPONSE",
-        response
-      );
-
       if (
         !response ||
         !Array.isArray(

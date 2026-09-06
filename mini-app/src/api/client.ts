@@ -1038,8 +1038,6 @@ export type GoogleLoginResult = {
 export async function loginGoogle(
   idToken: string
 ): Promise<GoogleLoginResult> {
-  console.log("IRONAGE DEBUG: loginGoogle CALLED");
-  console.trace("IRONAGE DEBUG GOOGLE TRACE");
   const normalizedToken =
     idToken.trim();
 

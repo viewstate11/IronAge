@@ -7,6 +7,7 @@ import Workout from "./Workout";
 import Nutrition from "./Nutrition";
 import Progress from "./Progress";
 import Profile from "./Profile";
+import ProfileFeature from "./ProfileFeature";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
 import TabBar from "./TabBar";
@@ -46,6 +47,7 @@ type AppScreen =
   | "my-coach"
   | "my-program"
   | "admin-coaches"
+  | "profile-feature"
   | "session"
   | "complete";
 
@@ -81,6 +83,29 @@ export default function MainApp() {
   ] = useState<number | null>(
     null
   );
+
+
+  const [
+    profileFeature,
+    setProfileFeature,
+  ] = useState({
+    title: "",
+    subtitle: "",
+  });
+
+  const openProfileFeature = (
+    title: string,
+    subtitle: string
+  ) => {
+    setProfileFeature({
+      title,
+      subtitle,
+    });
+
+    setScreen(
+      "profile-feature"
+    );
+  };
 
 
   /* =========================================================
@@ -612,40 +637,138 @@ export default function MainApp() {
             onOpenPremium={() => {
               setScreen("premium");
             }}
-            onOpenCoach={() => {
-              console.log(
-                "IRONAGE DEBUG: COACH SYSTEM CLICK"
-              );
 
-              /*
-               * CoachEntry must always be reachable.
-               *
-               * It handles:
-               * - Become a Coach
-               * - Pending Review
-               * - Rejected Application
-               * - Verified Coach Dashboard
-               *
-               * Role access must not block the
-               * application/status screen itself.
-               */
+            onOpenProgress={() => {
+              setScreen("progress");
+            }}
+
+            onOpenHistory={() => {
+              openProfileFeature(
+                "WORKOUT HISTORY",
+                "Your completed workouts, statistics and performance history."
+              );
+            }}
+
+            onOpenCoach={() => {
               setScreen("coach");
             }}
+
             onOpenFindCoach={() => {
               setScreen("find-coach");
             }}
+
             onOpenMyCoach={() => {
               setScreen("my-coach");
             }}
+
             onOpenMyProgram={() => {
-              changeTab("my-program");
+              setScreen("my-program");
             }}
+
+            onOpenPrograms={() => {
+              openProfileFeature(
+                "PROGRAMS",
+                "Explore IRONAGE training programs from verified coaches."
+              );
+            }}
+
+            onOpenSubscription={() => {
+              openProfileFeature(
+                "SUBSCRIPTION",
+                "Manage your IRONAGE plan, access and renewal."
+              );
+            }}
+
+            onOpenPayments={() => {
+              openProfileFeature(
+                "PAYMENTS",
+                "Purchases, subscriptions, receipts and payment history."
+              );
+            }}
+
+            onOpenNotifications={() => {
+              openProfileFeature(
+                "NOTIFICATIONS",
+                "Manage workout, coach, progress and account alerts."
+              );
+            }}
+
+            onOpenSettings={() => {
+              openProfileFeature(
+                "SETTINGS",
+                "Language, privacy, security and account preferences."
+              );
+            }}
+
+            onOpenCoachPrograms={() => {
+              openProfileFeature(
+                "MY COACH PROGRAMS",
+                "Programs published for your coach profile."
+              );
+            }}
+
+            onOpenVideoReviews={() => {
+              openProfileFeature(
+                "VIDEO REVIEWS",
+                "Review athlete exercise technique and provide feedback."
+              );
+            }}
+
+            onOpenEarnings={() => {
+              openProfileFeature(
+                "EARNINGS",
+                "Coach revenue, commissions and payouts."
+              );
+            }}
+
             onOpenAdmin={() => {
               setScreen("admin-coaches");
+            }}
+
+            onOpenCoachManagement={() => {
+              setScreen("admin-coaches");
+            }}
+
+            onOpenProgramManagement={() => {
+              openProfileFeature(
+                "PROGRAM MANAGEMENT",
+                "Create, review, approve and publish coach programs."
+              );
+            }}
+
+            onOpenUsers={() => {
+              openProfileFeature(
+                "USER MANAGEMENT",
+                "Manage IRONAGE athletes, coaches and account access."
+              );
+            }}
+
+            onOpenAnalytics={() => {
+              openProfileFeature(
+                "ANALYTICS",
+                "Users, coaches, subscriptions, growth and platform revenue."
+              );
             }}
           />
 
         )}
+
+        {screen === "profile-feature" && (
+
+          <ProfileFeature
+            title={
+              profileFeature.title
+            }
+            subtitle={
+              profileFeature.subtitle
+            }
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
 
         {screen === "admin-coaches" && (
 

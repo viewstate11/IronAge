@@ -568,9 +568,6 @@ const EDIT_COPY: Record<AppLanguage, EditCopy> = {
 export default function CoachEntry({
   onBack,
 }: Props) {
-  console.log(
-    "IRONAGE DEBUG: COACH ENTRY RENDER"
-  );
   const {
     language,
   } = useLanguage();
@@ -659,11 +656,6 @@ export default function CoachEntry({
           "/coaches/me",
           telegramAuthOptions()
         );
-
-      console.log(
-        "IRONAGE DEBUG: COACH ME RESPONSE",
-        response
-      );
 
       setCoach(
         response.coach ?? null
