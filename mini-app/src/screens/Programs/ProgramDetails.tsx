@@ -61,6 +61,8 @@ type Props = {
   onOpenCoach: (
     coachId: number
   ) => void;
+
+  onOpenMyProgram: () => void;
 };
 
 function formatPrice(
@@ -95,6 +97,7 @@ export default function ProgramDetails({
   programId,
   onBack,
   onOpenCoach,
+  onOpenMyProgram,
 }: Props) {
   const [
     program,
@@ -385,10 +388,15 @@ export default function ProgramDetails({
 
           <button
             type="button"
-            disabled
+            disabled={!hasAccess}
+            onClick={() => {
+              if (hasAccess) {
+                onOpenMyProgram();
+              }
+            }}
           >
             {hasAccess
-              ? "PROGRAM ACTIVE"
+              ? "OPEN MY PROGRAM"
               : "GET PROGRAM"}
           </button>
         </section>

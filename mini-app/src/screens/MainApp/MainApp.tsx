@@ -815,6 +815,12 @@ export default function MainApp() {
                 "coach-profile"
               );
             }}
+
+            onOpenMyProgram={() => {
+              setScreen(
+                "my-program"
+              );
+            }}
           />
 
         )}
