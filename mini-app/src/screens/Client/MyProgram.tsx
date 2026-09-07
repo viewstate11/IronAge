@@ -74,6 +74,16 @@ type ProgramAssignment = {
   startDate: string | null;
   endDate: string | null;
   isActive: boolean;
+
+  accessSource:
+    | "COACH_ASSIGNMENT"
+    | "FREE_CLAIM"
+    | "PURCHASE"
+    | "SUBSCRIPTION"
+    | "ADMIN_GRANT";
+
+  accessExpiresAt:
+    string | null;
   coach: Coach | null;
   program: TrainingProgram;
 };
@@ -160,6 +170,13 @@ export default function MyProgram({
     setAssignments,
   ] = useState<ProgramAssignment[]>([]);
 
+  const [
+    activeProgramId,
+    setActiveProgramId,
+  ] = useState<number | null>(
+    selectedProgramId
+  );
+
   useEffect(() => {
     let cancelled = false;
 
@@ -207,16 +224,22 @@ export default function MyProgram({
     };
   }, []);
 
+  useEffect(() => {
+    setActiveProgramId(
+      selectedProgramId
+    );
+  }, [selectedProgramId]);
+
   const assignment =
-    selectedProgramId !== null
+    activeProgramId !== null
       ? (
           assignments.find(
             (item) =>
               item.program.id ===
-              selectedProgramId
+              activeProgramId
           ) ?? null
         )
-      : assignments[0] ?? null;
+      : null;
 
   const workouts = useMemo(() => {
     if (!assignment) {
@@ -237,18 +260,39 @@ export default function MyProgram({
           <button
             type="button"
             className="my-program-back"
-            onClick={onBack}
+            onClick={() => {
+              if (
+                activeProgramId !== null &&
+                selectedProgramId === null
+              ) {
+                setActiveProgramId(
+                  null
+                );
+                return;
+              }
+
+              onBack();
+            }}
             aria-label="Back"
           >
             ←
           </button>
 
           <div>
-            <span>IRONAGE COACHING</span>
-            <h1>MY PROGRAM</h1>
+            <span>
+              IRONAGE TRAINING
+            </span>
+
+            <h1>
+              {activeProgramId === null
+                ? "MY PROGRAMS"
+                : "MY PROGRAM"}
+            </h1>
+
             <p>
-              YOUR COACH. YOUR PLAN.
-              YOUR WORK.
+              {activeProgramId === null
+                ? "YOUR PROGRAMS. YOUR TRAINING."
+                : "YOUR PLAN. YOUR WORK."}
             </p>
           </div>
         </header>
@@ -272,18 +316,132 @@ export default function MyProgram({
 
         {!loading &&
           !error &&
-          !assignment && (
+          activeProgramId === null &&
+          assignments.length === 0 && (
             <section className="my-program-state">
-              <span>NO ACTIVE PROGRAM</span>
+              <span>
+                NO PROGRAMS YET
+              </span>
+
               <h2>
-                YOUR COACH HAS NOT
-                ASSIGNED A PROGRAM YET.
+                YOUR TRAINING LIBRARY
+                IS EMPTY.
               </h2>
+
               <p>
-                Once a coach assigns your
-                training plan, it will
-                appear here.
+                Programs you receive from
+                a coach, claim for free or
+                purchase will appear here.
               </p>
+            </section>
+          )}
+
+        {!loading &&
+          !error &&
+          activeProgramId === null &&
+          assignments.length > 0 && (
+            <section className="my-program-library">
+              {assignments.map(
+                (item) => {
+                  const sourceLabel =
+                    item.accessSource ===
+                    "COACH_ASSIGNMENT"
+                      ? "COACH"
+                      : item.accessSource ===
+                          "FREE_CLAIM"
+                        ? "FREE"
+                        : item.accessSource ===
+                            "PURCHASE"
+                          ? "PURCHASE"
+                          : item.accessSource ===
+                              "SUBSCRIPTION"
+                            ? "SUBSCRIPTION"
+                            : "ADMIN";
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="my-program-library-card"
+                      onClick={() => {
+                        setActiveProgramId(
+                          item.program.id
+                        );
+                      }}
+                    >
+                      <div className="my-program-library-card__top">
+                        <span>
+                          {sourceLabel}
+                        </span>
+
+                        <b>
+                          OPEN →
+                        </b>
+                      </div>
+
+                      <h2>
+                        {item.program.name}
+                      </h2>
+
+                      {item.program
+                        .description && (
+                        <p>
+                          {
+                            item.program
+                              .description
+                          }
+                        </p>
+                      )}
+
+                      <div className="my-program-library-card__meta">
+                        <span>
+                          {
+                            item.program
+                              .durationWeeks ??
+                            "—"
+                          }{" "}
+                          WEEKS
+                        </span>
+
+                        <span>
+                          {
+                            item.program
+                              .workouts.length
+                          }{" "}
+                          WORKOUTS
+                        </span>
+
+                        <span>
+                          {item.coach
+                            ? (
+                                item.coach
+                                  .coachProfile
+                                  ?.displayName ||
+                                "COACH"
+                              )
+                            : "SELF-SERVICE"}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                }
+              )}
+            </section>
+          )}
+
+        {!loading &&
+          !error &&
+          activeProgramId !== null &&
+          !assignment && (
+            <section className="my-program-state my-program-state--error">
+              <span>
+                PROGRAM NOT AVAILABLE
+              </span>
+
+              <h2>
+                THIS PROGRAM IS NOT
+                ACTIVE IN YOUR ACCOUNT.
+              </h2>
             </section>
           )}
 
