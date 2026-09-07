@@ -988,12 +988,8 @@ export default function AdminPrograms({
 
                       <section className="admin-programs__actions">
 
-                        {program.status !==
-                          "ARCHIVED" &&
-                          program.status !==
-                            "PUBLISHED" &&
-                          program.status !==
-                            "APPROVED" && (
+                        {program.status ===
+                          "REVIEW" && (
                             <button
                               type="button"
                               className="admin-programs__approve"

@@ -276,6 +276,16 @@ router.post(
         });
       }
 
+      if (
+        existing.status !== "REVIEW"
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Only programs under review can be approved",
+        });
+      }
+
       const program =
         await prisma.trainingProgram.update({
           where: {
