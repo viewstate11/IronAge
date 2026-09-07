@@ -721,6 +721,9 @@ router.post(
               where: {
                 clientId,
                 isActive: true,
+                assignedBy: {
+                  not: null,
+                },
               },
               data: {
                 isActive: false,
