@@ -335,6 +335,151 @@ router.post(
   }
 );
 
+/* =========================================================
+   SUBMIT PROGRAM FOR IRONAGE REVIEW
+
+   POST /api/coach-programs/:id/submit
+
+   DRAFT
+     ↓
+   REVIEW
+========================================================= */
+
+router.post(
+  "/:id/submit",
+  requireAppAuth,
+  async (req, res) => {
+    try {
+      const coachId =
+        getCurrentUserId(
+          req as AppAuthenticatedRequest
+        );
+
+      if (
+        !await hasVerifiedActiveCoachProfile(
+          coachId
+        )
+      ) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Verified active coach profile required",
+        });
+      }
+
+      const programId =
+        parsePositiveInt(
+          req.params.id,
+          "programId"
+        );
+
+      const program =
+        await prisma.trainingProgram.findFirst({
+          where: {
+            id: programId,
+            coachId,
+            isActive: true,
+          },
+
+          include: {
+            _count: {
+              select: {
+                workouts: true,
+              },
+            },
+          },
+        });
+
+      if (!program) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Program not found",
+        });
+      }
+
+      if (
+        program.status !==
+        "DRAFT"
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Only draft programs can be submitted for review",
+        });
+      }
+
+      if (
+        program._count.workouts === 0
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Program must contain at least one workout",
+        });
+      }
+
+      const updated =
+        await prisma.trainingProgram.update({
+          where: {
+            id: programId,
+          },
+
+          data: {
+            status:
+              "REVIEW",
+
+            isPublished:
+              false,
+
+            approvedBy:
+              null,
+
+            approvedAt:
+              null,
+
+            publishedAt:
+              null,
+          },
+
+          include: {
+            workouts: {
+              include: {
+                workout: true,
+              },
+
+              orderBy: {
+                position:
+                  "asc",
+              },
+            },
+          },
+        });
+
+      return res.json({
+        success: true,
+        program: updated,
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE PROGRAM SUBMIT REVIEW ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Program review submission failed",
+        error:
+          error instanceof Error
+            ? error.message
+            : String(error),
+      });
+    }
+  }
+);
+
+
 router.get(
   "/",
   requireAppAuth,
@@ -526,8 +671,17 @@ router.post(
           where: {
             id: programId,
             coachId,
-            isActive: true,
+
+            status:
+              "PUBLISHED",
+
+            isPublished:
+              true,
+
+            isActive:
+              true,
           },
+
           select: {
             id: true,
           },

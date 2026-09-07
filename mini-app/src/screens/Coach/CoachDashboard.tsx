@@ -176,15 +176,27 @@ type CoachProgramWorkout = {
   workout: CoachWorkout;
 };
 
+type CoachProgramStatus =
+  | "DRAFT"
+  | "REVIEW"
+  | "APPROVED"
+  | "PUBLISHED"
+  | "ARCHIVED";
+
 type CoachProgram = {
   id: number;
   coachId: number;
   name: string;
   description: string | null;
   durationWeeks: number | null;
+
+  status: CoachProgramStatus;
+  isPublished: boolean;
   isActive: boolean;
+
   createdAt: string;
   updatedAt: string;
+
   workouts: CoachProgramWorkout[];
 };
 
@@ -303,6 +315,85 @@ export default function CoachDashboard({
 
   const [assignSuccess, setAssignSuccess] =
     useState<string | null>(null);
+
+  const [
+    submittingProgramId,
+    setSubmittingProgramId,
+  ] = useState<number | null>(
+    null
+  );
+
+  const [
+    programReviewError,
+    setProgramReviewError,
+  ] = useState<{
+    programId: number;
+    message: string;
+  } | null>(
+    null
+  );
+
+  async function submitProgramForReview(
+    programId: number
+  ) {
+    try {
+      setSubmittingProgramId(
+        programId
+      );
+
+      setProgramReviewError(
+        null
+      );
+
+      const response =
+        await api.post<{
+          success: boolean;
+          program: CoachProgram;
+        }>(
+          `/coach-programs/${programId}/submit`,
+          {},
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        !response.program
+      ) {
+        throw new Error(
+          "Program submission failed"
+        );
+      }
+
+      setPrograms(current =>
+        current.map(program =>
+          program.id === programId
+            ? {
+                ...program,
+                ...response.program,
+              }
+            : program
+        )
+      );
+    } catch (error) {
+      console.error(
+        "IRONAGE PROGRAM REVIEW SUBMIT ERROR:",
+        error
+      );
+
+      setProgramReviewError({
+        programId,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to submit program",
+      });
+    } finally {
+      setSubmittingProgramId(
+        null
+      );
+    }
+  }
 
   async function assignProgram(
     client: CoachClient
@@ -1326,26 +1417,111 @@ export default function CoachDashboard({
                         </div>
                       )}
 
-                      <button
-                        type="button"
-                        className="coach-program-card__assign"
-                        onClick={() => {
-                          setSelectedProgram(
-                            program
-                          );
-                          setAssignError(null);
-                          setAssignSuccess(null);
-                          setView(
-                            "assign-program"
-                          );
-                        }}
-                      >
-                        <span>
-                          ASSIGN PROGRAM
-                        </span>
+                      <div className="coach-program-review">
+                        <div className="coach-program-review__status">
+                          <span>
+                            IRONAGE STATUS
+                          </span>
 
-                        <b>→</b>
-                      </button>
+                          <strong
+                            className={`coach-program-review__badge coach-program-review__badge--${program.status.toLowerCase()}`}
+                          >
+                            {program.status}
+                          </strong>
+                        </div>
+
+                        {programReviewError?.programId ===
+                          program.id && (
+                          <div className="coach-program-review__error">
+                            {
+                              programReviewError.message
+                            }
+                          </div>
+                        )}
+
+                        {program.status ===
+                          "DRAFT" && (
+                          <button
+                            type="button"
+                            className="coach-program-review__submit"
+                            disabled={
+                              submittingProgramId ===
+                              program.id
+                            }
+                            onClick={() =>
+                              void submitProgramForReview(
+                                program.id
+                              )
+                            }
+                          >
+                            <span>
+                              {submittingProgramId ===
+                              program.id
+                                ? "SUBMITTING..."
+                                : "SUBMIT FOR REVIEW"}
+                            </span>
+
+                            <b>→</b>
+                          </button>
+                        )}
+
+                        {program.status ===
+                          "REVIEW" && (
+                          <div className="coach-program-review__message">
+                            WAITING FOR IRONAGE APPROVAL
+                          </div>
+                        )}
+
+                        {program.status ===
+                          "APPROVED" && (
+                          <div className="coach-program-review__message">
+                            APPROVED BY IRONAGE · WAITING FOR PUBLICATION
+                          </div>
+                        )}
+
+                        {program.status ===
+                          "PUBLISHED" && (
+                          <div className="coach-program-review__message coach-program-review__message--live">
+                            LIVE IN IRONAGE MARKETPLACE
+                          </div>
+                        )}
+
+                        {program.status ===
+                          "ARCHIVED" && (
+                          <div className="coach-program-review__message">
+                            PROGRAM ARCHIVED
+                          </div>
+                        )}
+                      </div>
+
+                      {program.status ===
+                        "PUBLISHED" &&
+                        program.isPublished && (
+                        <button
+                          type="button"
+                          className="coach-program-card__assign"
+                          onClick={() => {
+                            setSelectedProgram(
+                              program
+                            );
+                            setAssignError(
+                              null
+                            );
+                            setAssignSuccess(
+                              null
+                            );
+                            setView(
+                              "assign-program"
+                            );
+                          }}
+                        >
+                          <span>
+                            ASSIGN PROGRAM
+                          </span>
+
+                          <b>→</b>
+                        </button>
+                      )}
                     </article>
                   )
                 )}

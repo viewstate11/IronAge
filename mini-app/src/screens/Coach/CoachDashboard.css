@@ -1319,3 +1319,178 @@
   text-align: right;
 }
 
+
+/* =========================================================
+   PROGRAM REVIEW / IRONAGE APPROVAL
+========================================================= */
+
+.coach-program-review {
+  display: grid;
+  gap: 10px;
+
+  margin-top: 14px;
+}
+
+.coach-program-review__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 12px 13px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.16);
+
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.022);
+}
+
+.coach-program-review__status > span {
+  color:
+    rgba(255, 255, 255, 0.4);
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 0.12em;
+}
+
+.coach-program-review__badge {
+  padding: 6px 9px;
+
+  border-radius: 9px;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+}
+
+.coach-program-review__badge--draft {
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color:
+    rgba(255, 255, 255, 0.7);
+}
+
+.coach-program-review__badge--review {
+  background:
+    rgba(244, 201, 93, 0.1);
+
+  color: #f4c95d;
+}
+
+.coach-program-review__badge--approved {
+  background:
+    rgba(212, 175, 55, 0.1);
+
+  color: #d4af37;
+}
+
+.coach-program-review__badge--published {
+  background:
+    rgba(126, 231, 135, 0.08);
+
+  color: #7ee787;
+}
+
+.coach-program-review__badge--archived {
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  color:
+    rgba(255, 255, 255, 0.35);
+}
+
+.coach-program-review__submit {
+  width: 100%;
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 16px;
+
+  border:
+    1px solid
+    #d4af37;
+
+  border-radius: 14px;
+
+  background:
+    rgba(212, 175, 55, 0.08);
+
+  color: #d4af37;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: 0.09em;
+}
+
+.coach-program-review__submit:disabled {
+  opacity: 0.5;
+}
+
+.coach-program-review__submit b {
+  font-size: 17px;
+}
+
+.coach-program-review__message {
+  padding: 13px;
+
+  border-radius: 13px;
+
+  border:
+    1px solid
+    rgba(212, 175, 55, 0.2);
+
+  background:
+    rgba(212, 175, 55, 0.045);
+
+  color: #d4af37;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  letter-spacing: 0.08em;
+
+  text-align: center;
+}
+
+.coach-program-review__message--live {
+  border-color:
+    rgba(126, 231, 135, 0.24);
+
+  background:
+    rgba(126, 231, 135, 0.05);
+
+  color: #7ee787;
+}
+
+.coach-program-review__error {
+  margin-bottom: 12px;
+
+  padding: 13px;
+
+  border:
+    1px solid
+    rgba(255, 110, 110, 0.3);
+
+  border-radius: 13px;
+
+  background:
+    rgba(255, 110, 110, 0.04);
+
+  color: #ff8888;
+
+  font-size: 9px;
+  font-weight: 800;
+}
