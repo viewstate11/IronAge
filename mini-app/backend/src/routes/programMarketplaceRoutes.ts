@@ -257,26 +257,62 @@ router.get(
         });
       }
 
-      const assignment =
-        await prisma.programAssignment.findFirst({
+      const now =
+        new Date();
+
+      const entitlement =
+        await prisma.programEntitlement.findFirst({
           where: {
             programId,
-            clientId:
+
+            userId:
               currentUserId,
+
             isActive:
               true,
+
+            startsAt: {
+              lte:
+                now,
+            },
+
+            OR: [
+              {
+                expiresAt:
+                  null,
+              },
+              {
+                expiresAt: {
+                  gt:
+                    now,
+                },
+              },
+            ],
           },
 
           select: {
             id: true,
+            source: true,
+            expiresAt: true,
           },
         });
 
       return res.json({
         success: true,
         program,
+
         hasAccess:
-          Boolean(assignment),
+          Boolean(entitlement),
+
+        entitlement: entitlement
+          ? {
+              source:
+                entitlement.source,
+
+              expiresAt:
+                entitlement.expiresAt,
+            }
+          : null,
       });
     } catch (error) {
       console.error(
