@@ -12,7 +12,7 @@ import {
 const APPLE_BUNDLE_ID =
   "com.ironage.app";
 
-const SUPPORTED_PRODUCTS =
+const PREMIUM_PRODUCTS =
   new Set([
     "com.ironage.app.premium.monthly",
     "com.ironage.app.premium.yearly",
@@ -59,10 +59,13 @@ function requireTimestamp(
   return value;
 }
 
-function validateDecodedTransaction(
+function validateCommonTransaction(
   transaction:
     JWSTransactionDecodedPayload
-): AppleVerifiedTransaction {
+): Omit<
+  AppleVerifiedTransaction,
+  "expiresAt"
+> {
   const transactionId =
     requireString(
       transaction.transactionId,
@@ -99,21 +102,6 @@ function validateDecodedTransaction(
     );
   }
 
-  if (!SUPPORTED_PRODUCTS.has(productId)) {
-    throw new Error(
-      "Unsupported Apple Premium product"
-    );
-  }
-
-  if (
-    transaction.type !==
-    Type.AUTO_RENEWABLE_SUBSCRIPTION
-  ) {
-    throw new Error(
-      "Apple Premium product is not an auto-renewable subscription"
-    );
-  }
-
   if (
     typeof transaction.revocationDate ===
       "number" &&
@@ -126,17 +114,8 @@ function validateDecodedTransaction(
     );
   }
 
-  const expiresDate =
-    requireTimestamp(
-      transaction.expiresDate,
-      "expiresDate"
-    );
-
   const purchasedAt =
     new Date(purchaseDate);
-
-  const expiresAt =
-    new Date(expiresDate);
 
   if (
     Number.isNaN(
@@ -145,33 +124,6 @@ function validateDecodedTransaction(
   ) {
     throw new Error(
       "Apple purchase date is invalid"
-    );
-  }
-
-  if (
-    Number.isNaN(
-      expiresAt.getTime()
-    )
-  ) {
-    throw new Error(
-      "Apple expiration date is invalid"
-    );
-  }
-
-  if (
-    expiresAt.getTime() <=
-    purchasedAt.getTime()
-  ) {
-    throw new Error(
-      "Apple subscription expiration is invalid"
-    );
-  }
-
-  if (
-    expiresAt.getTime() <= Date.now()
-  ) {
-    throw new Error(
-      "Apple subscription has expired"
     );
   }
 
@@ -185,22 +137,20 @@ function validateDecodedTransaction(
         : null,
 
     productId,
-
     purchasedAt,
-
-    expiresAt,
-
     environment,
   };
 }
 
-export async function verifyAppleTransaction(
+async function decodeAppleTransaction(
   signedTransaction: string,
   options: {
     environment: Environment;
     appAppleId?: number;
   }
-): Promise<AppleVerifiedTransaction> {
+): Promise<
+  JWSTransactionDecodedPayload
+> {
   if (
     typeof signedTransaction !== "string" ||
     signedTransaction.length === 0
@@ -232,12 +182,139 @@ export async function verifyAppleTransaction(
       options.appAppleId
     );
 
+  return verifier.verifyAndDecodeTransaction(
+    signedTransaction
+  );
+}
+
+/* =========================================================
+   PREMIUM SUBSCRIPTION VERIFICATION
+
+   Existing behaviour is preserved.
+========================================================= */
+
+export async function verifyAppleTransaction(
+  signedTransaction: string,
+  options: {
+    environment: Environment;
+    appAppleId?: number;
+  }
+): Promise<AppleVerifiedTransaction> {
   const decoded =
-    await verifier.verifyAndDecodeTransaction(
-      signedTransaction
+    await decodeAppleTransaction(
+      signedTransaction,
+      options
     );
 
-  return validateDecodedTransaction(
-    decoded
-  );
+  const common =
+    validateCommonTransaction(
+      decoded
+    );
+
+  if (
+    !PREMIUM_PRODUCTS.has(
+      common.productId
+    )
+  ) {
+    throw new Error(
+      "Unsupported Apple Premium product"
+    );
+  }
+
+  if (
+    decoded.type !==
+    Type.AUTO_RENEWABLE_SUBSCRIPTION
+  ) {
+    throw new Error(
+      "Apple Premium product is not an auto-renewable subscription"
+    );
+  }
+
+  const expiresDate =
+    requireTimestamp(
+      decoded.expiresDate,
+      "expiresDate"
+    );
+
+  const expiresAt =
+    new Date(expiresDate);
+
+  if (
+    Number.isNaN(
+      expiresAt.getTime()
+    )
+  ) {
+    throw new Error(
+      "Apple expiration date is invalid"
+    );
+  }
+
+  if (
+    expiresAt.getTime() <=
+    common.purchasedAt.getTime()
+  ) {
+    throw new Error(
+      "Apple subscription expiration is invalid"
+    );
+  }
+
+  if (
+    expiresAt.getTime() <=
+    Date.now()
+  ) {
+    throw new Error(
+      "Apple subscription has expired"
+    );
+  }
+
+  return {
+    ...common,
+    expiresAt,
+  };
+}
+
+/* =========================================================
+   PROGRAM PURCHASE VERIFICATION
+
+   Standalone IRONAGE programs are Apple NON_CONSUMABLE
+   products.
+
+   IMPORTANT:
+   Product ownership is NOT decided here.
+
+   The caller must compare transaction.productId with the
+   TrainingProgram.appleProductId stored in the database.
+========================================================= */
+
+export async function verifyAppleProgramTransaction(
+  signedTransaction: string,
+  options: {
+    environment: Environment;
+    appAppleId?: number;
+  }
+): Promise<AppleVerifiedTransaction> {
+  const decoded =
+    await decodeAppleTransaction(
+      signedTransaction,
+      options
+    );
+
+  const common =
+    validateCommonTransaction(
+      decoded
+    );
+
+  if (
+    decoded.type !==
+    Type.NON_CONSUMABLE
+  ) {
+    throw new Error(
+      "Apple program product is not a non-consumable purchase"
+    );
+  }
+
+  return {
+    ...common,
+    expiresAt: null,
+  };
 }

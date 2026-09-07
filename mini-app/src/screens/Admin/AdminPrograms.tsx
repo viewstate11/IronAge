@@ -37,6 +37,9 @@ type AdminProgram = {
   priceCents: number | null;
   currency: string;
 
+  appleProductId:
+    string | null;
+
   approvedAt: string | null;
   publishedAt: string | null;
   createdAt: string;
@@ -109,6 +112,11 @@ type Copy = {
   athletes: string;
   price: string;
 
+  appleProductId: string;
+  appleProductPlaceholder: string;
+  saveProduct: string;
+  savingProduct: string;
+
   approve: string;
   approving: string;
 
@@ -154,6 +162,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "ATHLETES",
     price: "PRICE",
 
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "SAVE",
+    savingProduct: "SAVING...",
+
     approve: "APPROVE",
     approving: "APPROVING...",
 
@@ -197,6 +210,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "ТРЕНУВАННЯ",
     athletes: "АТЛЕТИ",
     price: "ЦІНА",
+
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "ЗБЕРЕГТИ",
+    savingProduct: "ЗБЕРЕЖЕННЯ...",
 
     approve: "СХВАЛИТИ",
     approving: "СХВАЛЕННЯ...",
@@ -242,6 +260,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "АТЛЕТЫ",
     price: "ЦЕНА",
 
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "СОХРАНИТЬ",
+    savingProduct: "СОХРАНЕНИЕ...",
+
     approve: "ОДОБРИТЬ",
     approving: "ОДОБРЕНИЕ...",
 
@@ -285,6 +308,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "ENTRENAMIENTOS",
     athletes: "ATLETAS",
     price: "PRECIO",
+
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "GUARDAR",
+    savingProduct: "GUARDANDO...",
 
     approve: "APROBAR",
     approving: "APROBANDO...",
@@ -330,6 +358,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "ATHLÈTES",
     price: "PRIX",
 
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "ENREGISTRER",
+    savingProduct: "ENREGISTREMENT...",
+
     approve: "APPROUVER",
     approving: "APPROBATION...",
 
@@ -373,6 +406,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "WORKOUTS",
     athletes: "ATHLETEN",
     price: "PREIS",
+
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "SPEICHERN",
+    savingProduct: "SPEICHERN...",
 
     approve: "FREIGEBEN",
     approving: "FREIGABE...",
@@ -418,6 +456,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "ATLETAS",
     price: "PREÇO",
 
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "SALVAR",
+    savingProduct: "SALVANDO...",
+
     approve: "APROVAR",
     approving: "APROVANDO...",
 
@@ -461,6 +504,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "ТРЕНИРОВКИ",
     athletes: "АТЛЕТИ",
     price: "ЦЕНА",
+
+    appleProductId: "APPLE PRODUCT ID",
+    appleProductPlaceholder: "com.ironage.app.program...",
+    saveProduct: "ЗАПАЗИ",
+    savingProduct: "ЗАПАЗВАНЕ...",
 
     approve: "ОДОБРИ",
     approving: "ОДОБРЯВАНЕ...",
@@ -547,6 +595,20 @@ export default function AdminPrograms({
   );
 
   const [
+    productDrafts,
+    setProductDrafts,
+  ] = useState<
+    Record<number, string>
+  >({});
+
+  const [
+    savingProductId,
+    setSavingProductId,
+  ] = useState<number | null>(
+    null
+  );
+
+  const [
     action,
     setAction,
   ] = useState<{
@@ -570,12 +632,27 @@ export default function AdminPrograms({
           telegramAuthOptions()
         );
 
-      setPrograms(
+      const loadedPrograms =
         Array.isArray(
           response.programs
         )
           ? response.programs
-          : []
+          : [];
+
+      setPrograms(
+        loadedPrograms
+      );
+
+      setProductDrafts(
+        Object.fromEntries(
+          loadedPrograms.map(
+            program => [
+              program.id,
+              program.appleProductId ??
+                "",
+            ]
+          )
+        )
       );
     } catch (loadError) {
       console.error(
@@ -667,6 +744,81 @@ export default function AdminPrograms({
       );
     } finally {
       setAction(null);
+    }
+  }
+
+  async function saveAppleProductId(
+    programId: number
+  ) {
+    try {
+      setSavingProductId(
+        programId
+      );
+
+      setError(null);
+
+      const value =
+        (
+          productDrafts[
+            programId
+          ] ?? ""
+        ).trim();
+
+      const response =
+        await api.post<ProgramActionResponse>(
+          `/admin/programs/${programId}/store-product`,
+          {
+            appleProductId:
+              value.length > 0
+                ? value
+                : null,
+          },
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        !response.program
+      ) {
+        throw new Error(
+          "Failed to save Apple Product ID"
+        );
+      }
+
+      setPrograms(current =>
+        current.map(program =>
+          program.id === programId
+            ? response.program
+            : program
+        )
+      );
+
+      setProductDrafts(
+        current => ({
+          ...current,
+
+          [programId]:
+            response.program
+              .appleProductId ??
+            "",
+        })
+      );
+    } catch (saveError) {
+      console.error(
+        "IRONAGE ADMIN APPLE PRODUCT SAVE ERROR:",
+        saveError
+      );
+
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : copy.error
+      );
+    } finally {
+      setSavingProductId(
+        null
+      );
     }
   }
 
@@ -982,6 +1134,64 @@ export default function AdminPrograms({
                               program.currency
                             )}
                           </strong>
+                        </div>
+                      </section>
+
+
+                      <section className="admin-programs__store-product">
+                        <label
+                          htmlFor={`apple-product-${program.id}`}
+                        >
+                          {copy.appleProductId}
+                        </label>
+
+                        <div className="admin-programs__store-product-row">
+                          <input
+                            id={`apple-product-${program.id}`}
+                            type="text"
+                            value={
+                              productDrafts[
+                                program.id
+                              ] ?? ""
+                            }
+                            placeholder={
+                              copy.appleProductPlaceholder
+                            }
+                            autoComplete="off"
+                            spellCheck={false}
+                            disabled={
+                              savingProductId ===
+                              program.id
+                            }
+                            onChange={event =>
+                              setProductDrafts(
+                                current => ({
+                                  ...current,
+
+                                  [program.id]:
+                                    event.target.value,
+                                })
+                              )
+                            }
+                          />
+
+                          <button
+                            type="button"
+                            disabled={
+                              savingProductId ===
+                              program.id
+                            }
+                            onClick={() =>
+                              void saveAppleProductId(
+                                program.id
+                              )
+                            }
+                          >
+                            {savingProductId ===
+                            program.id
+                              ? copy.savingProduct
+                              : copy.saveProduct}
+                          </button>
                         </div>
                       </section>
 

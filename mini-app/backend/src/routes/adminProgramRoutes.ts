@@ -664,6 +664,156 @@ router.post(
 );
 
 /* =========================================================
+   STORE PRODUCT CONFIG
+
+   POST /api/admin/programs/:id/store-product
+
+   Admin-only configuration for the Apple App Store
+   NON_CONSUMABLE product attached to a training program.
+========================================================= */
+
+router.post(
+  "/:id/store-product",
+  async (req, res) => {
+    try {
+      const programId =
+        parsePositiveInt(
+          req.params.id,
+          "programId"
+        );
+
+      const rawAppleProductId =
+        req.body?.appleProductId;
+
+      let appleProductId:
+        string | null =
+          null;
+
+      if (
+        rawAppleProductId !== undefined &&
+        rawAppleProductId !== null
+      ) {
+        if (
+          typeof rawAppleProductId !==
+          "string"
+        ) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "appleProductId must be a string or null",
+          });
+        }
+
+        const normalized =
+          rawAppleProductId.trim();
+
+        if (normalized.length > 0) {
+          if (
+            !normalized.startsWith(
+              "com.ironage.app.program."
+            )
+          ) {
+            return res.status(400).json({
+              success: false,
+              message:
+                "Apple program product ID must start with com.ironage.app.program.",
+            });
+          }
+
+          if (
+            normalized.length > 255 ||
+            !/^[A-Za-z0-9._-]+$/.test(
+              normalized
+            )
+          ) {
+            return res.status(400).json({
+              success: false,
+              message:
+                "Apple program product ID format is invalid",
+            });
+          }
+
+          appleProductId =
+            normalized;
+        }
+      }
+
+      const existing =
+        await prisma.trainingProgram.findUnique({
+          where: {
+            id:
+              programId,
+          },
+
+          select: {
+            id: true,
+          },
+        });
+
+      if (!existing) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Program not found",
+        });
+      }
+
+      const program =
+        await prisma.trainingProgram.update({
+          where: {
+            id:
+              programId,
+          },
+
+          data: {
+            appleProductId,
+          },
+
+          include:
+            programInclude,
+        });
+
+      return res.json({
+        success: true,
+        program,
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE ADMIN PROGRAM STORE PRODUCT ERROR:",
+        error
+      );
+
+      const code =
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error
+          ? String(
+              (
+                error as {
+                  code?: unknown;
+                }
+              ).code
+            )
+          : null;
+
+      if (code === "P2002") {
+        return res.status(409).json({
+          success: false,
+          message:
+            "This Apple Product ID is already assigned to another program",
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Failed to save Apple Product ID",
+      });
+    }
+  }
+);
+
+/* =========================================================
    ARCHIVE
 
    POST /api/admin/programs/:id/archive

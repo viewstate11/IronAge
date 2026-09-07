@@ -413,6 +413,7 @@ export const ModelName = {
   WorkoutExercise: 'WorkoutExercise',
   TrainingProgram: 'TrainingProgram',
   ProgramWorkout: 'ProgramWorkout',
+  ProgramPurchase: 'ProgramPurchase',
   ProgramEntitlement: 'ProgramEntitlement',
   ProgramAssignment: 'ProgramAssignment',
   ProgramWorkoutCompletion: 'ProgramWorkoutCompletion',
@@ -433,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coachProfile" | "coachClient" | "authIdentity" | "emailVerificationToken" | "authSession" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programEntitlement" | "programAssignment" | "programWorkoutCompletion" | "coachInvite" | "subscription"
+    modelProps: "user" | "coachProfile" | "coachClient" | "authIdentity" | "emailVerificationToken" | "authSession" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programPurchase" | "programEntitlement" | "programAssignment" | "programWorkoutCompletion" | "coachInvite" | "subscription"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1621,6 +1622,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProgramPurchase: {
+      payload: Prisma.$ProgramPurchasePayload<ExtArgs>
+      fields: Prisma.ProgramPurchaseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgramPurchaseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgramPurchaseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>
+        }
+        findFirst: {
+          args: Prisma.ProgramPurchaseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgramPurchaseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>
+        }
+        findMany: {
+          args: Prisma.ProgramPurchaseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>[]
+        }
+        create: {
+          args: Prisma.ProgramPurchaseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>
+        }
+        createMany: {
+          args: Prisma.ProgramPurchaseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProgramPurchaseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>[]
+        }
+        delete: {
+          args: Prisma.ProgramPurchaseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>
+        }
+        update: {
+          args: Prisma.ProgramPurchaseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgramPurchaseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgramPurchaseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProgramPurchaseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>[]
+        }
+        upsert: {
+          args: Prisma.ProgramPurchaseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramPurchasePayload>
+        }
+        aggregate: {
+          args: Prisma.ProgramPurchaseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramPurchase>
+        }
+        groupBy: {
+          args: Prisma.ProgramPurchaseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramPurchaseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgramPurchaseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramPurchaseCountAggregateOutputType> | number
+        }
+      }
+    }
     ProgramEntitlement: {
       payload: Prisma.$ProgramEntitlementPayload<ExtArgs>
       fields: Prisma.ProgramEntitlementFieldRefs
@@ -2261,6 +2336,8 @@ export const TrainingProgramScalarFieldEnum = {
   isPublished: 'isPublished',
   priceCents: 'priceCents',
   currency: 'currency',
+  appleProductId: 'appleProductId',
+  googleProductId: 'googleProductId',
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
   publishedAt: 'publishedAt',
@@ -2283,6 +2360,26 @@ export const ProgramWorkoutScalarFieldEnum = {
 } as const
 
 export type ProgramWorkoutScalarFieldEnum = (typeof ProgramWorkoutScalarFieldEnum)[keyof typeof ProgramWorkoutScalarFieldEnum]
+
+
+export const ProgramPurchaseScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  userId: 'userId',
+  provider: 'provider',
+  platform: 'platform',
+  productId: 'productId',
+  transactionId: 'transactionId',
+  originalTransactionId: 'originalTransactionId',
+  amountCents: 'amountCents',
+  currency: 'currency',
+  purchasedAt: 'purchasedAt',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramPurchaseScalarFieldEnum = (typeof ProgramPurchaseScalarFieldEnum)[keyof typeof ProgramPurchaseScalarFieldEnum]
 
 
 export const ProgramEntitlementScalarFieldEnum = {
@@ -2730,6 +2827,7 @@ export type GlobalOmitConfig = {
   workoutExercise?: Prisma.WorkoutExerciseOmit
   trainingProgram?: Prisma.TrainingProgramOmit
   programWorkout?: Prisma.ProgramWorkoutOmit
+  programPurchase?: Prisma.ProgramPurchaseOmit
   programEntitlement?: Prisma.ProgramEntitlementOmit
   programAssignment?: Prisma.ProgramAssignmentOmit
   programWorkoutCompletion?: Prisma.ProgramWorkoutCompletionOmit

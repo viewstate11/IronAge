@@ -24,30 +24,75 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
         )
     ]
 
-    private let supportedProductIDs: Set<String> = [
+    private let premiumProductIDs: Set<String> = [
         "com.ironage.app.premium.monthly",
         "com.ironage.app.premium.yearly"
     ]
 
+    private let programProductPrefix =
+        "com.ironage.app.program."
+
+    private func isSupportedProductID(
+        _ productId: String
+    ) -> Bool {
+        if premiumProductIDs.contains(
+            productId
+        ) {
+            return true
+        }
+
+        return productId.hasPrefix(
+            programProductPrefix
+        )
+    }
+
     @objc func getProducts(
         _ call: CAPPluginCall
     ) {
+        let requestedProductIDs =
+            call.getArray(
+                "productIds",
+                String.self
+            ) ?? Array(
+                premiumProductIDs
+            )
+
+        let validProductIDs =
+            Set(
+                requestedProductIDs.filter {
+                    isSupportedProductID($0)
+                }
+            )
+
+        guard
+            !validProductIDs.isEmpty
+        else {
+            call.reject(
+                "No supported StoreKit products requested"
+            )
+            return
+        }
+
         Task {
             do {
                 let products =
                     try await Product.products(
-                        for: supportedProductIDs
+                        for: validProductIDs
                     )
 
                 let result: [
                     [String: Any]
                 ] = products.map { product in
                     [
-                        "id": product.id,
+                        "id":
+                            product.id,
+
                         "displayName":
                             product.displayName,
+
                         "description":
                             product.description,
+
                         "displayPrice":
                             product.displayPrice
                     ]
@@ -55,7 +100,8 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
 
                 await MainActor.run {
                     call.resolve([
-                        "products": result
+                        "products":
+                            result
                     ])
                 }
             } catch {
@@ -75,13 +121,15 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
     ) {
         guard
             let productId =
-                call.getString("productId"),
-            supportedProductIDs.contains(
+                call.getString(
+                    "productId"
+                ),
+            isSupportedProductID(
                 productId
             )
         else {
             call.reject(
-                "Unsupported Premium product"
+                "Unsupported StoreKit product"
             )
             return
         }
@@ -90,7 +138,9 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
             do {
                 let products =
                     try await Product.products(
-                        for: [productId]
+                        for: [
+                            productId
+                        ]
                     )
 
                 guard
@@ -99,7 +149,7 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
                 else {
                     await MainActor.run {
                         call.reject(
-                            "Premium product not found"
+                            "StoreKit product not found"
                         )
                     }
                     return
@@ -109,10 +159,13 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
                     try await product.purchase()
 
                 switch result {
+
                 case .success(
                     let verification
                 ):
+
                     switch verification {
+
                     case .verified(
                         let transaction
                     ):
@@ -120,21 +173,31 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
                             verification
                                 .jwsRepresentation
 
+                        /*
+                         * Backend verifies the signed
+                         * transaction again before
+                         * granting Premium or program
+                         * ownership.
+                         */
                         await transaction.finish()
 
                         await MainActor.run {
                             call.resolve([
                                 "productId":
-                                    transaction.productID,
+                                    transaction
+                                        .productID,
+
                                 "transactionId":
                                     String(
                                         transaction.id
                                     ),
+
                                 "originalTransactionId":
                                     String(
                                         transaction
                                             .originalID
                                     ),
+
                                 "signedTransaction":
                                     signedTransaction
                             ])
@@ -156,7 +219,8 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
                 case .pending:
                     await MainActor.run {
                         call.resolve([
-                            "status": "PENDING"
+                            "status":
+                                "PENDING"
                         ])
                     }
 

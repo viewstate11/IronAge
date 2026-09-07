@@ -544,3 +544,73 @@ button:disabled {
       repeat(2,1fr);
   }
 }
+
+
+/* APPLE PROGRAM PRODUCT CONFIG */
+
+.admin-programs__store-product {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 16px;
+  background: rgba(212, 175, 55, 0.04);
+}
+
+.admin-programs__store-product label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #d4af37;
+}
+
+.admin-programs__store-product-row {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-programs__store-product-row input {
+  min-width: 0;
+  flex: 1;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  outline: none;
+  background: #0a0a0a;
+  color: #ffffff;
+  font: inherit;
+}
+
+.admin-programs__store-product-row input:focus {
+  border-color: #d4af37;
+}
+
+.admin-programs__store-product-row button {
+  min-width: 92px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  background: #d4af37;
+  color: #050505;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-programs__store-product-row button:disabled,
+.admin-programs__store-product-row input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .admin-programs__store-product-row {
+    flex-direction: column;
+  }
+
+  .admin-programs__store-product-row button {
+    width: 100%;
+  }
+}

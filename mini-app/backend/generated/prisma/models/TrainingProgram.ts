@@ -52,6 +52,8 @@ export type TrainingProgramMinAggregateOutputType = {
   isPublished: boolean | null
   priceCents: number | null
   currency: string | null
+  appleProductId: string | null
+  googleProductId: string | null
   approvedBy: number | null
   approvedAt: Date | null
   publishedAt: Date | null
@@ -70,6 +72,8 @@ export type TrainingProgramMaxAggregateOutputType = {
   isPublished: boolean | null
   priceCents: number | null
   currency: string | null
+  appleProductId: string | null
+  googleProductId: string | null
   approvedBy: number | null
   approvedAt: Date | null
   publishedAt: Date | null
@@ -88,6 +92,8 @@ export type TrainingProgramCountAggregateOutputType = {
   isPublished: number
   priceCents: number
   currency: number
+  appleProductId: number
+  googleProductId: number
   approvedBy: number
   approvedAt: number
   publishedAt: number
@@ -124,6 +130,8 @@ export type TrainingProgramMinAggregateInputType = {
   isPublished?: true
   priceCents?: true
   currency?: true
+  appleProductId?: true
+  googleProductId?: true
   approvedBy?: true
   approvedAt?: true
   publishedAt?: true
@@ -142,6 +150,8 @@ export type TrainingProgramMaxAggregateInputType = {
   isPublished?: true
   priceCents?: true
   currency?: true
+  appleProductId?: true
+  googleProductId?: true
   approvedBy?: true
   approvedAt?: true
   publishedAt?: true
@@ -160,6 +170,8 @@ export type TrainingProgramCountAggregateInputType = {
   isPublished?: true
   priceCents?: true
   currency?: true
+  appleProductId?: true
+  googleProductId?: true
   approvedBy?: true
   approvedAt?: true
   publishedAt?: true
@@ -265,6 +277,8 @@ export type TrainingProgramGroupByOutputType = {
   isPublished: boolean
   priceCents: number | null
   currency: string
+  appleProductId: string | null
+  googleProductId: string | null
   approvedBy: number | null
   approvedAt: Date | null
   publishedAt: Date | null
@@ -306,6 +320,8 @@ export type TrainingProgramWhereInput = {
   isPublished?: Prisma.BoolFilter<"TrainingProgram"> | boolean
   priceCents?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
   currency?: Prisma.StringFilter<"TrainingProgram"> | string
+  appleProductId?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
+  googleProductId?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
   approvedBy?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
   approvedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
@@ -317,6 +333,7 @@ export type TrainingProgramWhereInput = {
   workouts?: Prisma.ProgramWorkoutListRelationFilter
   assignments?: Prisma.ProgramAssignmentListRelationFilter
   entitlements?: Prisma.ProgramEntitlementListRelationFilter
+  purchases?: Prisma.ProgramPurchaseListRelationFilter
 }
 
 export type TrainingProgramOrderByWithRelationInput = {
@@ -329,6 +346,8 @@ export type TrainingProgramOrderByWithRelationInput = {
   isPublished?: Prisma.SortOrder
   priceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrder
+  appleProductId?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleProductId?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -340,10 +359,13 @@ export type TrainingProgramOrderByWithRelationInput = {
   workouts?: Prisma.ProgramWorkoutOrderByRelationAggregateInput
   assignments?: Prisma.ProgramAssignmentOrderByRelationAggregateInput
   entitlements?: Prisma.ProgramEntitlementOrderByRelationAggregateInput
+  purchases?: Prisma.ProgramPurchaseOrderByRelationAggregateInput
 }
 
 export type TrainingProgramWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  appleProductId?: string
+  googleProductId?: string
   AND?: Prisma.TrainingProgramWhereInput | Prisma.TrainingProgramWhereInput[]
   OR?: Prisma.TrainingProgramWhereInput[]
   NOT?: Prisma.TrainingProgramWhereInput | Prisma.TrainingProgramWhereInput[]
@@ -366,7 +388,8 @@ export type TrainingProgramWhereUniqueInput = Prisma.AtLeast<{
   workouts?: Prisma.ProgramWorkoutListRelationFilter
   assignments?: Prisma.ProgramAssignmentListRelationFilter
   entitlements?: Prisma.ProgramEntitlementListRelationFilter
-}, "id">
+  purchases?: Prisma.ProgramPurchaseListRelationFilter
+}, "id" | "appleProductId" | "googleProductId">
 
 export type TrainingProgramOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -378,6 +401,8 @@ export type TrainingProgramOrderByWithAggregationInput = {
   isPublished?: Prisma.SortOrder
   priceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrder
+  appleProductId?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleProductId?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -404,6 +429,8 @@ export type TrainingProgramScalarWhereWithAggregatesInput = {
   isPublished?: Prisma.BoolWithAggregatesFilter<"TrainingProgram"> | boolean
   priceCents?: Prisma.IntNullableWithAggregatesFilter<"TrainingProgram"> | number | null
   currency?: Prisma.StringWithAggregatesFilter<"TrainingProgram"> | string
+  appleProductId?: Prisma.StringNullableWithAggregatesFilter<"TrainingProgram"> | string | null
+  googleProductId?: Prisma.StringNullableWithAggregatesFilter<"TrainingProgram"> | string | null
   approvedBy?: Prisma.IntNullableWithAggregatesFilter<"TrainingProgram"> | number | null
   approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TrainingProgram"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TrainingProgram"> | Date | string | null
@@ -420,6 +447,8 @@ export type TrainingProgramCreateInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -430,6 +459,7 @@ export type TrainingProgramCreateInput = {
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUncheckedCreateInput = {
@@ -442,6 +472,8 @@ export type TrainingProgramUncheckedCreateInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -451,6 +483,7 @@ export type TrainingProgramUncheckedCreateInput = {
   workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUpdateInput = {
@@ -461,6 +494,8 @@ export type TrainingProgramUpdateInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -471,6 +506,7 @@ export type TrainingProgramUpdateInput = {
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateInput = {
@@ -483,6 +519,8 @@ export type TrainingProgramUncheckedUpdateInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -492,6 +530,7 @@ export type TrainingProgramUncheckedUpdateInput = {
   workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramCreateManyInput = {
@@ -504,6 +543,8 @@ export type TrainingProgramCreateManyInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -520,6 +561,8 @@ export type TrainingProgramUpdateManyMutationInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -537,6 +580,8 @@ export type TrainingProgramUncheckedUpdateManyInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -565,6 +610,8 @@ export type TrainingProgramCountOrderByAggregateInput = {
   isPublished?: Prisma.SortOrder
   priceCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  appleProductId?: Prisma.SortOrder
+  googleProductId?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
@@ -591,6 +638,8 @@ export type TrainingProgramMaxOrderByAggregateInput = {
   isPublished?: Prisma.SortOrder
   priceCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  appleProductId?: Prisma.SortOrder
+  googleProductId?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
@@ -609,6 +658,8 @@ export type TrainingProgramMinOrderByAggregateInput = {
   isPublished?: Prisma.SortOrder
   priceCents?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  appleProductId?: Prisma.SortOrder
+  googleProductId?: Prisma.SortOrder
   approvedBy?: Prisma.SortOrder
   approvedAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
@@ -732,6 +783,20 @@ export type TrainingProgramUpdateOneRequiredWithoutWorkoutsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TrainingProgramUpdateToOneWithWhereWithoutWorkoutsInput, Prisma.TrainingProgramUpdateWithoutWorkoutsInput>, Prisma.TrainingProgramUncheckedUpdateWithoutWorkoutsInput>
 }
 
+export type TrainingProgramCreateNestedOneWithoutPurchasesInput = {
+  create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutPurchasesInput, Prisma.TrainingProgramUncheckedCreateWithoutPurchasesInput>
+  connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutPurchasesInput
+  connect?: Prisma.TrainingProgramWhereUniqueInput
+}
+
+export type TrainingProgramUpdateOneRequiredWithoutPurchasesNestedInput = {
+  create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutPurchasesInput, Prisma.TrainingProgramUncheckedCreateWithoutPurchasesInput>
+  connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutPurchasesInput
+  upsert?: Prisma.TrainingProgramUpsertWithoutPurchasesInput
+  connect?: Prisma.TrainingProgramWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TrainingProgramUpdateToOneWithWhereWithoutPurchasesInput, Prisma.TrainingProgramUpdateWithoutPurchasesInput>, Prisma.TrainingProgramUncheckedUpdateWithoutPurchasesInput>
+}
+
 export type TrainingProgramCreateNestedOneWithoutEntitlementsInput = {
   create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutEntitlementsInput, Prisma.TrainingProgramUncheckedCreateWithoutEntitlementsInput>
   connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutEntitlementsInput
@@ -768,6 +833,8 @@ export type TrainingProgramCreateWithoutCoachInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -777,6 +844,7 @@ export type TrainingProgramCreateWithoutCoachInput = {
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUncheckedCreateWithoutCoachInput = {
@@ -788,6 +856,8 @@ export type TrainingProgramUncheckedCreateWithoutCoachInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -797,6 +867,7 @@ export type TrainingProgramUncheckedCreateWithoutCoachInput = {
   workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramCreateOrConnectWithoutCoachInput = {
@@ -817,6 +888,8 @@ export type TrainingProgramCreateWithoutApprovedByUserInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -826,6 +899,7 @@ export type TrainingProgramCreateWithoutApprovedByUserInput = {
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUncheckedCreateWithoutApprovedByUserInput = {
@@ -838,6 +912,8 @@ export type TrainingProgramUncheckedCreateWithoutApprovedByUserInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -846,6 +922,7 @@ export type TrainingProgramUncheckedCreateWithoutApprovedByUserInput = {
   workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramCreateOrConnectWithoutApprovedByUserInput = {
@@ -887,6 +964,8 @@ export type TrainingProgramScalarWhereInput = {
   isPublished?: Prisma.BoolFilter<"TrainingProgram"> | boolean
   priceCents?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
   currency?: Prisma.StringFilter<"TrainingProgram"> | string
+  appleProductId?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
+  googleProductId?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
   approvedBy?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
   approvedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
@@ -919,6 +998,8 @@ export type TrainingProgramCreateWithoutWorkoutsInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -928,6 +1009,7 @@ export type TrainingProgramCreateWithoutWorkoutsInput = {
   approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUncheckedCreateWithoutWorkoutsInput = {
@@ -940,6 +1022,8 @@ export type TrainingProgramUncheckedCreateWithoutWorkoutsInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -948,6 +1032,7 @@ export type TrainingProgramUncheckedCreateWithoutWorkoutsInput = {
   updatedAt?: Date | string
   assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramCreateOrConnectWithoutWorkoutsInput = {
@@ -974,6 +1059,8 @@ export type TrainingProgramUpdateWithoutWorkoutsInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -983,6 +1070,7 @@ export type TrainingProgramUpdateWithoutWorkoutsInput = {
   approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateWithoutWorkoutsInput = {
@@ -995,12 +1083,121 @@ export type TrainingProgramUncheckedUpdateWithoutWorkoutsInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
+  entitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutProgramNestedInput
+}
+
+export type TrainingProgramCreateWithoutPurchasesInput = {
+  name: string
+  description?: string | null
+  durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  coach: Prisma.UserCreateNestedOneWithoutTrainingProgramsInput
+  approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
+  workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
+  assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
+  entitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutProgramInput
+}
+
+export type TrainingProgramUncheckedCreateWithoutPurchasesInput = {
+  id?: number
+  coachId: number
+  name: string
+  description?: string | null
+  durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
+  assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
+  entitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutProgramInput
+}
+
+export type TrainingProgramCreateOrConnectWithoutPurchasesInput = {
+  where: Prisma.TrainingProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.TrainingProgramCreateWithoutPurchasesInput, Prisma.TrainingProgramUncheckedCreateWithoutPurchasesInput>
+}
+
+export type TrainingProgramUpsertWithoutPurchasesInput = {
+  update: Prisma.XOR<Prisma.TrainingProgramUpdateWithoutPurchasesInput, Prisma.TrainingProgramUncheckedUpdateWithoutPurchasesInput>
+  create: Prisma.XOR<Prisma.TrainingProgramCreateWithoutPurchasesInput, Prisma.TrainingProgramUncheckedCreateWithoutPurchasesInput>
+  where?: Prisma.TrainingProgramWhereInput
+}
+
+export type TrainingProgramUpdateToOneWithWhereWithoutPurchasesInput = {
+  where?: Prisma.TrainingProgramWhereInput
+  data: Prisma.XOR<Prisma.TrainingProgramUpdateWithoutPurchasesInput, Prisma.TrainingProgramUncheckedUpdateWithoutPurchasesInput>
+}
+
+export type TrainingProgramUpdateWithoutPurchasesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coach?: Prisma.UserUpdateOneRequiredWithoutTrainingProgramsNestedInput
+  approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
+  workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
+  assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
+  entitlements?: Prisma.ProgramEntitlementUpdateManyWithoutProgramNestedInput
+}
+
+export type TrainingProgramUncheckedUpdateWithoutPurchasesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  coachId?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutProgramNestedInput
 }
@@ -1013,6 +1210,8 @@ export type TrainingProgramCreateWithoutEntitlementsInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -1022,6 +1221,7 @@ export type TrainingProgramCreateWithoutEntitlementsInput = {
   approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUncheckedCreateWithoutEntitlementsInput = {
@@ -1034,6 +1234,8 @@ export type TrainingProgramUncheckedCreateWithoutEntitlementsInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -1042,6 +1244,7 @@ export type TrainingProgramUncheckedCreateWithoutEntitlementsInput = {
   updatedAt?: Date | string
   workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramCreateOrConnectWithoutEntitlementsInput = {
@@ -1068,6 +1271,8 @@ export type TrainingProgramUpdateWithoutEntitlementsInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1077,6 +1282,7 @@ export type TrainingProgramUpdateWithoutEntitlementsInput = {
   approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateWithoutEntitlementsInput = {
@@ -1089,6 +1295,8 @@ export type TrainingProgramUncheckedUpdateWithoutEntitlementsInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1097,6 +1305,7 @@ export type TrainingProgramUncheckedUpdateWithoutEntitlementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramCreateWithoutAssignmentsInput = {
@@ -1107,6 +1316,8 @@ export type TrainingProgramCreateWithoutAssignmentsInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -1116,6 +1327,7 @@ export type TrainingProgramCreateWithoutAssignmentsInput = {
   approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramUncheckedCreateWithoutAssignmentsInput = {
@@ -1128,6 +1340,8 @@ export type TrainingProgramUncheckedCreateWithoutAssignmentsInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -1136,6 +1350,7 @@ export type TrainingProgramUncheckedCreateWithoutAssignmentsInput = {
   updatedAt?: Date | string
   workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
   entitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutProgramInput
+  purchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutProgramInput
 }
 
 export type TrainingProgramCreateOrConnectWithoutAssignmentsInput = {
@@ -1162,6 +1377,8 @@ export type TrainingProgramUpdateWithoutAssignmentsInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1171,6 +1388,7 @@ export type TrainingProgramUpdateWithoutAssignmentsInput = {
   approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateWithoutAssignmentsInput = {
@@ -1183,6 +1401,8 @@ export type TrainingProgramUncheckedUpdateWithoutAssignmentsInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1191,6 +1411,7 @@ export type TrainingProgramUncheckedUpdateWithoutAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramCreateManyCoachInput = {
@@ -1202,6 +1423,8 @@ export type TrainingProgramCreateManyCoachInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedBy?: number | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
@@ -1220,6 +1443,8 @@ export type TrainingProgramCreateManyApprovedByUserInput = {
   isPublished?: boolean
   priceCents?: number | null
   currency?: string
+  appleProductId?: string | null
+  googleProductId?: string | null
   approvedAt?: Date | string | null
   publishedAt?: Date | string | null
   isActive?: boolean
@@ -1235,6 +1460,8 @@ export type TrainingProgramUpdateWithoutCoachInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1244,6 +1471,7 @@ export type TrainingProgramUpdateWithoutCoachInput = {
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateWithoutCoachInput = {
@@ -1255,6 +1483,8 @@ export type TrainingProgramUncheckedUpdateWithoutCoachInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1264,6 +1494,7 @@ export type TrainingProgramUncheckedUpdateWithoutCoachInput = {
   workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateManyWithoutCoachInput = {
@@ -1275,6 +1506,8 @@ export type TrainingProgramUncheckedUpdateManyWithoutCoachInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1291,6 +1524,8 @@ export type TrainingProgramUpdateWithoutApprovedByUserInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1300,6 +1535,7 @@ export type TrainingProgramUpdateWithoutApprovedByUserInput = {
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateWithoutApprovedByUserInput = {
@@ -1312,6 +1548,8 @@ export type TrainingProgramUncheckedUpdateWithoutApprovedByUserInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1320,6 +1558,7 @@ export type TrainingProgramUncheckedUpdateWithoutApprovedByUserInput = {
   workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
   entitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutProgramNestedInput
+  purchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutProgramNestedInput
 }
 
 export type TrainingProgramUncheckedUpdateManyWithoutApprovedByUserInput = {
@@ -1332,6 +1571,8 @@ export type TrainingProgramUncheckedUpdateManyWithoutApprovedByUserInput = {
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  appleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleProductId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1348,12 +1589,14 @@ export type TrainingProgramCountOutputType = {
   workouts: number
   assignments: number
   entitlements: number
+  purchases: number
 }
 
 export type TrainingProgramCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workouts?: boolean | TrainingProgramCountOutputTypeCountWorkoutsArgs
   assignments?: boolean | TrainingProgramCountOutputTypeCountAssignmentsArgs
   entitlements?: boolean | TrainingProgramCountOutputTypeCountEntitlementsArgs
+  purchases?: boolean | TrainingProgramCountOutputTypeCountPurchasesArgs
 }
 
 /**
@@ -1387,6 +1630,13 @@ export type TrainingProgramCountOutputTypeCountEntitlementsArgs<ExtArgs extends 
   where?: Prisma.ProgramEntitlementWhereInput
 }
 
+/**
+ * TrainingProgramCountOutputType without action
+ */
+export type TrainingProgramCountOutputTypeCountPurchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgramPurchaseWhereInput
+}
+
 
 export type TrainingProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1398,6 +1648,8 @@ export type TrainingProgramSelect<ExtArgs extends runtime.Types.Extensions.Inter
   isPublished?: boolean
   priceCents?: boolean
   currency?: boolean
+  appleProductId?: boolean
+  googleProductId?: boolean
   approvedBy?: boolean
   approvedAt?: boolean
   publishedAt?: boolean
@@ -1409,6 +1661,7 @@ export type TrainingProgramSelect<ExtArgs extends runtime.Types.Extensions.Inter
   workouts?: boolean | Prisma.TrainingProgram$workoutsArgs<ExtArgs>
   assignments?: boolean | Prisma.TrainingProgram$assignmentsArgs<ExtArgs>
   entitlements?: boolean | Prisma.TrainingProgram$entitlementsArgs<ExtArgs>
+  purchases?: boolean | Prisma.TrainingProgram$purchasesArgs<ExtArgs>
   _count?: boolean | Prisma.TrainingProgramCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["trainingProgram"]>
 
@@ -1422,6 +1675,8 @@ export type TrainingProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   isPublished?: boolean
   priceCents?: boolean
   currency?: boolean
+  appleProductId?: boolean
+  googleProductId?: boolean
   approvedBy?: boolean
   approvedAt?: boolean
   publishedAt?: boolean
@@ -1442,6 +1697,8 @@ export type TrainingProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   isPublished?: boolean
   priceCents?: boolean
   currency?: boolean
+  appleProductId?: boolean
+  googleProductId?: boolean
   approvedBy?: boolean
   approvedAt?: boolean
   publishedAt?: boolean
@@ -1462,6 +1719,8 @@ export type TrainingProgramSelectScalar = {
   isPublished?: boolean
   priceCents?: boolean
   currency?: boolean
+  appleProductId?: boolean
+  googleProductId?: boolean
   approvedBy?: boolean
   approvedAt?: boolean
   publishedAt?: boolean
@@ -1470,13 +1729,14 @@ export type TrainingProgramSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TrainingProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "coachId" | "name" | "description" | "durationWeeks" | "status" | "isPublished" | "priceCents" | "currency" | "approvedBy" | "approvedAt" | "publishedAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["trainingProgram"]>
+export type TrainingProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "coachId" | "name" | "description" | "durationWeeks" | "status" | "isPublished" | "priceCents" | "currency" | "appleProductId" | "googleProductId" | "approvedBy" | "approvedAt" | "publishedAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["trainingProgram"]>
 export type TrainingProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
   workouts?: boolean | Prisma.TrainingProgram$workoutsArgs<ExtArgs>
   assignments?: boolean | Prisma.TrainingProgram$assignmentsArgs<ExtArgs>
   entitlements?: boolean | Prisma.TrainingProgram$entitlementsArgs<ExtArgs>
+  purchases?: boolean | Prisma.TrainingProgram$purchasesArgs<ExtArgs>
   _count?: boolean | Prisma.TrainingProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TrainingProgramIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1496,6 +1756,7 @@ export type $TrainingProgramPayload<ExtArgs extends runtime.Types.Extensions.Int
     workouts: Prisma.$ProgramWorkoutPayload<ExtArgs>[]
     assignments: Prisma.$ProgramAssignmentPayload<ExtArgs>[]
     entitlements: Prisma.$ProgramEntitlementPayload<ExtArgs>[]
+    purchases: Prisma.$ProgramPurchasePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1507,6 +1768,8 @@ export type $TrainingProgramPayload<ExtArgs extends runtime.Types.Extensions.Int
     isPublished: boolean
     priceCents: number | null
     currency: string
+    appleProductId: string | null
+    googleProductId: string | null
     approvedBy: number | null
     approvedAt: Date | null
     publishedAt: Date | null
@@ -1912,6 +2175,7 @@ export interface Prisma__TrainingProgramClient<T, Null = never, ExtArgs extends 
   workouts<T extends Prisma.TrainingProgram$workoutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$workoutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramWorkoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignments<T extends Prisma.TrainingProgram$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   entitlements<T extends Prisma.TrainingProgram$entitlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$entitlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramEntitlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  purchases<T extends Prisma.TrainingProgram$purchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1950,6 +2214,8 @@ export interface TrainingProgramFieldRefs {
   readonly isPublished: Prisma.FieldRef<"TrainingProgram", 'Boolean'>
   readonly priceCents: Prisma.FieldRef<"TrainingProgram", 'Int'>
   readonly currency: Prisma.FieldRef<"TrainingProgram", 'String'>
+  readonly appleProductId: Prisma.FieldRef<"TrainingProgram", 'String'>
+  readonly googleProductId: Prisma.FieldRef<"TrainingProgram", 'String'>
   readonly approvedBy: Prisma.FieldRef<"TrainingProgram", 'Int'>
   readonly approvedAt: Prisma.FieldRef<"TrainingProgram", 'DateTime'>
   readonly publishedAt: Prisma.FieldRef<"TrainingProgram", 'DateTime'>
@@ -2445,6 +2711,30 @@ export type TrainingProgram$entitlementsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.ProgramEntitlementScalarFieldEnum | Prisma.ProgramEntitlementScalarFieldEnum[]
+}
+
+/**
+ * TrainingProgram.purchases
+ */
+export type TrainingProgram$purchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProgramPurchase
+   */
+  select?: Prisma.ProgramPurchaseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProgramPurchase
+   */
+  omit?: Prisma.ProgramPurchaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProgramPurchaseInclude<ExtArgs> | null
+  where?: Prisma.ProgramPurchaseWhereInput
+  orderBy?: Prisma.ProgramPurchaseOrderByWithRelationInput | Prisma.ProgramPurchaseOrderByWithRelationInput[]
+  cursor?: Prisma.ProgramPurchaseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProgramPurchaseScalarFieldEnum | Prisma.ProgramPurchaseScalarFieldEnum[]
 }
 
 /**

@@ -30,7 +30,9 @@ export type StoreKitPurchaseResponse =
     };
 
 type IronAgeStoreKitPlugin = {
-  getProducts(): Promise<
+  getProducts(options?: {
+    productIds?: string[];
+  }): Promise<
     StoreKitProductsResponse
   >;
 

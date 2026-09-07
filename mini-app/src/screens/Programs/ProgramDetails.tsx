@@ -3,9 +3,17 @@ import {
   useState,
 } from "react";
 
+import {
+  Capacitor,
+} from "@capacitor/core";
+
 import api, {
   telegramAuthOptions,
 } from "../../api/client";
+
+import {
+  IronAgeStoreKit,
+} from "../../native/ironAgeStoreKit";
 
 import "./ProgramDetails.css";
 
@@ -24,6 +32,9 @@ type ProgramData = {
 
   currency:
     string;
+
+  appleProductId:
+    string | null;
 
   coach: {
     id: number;
@@ -61,6 +72,24 @@ type ClaimResponse = {
   entitlement: {
     id: number;
     source: "FREE_CLAIM";
+  };
+};
+
+type PurchaseResponse = {
+  success: boolean;
+  hasAccess: boolean;
+  assignmentId: number;
+
+  purchase: {
+    id: number;
+    provider: "APPLE";
+    productId: string;
+    transactionId: string;
+  };
+
+  entitlement: {
+    id: number;
+    source: "PURCHASE";
   };
 };
 
@@ -148,6 +177,22 @@ export default function ProgramDetails({
     null
   );
 
+  const [
+    purchasing,
+    setPurchasing,
+  ] = useState(false);
+
+  const [
+    purchaseError,
+    setPurchaseError,
+  ] = useState<string | null>(
+    null
+  );
+
+  const isNativeIOS =
+    Capacitor.isNativePlatform() &&
+    Capacitor.getPlatform() === "ios";
+
   async function loadProgram() {
     try {
       setLoading(true);
@@ -230,6 +275,106 @@ export default function ProgramDetails({
       );
     } finally {
       setClaiming(false);
+    }
+  }
+
+  async function purchaseAppleProgram() {
+    if (
+      purchasing ||
+      hasAccess ||
+      !program ||
+      program.priceCents === null ||
+      program.priceCents <= 0
+    ) {
+      return;
+    }
+
+    if (!isNativeIOS) {
+      setPurchaseError(
+        "Program purchase is available in the IRONAGE iOS app."
+      );
+      return;
+    }
+
+    if (!program.appleProductId) {
+      setPurchaseError(
+        "This program is not configured for App Store purchase yet."
+      );
+      return;
+    }
+
+    try {
+      setPurchasing(true);
+      setPurchaseError(null);
+
+      const purchase =
+        await IronAgeStoreKit.purchase({
+          productId:
+            program.appleProductId,
+        });
+
+      if (
+        purchase.status ===
+        "CANCELLED"
+      ) {
+        setPurchaseError(
+          "Purchase cancelled."
+        );
+        return;
+      }
+
+      if (
+        purchase.status ===
+        "PENDING"
+      ) {
+        setPurchaseError(
+          "Purchase is pending Apple approval."
+        );
+        return;
+      }
+
+      if (
+        !purchase.signedTransaction
+      ) {
+        throw new Error(
+          "Apple signed transaction is missing"
+        );
+      }
+
+      const response =
+        await api.post<PurchaseResponse>(
+          `/programs/${program.id}/purchase/apple`,
+          {
+            signedTransaction:
+              purchase.signedTransaction,
+          },
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        response.hasAccess !== true
+      ) {
+        throw new Error(
+          "Program purchase verification failed"
+        );
+      }
+
+      setHasAccess(true);
+    } catch (err) {
+      console.error(
+        "IRONAGE APPLE PROGRAM PURCHASE UI ERROR:",
+        err
+      );
+
+      setPurchaseError(
+        err instanceof Error
+          ? err.message
+          : "Program purchase failed"
+      );
+    } finally {
+      setPurchasing(false);
     }
   }
 
@@ -460,7 +605,11 @@ export default function ProgramDetails({
                 ? "Get this program free and start training."
                 : program.priceCents === null
                   ? "Program access is not available yet."
-                  : "Secure purchase access will be connected in the payment module."}
+                  : !program.appleProductId
+                    ? "App Store purchase is not configured for this program yet."
+                    : isNativeIOS
+                      ? "Purchase securely through the App Store and unlock this program."
+                      : "Purchase this program in the IRONAGE iOS app."}
           </p>
 
           {claimError && (
@@ -472,13 +621,32 @@ export default function ProgramDetails({
             </p>
           )}
 
+          {purchaseError && (
+            <p
+              role="alert"
+              className="program-detail__access-error"
+            >
+              {purchaseError}
+            </p>
+          )}
+
           <button
             type="button"
             disabled={
               claiming ||
+              purchasing ||
               (
                 !hasAccess &&
-                program.priceCents !== 0
+                program.priceCents === null
+              ) ||
+              (
+                !hasAccess &&
+                program.priceCents !== null &&
+                program.priceCents > 0 &&
+                (
+                  !isNativeIOS ||
+                  !program.appleProductId
+                )
               )
             }
             onClick={() => {
@@ -490,20 +658,36 @@ export default function ProgramDetails({
                 return;
               }
 
-              if (program.priceCents === 0) {
+              if (
+                program.priceCents === 0
+              ) {
                 void claimFreeProgram();
+                return;
+              }
+
+              if (
+                program.priceCents !== null &&
+                program.priceCents > 0
+              ) {
+                void purchaseAppleProgram();
               }
             }}
           >
             {claiming
               ? "GETTING PROGRAM..."
-              : hasAccess
-                ? "OPEN MY PROGRAM"
-                : program.priceCents === 0
-                  ? "GET PROGRAM"
-                  : program.priceCents === null
-                    ? "COMING SOON"
-                    : "PURCHASE COMING SOON"}
+              : purchasing
+                ? "PROCESSING PURCHASE..."
+                : hasAccess
+                  ? "OPEN MY PROGRAM"
+                  : program.priceCents === 0
+                    ? "GET PROGRAM"
+                    : program.priceCents === null
+                      ? "COMING SOON"
+                      : !program.appleProductId
+                        ? "PURCHASE COMING SOON"
+                        : isNativeIOS
+                          ? "PURCHASE"
+                          : "AVAILABLE IN IOS APP"}
           </button>
         </section>
 

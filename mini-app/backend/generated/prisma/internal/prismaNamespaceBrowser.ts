@@ -67,6 +67,7 @@ export const ModelName = {
   WorkoutExercise: 'WorkoutExercise',
   TrainingProgram: 'TrainingProgram',
   ProgramWorkout: 'ProgramWorkout',
+  ProgramPurchase: 'ProgramPurchase',
   ProgramEntitlement: 'ProgramEntitlement',
   ProgramAssignment: 'ProgramAssignment',
   ProgramWorkoutCompletion: 'ProgramWorkoutCompletion',
@@ -321,6 +322,8 @@ export const TrainingProgramScalarFieldEnum = {
   isPublished: 'isPublished',
   priceCents: 'priceCents',
   currency: 'currency',
+  appleProductId: 'appleProductId',
+  googleProductId: 'googleProductId',
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
   publishedAt: 'publishedAt',
@@ -343,6 +346,26 @@ export const ProgramWorkoutScalarFieldEnum = {
 } as const
 
 export type ProgramWorkoutScalarFieldEnum = (typeof ProgramWorkoutScalarFieldEnum)[keyof typeof ProgramWorkoutScalarFieldEnum]
+
+
+export const ProgramPurchaseScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  userId: 'userId',
+  provider: 'provider',
+  platform: 'platform',
+  productId: 'productId',
+  transactionId: 'transactionId',
+  originalTransactionId: 'originalTransactionId',
+  amountCents: 'amountCents',
+  currency: 'currency',
+  purchasedAt: 'purchasedAt',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramPurchaseScalarFieldEnum = (typeof ProgramPurchaseScalarFieldEnum)[keyof typeof ProgramPurchaseScalarFieldEnum]
 
 
 export const ProgramEntitlementScalarFieldEnum = {

@@ -42,6 +42,7 @@ model User {
   assignedPrograms        ProgramAssignment[]      @relation("ProgramAssignedBy")
   subscriptions           Subscription[]
   programEntitlements     ProgramEntitlement[]
+  programPurchases        ProgramPurchase[]
   authIdentities          AuthIdentity[]
   authSessions            AuthSession[]
   emailVerificationTokens EmailVerificationToken[]
@@ -335,6 +336,9 @@ model TrainingProgram {
   priceCents Int?
   currency   String @default("EUR")
 
+  appleProductId  String? @unique
+  googleProductId String? @unique
+
   approvedBy  Int?
   approvedAt  DateTime?
   publishedAt DateTime?
@@ -350,6 +354,7 @@ model TrainingProgram {
   workouts     ProgramWorkout[]
   assignments  ProgramAssignment[]
   entitlements ProgramEntitlement[]
+  purchases    ProgramPurchase[]
 
   @@index([coachId])
   @@index([approvedBy])
@@ -374,6 +379,39 @@ model ProgramWorkout {
   @@unique([programId, position])
   @@index([programId])
   @@index([workoutId])
+}
+
+model ProgramPurchase {
+  id        Int @id @default(autoincrement())
+  programId Int
+  userId    Int
+
+  provider String
+  platform String
+
+  productId     String
+  transactionId String @unique
+
+  originalTransactionId String?
+
+  amountCents Int?
+  currency    String?
+
+  purchasedAt DateTime
+  verifiedAt  DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  program TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([programId])
+  @@index([userId])
+  @@index([provider])
+  @@index([platform])
+  @@index([productId])
+  @@index([purchasedAt])
 }
 
 model ProgramEntitlement {
