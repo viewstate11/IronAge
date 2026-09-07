@@ -112,6 +112,11 @@ type Copy = {
   athletes: string;
   price: string;
 
+  priceInput: string;
+  currencyInput: string;
+  savePrice: string;
+  savingPrice: string;
+
   appleProductId: string;
   appleProductPlaceholder: string;
   saveProduct: string;
@@ -162,6 +167,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "ATHLETES",
     price: "PRICE",
 
+    priceInput: "PROGRAM PRICE",
+    currencyInput: "CURRENCY",
+    savePrice: "SAVE PRICE",
+    savingPrice: "SAVING...",
+
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
     saveProduct: "SAVE",
@@ -210,6 +220,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "ТРЕНУВАННЯ",
     athletes: "АТЛЕТИ",
     price: "ЦІНА",
+
+    priceInput: "ЦІНА ПРОГРАМИ",
+    currencyInput: "ВАЛЮТА",
+    savePrice: "ЗБЕРЕГТИ ЦІНУ",
+    savingPrice: "ЗБЕРЕЖЕННЯ...",
 
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
@@ -260,6 +275,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "АТЛЕТЫ",
     price: "ЦЕНА",
 
+    priceInput: "ЦЕНА ПРОГРАММЫ",
+    currencyInput: "ВАЛЮТА",
+    savePrice: "СОХРАНИТЬ ЦЕНУ",
+    savingPrice: "СОХРАНЕНИЕ...",
+
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
     saveProduct: "СОХРАНИТЬ",
@@ -308,6 +328,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "ENTRENAMIENTOS",
     athletes: "ATLETAS",
     price: "PRECIO",
+
+    priceInput: "PRECIO DEL PROGRAMA",
+    currencyInput: "MONEDA",
+    savePrice: "GUARDAR PRECIO",
+    savingPrice: "GUARDANDO...",
 
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
@@ -358,6 +383,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "ATHLÈTES",
     price: "PRIX",
 
+    priceInput: "PRIX DU PROGRAMME",
+    currencyInput: "DEVISE",
+    savePrice: "ENREGISTRER LE PRIX",
+    savingPrice: "ENREGISTREMENT...",
+
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
     saveProduct: "ENREGISTRER",
@@ -406,6 +436,11 @@ const COPY: Record<AppLanguage, Copy> = {
     workouts: "WORKOUTS",
     athletes: "ATHLETEN",
     price: "PREIS",
+
+    priceInput: "PROGRAMMPREIS",
+    currencyInput: "WÄHRUNG",
+    savePrice: "PREIS SPEICHERN",
+    savingPrice: "SPEICHERN...",
 
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
@@ -456,6 +491,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "ATLETAS",
     price: "PREÇO",
 
+    priceInput: "PREÇO DO PROGRAMA",
+    currencyInput: "MOEDA",
+    savePrice: "SALVAR PREÇO",
+    savingPrice: "SALVANDO...",
+
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
     saveProduct: "SALVAR",
@@ -505,6 +545,11 @@ const COPY: Record<AppLanguage, Copy> = {
     athletes: "АТЛЕТИ",
     price: "ЦЕНА",
 
+    priceInput: "ЦЕНА НА ПРОГРАМАТА",
+    currencyInput: "ВАЛУТА",
+    savePrice: "ЗАПАЗИ ЦЕНАТА",
+    savingPrice: "ЗАПАЗВАНЕ...",
+
     appleProductId: "APPLE PRODUCT ID",
     appleProductPlaceholder: "com.ironage.app.program...",
     saveProduct: "ЗАПАЗИ",
@@ -533,10 +578,11 @@ function formatPrice(
   priceCents: number | null,
   currency: string
 ): string {
-  if (
-    priceCents === null ||
-    priceCents <= 0
-  ) {
+  if (priceCents === null) {
+    return "PRICE TBA";
+  }
+
+  if (priceCents === 0) {
     return "FREE";
   }
 
@@ -595,6 +641,27 @@ export default function AdminPrograms({
   );
 
   const [
+    priceDrafts,
+    setPriceDrafts,
+  ] = useState<
+    Record<number, string>
+  >({});
+
+  const [
+    currencyDrafts,
+    setCurrencyDrafts,
+  ] = useState<
+    Record<number, string>
+  >({});
+
+  const [
+    savingPriceId,
+    setSavingPriceId,
+  ] = useState<number | null>(
+    null
+  );
+
+  const [
     productDrafts,
     setProductDrafts,
   ] = useState<
@@ -641,6 +708,34 @@ export default function AdminPrograms({
 
       setPrograms(
         loadedPrograms
+      );
+
+      setPriceDrafts(
+        Object.fromEntries(
+          loadedPrograms.map(
+            program => [
+              program.id,
+              program.priceCents ===
+              null
+                ? ""
+                : (
+                    program.priceCents /
+                    100
+                  ).toFixed(2),
+            ]
+          )
+        )
+      );
+
+      setCurrencyDrafts(
+        Object.fromEntries(
+          loadedPrograms.map(
+            program => [
+              program.id,
+              program.currency,
+            ]
+          )
+        )
       );
 
       setProductDrafts(
@@ -744,6 +839,166 @@ export default function AdminPrograms({
       );
     } finally {
       setAction(null);
+    }
+  }
+
+  async function saveProgramPrice(
+    programId: number
+  ) {
+    try {
+      setSavingPriceId(
+        programId
+      );
+
+      setError(null);
+
+      const rawPrice =
+        (
+          priceDrafts[
+            programId
+          ] ?? ""
+        ).trim();
+
+      const currency =
+        (
+          currencyDrafts[
+            programId
+          ] ?? "EUR"
+        )
+          .trim()
+          .toUpperCase();
+
+      let priceCents:
+        number | null =
+          null;
+
+      if (rawPrice.length > 0) {
+        if (
+          !/^\d+(?:[.,]\d{1,2})?$/.test(
+            rawPrice
+          )
+        ) {
+          throw new Error(
+            "Price must use a valid amount, for example 9.99"
+          );
+        }
+
+        const normalized =
+          rawPrice.replace(
+            ",",
+            "."
+          );
+
+        const [
+          whole,
+          fraction = "",
+        ] = normalized.split(
+          "."
+        );
+
+        const cents =
+          Number(whole) * 100 +
+          Number(
+            fraction.padEnd(
+              2,
+              "0"
+            )
+          );
+
+        if (
+          !Number.isSafeInteger(
+            cents
+          ) ||
+          cents < 0
+        ) {
+          throw new Error(
+            "Invalid program price"
+          );
+        }
+
+        priceCents =
+          cents;
+      }
+
+      if (
+        !/^[A-Z]{3}$/.test(
+          currency
+        )
+      ) {
+        throw new Error(
+          "Currency must be a 3-letter code, for example EUR"
+        );
+      }
+
+      const response =
+        await api.post<ProgramActionResponse>(
+          `/admin/programs/${programId}/price`,
+          {
+            priceCents,
+            currency,
+          },
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        !response.program
+      ) {
+        throw new Error(
+          "Failed to save program price"
+        );
+      }
+
+      setPrograms(current =>
+        current.map(program =>
+          program.id === programId
+            ? response.program
+            : program
+        )
+      );
+
+      setPriceDrafts(
+        current => ({
+          ...current,
+
+          [programId]:
+            response.program
+              .priceCents ===
+            null
+              ? ""
+              : (
+                  response.program
+                    .priceCents /
+                  100
+                ).toFixed(2),
+        })
+      );
+
+      setCurrencyDrafts(
+        current => ({
+          ...current,
+
+          [programId]:
+            response.program
+              .currency,
+        })
+      );
+    } catch (saveError) {
+      console.error(
+        "IRONAGE ADMIN PROGRAM PRICE SAVE ERROR:",
+        saveError
+      );
+
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : copy.error
+      );
+    } finally {
+      setSavingPriceId(
+        null
+      );
     }
   }
 
@@ -1135,6 +1390,97 @@ export default function AdminPrograms({
                             )}
                           </strong>
                         </div>
+                      </section>
+
+
+                      <section className="admin-programs__price-config">
+                        <label>
+                          {copy.priceInput}
+                        </label>
+
+                        <div className="admin-programs__price-config-row">
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            value={
+                              priceDrafts[
+                                program.id
+                              ] ?? ""
+                            }
+                            placeholder="9.99"
+                            disabled={
+                              savingPriceId ===
+                              program.id
+                            }
+                            onChange={event =>
+                              setPriceDrafts(
+                                current => ({
+                                  ...current,
+
+                                  [program.id]:
+                                    event.target.value,
+                                })
+                              )
+                            }
+                          />
+
+                          <input
+                            type="text"
+                            value={
+                              currencyDrafts[
+                                program.id
+                              ] ??
+                              program.currency
+                            }
+                            maxLength={3}
+                            placeholder="EUR"
+                            aria-label={
+                              copy.currencyInput
+                            }
+                            disabled={
+                              savingPriceId ===
+                              program.id
+                            }
+                            onChange={event =>
+                              setCurrencyDrafts(
+                                current => ({
+                                  ...current,
+
+                                  [program.id]:
+                                    event.target.value
+                                      .toUpperCase(),
+                                })
+                              )
+                            }
+                          />
+
+                          <button
+                            type="button"
+                            disabled={
+                              savingPriceId ===
+                              program.id
+                            }
+                            onClick={() =>
+                              void saveProgramPrice(
+                                program.id
+                              )
+                            }
+                          >
+                            {savingPriceId ===
+                            program.id
+                              ? copy.savingPrice
+                              : copy.savePrice}
+                          </button>
+                        </div>
+
+                        <small>
+                          {copy.currencyInput}: {
+                            currencyDrafts[
+                              program.id
+                            ] ??
+                            program.currency
+                          }
+                        </small>
                       </section>
 
 

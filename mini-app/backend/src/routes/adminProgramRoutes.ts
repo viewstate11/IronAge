@@ -664,6 +664,146 @@ router.post(
 );
 
 /* =========================================================
+   PRICE CONFIG
+
+   POST /api/admin/programs/:id/price
+
+   priceCents semantics:
+   - null = price not configured / TBA
+   - 0 = FREE
+   - > 0 = paid program
+========================================================= */
+
+router.post(
+  "/:id/price",
+  async (req, res) => {
+    try {
+      const programId =
+        parsePositiveInt(
+          req.params.id,
+          "programId"
+        );
+
+      const rawPriceCents =
+        req.body?.priceCents;
+
+      const rawCurrency =
+        req.body?.currency;
+
+      let priceCents:
+        number | null =
+          null;
+
+      if (
+        rawPriceCents !== null &&
+        rawPriceCents !== undefined
+      ) {
+        const parsed =
+          Number(
+            rawPriceCents
+          );
+
+        if (
+          !Number.isSafeInteger(
+            parsed
+          ) ||
+          parsed < 0
+        ) {
+          return res.status(400).json({
+            success: false,
+            message:
+              "priceCents must be a non-negative integer or null",
+          });
+        }
+
+        priceCents =
+          parsed;
+      }
+
+      if (
+        typeof rawCurrency !==
+        "string"
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "currency is required",
+        });
+      }
+
+      const currency =
+        rawCurrency
+          .trim()
+          .toUpperCase();
+
+      if (
+        !/^[A-Z]{3}$/.test(
+          currency
+        )
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "currency must be a 3-letter ISO currency code",
+        });
+      }
+
+      const existing =
+        await prisma.trainingProgram.findUnique({
+          where: {
+            id:
+              programId,
+          },
+
+          select: {
+            id: true,
+          },
+        });
+
+      if (!existing) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Program not found",
+        });
+      }
+
+      const program =
+        await prisma.trainingProgram.update({
+          where: {
+            id:
+              programId,
+          },
+
+          data: {
+            priceCents,
+            currency,
+          },
+
+          include:
+            programInclude,
+        });
+
+      return res.json({
+        success: true,
+        program,
+      });
+    } catch (error) {
+      console.error(
+        "IRONAGE ADMIN PROGRAM PRICE ERROR:",
+        error
+      );
+
+      return res.status(400).json({
+        success: false,
+        message:
+          "Failed to save program price",
+      });
+    }
+  }
+);
+
+/* =========================================================
    STORE PRODUCT CONFIG
 
    POST /api/admin/programs/:id/store-product

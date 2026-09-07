@@ -614,3 +614,81 @@ button:disabled {
     width: 100%;
   }
 }
+
+
+/* PROGRAM PRICE CONFIG */
+
+.admin-programs__price-config {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.admin-programs__price-config > label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #d4af37;
+}
+
+.admin-programs__price-config-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 80px auto;
+  gap: 10px;
+}
+
+.admin-programs__price-config-row input {
+  min-width: 0;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  outline: none;
+  background: #0a0a0a;
+  color: #ffffff;
+  font: inherit;
+}
+
+.admin-programs__price-config-row input:focus {
+  border-color: #d4af37;
+}
+
+.admin-programs__price-config-row button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  background: #d4af37;
+  color: #050505;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-programs__price-config small {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.admin-programs__price-config-row button:disabled,
+.admin-programs__price-config-row input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 620px) {
+  .admin-programs__price-config-row {
+    grid-template-columns: 1fr 74px;
+  }
+
+  .admin-programs__price-config-row button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
