@@ -74,7 +74,7 @@ type ProgramAssignment = {
   startDate: string | null;
   endDate: string | null;
   isActive: boolean;
-  coach: Coach;
+  coach: Coach | null;
   program: TrainingProgram;
 };
 
@@ -282,28 +282,40 @@ export default function MyProgram({
           assignment && (
             <>
               <section className="my-program-coach">
-                <span>YOUR COACH</span>
+                <span>
+                  {assignment.coach
+                    ? "YOUR COACH"
+                    : "PROGRAM ACCESS"}
+                </span>
 
                 <h2>
                   {assignment.coach
-                    .coachProfile
-                    ?.displayName ||
-                    [
-                      assignment.coach
-                        .firstName,
-                      assignment.coach
-                        .lastName,
-                    ]
-                      .filter(Boolean)
-                      .join(" ") ||
-                    "IRONAGE COACH"}
+                    ? (
+                        assignment.coach
+                          .coachProfile
+                          ?.displayName ||
+                        [
+                          assignment.coach
+                            .firstName,
+                          assignment.coach
+                            .lastName,
+                        ]
+                          .filter(Boolean)
+                          .join(" ") ||
+                        "IRONAGE COACH"
+                      )
+                    : "IRONAGE PROGRAM"}
                 </h2>
 
                 <p>
                   {assignment.coach
-                    .coachProfile
-                    ?.specialization ||
-                    "PERSONAL COACHING"}
+                    ? (
+                        assignment.coach
+                          .coachProfile
+                          ?.specialization ||
+                        "PERSONAL COACHING"
+                      )
+                    : "SELF-SERVICE TRAINING PROGRAM"}
                 </p>
               </section>
 

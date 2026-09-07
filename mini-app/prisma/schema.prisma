@@ -404,7 +404,7 @@ model ProgramAssignment {
   id         Int       @id @default(autoincrement())
   programId  Int
   clientId   Int
-  assignedBy Int
+  assignedBy Int?
   startDate  DateTime?
   endDate    DateTime?
   isActive   Boolean   @default(true)
@@ -413,7 +413,7 @@ model ProgramAssignment {
 
   program     TrainingProgram            @relation(fields: [programId], references: [id], onDelete: Cascade)
   client      User                       @relation("ProgramClient", fields: [clientId], references: [id], onDelete: Cascade)
-  coach       User                       @relation("ProgramAssignedBy", fields: [assignedBy], references: [id], onDelete: Cascade)
+  coach       User?                      @relation("ProgramAssignedBy", fields: [assignedBy], references: [id], onDelete: SetNull)
   completions ProgramWorkoutCompletion[]
 
   @@index([programId])

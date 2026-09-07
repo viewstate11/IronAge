@@ -1113,10 +1113,12 @@ export type UserUpdateOneRequiredWithoutProgramAssignmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProgramAssignmentsInput, Prisma.UserUpdateWithoutProgramAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutProgramAssignmentsInput>
 }
 
-export type UserUpdateOneRequiredWithoutAssignedProgramsNestedInput = {
+export type UserUpdateOneWithoutAssignedProgramsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedProgramsInput, Prisma.UserUncheckedCreateWithoutAssignedProgramsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedProgramsInput
   upsert?: Prisma.UserUpsertWithoutAssignedProgramsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedProgramsInput, Prisma.UserUpdateWithoutAssignedProgramsInput>, Prisma.UserUncheckedUpdateWithoutAssignedProgramsInput>
 }
