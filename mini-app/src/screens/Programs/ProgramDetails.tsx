@@ -9,54 +9,6 @@ import api, {
 
 import "./ProgramDetails.css";
 
-type Exercise = {
-  id: number;
-  name: string;
-};
-
-type WorkoutExercise = {
-  id: number;
-  position: number;
-
-  sets: number | null;
-  repetitions: number | null;
-
-  minRepetitions:
-    number | null;
-
-  maxRepetitions:
-    number | null;
-
-  duration:
-    number | null;
-
-  restSeconds:
-    number | null;
-
-  coachNotes:
-    string | null;
-
-  exercise: Exercise;
-};
-
-type ProgramWorkout = {
-  id: number;
-  week: number | null;
-  day: number | null;
-  position: number;
-
-  workout: {
-    id: number;
-    name: string;
-    description: string | null;
-    duration: number | null;
-    difficulty: string | null;
-
-    exercises:
-      WorkoutExercise[];
-  };
-};
-
 type ProgramData = {
   id: number;
   coachId: number;
@@ -86,10 +38,11 @@ type ProgramData = {
     } | null;
   };
 
-  workouts:
-    ProgramWorkout[];
 
   _count: {
+    workouts:
+      number;
+
     assignments:
       number;
   };
@@ -98,6 +51,7 @@ type ProgramData = {
 type Response = {
   success: boolean;
   program: ProgramData;
+  hasAccess: boolean;
 };
 
 type Props = {
@@ -161,6 +115,11 @@ export default function ProgramDetails({
     null
   );
 
+  const [
+    hasAccess,
+    setHasAccess,
+  ] = useState(false);
+
   async function loadProgram() {
     try {
       setLoading(true);
@@ -180,6 +139,12 @@ export default function ProgramDetails({
 
       setProgram(
         response.program
+      );
+
+      setHasAccess(
+        Boolean(
+          response.hasAccess
+        )
       );
     } catch (err) {
       setError(
@@ -361,8 +326,8 @@ export default function ProgramDetails({
             <strong>
               {
                 program
+                  ._count
                   .workouts
-                  .length
               }
             </strong>
 
@@ -387,89 +352,19 @@ export default function ProgramDetails({
         </section>
 
 
-        <section className="program-detail__workouts">
-          <div className="program-detail__section-title">
-            PROGRAM WORKOUTS
-          </div>
+        <section className="program-detail__access">
+          <span>
+            PROGRAM CONTENT
+          </span>
 
-          {program.workouts.map(
-            (
-              item,
-              index
-            ) => (
-              <article
-                key={
-                  item.id
-                }
-                className="program-detail__workout"
-              >
-                <div className="program-detail__workout-top">
-                  <span>
-                    {String(
-                      index + 1
-                    ).padStart(
-                      2,
-                      "0"
-                    )}
-                  </span>
+          <h2>
+            FULL TRAINING PLAN PROTECTED
+          </h2>
 
-                  <div>
-                    <h3>
-                      {
-                        item
-                          .workout
-                          .name
-                      }
-                    </h3>
-
-                    <p>
-                      {item.week
-                        ? `WEEK ${item.week}`
-                        : ""}
-                      {item.week &&
-                      item.day
-                        ? " • "
-                        : ""}
-                      {item.day
-                        ? `DAY ${item.day}`
-                        : ""}
-                    </p>
-                  </div>
-                </div>
-
-                {item.workout
-                  .exercises.map(
-                    (
-                      exercise
-                    ) => (
-                      <div
-                        key={
-                          exercise.id
-                        }
-                        className="program-detail__exercise"
-                      >
-                        <strong>
-                          {
-                            exercise
-                              .exercise
-                              .name
-                          }
-                        </strong>
-
-                        <span>
-                          {exercise.sets
-                            ? `${exercise.sets} SETS`
-                            : ""}
-                          {exercise.repetitions
-                            ? ` • ${exercise.repetitions} REPS`
-                            : ""}
-                        </span>
-                      </div>
-                    )
-                  )}
-              </article>
-            )
-          )}
+          <p>
+            Exercises, sets, repetitions and coach instructions
+            become available only after program access is granted.
+          </p>
         </section>
 
 
@@ -483,16 +378,18 @@ export default function ProgramDetails({
           </h2>
 
           <p>
-            Purchase and subscription
-            access will be connected
-            in the next IRONAGE module.
+            {hasAccess
+              ? "This program is already active in your IRONAGE account."
+              : "Purchase and subscription access will be connected in the next IRONAGE module."}
           </p>
 
           <button
             type="button"
             disabled
           >
-            GET PROGRAM
+            {hasAccess
+              ? "PROGRAM ACTIVE"
+              : "GET PROGRAM"}
           </button>
         </section>
 

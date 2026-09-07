@@ -4,6 +4,7 @@ import { prisma } from "../prisma.js";
 
 import {
   requireAppAuth,
+  type AppAuthenticatedRequest,
 } from "../middleware/appAuthMiddleware.js";
 
 const router = Router();
@@ -159,6 +160,11 @@ router.get(
   requireAppAuth,
   async (req, res) => {
     try {
+      const currentUserId =
+        (
+          req as AppAuthenticatedRequest
+        ).appUserId;
+
       const programId =
         parsePositiveInt(
           req.params.id,
@@ -231,67 +237,11 @@ router.get(
               },
             },
 
-            workouts: {
-              select: {
-                id: true,
-                week: true,
-                day: true,
-                position: true,
-
-                workout: {
-                  select: {
-                    id: true,
-                    name: true,
-                    description: true,
-                    duration: true,
-                    difficulty: true,
-
-                    exercises: {
-                      select: {
-                        id: true,
-                        position: true,
-
-                        sets: true,
-                        repetitions: true,
-                        minRepetitions:
-                          true,
-                        maxRepetitions:
-                          true,
-
-                        duration:
-                          true,
-
-                        restSeconds:
-                          true,
-
-                        coachNotes:
-                          true,
-
-                        exercise: {
-                          select: {
-                            id: true,
-                            name: true,
-                          },
-                        },
-                      },
-
-                      orderBy: {
-                        position:
-                          "asc",
-                      },
-                    },
-                  },
-                },
-              },
-
-              orderBy: {
-                position:
-                  "asc",
-              },
-            },
-
             _count: {
               select: {
+                workouts:
+                  true,
+
                 assignments:
                   true,
               },
@@ -307,9 +257,26 @@ router.get(
         });
       }
 
+      const assignment =
+        await prisma.programAssignment.findFirst({
+          where: {
+            programId,
+            clientId:
+              currentUserId,
+            isActive:
+              true,
+          },
+
+          select: {
+            id: true,
+          },
+        });
+
       return res.json({
         success: true,
         program,
+        hasAccess:
+          Boolean(assignment),
       });
     } catch (error) {
       console.error(
