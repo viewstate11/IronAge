@@ -54,6 +54,16 @@ type Response = {
   hasAccess: boolean;
 };
 
+type ClaimResponse = {
+  success: boolean;
+  hasAccess: boolean;
+  assignmentId: number;
+  entitlement: {
+    id: number;
+    source: "FREE_CLAIM";
+  };
+};
+
 type Props = {
   programId: number;
   onBack: () => void;
@@ -71,10 +81,11 @@ function formatPrice(
   priceCents: number | null,
   currency: string
 ): string {
-  if (
-    priceCents === null ||
-    priceCents <= 0
-  ) {
+  if (priceCents === null) {
+    return "PRICE TBA";
+  }
+
+  if (priceCents === 0) {
     return "FREE";
   }
 
@@ -125,6 +136,18 @@ export default function ProgramDetails({
     setHasAccess,
   ] = useState(false);
 
+  const [
+    claiming,
+    setClaiming,
+  ] = useState(false);
+
+  const [
+    claimError,
+    setClaimError,
+  ] = useState<string | null>(
+    null
+  );
+
   async function loadProgram() {
     try {
       setLoading(true);
@@ -159,6 +182,54 @@ export default function ProgramDetails({
       );
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function claimFreeProgram() {
+    if (
+      claiming ||
+      hasAccess ||
+      !program ||
+      program.priceCents !== 0
+    ) {
+      return;
+    }
+
+    try {
+      setClaiming(true);
+      setClaimError(null);
+
+      const response =
+        await api.post<ClaimResponse>(
+          `/programs/${program.id}/claim`,
+          {},
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        response.hasAccess !== true
+      ) {
+        throw new Error(
+          "Program claim failed"
+        );
+      }
+
+      setHasAccess(true);
+    } catch (err) {
+      console.error(
+        "IRONAGE FREE PROGRAM CLAIM UI ERROR:",
+        err
+      );
+
+      setClaimError(
+        err instanceof Error
+          ? err.message
+          : "Failed to get program"
+      );
+    } finally {
+      setClaiming(false);
     }
   }
 
@@ -384,24 +455,55 @@ export default function ProgramDetails({
 
           <p>
             {hasAccess
-              ? "This program is already active in your IRONAGE account."
-              : "Purchase and subscription access will be connected in the next IRONAGE module."}
+              ? "This program is available in your IRONAGE account."
+              : program.priceCents === 0
+                ? "Get this program free and start training."
+                : program.priceCents === null
+                  ? "Program access is not available yet."
+                  : "Secure purchase access will be connected in the payment module."}
           </p>
+
+          {claimError && (
+            <p
+              role="alert"
+              className="program-detail__access-error"
+            >
+              {claimError}
+            </p>
+          )}
 
           <button
             type="button"
-            disabled={!hasAccess}
+            disabled={
+              claiming ||
+              (
+                !hasAccess &&
+                program.priceCents !== 0
+              )
+            }
             onClick={() => {
               if (hasAccess) {
                 onOpenMyProgram(
                   program.id
                 );
+
+                return;
+              }
+
+              if (program.priceCents === 0) {
+                void claimFreeProgram();
               }
             }}
           >
-            {hasAccess
-              ? "OPEN MY PROGRAM"
-              : "GET PROGRAM"}
+            {claiming
+              ? "GETTING PROGRAM..."
+              : hasAccess
+                ? "OPEN MY PROGRAM"
+                : program.priceCents === 0
+                  ? "GET PROGRAM"
+                  : program.priceCents === null
+                    ? "COMING SOON"
+                    : "PURCHASE COMING SOON"}
           </button>
         </section>
 
