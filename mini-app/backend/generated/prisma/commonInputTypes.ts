@@ -385,6 +385,23 @@ export type EnumProgramStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumProgramStatusFilter<$PrismaModel>
 }
 
+export type EnumProgramEntitlementSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramEntitlementSource | Prisma.EnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramEntitlementSourceFilter<$PrismaModel> | $Enums.ProgramEntitlementSource
+}
+
+export type EnumProgramEntitlementSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramEntitlementSource | Prisma.EnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramEntitlementSourceWithAggregatesFilter<$PrismaModel> | $Enums.ProgramEntitlementSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProgramEntitlementSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProgramEntitlementSourceFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -745,6 +762,23 @@ export type NestedEnumProgramStatusWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumProgramStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumProgramStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumProgramEntitlementSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramEntitlementSource | Prisma.EnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramEntitlementSourceFilter<$PrismaModel> | $Enums.ProgramEntitlementSource
+}
+
+export type NestedEnumProgramEntitlementSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProgramEntitlementSource | Prisma.EnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProgramEntitlementSource[] | Prisma.ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProgramEntitlementSourceWithAggregatesFilter<$PrismaModel> | $Enums.ProgramEntitlementSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProgramEntitlementSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProgramEntitlementSourceFilter<$PrismaModel>
 }
 
 

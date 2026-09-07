@@ -9,6 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const ProgramEntitlementSource = {
+  COACH_ASSIGNMENT: 'COACH_ASSIGNMENT',
+  FREE_CLAIM: 'FREE_CLAIM',
+  PURCHASE: 'PURCHASE',
+  SUBSCRIPTION: 'SUBSCRIPTION',
+  ADMIN_GRANT: 'ADMIN_GRANT'
+} as const
+
+export type ProgramEntitlementSource = (typeof ProgramEntitlementSource)[keyof typeof ProgramEntitlementSource]
+
+
 export const ProgramStatus = {
   DRAFT: 'DRAFT',
   REVIEW: 'REVIEW',

@@ -41,6 +41,7 @@ model User {
   programAssignments      ProgramAssignment[]      @relation("ProgramClient")
   assignedPrograms        ProgramAssignment[]      @relation("ProgramAssignedBy")
   subscriptions           Subscription[]
+  programEntitlements     ProgramEntitlement[]
   authIdentities          AuthIdentity[]
   authSessions            AuthSession[]
   emailVerificationTokens EmailVerificationToken[]
@@ -78,6 +79,14 @@ model CoachClient {
   @@unique([coachId, clientId])
   @@unique([clientId])
   @@index([coachId])
+}
+
+enum ProgramEntitlementSource {
+  COACH_ASSIGNMENT
+  FREE_CLAIM
+  PURCHASE
+  SUBSCRIPTION
+  ADMIN_GRANT
 }
 
 enum ProgramStatus {
@@ -338,8 +347,9 @@ model TrainingProgram {
   coach          User  @relation("TrainingProgramCoach", fields: [coachId], references: [id], onDelete: Cascade)
   approvedByUser User? @relation("TrainingProgramApprovedBy", fields: [approvedBy], references: [id], onDelete: SetNull)
 
-  workouts    ProgramWorkout[]
-  assignments ProgramAssignment[]
+  workouts     ProgramWorkout[]
+  assignments  ProgramAssignment[]
+  entitlements ProgramEntitlement[]
 
   @@index([coachId])
   @@index([approvedBy])
@@ -364,6 +374,30 @@ model ProgramWorkout {
   @@unique([programId, position])
   @@index([programId])
   @@index([workoutId])
+}
+
+model ProgramEntitlement {
+  id        Int                      @id @default(autoincrement())
+  programId Int
+  userId    Int
+  source    ProgramEntitlementSource
+
+  isActive  Boolean   @default(true)
+  startsAt  DateTime  @default(now())
+  expiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  program TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([programId])
+  @@index([userId])
+  @@index([source])
+  @@index([isActive])
+  @@index([userId, programId, isActive])
+  @@index([expiresAt])
 }
 
 model ProgramAssignment {

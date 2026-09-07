@@ -714,40 +714,76 @@ router.post(
         });
       }
 
-      await prisma.programAssignment.updateMany({
-        where: {
-          clientId,
-          isActive: true,
-        },
-        data: {
-          isActive: false,
-        },
-      });
-
       const assignment =
-        await prisma.programAssignment.create({
-          data: {
-            programId,
-            clientId,
-            assignedBy:
-              coachId,
-            startDate:
-              new Date(),
-            isActive:
-              true,
-          },
-          include: {
-            program:
-              true,
-            client: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
+        await prisma.$transaction(
+          async (tx) => {
+            await tx.programAssignment.updateMany({
+              where: {
+                clientId,
+                isActive: true,
               },
-            },
-          },
-        });
+              data: {
+                isActive: false,
+              },
+            });
+
+            await tx.programEntitlement.updateMany({
+              where: {
+                userId:
+                  clientId,
+                source:
+                  "COACH_ASSIGNMENT",
+                isActive:
+                  true,
+              },
+              data: {
+                isActive:
+                  false,
+              },
+            });
+
+            const newAssignment =
+              await tx.programAssignment.create({
+                data: {
+                  programId,
+                  clientId,
+                  assignedBy:
+                    coachId,
+                  startDate:
+                    new Date(),
+                  isActive:
+                    true,
+                },
+                include: {
+                  program:
+                    true,
+                  client: {
+                    select: {
+                      id: true,
+                      firstName: true,
+                      lastName: true,
+                    },
+                  },
+                },
+              });
+
+            await tx.programEntitlement.create({
+              data: {
+                programId,
+                userId:
+                  clientId,
+                source:
+                  "COACH_ASSIGNMENT",
+                isActive:
+                  true,
+                startsAt:
+                  new Date(),
+              },
+            });
+
+            return newAssignment;
+          }
+        );
 
       return res.status(201).json({
         success: true,

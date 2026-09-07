@@ -98,6 +98,11 @@ export type TrainingProgram = Prisma.TrainingProgramModel
  */
 export type ProgramWorkout = Prisma.ProgramWorkoutModel
 /**
+ * Model ProgramEntitlement
+ * 
+ */
+export type ProgramEntitlement = Prisma.ProgramEntitlementModel
+/**
  * Model ProgramAssignment
  * 
  */

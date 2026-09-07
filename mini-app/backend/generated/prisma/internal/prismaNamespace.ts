@@ -413,6 +413,7 @@ export const ModelName = {
   WorkoutExercise: 'WorkoutExercise',
   TrainingProgram: 'TrainingProgram',
   ProgramWorkout: 'ProgramWorkout',
+  ProgramEntitlement: 'ProgramEntitlement',
   ProgramAssignment: 'ProgramAssignment',
   ProgramWorkoutCompletion: 'ProgramWorkoutCompletion',
   CoachInvite: 'CoachInvite',
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coachProfile" | "coachClient" | "authIdentity" | "emailVerificationToken" | "authSession" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programAssignment" | "programWorkoutCompletion" | "coachInvite" | "subscription"
+    modelProps: "user" | "coachProfile" | "coachClient" | "authIdentity" | "emailVerificationToken" | "authSession" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programEntitlement" | "programAssignment" | "programWorkoutCompletion" | "coachInvite" | "subscription"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1620,6 +1621,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProgramEntitlement: {
+      payload: Prisma.$ProgramEntitlementPayload<ExtArgs>
+      fields: Prisma.ProgramEntitlementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgramEntitlementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgramEntitlementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>
+        }
+        findFirst: {
+          args: Prisma.ProgramEntitlementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgramEntitlementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>
+        }
+        findMany: {
+          args: Prisma.ProgramEntitlementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>[]
+        }
+        create: {
+          args: Prisma.ProgramEntitlementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>
+        }
+        createMany: {
+          args: Prisma.ProgramEntitlementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProgramEntitlementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>[]
+        }
+        delete: {
+          args: Prisma.ProgramEntitlementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>
+        }
+        update: {
+          args: Prisma.ProgramEntitlementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgramEntitlementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgramEntitlementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProgramEntitlementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProgramEntitlementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgramEntitlementPayload>
+        }
+        aggregate: {
+          args: Prisma.ProgramEntitlementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgramEntitlement>
+        }
+        groupBy: {
+          args: Prisma.ProgramEntitlementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramEntitlementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgramEntitlementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgramEntitlementCountAggregateOutputType> | number
+        }
+      }
+    }
     ProgramAssignment: {
       payload: Prisma.$ProgramAssignmentPayload<ExtArgs>
       fields: Prisma.ProgramAssignmentFieldRefs
@@ -2210,6 +2285,21 @@ export const ProgramWorkoutScalarFieldEnum = {
 export type ProgramWorkoutScalarFieldEnum = (typeof ProgramWorkoutScalarFieldEnum)[keyof typeof ProgramWorkoutScalarFieldEnum]
 
 
+export const ProgramEntitlementScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  userId: 'userId',
+  source: 'source',
+  isActive: 'isActive',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProgramEntitlementScalarFieldEnum = (typeof ProgramEntitlementScalarFieldEnum)[keyof typeof ProgramEntitlementScalarFieldEnum]
+
+
 export const ProgramAssignmentScalarFieldEnum = {
   id: 'id',
   programId: 'programId',
@@ -2459,6 +2549,20 @@ export type EnumProgramStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 export type ListEnumProgramStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'ProgramEntitlementSource'
+ */
+export type EnumProgramEntitlementSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramEntitlementSource'>
+    
+
+
+/**
+ * Reference to a field of type 'ProgramEntitlementSource[]'
+ */
+export type ListEnumProgramEntitlementSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramEntitlementSource[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2626,6 +2730,7 @@ export type GlobalOmitConfig = {
   workoutExercise?: Prisma.WorkoutExerciseOmit
   trainingProgram?: Prisma.TrainingProgramOmit
   programWorkout?: Prisma.ProgramWorkoutOmit
+  programEntitlement?: Prisma.ProgramEntitlementOmit
   programAssignment?: Prisma.ProgramAssignmentOmit
   programWorkoutCompletion?: Prisma.ProgramWorkoutCompletionOmit
   coachInvite?: Prisma.CoachInviteOmit
