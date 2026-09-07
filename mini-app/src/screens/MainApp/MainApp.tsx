@@ -22,6 +22,8 @@ import CoachProfile from "../Coach/CoachProfile";
 import MyProgram from "../Client/MyProgram";
 import MyCoach from "../Client/MyCoach";
 import AdminCoaches from "../Admin/AdminCoaches";
+import Programs from "../Programs/Programs";
+import ProgramDetails from "../Programs/ProgramDetails";
 
 import type { Tab } from "../../navigation/tabs";
 
@@ -48,6 +50,8 @@ type AppScreen =
   | "my-program"
   | "admin-coaches"
   | "profile-feature"
+  | "programs"
+  | "program-details"
   | "session"
   | "complete";
 
@@ -80,6 +84,14 @@ export default function MainApp() {
   const [
     selectedCoachId,
     setSelectedCoachId,
+  ] = useState<number | null>(
+    null
+  );
+
+
+  const [
+    selectedProgramId,
+    setSelectedProgramId,
   ] = useState<number | null>(
     null
   );
@@ -666,9 +678,8 @@ export default function MainApp() {
             }}
 
             onOpenPrograms={() => {
-              openProfileFeature(
-                "PROGRAMS",
-                "Explore IRONAGE training programs from verified coaches."
+              setScreen(
+                "programs"
               );
             }}
 
@@ -752,6 +763,61 @@ export default function MainApp() {
           />
 
         )}
+
+        {screen === "programs" && (
+
+          <Programs
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
+            }}
+
+            onOpenProgram={(
+              programId
+            ) => {
+              setSelectedProgramId(
+                programId
+              );
+
+              setScreen(
+                "program-details"
+              );
+            }}
+          />
+
+        )}
+
+
+        {screen === "program-details" &&
+          selectedProgramId !== null && (
+
+          <ProgramDetails
+            programId={
+              selectedProgramId
+            }
+
+            onBack={() => {
+              setScreen(
+                "programs"
+              );
+            }}
+
+            onOpenCoach={(
+              coachId
+            ) => {
+              setSelectedCoachId(
+                coachId
+              );
+
+              setScreen(
+                "coach-profile"
+              );
+            }}
+          />
+
+        )}
+
 
         {screen === "profile-feature" && (
 
