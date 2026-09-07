@@ -22,6 +22,7 @@ import CoachProfile from "../Coach/CoachProfile";
 import MyProgram from "../Client/MyProgram";
 import MyCoach from "../Client/MyCoach";
 import AdminCoaches from "../Admin/AdminCoaches";
+import AdminPrograms from "../Admin/AdminPrograms";
 import Programs from "../Programs/Programs";
 import ProgramDetails from "../Programs/ProgramDetails";
 
@@ -49,6 +50,7 @@ type AppScreen =
   | "my-coach"
   | "my-program"
   | "admin-coaches"
+  | "admin-programs"
   | "profile-feature"
   | "programs"
   | "program-details"
@@ -741,9 +743,8 @@ export default function MainApp() {
             }}
 
             onOpenProgramManagement={() => {
-              openProfileFeature(
-                "PROGRAM MANAGEMENT",
-                "Create, review, approve and publish coach programs."
+              setScreen(
+                "admin-programs"
               );
             }}
 
@@ -830,6 +831,19 @@ export default function MainApp() {
             }
             onBack={() => {
               setScreen("profile");
+            }}
+          />
+
+        )}
+
+
+        {screen === "admin-programs" && (
+
+          <AdminPrograms
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
             }}
           />
 
