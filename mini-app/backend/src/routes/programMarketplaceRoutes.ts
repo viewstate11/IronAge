@@ -589,6 +589,137 @@ router.post(
         error
       );
 
+      /*
+       * Concurrent/idempotent recovery:
+       *
+       * A parallel request may have completed the same
+       * FREE_CLAIM while this transaction lost a race
+       * against a unique index or Serializable conflict.
+       *
+       * In that case the desired final state already
+       * exists, so return success instead of HTTP 500.
+       */
+      try {
+        const authenticatedRequest =
+          req as AppAuthenticatedRequest;
+
+        const userId =
+          authenticatedRequest.appUserId;
+
+        const programId =
+          Number(req.params.id);
+
+        if (
+          Number.isSafeInteger(programId) &&
+          programId > 0
+        ) {
+          const now =
+            new Date();
+
+          const [
+            entitlement,
+            assignment,
+          ] = await Promise.all([
+            prisma.programEntitlement.findFirst({
+              where: {
+                programId,
+                userId,
+
+                source:
+                  "FREE_CLAIM",
+
+                isActive:
+                  true,
+
+                startsAt: {
+                  lte:
+                    now,
+                },
+
+                OR: [
+                  {
+                    expiresAt:
+                      null,
+                  },
+                  {
+                    expiresAt: {
+                      gt:
+                        now,
+                    },
+                  },
+                ],
+              },
+
+              select: {
+                id: true,
+              },
+            }),
+
+            prisma.programAssignment.findFirst({
+              where: {
+                programId,
+
+                clientId:
+                  userId,
+
+                assignedBy:
+                  null,
+
+                isActive:
+                  true,
+              },
+
+              select: {
+                id: true,
+              },
+            }),
+          ]);
+
+          if (
+            entitlement &&
+            assignment
+          ) {
+            console.log(
+              "IRONAGE FREE PROGRAM CLAIM RECOVERED:",
+              {
+                userId,
+                programId,
+                entitlementId:
+                  entitlement.id,
+                assignmentId:
+                  assignment.id,
+              }
+            );
+
+            return res.status(200).json({
+              success: true,
+
+              hasAccess:
+                true,
+
+              entitlement: {
+                id:
+                  entitlement.id,
+
+                source:
+                  "FREE_CLAIM",
+              },
+
+              assignmentId:
+                assignment.id,
+
+              recovered:
+                true,
+            });
+          }
+        }
+      } catch (recoveryError) {
+        console.error(
+          "IRONAGE FREE PROGRAM CLAIM RECOVERY ERROR:",
+          recoveryError
+        );
+      }
+
       return res.status(500).json({
         success: false,
         message:
