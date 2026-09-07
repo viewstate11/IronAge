@@ -16,6 +16,7 @@ import coachProgramRoutes from "./routes/coachProgramRoutes.js";
 import coachInviteRoutes from "./routes/coachInviteRoutes.js";
 import myProgramRoutes from "./routes/myProgramRoutes.js";
 import adminCoachRoutes from "./routes/adminCoachRoutes.js";
+import adminProgramRoutes from "./routes/adminProgramRoutes.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -150,6 +151,11 @@ app.use("/api/my-programs", myProgramRoutes);
 app.use(
   "/api/admin/coaches",
   adminCoachRoutes
+);
+
+app.use(
+  "/api/admin/programs",
+  adminProgramRoutes
 );
 
 /* =========================================================

@@ -2182,6 +2182,13 @@ export const TrainingProgramScalarFieldEnum = {
   name: 'name',
   description: 'description',
   durationWeeks: 'durationWeeks',
+  status: 'status',
+  isPublished: 'isPublished',
+  priceCents: 'priceCents',
+  currency: 'currency',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  publishedAt: 'publishedAt',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2436,6 +2443,20 @@ export type EnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'MealType[]'
  */
 export type ListEnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MealType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProgramStatus'
+ */
+export type EnumProgramStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ProgramStatus[]'
+ */
+export type ListEnumProgramStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgramStatus[]'>
     
 
 /**

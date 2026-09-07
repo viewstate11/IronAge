@@ -37,6 +37,7 @@ model User {
   clientRelationships     CoachClient[]            @relation("ClientUser")
   trainingWorkouts        TrainingWorkout[]        @relation("TrainingWorkoutCoach")
   trainingPrograms        TrainingProgram[]        @relation("TrainingProgramCoach")
+  approvedPrograms        TrainingProgram[]        @relation("TrainingProgramApprovedBy")
   programAssignments      ProgramAssignment[]      @relation("ProgramClient")
   assignedPrograms        ProgramAssignment[]      @relation("ProgramAssignedBy")
   subscriptions           Subscription[]
@@ -77,6 +78,14 @@ model CoachClient {
   @@unique([coachId, clientId])
   @@unique([clientId])
   @@index([coachId])
+}
+
+enum ProgramStatus {
+  DRAFT
+  REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
 }
 
 enum AuthProvider {
@@ -305,20 +314,37 @@ model WorkoutExercise {
 }
 
 model TrainingProgram {
-  id            Int      @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   coachId       Int
   name          String
   description   String?
   durationWeeks Int?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
 
-  coach       User                @relation("TrainingProgramCoach", fields: [coachId], references: [id], onDelete: Cascade)
+  status      ProgramStatus @default(DRAFT)
+  isPublished Boolean       @default(false)
+
+  priceCents Int?
+  currency   String @default("EUR")
+
+  approvedBy  Int?
+  approvedAt  DateTime?
+  publishedAt DateTime?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  coach          User  @relation("TrainingProgramCoach", fields: [coachId], references: [id], onDelete: Cascade)
+  approvedByUser User? @relation("TrainingProgramApprovedBy", fields: [approvedBy], references: [id], onDelete: SetNull)
+
   workouts    ProgramWorkout[]
   assignments ProgramAssignment[]
 
   @@index([coachId])
+  @@index([approvedBy])
+  @@index([status])
+  @@index([isPublished])
   @@index([isActive])
 }
 

@@ -316,6 +316,13 @@ export const TrainingProgramScalarFieldEnum = {
   name: 'name',
   description: 'description',
   durationWeeks: 'durationWeeks',
+  status: 'status',
+  isPublished: 'isPublished',
+  priceCents: 'priceCents',
+  currency: 'currency',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  publishedAt: 'publishedAt',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

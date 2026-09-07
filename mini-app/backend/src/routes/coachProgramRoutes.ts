@@ -86,7 +86,7 @@ function optionalString(
   return normalized || null;
 }
 
-async function hasActiveCoachProfile(
+async function hasVerifiedActiveCoachProfile(
   coachId: number
 ): Promise<boolean> {
   const profile =
@@ -94,13 +94,16 @@ async function hasActiveCoachProfile(
       where: {
         userId: coachId,
       },
+
       select: {
         isActive: true,
+        isVerified: true,
       },
     });
 
   return Boolean(
-    profile?.isActive
+    profile?.isActive &&
+    profile?.isVerified
   );
 }
 
@@ -115,14 +118,14 @@ router.post(
         );
 
       if (
-        !await hasActiveCoachProfile(
+        !await hasVerifiedActiveCoachProfile(
           coachId
         )
       ) {
         return res.status(403).json({
           success: false,
           message:
-            "Active coach profile required",
+            "Verified active coach profile required",
         });
       }
 
@@ -343,14 +346,14 @@ router.get(
         );
 
       if (
-        !await hasActiveCoachProfile(
+        !await hasVerifiedActiveCoachProfile(
           coachId
         )
       ) {
         return res.status(403).json({
           success: false,
           message:
-            "Active coach profile required",
+            "Verified active coach profile required",
         });
       }
 
@@ -405,6 +408,18 @@ router.get(
         getCurrentUserId(
           req as AppAuthenticatedRequest
         );
+
+      if (
+        !await hasVerifiedActiveCoachProfile(
+          coachId
+        )
+      ) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Verified active coach profile required",
+        });
+      }
 
       const programId =
         parsePositiveInt(
@@ -483,14 +498,14 @@ router.post(
         );
 
       if (
-        !await hasActiveCoachProfile(
+        !await hasVerifiedActiveCoachProfile(
           coachId
         )
       ) {
         return res.status(403).json({
           success: false,
           message:
-            "Active coach profile required",
+            "Verified active coach profile required",
         });
       }
 

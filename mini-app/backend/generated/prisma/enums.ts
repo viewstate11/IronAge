@@ -9,6 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const ProgramStatus = {
+  DRAFT: 'DRAFT',
+  REVIEW: 'REVIEW',
+  APPROVED: 'APPROVED',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ProgramStatus = (typeof ProgramStatus)[keyof typeof ProgramStatus]
+
+
 export const AuthProvider = {
   EMAIL: 'EMAIL',
   GOOGLE: 'GOOGLE',

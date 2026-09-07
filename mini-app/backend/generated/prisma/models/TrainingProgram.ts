@@ -30,12 +30,16 @@ export type TrainingProgramAvgAggregateOutputType = {
   id: number | null
   coachId: number | null
   durationWeeks: number | null
+  priceCents: number | null
+  approvedBy: number | null
 }
 
 export type TrainingProgramSumAggregateOutputType = {
   id: number | null
   coachId: number | null
   durationWeeks: number | null
+  priceCents: number | null
+  approvedBy: number | null
 }
 
 export type TrainingProgramMinAggregateOutputType = {
@@ -44,6 +48,13 @@ export type TrainingProgramMinAggregateOutputType = {
   name: string | null
   description: string | null
   durationWeeks: number | null
+  status: $Enums.ProgramStatus | null
+  isPublished: boolean | null
+  priceCents: number | null
+  currency: string | null
+  approvedBy: number | null
+  approvedAt: Date | null
+  publishedAt: Date | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,6 +66,13 @@ export type TrainingProgramMaxAggregateOutputType = {
   name: string | null
   description: string | null
   durationWeeks: number | null
+  status: $Enums.ProgramStatus | null
+  isPublished: boolean | null
+  priceCents: number | null
+  currency: string | null
+  approvedBy: number | null
+  approvedAt: Date | null
+  publishedAt: Date | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -66,6 +84,13 @@ export type TrainingProgramCountAggregateOutputType = {
   name: number
   description: number
   durationWeeks: number
+  status: number
+  isPublished: number
+  priceCents: number
+  currency: number
+  approvedBy: number
+  approvedAt: number
+  publishedAt: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -77,12 +102,16 @@ export type TrainingProgramAvgAggregateInputType = {
   id?: true
   coachId?: true
   durationWeeks?: true
+  priceCents?: true
+  approvedBy?: true
 }
 
 export type TrainingProgramSumAggregateInputType = {
   id?: true
   coachId?: true
   durationWeeks?: true
+  priceCents?: true
+  approvedBy?: true
 }
 
 export type TrainingProgramMinAggregateInputType = {
@@ -91,6 +120,13 @@ export type TrainingProgramMinAggregateInputType = {
   name?: true
   description?: true
   durationWeeks?: true
+  status?: true
+  isPublished?: true
+  priceCents?: true
+  currency?: true
+  approvedBy?: true
+  approvedAt?: true
+  publishedAt?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -102,6 +138,13 @@ export type TrainingProgramMaxAggregateInputType = {
   name?: true
   description?: true
   durationWeeks?: true
+  status?: true
+  isPublished?: true
+  priceCents?: true
+  currency?: true
+  approvedBy?: true
+  approvedAt?: true
+  publishedAt?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -113,6 +156,13 @@ export type TrainingProgramCountAggregateInputType = {
   name?: true
   description?: true
   durationWeeks?: true
+  status?: true
+  isPublished?: true
+  priceCents?: true
+  currency?: true
+  approvedBy?: true
+  approvedAt?: true
+  publishedAt?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -211,6 +261,13 @@ export type TrainingProgramGroupByOutputType = {
   name: string
   description: string | null
   durationWeeks: number | null
+  status: $Enums.ProgramStatus
+  isPublished: boolean
+  priceCents: number | null
+  currency: string
+  approvedBy: number | null
+  approvedAt: Date | null
+  publishedAt: Date | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -245,10 +302,18 @@ export type TrainingProgramWhereInput = {
   name?: Prisma.StringFilter<"TrainingProgram"> | string
   description?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
   durationWeeks?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  status?: Prisma.EnumProgramStatusFilter<"TrainingProgram"> | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFilter<"TrainingProgram"> | boolean
+  priceCents?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  currency?: Prisma.StringFilter<"TrainingProgram"> | string
+  approvedBy?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
+  publishedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
   isActive?: Prisma.BoolFilter<"TrainingProgram"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TrainingProgram"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TrainingProgram"> | Date | string
   coach?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  approvedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   workouts?: Prisma.ProgramWorkoutListRelationFilter
   assignments?: Prisma.ProgramAssignmentListRelationFilter
 }
@@ -259,10 +324,18 @@ export type TrainingProgramOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   durationWeeks?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   coach?: Prisma.UserOrderByWithRelationInput
+  approvedByUser?: Prisma.UserOrderByWithRelationInput
   workouts?: Prisma.ProgramWorkoutOrderByRelationAggregateInput
   assignments?: Prisma.ProgramAssignmentOrderByRelationAggregateInput
 }
@@ -276,10 +349,18 @@ export type TrainingProgramWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"TrainingProgram"> | string
   description?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
   durationWeeks?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  status?: Prisma.EnumProgramStatusFilter<"TrainingProgram"> | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFilter<"TrainingProgram"> | boolean
+  priceCents?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  currency?: Prisma.StringFilter<"TrainingProgram"> | string
+  approvedBy?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
+  publishedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
   isActive?: Prisma.BoolFilter<"TrainingProgram"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TrainingProgram"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TrainingProgram"> | Date | string
   coach?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  approvedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   workouts?: Prisma.ProgramWorkoutListRelationFilter
   assignments?: Prisma.ProgramAssignmentListRelationFilter
 }, "id">
@@ -290,6 +371,13 @@ export type TrainingProgramOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   durationWeeks?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  approvedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -309,6 +397,13 @@ export type TrainingProgramScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"TrainingProgram"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"TrainingProgram"> | string | null
   durationWeeks?: Prisma.IntNullableWithAggregatesFilter<"TrainingProgram"> | number | null
+  status?: Prisma.EnumProgramStatusWithAggregatesFilter<"TrainingProgram"> | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolWithAggregatesFilter<"TrainingProgram"> | boolean
+  priceCents?: Prisma.IntNullableWithAggregatesFilter<"TrainingProgram"> | number | null
+  currency?: Prisma.StringWithAggregatesFilter<"TrainingProgram"> | string
+  approvedBy?: Prisma.IntNullableWithAggregatesFilter<"TrainingProgram"> | number | null
+  approvedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TrainingProgram"> | Date | string | null
+  publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TrainingProgram"> | Date | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"TrainingProgram"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TrainingProgram"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TrainingProgram"> | Date | string
@@ -318,10 +413,17 @@ export type TrainingProgramCreateInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   coach: Prisma.UserCreateNestedOneWithoutTrainingProgramsInput
+  approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
 }
@@ -332,6 +434,13 @@ export type TrainingProgramUncheckedCreateInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -343,10 +452,17 @@ export type TrainingProgramUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   coach?: Prisma.UserUpdateOneRequiredWithoutTrainingProgramsNestedInput
+  approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
 }
@@ -357,6 +473,13 @@ export type TrainingProgramUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -370,6 +493,13 @@ export type TrainingProgramCreateManyInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -379,6 +509,12 @@ export type TrainingProgramUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -390,6 +526,13 @@ export type TrainingProgramUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -411,6 +554,13 @@ export type TrainingProgramCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -420,6 +570,8 @@ export type TrainingProgramAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   coachId?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrder
 }
 
 export type TrainingProgramMaxOrderByAggregateInput = {
@@ -428,6 +580,13 @@ export type TrainingProgramMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -439,6 +598,13 @@ export type TrainingProgramMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  isPublished?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrder
+  approvedAt?: Prisma.SortOrder
+  publishedAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -448,6 +614,8 @@ export type TrainingProgramSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   coachId?: Prisma.SortOrder
   durationWeeks?: Prisma.SortOrder
+  priceCents?: Prisma.SortOrder
+  approvedBy?: Prisma.SortOrder
 }
 
 export type TrainingProgramScalarRelationFilter = {
@@ -462,10 +630,24 @@ export type TrainingProgramCreateNestedManyWithoutCoachInput = {
   connect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
 }
 
+export type TrainingProgramCreateNestedManyWithoutApprovedByUserInput = {
+  create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput> | Prisma.TrainingProgramCreateWithoutApprovedByUserInput[] | Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput[]
+  connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput | Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput[]
+  createMany?: Prisma.TrainingProgramCreateManyApprovedByUserInputEnvelope
+  connect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+}
+
 export type TrainingProgramUncheckedCreateNestedManyWithoutCoachInput = {
   create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutCoachInput, Prisma.TrainingProgramUncheckedCreateWithoutCoachInput> | Prisma.TrainingProgramCreateWithoutCoachInput[] | Prisma.TrainingProgramUncheckedCreateWithoutCoachInput[]
   connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutCoachInput | Prisma.TrainingProgramCreateOrConnectWithoutCoachInput[]
   createMany?: Prisma.TrainingProgramCreateManyCoachInputEnvelope
+  connect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+}
+
+export type TrainingProgramUncheckedCreateNestedManyWithoutApprovedByUserInput = {
+  create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput> | Prisma.TrainingProgramCreateWithoutApprovedByUserInput[] | Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput[]
+  connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput | Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput[]
+  createMany?: Prisma.TrainingProgramCreateManyApprovedByUserInputEnvelope
   connect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
 }
 
@@ -483,6 +665,20 @@ export type TrainingProgramUpdateManyWithoutCoachNestedInput = {
   deleteMany?: Prisma.TrainingProgramScalarWhereInput | Prisma.TrainingProgramScalarWhereInput[]
 }
 
+export type TrainingProgramUpdateManyWithoutApprovedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput> | Prisma.TrainingProgramCreateWithoutApprovedByUserInput[] | Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput[]
+  connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput | Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput[]
+  upsert?: Prisma.TrainingProgramUpsertWithWhereUniqueWithoutApprovedByUserInput | Prisma.TrainingProgramUpsertWithWhereUniqueWithoutApprovedByUserInput[]
+  createMany?: Prisma.TrainingProgramCreateManyApprovedByUserInputEnvelope
+  set?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  disconnect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  delete?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  connect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  update?: Prisma.TrainingProgramUpdateWithWhereUniqueWithoutApprovedByUserInput | Prisma.TrainingProgramUpdateWithWhereUniqueWithoutApprovedByUserInput[]
+  updateMany?: Prisma.TrainingProgramUpdateManyWithWhereWithoutApprovedByUserInput | Prisma.TrainingProgramUpdateManyWithWhereWithoutApprovedByUserInput[]
+  deleteMany?: Prisma.TrainingProgramScalarWhereInput | Prisma.TrainingProgramScalarWhereInput[]
+}
+
 export type TrainingProgramUncheckedUpdateManyWithoutCoachNestedInput = {
   create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutCoachInput, Prisma.TrainingProgramUncheckedCreateWithoutCoachInput> | Prisma.TrainingProgramCreateWithoutCoachInput[] | Prisma.TrainingProgramUncheckedCreateWithoutCoachInput[]
   connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutCoachInput | Prisma.TrainingProgramCreateOrConnectWithoutCoachInput[]
@@ -495,6 +691,24 @@ export type TrainingProgramUncheckedUpdateManyWithoutCoachNestedInput = {
   update?: Prisma.TrainingProgramUpdateWithWhereUniqueWithoutCoachInput | Prisma.TrainingProgramUpdateWithWhereUniqueWithoutCoachInput[]
   updateMany?: Prisma.TrainingProgramUpdateManyWithWhereWithoutCoachInput | Prisma.TrainingProgramUpdateManyWithWhereWithoutCoachInput[]
   deleteMany?: Prisma.TrainingProgramScalarWhereInput | Prisma.TrainingProgramScalarWhereInput[]
+}
+
+export type TrainingProgramUncheckedUpdateManyWithoutApprovedByUserNestedInput = {
+  create?: Prisma.XOR<Prisma.TrainingProgramCreateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput> | Prisma.TrainingProgramCreateWithoutApprovedByUserInput[] | Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput[]
+  connectOrCreate?: Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput | Prisma.TrainingProgramCreateOrConnectWithoutApprovedByUserInput[]
+  upsert?: Prisma.TrainingProgramUpsertWithWhereUniqueWithoutApprovedByUserInput | Prisma.TrainingProgramUpsertWithWhereUniqueWithoutApprovedByUserInput[]
+  createMany?: Prisma.TrainingProgramCreateManyApprovedByUserInputEnvelope
+  set?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  disconnect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  delete?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  connect?: Prisma.TrainingProgramWhereUniqueInput | Prisma.TrainingProgramWhereUniqueInput[]
+  update?: Prisma.TrainingProgramUpdateWithWhereUniqueWithoutApprovedByUserInput | Prisma.TrainingProgramUpdateWithWhereUniqueWithoutApprovedByUserInput[]
+  updateMany?: Prisma.TrainingProgramUpdateManyWithWhereWithoutApprovedByUserInput | Prisma.TrainingProgramUpdateManyWithWhereWithoutApprovedByUserInput[]
+  deleteMany?: Prisma.TrainingProgramScalarWhereInput | Prisma.TrainingProgramScalarWhereInput[]
+}
+
+export type EnumProgramStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ProgramStatus
 }
 
 export type TrainingProgramCreateNestedOneWithoutWorkoutsInput = {
@@ -529,9 +743,16 @@ export type TrainingProgramCreateWithoutCoachInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
 }
@@ -541,6 +762,13 @@ export type TrainingProgramUncheckedCreateWithoutCoachInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -555,6 +783,53 @@ export type TrainingProgramCreateOrConnectWithoutCoachInput = {
 
 export type TrainingProgramCreateManyCoachInputEnvelope = {
   data: Prisma.TrainingProgramCreateManyCoachInput | Prisma.TrainingProgramCreateManyCoachInput[]
+  skipDuplicates?: boolean
+}
+
+export type TrainingProgramCreateWithoutApprovedByUserInput = {
+  name: string
+  description?: string | null
+  durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  coach: Prisma.UserCreateNestedOneWithoutTrainingProgramsInput
+  workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
+  assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
+}
+
+export type TrainingProgramUncheckedCreateWithoutApprovedByUserInput = {
+  id?: number
+  coachId: number
+  name: string
+  description?: string | null
+  durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  workouts?: Prisma.ProgramWorkoutUncheckedCreateNestedManyWithoutProgramInput
+  assignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutProgramInput
+}
+
+export type TrainingProgramCreateOrConnectWithoutApprovedByUserInput = {
+  where: Prisma.TrainingProgramWhereUniqueInput
+  create: Prisma.XOR<Prisma.TrainingProgramCreateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput>
+}
+
+export type TrainingProgramCreateManyApprovedByUserInputEnvelope = {
+  data: Prisma.TrainingProgramCreateManyApprovedByUserInput | Prisma.TrainingProgramCreateManyApprovedByUserInput[]
   skipDuplicates?: boolean
 }
 
@@ -583,19 +858,49 @@ export type TrainingProgramScalarWhereInput = {
   name?: Prisma.StringFilter<"TrainingProgram"> | string
   description?: Prisma.StringNullableFilter<"TrainingProgram"> | string | null
   durationWeeks?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  status?: Prisma.EnumProgramStatusFilter<"TrainingProgram"> | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFilter<"TrainingProgram"> | boolean
+  priceCents?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  currency?: Prisma.StringFilter<"TrainingProgram"> | string
+  approvedBy?: Prisma.IntNullableFilter<"TrainingProgram"> | number | null
+  approvedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
+  publishedAt?: Prisma.DateTimeNullableFilter<"TrainingProgram"> | Date | string | null
   isActive?: Prisma.BoolFilter<"TrainingProgram"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TrainingProgram"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TrainingProgram"> | Date | string
+}
+
+export type TrainingProgramUpsertWithWhereUniqueWithoutApprovedByUserInput = {
+  where: Prisma.TrainingProgramWhereUniqueInput
+  update: Prisma.XOR<Prisma.TrainingProgramUpdateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedUpdateWithoutApprovedByUserInput>
+  create: Prisma.XOR<Prisma.TrainingProgramCreateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedCreateWithoutApprovedByUserInput>
+}
+
+export type TrainingProgramUpdateWithWhereUniqueWithoutApprovedByUserInput = {
+  where: Prisma.TrainingProgramWhereUniqueInput
+  data: Prisma.XOR<Prisma.TrainingProgramUpdateWithoutApprovedByUserInput, Prisma.TrainingProgramUncheckedUpdateWithoutApprovedByUserInput>
+}
+
+export type TrainingProgramUpdateManyWithWhereWithoutApprovedByUserInput = {
+  where: Prisma.TrainingProgramScalarWhereInput
+  data: Prisma.XOR<Prisma.TrainingProgramUpdateManyMutationInput, Prisma.TrainingProgramUncheckedUpdateManyWithoutApprovedByUserInput>
 }
 
 export type TrainingProgramCreateWithoutWorkoutsInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   coach: Prisma.UserCreateNestedOneWithoutTrainingProgramsInput
+  approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   assignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutProgramInput
 }
 
@@ -605,6 +910,13 @@ export type TrainingProgramUncheckedCreateWithoutWorkoutsInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -631,10 +943,17 @@ export type TrainingProgramUpdateWithoutWorkoutsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   coach?: Prisma.UserUpdateOneRequiredWithoutTrainingProgramsNestedInput
+  approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
 }
 
@@ -644,6 +963,13 @@ export type TrainingProgramUncheckedUpdateWithoutWorkoutsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -654,10 +980,17 @@ export type TrainingProgramCreateWithoutAssignmentsInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   coach: Prisma.UserCreateNestedOneWithoutTrainingProgramsInput
+  approvedByUser?: Prisma.UserCreateNestedOneWithoutApprovedProgramsInput
   workouts?: Prisma.ProgramWorkoutCreateNestedManyWithoutProgramInput
 }
 
@@ -667,6 +1000,13 @@ export type TrainingProgramUncheckedCreateWithoutAssignmentsInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -693,10 +1033,17 @@ export type TrainingProgramUpdateWithoutAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   coach?: Prisma.UserUpdateOneRequiredWithoutTrainingProgramsNestedInput
+  approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
 }
 
@@ -706,6 +1053,13 @@ export type TrainingProgramUncheckedUpdateWithoutAssignmentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -717,6 +1071,30 @@ export type TrainingProgramCreateManyCoachInput = {
   name: string
   description?: string | null
   durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedBy?: number | null
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TrainingProgramCreateManyApprovedByUserInput = {
+  id?: number
+  coachId: number
+  name: string
+  description?: string | null
+  durationWeeks?: number | null
+  status?: $Enums.ProgramStatus
+  isPublished?: boolean
+  priceCents?: number | null
+  currency?: string
+  approvedAt?: Date | string | null
+  publishedAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -726,9 +1104,16 @@ export type TrainingProgramUpdateWithoutCoachInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedByUser?: Prisma.UserUpdateOneWithoutApprovedProgramsNestedInput
   workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
   assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
 }
@@ -738,6 +1123,13 @@ export type TrainingProgramUncheckedUpdateWithoutCoachInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -750,6 +1142,67 @@ export type TrainingProgramUncheckedUpdateManyWithoutCoachInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TrainingProgramUpdateWithoutApprovedByUserInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coach?: Prisma.UserUpdateOneRequiredWithoutTrainingProgramsNestedInput
+  workouts?: Prisma.ProgramWorkoutUpdateManyWithoutProgramNestedInput
+  assignments?: Prisma.ProgramAssignmentUpdateManyWithoutProgramNestedInput
+}
+
+export type TrainingProgramUncheckedUpdateWithoutApprovedByUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  coachId?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workouts?: Prisma.ProgramWorkoutUncheckedUpdateManyWithoutProgramNestedInput
+  assignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutProgramNestedInput
+}
+
+export type TrainingProgramUncheckedUpdateManyWithoutApprovedByUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  coachId?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durationWeeks?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  priceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -801,10 +1254,18 @@ export type TrainingProgramSelect<ExtArgs extends runtime.Types.Extensions.Inter
   name?: boolean
   description?: boolean
   durationWeeks?: boolean
+  status?: boolean
+  isPublished?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  approvedBy?: boolean
+  approvedAt?: boolean
+  publishedAt?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
   workouts?: boolean | Prisma.TrainingProgram$workoutsArgs<ExtArgs>
   assignments?: boolean | Prisma.TrainingProgram$assignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TrainingProgramCountOutputTypeDefaultArgs<ExtArgs>
@@ -816,10 +1277,18 @@ export type TrainingProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   name?: boolean
   description?: boolean
   durationWeeks?: boolean
+  status?: boolean
+  isPublished?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  approvedBy?: boolean
+  approvedAt?: boolean
+  publishedAt?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["trainingProgram"]>
 
 export type TrainingProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -828,10 +1297,18 @@ export type TrainingProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   name?: boolean
   description?: boolean
   durationWeeks?: boolean
+  status?: boolean
+  isPublished?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  approvedBy?: boolean
+  approvedAt?: boolean
+  publishedAt?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
 }, ExtArgs["result"]["trainingProgram"]>
 
 export type TrainingProgramSelectScalar = {
@@ -840,29 +1317,40 @@ export type TrainingProgramSelectScalar = {
   name?: boolean
   description?: boolean
   durationWeeks?: boolean
+  status?: boolean
+  isPublished?: boolean
+  priceCents?: boolean
+  currency?: boolean
+  approvedBy?: boolean
+  approvedAt?: boolean
+  publishedAt?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TrainingProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "coachId" | "name" | "description" | "durationWeeks" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["trainingProgram"]>
+export type TrainingProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "coachId" | "name" | "description" | "durationWeeks" | "status" | "isPublished" | "priceCents" | "currency" | "approvedBy" | "approvedAt" | "publishedAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["trainingProgram"]>
 export type TrainingProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
   workouts?: boolean | Prisma.TrainingProgram$workoutsArgs<ExtArgs>
   assignments?: boolean | Prisma.TrainingProgram$assignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TrainingProgramCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TrainingProgramIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
 }
 export type TrainingProgramIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   coach?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  approvedByUser?: boolean | Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>
 }
 
 export type $TrainingProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TrainingProgram"
   objects: {
     coach: Prisma.$UserPayload<ExtArgs>
+    approvedByUser: Prisma.$UserPayload<ExtArgs> | null
     workouts: Prisma.$ProgramWorkoutPayload<ExtArgs>[]
     assignments: Prisma.$ProgramAssignmentPayload<ExtArgs>[]
   }
@@ -872,6 +1360,13 @@ export type $TrainingProgramPayload<ExtArgs extends runtime.Types.Extensions.Int
     name: string
     description: string | null
     durationWeeks: number | null
+    status: $Enums.ProgramStatus
+    isPublished: boolean
+    priceCents: number | null
+    currency: string
+    approvedBy: number | null
+    approvedAt: Date | null
+    publishedAt: Date | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1270,6 +1765,7 @@ readonly fields: TrainingProgramFieldRefs;
 export interface Prisma__TrainingProgramClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   coach<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  approvedByUser<T extends Prisma.TrainingProgram$approvedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$approvedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   workouts<T extends Prisma.TrainingProgram$workoutsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$workoutsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramWorkoutPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignments<T extends Prisma.TrainingProgram$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TrainingProgram$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgramAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1306,6 +1802,13 @@ export interface TrainingProgramFieldRefs {
   readonly name: Prisma.FieldRef<"TrainingProgram", 'String'>
   readonly description: Prisma.FieldRef<"TrainingProgram", 'String'>
   readonly durationWeeks: Prisma.FieldRef<"TrainingProgram", 'Int'>
+  readonly status: Prisma.FieldRef<"TrainingProgram", 'ProgramStatus'>
+  readonly isPublished: Prisma.FieldRef<"TrainingProgram", 'Boolean'>
+  readonly priceCents: Prisma.FieldRef<"TrainingProgram", 'Int'>
+  readonly currency: Prisma.FieldRef<"TrainingProgram", 'String'>
+  readonly approvedBy: Prisma.FieldRef<"TrainingProgram", 'Int'>
+  readonly approvedAt: Prisma.FieldRef<"TrainingProgram", 'DateTime'>
+  readonly publishedAt: Prisma.FieldRef<"TrainingProgram", 'DateTime'>
   readonly isActive: Prisma.FieldRef<"TrainingProgram", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"TrainingProgram", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TrainingProgram", 'DateTime'>
@@ -1707,6 +2210,25 @@ export type TrainingProgramDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many TrainingPrograms to delete.
    */
   limit?: number
+}
+
+/**
+ * TrainingProgram.approvedByUser
+ */
+export type TrainingProgram$approvedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
