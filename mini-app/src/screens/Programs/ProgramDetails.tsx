@@ -62,7 +62,9 @@ type Props = {
     coachId: number
   ) => void;
 
-  onOpenMyProgram: () => void;
+  onOpenMyProgram: (
+    programId: number
+  ) => void;
 };
 
 function formatPrice(
@@ -391,7 +393,9 @@ export default function ProgramDetails({
             disabled={!hasAccess}
             onClick={() => {
               if (hasAccess) {
-                onOpenMyProgram();
+                onOpenMyProgram(
+                  program.id
+                );
               }
             }}
           >

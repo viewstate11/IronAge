@@ -84,6 +84,7 @@ type MyProgramsResponse = {
 };
 
 type Props = {
+  selectedProgramId?: number | null;
   onBack: () => void;
   onStartWorkout: (
     workoutId: string,
@@ -140,6 +141,7 @@ function toWorkoutProgram(
 }
 
 export default function MyProgram({
+  selectedProgramId = null,
   onBack,
   onStartWorkout,
 }: Props) {
@@ -206,7 +208,15 @@ export default function MyProgram({
   }, []);
 
   const assignment =
-    assignments[0] ?? null;
+    selectedProgramId !== null
+      ? (
+          assignments.find(
+            (item) =>
+              item.program.id ===
+              selectedProgramId
+          ) ?? null
+        )
+      : assignments[0] ?? null;
 
   const workouts = useMemo(() => {
     if (!assignment) {

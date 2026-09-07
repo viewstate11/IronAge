@@ -98,6 +98,13 @@ export default function MainApp() {
     null
   );
 
+  const [
+    selectedMyProgramId,
+    setSelectedMyProgramId,
+  ] = useState<number | null>(
+    null
+  );
+
 
   const [
     profileFeature,
@@ -676,6 +683,9 @@ export default function MainApp() {
             }}
 
             onOpenMyProgram={() => {
+              setSelectedMyProgramId(
+                null
+              );
               setScreen("my-program");
             }}
 
@@ -816,7 +826,13 @@ export default function MainApp() {
               );
             }}
 
-            onOpenMyProgram={() => {
+            onOpenMyProgram={(
+              programId
+            ) => {
+              setSelectedMyProgramId(
+                programId
+              );
+
               setScreen(
                 "my-program"
               );
@@ -941,6 +957,10 @@ export default function MainApp() {
               );
             }}
             onOpenProgram={() => {
+              setSelectedMyProgramId(
+                null
+              );
+
               setScreen(
                 "my-program"
               );
@@ -953,6 +973,9 @@ export default function MainApp() {
         {screen === "my-program" && (
 
           <MyProgram
+            selectedProgramId={
+              selectedMyProgramId
+            }
             onBack={() => {
               setScreen("profile");
             }}
