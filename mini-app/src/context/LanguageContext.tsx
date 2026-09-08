@@ -3420,6 +3420,395 @@ const translations:
   },
 
   /* =====================================================
+     CREATE PROGRAM
+  ===================================================== */
+
+  "createProgram.back": {
+    en: "Back to programs",
+    es: "Volver a programas",
+    uk: "Назад до програм",
+    ru: "Назад к программам",
+    fr: "Retour aux programmes",
+    de: "Zurück zu Programmen",
+    pt: "Voltar aos programas",
+    bg: "Назад към програмите",
+  },
+
+  "createProgram.coach": {
+    en: "IRONAGE COACH",
+    es: "ENTRENADOR IRONAGE",
+    uk: "ТРЕНЕР IRONAGE",
+    ru: "ТРЕНЕР IRONAGE",
+    fr: "COACH IRONAGE",
+    de: "IRONAGE COACH",
+    pt: "TREINADOR IRONAGE",
+    bg: "ТРЕНЬОР IRONAGE",
+  },
+
+  "createProgram.title": {
+    en: "CREATE PROGRAM",
+    es: "CREAR PROGRAMA",
+    uk: "СТВОРИТИ ПРОГРАМУ",
+    ru: "СОЗДАТЬ ПРОГРАММУ",
+    fr: "CRÉER UN PROGRAMME",
+    de: "PROGRAMM ERSTELLEN",
+    pt: "CRIAR PROGRAMA",
+    bg: "СЪЗДАЙ ПРОГРАМА",
+  },
+
+  "createProgram.subtitle": {
+    en: "BUILD THE SYSTEM",
+    es: "CONSTRUYE EL SISTEMA",
+    uk: "ПОБУДУЙ СИСТЕМУ",
+    ru: "ПОСТРОЙ СИСТЕМУ",
+    fr: "CONSTRUIS LE SYSTÈME",
+    de: "SYSTEM AUFBAUEN",
+    pt: "CONSTRUA O SISTEMA",
+    bg: "ИЗГРАДИ СИСТЕМАТА",
+  },
+
+  "createProgram.details": {
+    en: "PROGRAM DETAILS",
+    es: "DETALLES DEL PROGRAMA",
+    uk: "ДЕТАЛІ ПРОГРАМИ",
+    ru: "ДЕТАЛИ ПРОГРАММЫ",
+    fr: "DÉTAILS DU PROGRAMME",
+    de: "PROGRAMMDETAILS",
+    pt: "DETALHES DO PROGRAMA",
+    bg: "ДЕТАЙЛИ ЗА ПРОГРАМАТА",
+  },
+
+  "createProgram.defineGoal": {
+    en: "DEFINE THE GOAL",
+    es: "DEFINE EL OBJETIVO",
+    uk: "ВИЗНАЧ ЦІЛЬ",
+    ru: "ОПРЕДЕЛИ ЦЕЛЬ",
+    fr: "DÉFINIS L’OBJECTIF",
+    de: "ZIEL DEFINIEREN",
+    pt: "DEFINA O OBJETIVO",
+    bg: "ОПРЕДЕЛИ ЦЕЛТА",
+  },
+
+  "createProgram.name": {
+    en: "PROGRAM NAME",
+    es: "NOMBRE DEL PROGRAMA",
+    uk: "НАЗВА ПРОГРАМИ",
+    ru: "НАЗВАНИЕ ПРОГРАММЫ",
+    fr: "NOM DU PROGRAMME",
+    de: "PROGRAMMNAME",
+    pt: "NOME DO PROGRAMA",
+    bg: "ИМЕ НА ПРОГРАМАТА",
+  },
+
+  "createProgram.namePlaceholder": {
+    en: "IRONAGE STRENGTH",
+    es: "FUERZA IRONAGE",
+    uk: "СИЛА IRONAGE",
+    ru: "СИЛА IRONAGE",
+    fr: "FORCE IRONAGE",
+    de: "IRONAGE STRENGTH",
+    pt: "FORÇA IRONAGE",
+    bg: "IRONAGE СИЛА",
+  },
+
+  "createProgram.description": {
+    en: "DESCRIPTION",
+    es: "DESCRIPCIÓN",
+    uk: "ОПИС",
+    ru: "ОПИСАНИЕ",
+    fr: "DESCRIPTION",
+    de: "BESCHREIBUNG",
+    pt: "DESCRIÇÃO",
+    bg: "ОПИСАНИЕ",
+  },
+
+  "createProgram.descriptionPlaceholder": {
+    en: "Strength and muscle development...",
+    es: "Desarrollo de fuerza y masa muscular...",
+    uk: "Розвиток сили та м’язової маси...",
+    ru: "Развитие силы и мышечной массы...",
+    fr: "Développement de la force et de la masse musculaire...",
+    de: "Kraft- und Muskelaufbau...",
+    pt: "Desenvolvimento de força e massa muscular...",
+    bg: "Развитие на сила и мускулна маса...",
+  },
+
+  "createProgram.duration": {
+    en: "DURATION",
+    es: "DURACIÓN",
+    uk: "ТРИВАЛІСТЬ",
+    ru: "ДЛИТЕЛЬНОСТЬ",
+    fr: "DURÉE",
+    de: "DAUER",
+    pt: "DURAÇÃO",
+    bg: "ПРОДЪЛЖИТЕЛНОСТ",
+  },
+
+  "createProgram.weeks": {
+    en: "WEEKS",
+    es: "SEMANAS",
+    uk: "ТИЖНІ",
+    ru: "НЕДЕЛИ",
+    fr: "SEMAINES",
+    de: "WOCHEN",
+    pt: "SEMANAS",
+    bg: "СЕДМИЦИ",
+  },
+
+  "createProgram.myWorkouts": {
+    en: "MY WORKOUTS",
+    es: "MIS ENTRENAMIENTOS",
+    uk: "МОЇ ТРЕНУВАННЯ",
+    ru: "МОИ ТРЕНИРОВКИ",
+    fr: "MES ENTRAÎNEMENTS",
+    de: "MEINE TRAININGS",
+    pt: "MEUS TREINOS",
+    bg: "МОИТЕ ТРЕНИРОВКИ",
+  },
+
+  "createProgram.addSessions": {
+    en: "ADD TRAINING SESSIONS",
+    es: "AÑADE SESIONES DE ENTRENAMIENTO",
+    uk: "ДОДАЙ ТРЕНУВАЛЬНІ СЕСІЇ",
+    ru: "ДОБАВЬ ТРЕНИРОВОЧНЫЕ СЕССИИ",
+    fr: "AJOUTE DES SÉANCES D’ENTRAÎNEMENT",
+    de: "TRAININGSEINHEITEN HINZUFÜGEN",
+    pt: "ADICIONE SESSÕES DE TREINO",
+    bg: "ДОБАВИ ТРЕНИРОВЪЧНИ СЕСИИ",
+  },
+
+  "createProgram.loadingWorkouts": {
+    en: "LOADING WORKOUTS...",
+    es: "CARGANDO ENTRENAMIENTOS...",
+    uk: "ЗАВАНТАЖЕННЯ ТРЕНУВАНЬ...",
+    ru: "ЗАГРУЗКА ТРЕНИРОВОК...",
+    fr: "CHARGEMENT DES ENTRAÎNEMENTS...",
+    de: "TRAININGS WERDEN GELADEN...",
+    pt: "CARREGANDO TREINOS...",
+    bg: "ЗАРЕЖДАНЕ НА ТРЕНИРОВКИ...",
+  },
+
+  "createProgram.noWorkouts": {
+    en: "NO WORKOUTS AVAILABLE",
+    es: "NO HAY ENTRENAMIENTOS DISPONIBLES",
+    uk: "НЕМАЄ ДОСТУПНИХ ТРЕНУВАНЬ",
+    ru: "НЕТ ДОСТУПНЫХ ТРЕНИРОВОК",
+    fr: "AUCUN ENTRAÎNEMENT DISPONIBLE",
+    de: "KEINE TRAININGS VERFÜGBAR",
+    pt: "NENHUM TREINO DISPONÍVEL",
+    bg: "НЯМА ДОСТЪПНИ ТРЕНИРОВКИ",
+  },
+
+  "createProgram.workout": {
+    en: "WORKOUT",
+    es: "ENTRENAMIENTO",
+    uk: "ТРЕНУВАННЯ",
+    ru: "ТРЕНИРОВКА",
+    fr: "ENTRAÎNEMENT",
+    de: "TRAINING",
+    pt: "TREINO",
+    bg: "ТРЕНИРОВКА",
+  },
+
+  "createProgram.min": {
+    en: "MIN",
+    es: "MIN",
+    uk: "ХВ",
+    ru: "МИН",
+    fr: "MIN",
+    de: "MIN",
+    pt: "MIN",
+    bg: "МИН",
+  },
+
+  "createProgram.durationUnavailable": {
+    en: "DURATION —",
+    es: "DURACIÓN —",
+    uk: "ТРИВАЛІСТЬ —",
+    ru: "ДЛИТЕЛЬНОСТЬ —",
+    fr: "DURÉE —",
+    de: "DAUER —",
+    pt: "DURAÇÃO —",
+    bg: "ПРОДЪЛЖИТЕЛНОСТ —",
+  },
+
+  "createProgram.schedule": {
+    en: "PROGRAM SCHEDULE",
+    es: "HORARIO DEL PROGRAMA",
+    uk: "РОЗКЛАД ПРОГРАМИ",
+    ru: "РАСПИСАНИЕ ПРОГРАММЫ",
+    fr: "PLANNING DU PROGRAMME",
+    de: "PROGRAMMPLAN",
+    pt: "CRONOGRAMA DO PROGRAMA",
+    bg: "ГРАФИК НА ПРОГРАМАТА",
+  },
+
+  "createProgram.setWeekDay": {
+    en: "SET WEEK AND DAY",
+    es: "DEFINE SEMANA Y DÍA",
+    uk: "ВСТАНОВИ ТИЖДЕНЬ І ДЕНЬ",
+    ru: "ЗАДАЙ НЕДЕЛЮ И ДЕНЬ",
+    fr: "DÉFINIS LA SEMAINE ET LE JOUR",
+    de: "WOCHE UND TAG FESTLEGEN",
+    pt: "DEFINA SEMANA E DIA",
+    bg: "ЗАДАЙ СЕДМИЦА И ДЕН",
+  },
+
+  "createProgram.position": {
+    en: "POSITION",
+    es: "POSICIÓN",
+    uk: "ПОЗИЦІЯ",
+    ru: "ПОЗИЦИЯ",
+    fr: "POSITION",
+    de: "POSITION",
+    pt: "POSIÇÃO",
+    bg: "ПОЗИЦИЯ",
+  },
+
+  "createProgram.week": {
+    en: "WEEK",
+    es: "SEMANA",
+    uk: "ТИЖДЕНЬ",
+    ru: "НЕДЕЛЯ",
+    fr: "SEMAINE",
+    de: "WOCHE",
+    pt: "SEMANA",
+    bg: "СЕДМИЦА",
+  },
+
+  "createProgram.day": {
+    en: "DAY",
+    es: "DÍA",
+    uk: "ДЕНЬ",
+    ru: "ДЕНЬ",
+    fr: "JOUR",
+    de: "TAG",
+    pt: "DIA",
+    bg: "ДЕН",
+  },
+
+  "createProgram.remove": {
+    en: "Remove",
+    es: "Eliminar",
+    uk: "Видалити",
+    ru: "Удалить",
+    fr: "Supprimer",
+    de: "Entfernen",
+    pt: "Remover",
+    bg: "Премахни",
+  },
+
+  "createProgram.nameRequired": {
+    en: "Program name is required.",
+    es: "El nombre del programa es obligatorio.",
+    uk: "Назва програми обов’язкова.",
+    ru: "Название программы обязательно.",
+    fr: "Le nom du programme est obligatoire.",
+    de: "Der Programmname ist erforderlich.",
+    pt: "O nome do programa é obrigatório.",
+    bg: "Името на програмата е задължително.",
+  },
+
+  "createProgram.addWorkout": {
+    en: "Add at least one workout.",
+    es: "Añade al menos un entrenamiento.",
+    uk: "Додай хоча б одне тренування.",
+    ru: "Добавь хотя бы одну тренировку.",
+    fr: "Ajoute au moins un entraînement.",
+    de: "Füge mindestens ein Training hinzu.",
+    pt: "Adicione pelo menos um treino.",
+    bg: "Добави поне една тренировка.",
+  },
+
+  "createProgram.durationMinimum": {
+    en: "Program duration must be at least 1 week.",
+    es: "La duración debe ser de al menos 1 semana.",
+    uk: "Тривалість програми має бути щонайменше 1 тиждень.",
+    ru: "Длительность программы должна быть не менее 1 недели.",
+    fr: "La durée du programme doit être d’au moins 1 semaine.",
+    de: "Die Programmdauer muss mindestens 1 Woche betragen.",
+    pt: "A duração do programa deve ser de pelo menos 1 semana.",
+    bg: "Продължителността трябва да е поне 1 седмица.",
+  },
+
+  "createProgram.weekBetween": {
+    en: "week must be between 1 and",
+    es: "la semana debe estar entre 1 y",
+    uk: "тиждень має бути від 1 до",
+    ru: "неделя должна быть от 1 до",
+    fr: "la semaine doit être comprise entre 1 et",
+    de: "die Woche muss zwischen 1 und",
+    pt: "a semana deve estar entre 1 e",
+    bg: "седмицата трябва да е между 1 и",
+  },
+
+  "createProgram.dayBetween": {
+    en: "day must be between 1 and 7.",
+    es: "el día debe estar entre 1 y 7.",
+    uk: "день має бути від 1 до 7.",
+    ru: "день должен быть от 1 до 7.",
+    fr: "le jour doit être compris entre 1 et 7.",
+    de: "der Tag muss zwischen 1 und 7 liegen.",
+    pt: "o dia deve estar entre 1 e 7.",
+    bg: "денят трябва да е между 1 и 7.",
+  },
+
+  "createProgram.failedLoad": {
+    en: "Failed to load workouts",
+    es: "No se pudieron cargar los entrenamientos",
+    uk: "Не вдалося завантажити тренування",
+    ru: "Не удалось загрузить тренировки",
+    fr: "Impossible de charger les entraînements",
+    de: "Trainings konnten nicht geladen werden",
+    pt: "Não foi possível carregar os treinos",
+    bg: "Тренировките не можаха да бъдат заредени",
+  },
+
+  "createProgram.notCreated": {
+    en: "Program was not created",
+    es: "El programa no fue creado",
+    uk: "Програму не було створено",
+    ru: "Программа не была создана",
+    fr: "Le programme n’a pas été créé",
+    de: "Programm wurde nicht erstellt",
+    pt: "O programa não foi criado",
+    bg: "Програмата не беше създадена",
+  },
+
+  "createProgram.failedCreate": {
+    en: "Failed to create program",
+    es: "No se pudo crear el programa",
+    uk: "Не вдалося створити програму",
+    ru: "Не удалось создать программу",
+    fr: "Impossible de créer le programme",
+    de: "Programm konnte nicht erstellt werden",
+    pt: "Não foi possível criar o programa",
+    bg: "Програмата не можа да бъде създадена",
+  },
+
+  "createProgram.saving": {
+    en: "SAVING...",
+    es: "GUARDANDO...",
+    uk: "ЗБЕРЕЖЕННЯ...",
+    ru: "СОХРАНЕНИЕ...",
+    fr: "ENREGISTREMENT...",
+    de: "WIRD GESPEICHERT...",
+    pt: "SALVANDO...",
+    bg: "ЗАПАЗВАНЕ...",
+  },
+
+  "createProgram.save": {
+    en: "SAVE PROGRAM",
+    es: "GUARDAR PROGRAMA",
+    uk: "ЗБЕРЕГТИ ПРОГРАМУ",
+    ru: "СОХРАНИТЬ ПРОГРАММУ",
+    fr: "ENREGISTRER LE PROGRAMME",
+    de: "PROGRAMM SPEICHERN",
+    pt: "SALVAR PROGRAMA",
+    bg: "ЗАПАЗИ ПРОГРАМАТА",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 

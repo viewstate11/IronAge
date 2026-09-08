@@ -8,6 +8,8 @@ import api, {
   telegramAuthOptions,
 } from "../../api/client";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./CreateProgram.css";
 
 type Props = {
@@ -49,6 +51,8 @@ export default function CreateProgram({
   onBack,
   onCreated,
 }: Props) {
+  const { t } = useLanguage();
+
   const [name, setName] =
     useState("");
 
@@ -117,7 +121,7 @@ export default function CreateProgram({
       setLoadError(
         error instanceof Error
           ? error.message
-          : "Failed to load workouts"
+          : t("createProgram.failedLoad")
       );
     } finally {
       setLoading(false);
@@ -192,7 +196,7 @@ export default function CreateProgram({
 
     if (!normalizedName) {
       setSaveError(
-        "Program name is required."
+        t("createProgram.nameRequired")
       );
       return;
     }
@@ -201,7 +205,7 @@ export default function CreateProgram({
       selected.length === 0
     ) {
       setSaveError(
-        "Add at least one workout."
+        t("createProgram.addWorkout")
       );
       return;
     }
@@ -214,7 +218,7 @@ export default function CreateProgram({
       weeks < 1
     ) {
       setSaveError(
-        "Program duration must be at least 1 week."
+        t("createProgram.durationMinimum")
       );
       return;
     }
@@ -232,7 +236,7 @@ export default function CreateProgram({
         week > weeks
       ) {
         setSaveError(
-          `${item.workout.name}: week must be between 1 and ${weeks}.`
+          `${item.workout.name}: ${t("createProgram.weekBetween")} ${weeks}.`
         );
         return;
       }
@@ -243,7 +247,7 @@ export default function CreateProgram({
         day > 7
       ) {
         setSaveError(
-          `${item.workout.name}: day must be between 1 and 7.`
+          `${item.workout.name}: ${t("createProgram.dayBetween")}`
         );
         return;
       }
@@ -294,7 +298,7 @@ export default function CreateProgram({
       ) {
         throw new Error(
           response?.message ||
-            "Program was not created"
+            t("createProgram.notCreated")
         );
       }
 
@@ -308,7 +312,7 @@ export default function CreateProgram({
       setSaveError(
         error instanceof Error
           ? error.message
-          : "Failed to create program"
+          : t("createProgram.failedCreate")
       );
     } finally {
       setSaving(false);
@@ -324,22 +328,22 @@ export default function CreateProgram({
             type="button"
             className="create-program__back"
             onClick={onBack}
-            aria-label="Back to programs"
+            aria-label={t("createProgram.back")}
           >
             ←
           </button>
 
           <div>
             <span>
-              IRONAGE COACH
+              {t("createProgram.coach")}
             </span>
 
             <h1>
-              CREATE PROGRAM
+              {t("createProgram.title")}
             </h1>
 
             <p>
-              BUILD THE SYSTEM
+              {t("createProgram.subtitle")}
             </p>
           </div>
         </header>
@@ -350,18 +354,18 @@ export default function CreateProgram({
 
             <div>
               <strong>
-                PROGRAM DETAILS
+                {t("createProgram.details")}
               </strong>
 
               <small>
-                DEFINE THE GOAL
+                {t("createProgram.defineGoal")}
               </small>
             </div>
           </div>
 
           <label className="create-program__field">
             <span>
-              PROGRAM NAME
+              {t("createProgram.name")}
             </span>
 
             <input
@@ -371,13 +375,13 @@ export default function CreateProgram({
                   event.target.value
                 )
               }
-              placeholder="IRONAGE STRENGTH"
+              placeholder={t("createProgram.namePlaceholder")}
             />
           </label>
 
           <label className="create-program__field">
             <span>
-              DESCRIPTION
+              {t("createProgram.description")}
             </span>
 
             <textarea
@@ -388,13 +392,13 @@ export default function CreateProgram({
                   event.target.value
                 )
               }
-              placeholder="Strength and muscle development..."
+              placeholder={t("createProgram.descriptionPlaceholder")}
             />
           </label>
 
           <label className="create-program__field">
             <span>
-              DURATION
+              {t("createProgram.duration")}
             </span>
 
             <select
@@ -406,15 +410,15 @@ export default function CreateProgram({
               }
             >
               <option value="4">
-                4 WEEKS
+                4 {t("createProgram.weeks")}
               </option>
 
               <option value="8">
-                8 WEEKS
+                8 {t("createProgram.weeks")}
               </option>
 
               <option value="12">
-                12 WEEKS
+                12 {t("createProgram.weeks")}
               </option>
             </select>
           </label>
@@ -426,18 +430,18 @@ export default function CreateProgram({
 
             <div>
               <strong>
-                MY WORKOUTS
+                {t("createProgram.myWorkouts")}
               </strong>
 
               <small>
-                ADD TRAINING SESSIONS
+                {t("createProgram.addSessions")}
               </small>
             </div>
           </div>
 
           {loading && (
             <div className="create-program__state">
-              LOADING WORKOUTS...
+              {t("createProgram.loadingWorkouts")}
             </div>
           )}
 
@@ -454,7 +458,7 @@ export default function CreateProgram({
                     void loadWorkouts()
                   }
                 >
-                  RETRY
+                  {t("common.retry")}
                 </button>
               </div>
             )}
@@ -463,7 +467,7 @@ export default function CreateProgram({
             !loadError &&
             workouts.length === 0 && (
               <div className="create-program__state">
-                NO WORKOUTS AVAILABLE
+                {t("createProgram.noWorkouts")}
               </div>
             )}
 
@@ -499,7 +503,7 @@ export default function CreateProgram({
                         <div>
                           <span>
                             {workout.difficulty ||
-                              "WORKOUT"}
+                              t("createProgram.workout")}
                           </span>
 
                           <strong>
@@ -508,8 +512,8 @@ export default function CreateProgram({
 
                           <small>
                             {workout.duration
-                              ? `${workout.duration} MIN`
-                              : "DURATION —"}
+                              ? `${workout.duration} ${t("createProgram.min")}`
+                              : t("createProgram.durationUnavailable")}
                           </small>
                         </div>
 
@@ -533,11 +537,11 @@ export default function CreateProgram({
 
               <div>
                 <strong>
-                  PROGRAM SCHEDULE
+                  {t("createProgram.schedule")}
                 </strong>
 
                 <small>
-                  SET WEEK AND DAY
+                  {t("createProgram.setWeekDay")}
                 </small>
               </div>
             </div>
@@ -554,7 +558,7 @@ export default function CreateProgram({
                     <div className="create-program__selected-header">
                       <div>
                         <span>
-                          POSITION {index + 1}
+                          {t("createProgram.position")} {index + 1}
                         </span>
 
                         <strong>
@@ -569,7 +573,7 @@ export default function CreateProgram({
                             item.workout.id
                           )
                         }
-                        aria-label={`Remove ${item.workout.name}`}
+                        aria-label={`${t("createProgram.remove")} ${item.workout.name}`}
                       >
                         ×
                       </button>
@@ -578,7 +582,7 @@ export default function CreateProgram({
                     <div className="create-program__grid">
                       <label>
                         <span>
-                          WEEK
+                          {t("createProgram.week")}
                         </span>
 
                         <input
@@ -605,7 +609,7 @@ export default function CreateProgram({
 
                       <label>
                         <span>
-                          DAY
+                          {t("createProgram.day")}
                         </span>
 
                         <input
@@ -651,8 +655,8 @@ export default function CreateProgram({
         >
           <span>
             {saving
-              ? "SAVING..."
-              : "SAVE PROGRAM"}
+              ? t("createProgram.saving")
+              : t("createProgram.save")}
           </span>
 
           <b>→</b>
