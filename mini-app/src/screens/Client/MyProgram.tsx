@@ -13,6 +13,8 @@ import type {
   WorkoutProgram,
 } from "../../types/workout";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./MyProgram.css";
 
 type Exercise = {
@@ -103,7 +105,9 @@ type Props = {
 };
 
 function getReps(
-  item: WorkoutExercise
+  item: WorkoutExercise,
+  secLabel: string,
+  prescribedLabel: string
 ): string {
   if (
     item.minRepetitions !== null &&
@@ -117,16 +121,18 @@ function getReps(
   }
 
   if (item.duration !== null) {
-    return `${item.duration} SEC`;
+    return `${item.duration} ${secLabel}`;
   }
 
-  return "AS PRESCRIBED";
+  return prescribedLabel;
 }
 
 function toWorkoutProgram(
   workout: TrainingWorkout,
   assignmentId: number,
-  programWorkoutId: number
+  programWorkoutId: number,
+  secLabel: string,
+  prescribedLabel: string
 ): WorkoutProgram {
   return {
     id: `coach-${workout.id}`,
@@ -144,7 +150,11 @@ function toWorkoutProgram(
           1,
           item.sets ?? 1
         ),
-        reps: getReps(item),
+        reps: getReps(
+          item,
+          secLabel,
+          prescribedLabel
+        ),
       })
     ),
   };
@@ -155,6 +165,8 @@ export default function MyProgram({
   onBack,
   onStartWorkout,
 }: Props) {
+  const { t } = useLanguage();
+
   const [
     loading,
     setLoading,
@@ -208,7 +220,7 @@ export default function MyProgram({
         setError(
           loadError instanceof Error
             ? loadError.message
-            : "Failed to load program"
+            : t("myProgram.failedToLoad")
         );
       } finally {
         if (!cancelled) {
@@ -273,26 +285,26 @@ export default function MyProgram({
 
               onBack();
             }}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
 
           <div>
             <span>
-              IRONAGE TRAINING
+              {t("myProgram.training")}
             </span>
 
             <h1>
               {activeProgramId === null
-                ? "MY PROGRAMS"
-                : "MY PROGRAM"}
+                ? t("myProgram.myPrograms")
+                : t("myProgram.myProgram")}
             </h1>
 
             <p>
               {activeProgramId === null
-                ? "YOUR PROGRAMS. YOUR TRAINING."
-                : "YOUR PLAN. YOUR WORK."}
+                ? t("myProgram.librarySubtitle")
+                : t("myProgram.programSubtitle")}
             </p>
           </div>
         </header>
@@ -300,7 +312,7 @@ export default function MyProgram({
         {loading && (
           <section className="my-program-state">
             <strong>
-              LOADING PROGRAM...
+              {t("myProgram.loading")}
             </strong>
           </section>
         )}
@@ -308,7 +320,7 @@ export default function MyProgram({
         {!loading && error && (
           <section className="my-program-state my-program-state--error">
             <strong>
-              PROGRAM LOAD ERROR
+              {t("myProgram.loadError")}
             </strong>
             <p>{error}</p>
           </section>
@@ -320,12 +332,11 @@ export default function MyProgram({
           assignments.length === 0 && (
             <section className="my-program-state">
               <span>
-                NO PROGRAMS YET
+                {t("myProgram.noProgramsYet")}
               </span>
 
               <h2>
-                YOUR TRAINING LIBRARY
-                IS EMPTY.
+                {t("myProgram.libraryEmpty")}
               </h2>
 
               <p>
@@ -346,17 +357,17 @@ export default function MyProgram({
                   const sourceLabel =
                     item.accessSource ===
                     "COACH_ASSIGNMENT"
-                      ? "COACH"
+                      ? t("myProgram.sourceCoach")
                       : item.accessSource ===
                           "FREE_CLAIM"
-                        ? "FREE"
+                        ? t("myProgram.sourceFree")
                         : item.accessSource ===
                             "PURCHASE"
-                          ? "PURCHASE"
+                          ? t("myProgram.sourcePurchase")
                           : item.accessSource ===
                               "SUBSCRIPTION"
-                            ? "SUBSCRIPTION"
-                            : "ADMIN";
+                            ? t("myProgram.sourceSubscription")
+                            : t("myProgram.sourceAdmin");
 
                   return (
                     <button
@@ -375,7 +386,7 @@ export default function MyProgram({
                         </span>
 
                         <b>
-                          OPEN →
+                          {t("myProgram.open")} →
                         </b>
                       </div>
 
@@ -400,7 +411,7 @@ export default function MyProgram({
                               .durationWeeks ??
                             "—"
                           }{" "}
-                          WEEKS
+                          {t("myProgram.weeks")}
                         </span>
 
                         <span>
@@ -408,7 +419,7 @@ export default function MyProgram({
                             item.program
                               .workouts.length
                           }{" "}
-                          WORKOUTS
+                          {t("myProgram.workouts")}
                         </span>
 
                         <span>
@@ -419,7 +430,7 @@ export default function MyProgram({
                                   ?.displayName ||
                                 "COACH"
                               )
-                            : "SELF-SERVICE"}
+                            : t("myProgram.selfService")}
                         </span>
                       </div>
                     </button>
@@ -435,7 +446,7 @@ export default function MyProgram({
           !assignment && (
             <section className="my-program-state my-program-state--error">
               <span>
-                PROGRAM NOT AVAILABLE
+                {t("myProgram.notAvailable")}
               </span>
 
               <h2>
@@ -452,8 +463,8 @@ export default function MyProgram({
               <section className="my-program-coach">
                 <span>
                   {assignment.coach
-                    ? "YOUR COACH"
-                    : "PROGRAM ACCESS"}
+                    ? t("myProgram.yourCoach")
+                    : t("myProgram.programAccess")}
                 </span>
 
                 <h2>
@@ -470,9 +481,9 @@ export default function MyProgram({
                         ]
                           .filter(Boolean)
                           .join(" ") ||
-                        "IRONAGE COACH"
+                        t("myProgram.ironageCoach")
                       )
-                    : "IRONAGE PROGRAM"}
+                    : t("myProgram.ironageProgram")}
                 </h2>
 
                 <p>
@@ -481,15 +492,15 @@ export default function MyProgram({
                         assignment.coach
                           .coachProfile
                           ?.specialization ||
-                        "PERSONAL COACHING"
+                        t("myProgram.personalCoaching")
                       )
-                    : "SELF-SERVICE TRAINING PROGRAM"}
+                    : t("myProgram.selfServiceProgram")}
                 </p>
               </section>
 
               <section className="my-program-hero">
                 <span>
-                  ACTIVE PROGRAM
+                  {t("myProgram.activeProgram")}
                 </span>
 
                 <h2>
@@ -513,14 +524,14 @@ export default function MyProgram({
                         .durationWeeks ??
                         "—"}
                     </strong>
-                    <span>WEEKS</span>
+                    <span>{t("myProgram.weeks")}</span>
                   </div>
 
                   <div>
                     <strong>
                       {workouts.length}
                     </strong>
-                    <span>WORKOUTS</span>
+                    <span>{t("myProgram.workouts")}</span>
                   </div>
                 </div>
               </section>
@@ -528,7 +539,7 @@ export default function MyProgram({
               <div className="my-program-title">
                 <span />
                 <strong>
-                  TRAINING SCHEDULE
+                  {t("myProgram.trainingSchedule")}
                 </strong>
                 <span />
               </div>
@@ -557,10 +568,10 @@ export default function MyProgram({
                         <div className="my-program-workout-top">
                           <div>
                             <span>
-                              WEEK{" "}
+                              {t("myProgram.week")}{" "}
                               {programWorkout.week ??
                                 "—"}{" "}
-                              · DAY{" "}
+                              · {t("myProgram.day")}{" "}
                               {programWorkout.day ??
                                 "—"}
                             </span>
@@ -585,17 +596,17 @@ export default function MyProgram({
                               workout.exercises
                                 .length
                             }{" "}
-                            EXERCISES
+                            {t("myProgram.exercises")}
                           </span>
 
                           <span>
-                            {totalSets} SETS
+                            {totalSets} {t("myProgram.sets")}
                           </span>
 
                           {workout.duration !==
                             null && (
                             <span>
-                              {workout.duration} MIN
+                              {workout.duration} {t("myProgram.min")}
                             </span>
                           )}
                         </div>
@@ -617,11 +628,13 @@ export default function MyProgram({
                                   <small>
                                     {item.sets ??
                                       1}{" "}
-                                    SETS ·{" "}
+                                    {t("myProgram.sets")} ·{" "}
                                     {getReps(
-                                      item
+                                      item,
+                                      t("myProgram.sec"),
+                                      t("myProgram.asPrescribed")
                                     )}{" "}
-                                    REPS
+                                    {t("myProgram.reps")}
                                   </small>
                                 </section>
 
@@ -647,7 +660,9 @@ export default function MyProgram({
                               toWorkoutProgram(
                                 workout,
                                 assignment.id,
-                                programWorkout.id
+                                programWorkout.id,
+                                t("myProgram.sec"),
+                                t("myProgram.asPrescribed")
                               );
 
                             onStartWorkout(
@@ -656,7 +671,7 @@ export default function MyProgram({
                             );
                           }}
                         >
-                          START WORKOUT →
+                          {t("myProgram.startWorkout")} →
                         </button>
                       </article>
                     );

@@ -745,6 +745,439 @@ const translations:
   },
 
   /* =====================================================
+     MY PROGRAM
+  ===================================================== */
+
+  "myProgram.training": {
+    en: "IRONAGE TRAINING",
+    es: "ENTRENAMIENTO IRONAGE",
+    uk: "ТРЕНУВАННЯ IRONAGE",
+    ru: "ТРЕНИРОВКА IRONAGE",
+    fr: "ENTRAÎNEMENT IRONAGE",
+    de: "IRONAGE TRAINING",
+    pt: "TREINO IRONAGE",
+    bg: "ТРЕНИРОВКА IRONAGE",
+  },
+
+  "myProgram.myPrograms": {
+    en: "MY PROGRAMS",
+    es: "MIS PROGRAMAS",
+    uk: "МОЇ ПРОГРАМИ",
+    ru: "МОИ ПРОГРАММЫ",
+    fr: "MES PROGRAMMES",
+    de: "MEINE PROGRAMME",
+    pt: "MEUS PROGRAMAS",
+    bg: "МОИТЕ ПРОГРАМИ",
+  },
+
+  "myProgram.myProgram": {
+    en: "MY PROGRAM",
+    es: "MI PROGRAMA",
+    uk: "МОЯ ПРОГРАМА",
+    ru: "МОЯ ПРОГРАММА",
+    fr: "MON PROGRAMME",
+    de: "MEIN PROGRAMM",
+    pt: "MEU PROGRAMA",
+    bg: "МОЯТА ПРОГРАМА",
+  },
+
+  "myProgram.librarySubtitle": {
+    en: "YOUR PROGRAMS. YOUR TRAINING.",
+    es: "TUS PROGRAMAS. TU ENTRENAMIENTO.",
+    uk: "ТВОЇ ПРОГРАМИ. ТВОЇ ТРЕНУВАННЯ.",
+    ru: "ТВОИ ПРОГРАММЫ. ТВОИ ТРЕНИРОВКИ.",
+    fr: "TES PROGRAMMES. TON ENTRAÎNEMENT.",
+    de: "DEINE PROGRAMME. DEIN TRAINING.",
+    pt: "SEUS PROGRAMAS. SEU TREINO.",
+    bg: "ТВОИТЕ ПРОГРАМИ. ТВОИТЕ ТРЕНИРОВКИ.",
+  },
+
+  "myProgram.programSubtitle": {
+    en: "YOUR PLAN. YOUR WORK.",
+    es: "TU PLAN. TU TRABAJO.",
+    uk: "ТВІЙ ПЛАН. ТВОЯ РОБОТА.",
+    ru: "ТВОЙ ПЛАН. ТВОЯ РАБОТА.",
+    fr: "TON PLAN. TON TRAVAIL.",
+    de: "DEIN PLAN. DEINE ARBEIT.",
+    pt: "SEU PLANO. SEU TRABALHO.",
+    bg: "ТВОЯТ ПЛАН. ТВОЯТА РАБОТА.",
+  },
+
+  "myProgram.loading": {
+    en: "LOADING PROGRAM...",
+    es: "CARGANDO PROGRAMA...",
+    uk: "ЗАВАНТАЖЕННЯ ПРОГРАМИ...",
+    ru: "ЗАГРУЗКА ПРОГРАММЫ...",
+    fr: "CHARGEMENT DU PROGRAMME...",
+    de: "PROGRAMM WIRD GELADEN...",
+    pt: "CARREGANDO PROGRAMA...",
+    bg: "ЗАРЕЖДАНЕ НА ПРОГРАМАТА...",
+  },
+
+  "myProgram.loadError": {
+    en: "PROGRAM LOAD ERROR",
+    es: "ERROR AL CARGAR EL PROGRAMA",
+    uk: "ПОМИЛКА ЗАВАНТАЖЕННЯ ПРОГРАМИ",
+    ru: "ОШИБКА ЗАГРУЗКИ ПРОГРАММЫ",
+    fr: "ERREUR DE CHARGEMENT DU PROGRAMME",
+    de: "FEHLER BEIM LADEN DES PROGRAMMS",
+    pt: "ERRO AO CARREGAR O PROGRAMA",
+    bg: "ГРЕШКА ПРИ ЗАРЕЖДАНЕ НА ПРОГРАМАТА",
+  },
+
+  "myProgram.failedToLoad": {
+    en: "Failed to load program",
+    es: "No se pudo cargar el programa",
+    uk: "Не вдалося завантажити програму",
+    ru: "Не удалось загрузить программу",
+    fr: "Impossible de charger le programme",
+    de: "Programm konnte nicht geladen werden",
+    pt: "Não foi possível carregar o programa",
+    bg: "Програмата не можа да бъде заредена",
+  },
+
+  "myProgram.noProgramsYet": {
+    en: "NO PROGRAMS YET",
+    es: "AÚN NO HAY PROGRAMAS",
+    uk: "ПРОГРАМ ЩЕ НЕМАЄ",
+    ru: "ПРОГРАММ ПОКА НЕТ",
+    fr: "AUCUN PROGRAMME POUR LE MOMENT",
+    de: "NOCH KEINE PROGRAMME",
+    pt: "AINDA NÃO HÁ PROGRAMAS",
+    bg: "ВСЕ ОЩЕ НЯМА ПРОГРАМИ",
+  },
+
+  "myProgram.libraryEmpty": {
+    en: "YOUR TRAINING LIBRARY IS EMPTY.",
+    es: "TU BIBLIOTECA DE ENTRENAMIENTO ESTÁ VACÍA.",
+    uk: "ТВОЯ БІБЛІОТЕКА ТРЕНУВАНЬ ПОРОЖНЯ.",
+    ru: "ТВОЯ БИБЛИОТЕКА ТРЕНИРОВОК ПУСТА.",
+    fr: "TA BIBLIOTHÈQUE D’ENTRAÎNEMENT EST VIDE.",
+    de: "DEINE TRAININGSBIBLIOTHEK IST LEER.",
+    pt: "SUA BIBLIOTECA DE TREINOS ESTÁ VAZIA.",
+    bg: "ТВОЯТА БИБЛИОТЕКА С ТРЕНИРОВКИ Е ПРАЗНА.",
+  },
+
+  "myProgram.libraryHint": {
+    en: "Programs you receive from a coach, claim for free or purchase will appear here.",
+    es: "Los programas que recibas de un entrenador, obtengas gratis o compres aparecerán aquí.",
+    uk: "Програми від тренера, безкоштовно отримані або придбані програми з’являться тут.",
+    ru: "Программы от тренера, полученные бесплатно или купленные, появятся здесь.",
+    fr: "Les programmes reçus d’un coach, obtenus gratuitement ou achetés apparaîtront ici.",
+    de: "Programme vom Coach, kostenlos beanspruchte oder gekaufte Programme erscheinen hier.",
+    pt: "Programas recebidos de um treinador, obtidos gratuitamente ou comprados aparecerão aqui.",
+    bg: "Програмите от треньор, получени безплатно или закупени, ще се появят тук.",
+  },
+
+  "myProgram.sourceCoach": {
+    en: "COACH",
+    es: "ENTRENADOR",
+    uk: "ТРЕНЕР",
+    ru: "ТРЕНЕР",
+    fr: "COACH",
+    de: "COACH",
+    pt: "TREINADOR",
+    bg: "ТРЕНЬОР",
+  },
+
+  "myProgram.sourceFree": {
+    en: "FREE",
+    es: "GRATIS",
+    uk: "БЕЗКОШТОВНО",
+    ru: "БЕСПЛАТНО",
+    fr: "GRATUIT",
+    de: "KOSTENLOS",
+    pt: "GRÁTIS",
+    bg: "БЕЗПЛАТНО",
+  },
+
+  "myProgram.sourcePurchase": {
+    en: "PURCHASE",
+    es: "COMPRA",
+    uk: "ПОКУПКА",
+    ru: "ПОКУПКА",
+    fr: "ACHAT",
+    de: "KAUF",
+    pt: "COMPRA",
+    bg: "ПОКУПКА",
+  },
+
+  "myProgram.sourceSubscription": {
+    en: "SUBSCRIPTION",
+    es: "SUSCRIPCIÓN",
+    uk: "ПІДПИСКА",
+    ru: "ПОДПИСКА",
+    fr: "ABONNEMENT",
+    de: "ABONNEMENT",
+    pt: "ASSINATURA",
+    bg: "АБОНАМЕНТ",
+  },
+
+  "myProgram.sourceAdmin": {
+    en: "ADMIN",
+    es: "ADMIN",
+    uk: "АДМІН",
+    ru: "АДМИН",
+    fr: "ADMIN",
+    de: "ADMIN",
+    pt: "ADMIN",
+    bg: "АДМИН",
+  },
+
+  "myProgram.open": {
+    en: "OPEN",
+    es: "ABRIR",
+    uk: "ВІДКРИТИ",
+    ru: "ОТКРЫТЬ",
+    fr: "OUVRIR",
+    de: "ÖFFNEN",
+    pt: "ABRIR",
+    bg: "ОТВОРИ",
+  },
+
+  "myProgram.weeks": {
+    en: "WEEKS",
+    es: "SEMANAS",
+    uk: "ТИЖНІ",
+    ru: "НЕДЕЛИ",
+    fr: "SEMAINES",
+    de: "WOCHEN",
+    pt: "SEMANAS",
+    bg: "СЕДМИЦИ",
+  },
+
+  "myProgram.workouts": {
+    en: "WORKOUTS",
+    es: "ENTRENAMIENTOS",
+    uk: "ТРЕНУВАННЯ",
+    ru: "ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENTS",
+    de: "TRAININGS",
+    pt: "TREINOS",
+    bg: "ТРЕНИРОВКИ",
+  },
+
+  "myProgram.selfService": {
+    en: "SELF-SERVICE",
+    es: "AUTOSERVICIO",
+    uk: "САМОСТІЙНО",
+    ru: "САМОСТОЯТЕЛЬНО",
+    fr: "EN AUTONOMIE",
+    de: "SELBSTSTÄNDIG",
+    pt: "AUTOSSERVIÇO",
+    bg: "САМОСТОЯТЕЛНО",
+  },
+
+  "myProgram.notAvailable": {
+    en: "PROGRAM NOT AVAILABLE",
+    es: "PROGRAMA NO DISPONIBLE",
+    uk: "ПРОГРАМА НЕДОСТУПНА",
+    ru: "ПРОГРАММА НЕДОСТУПНА",
+    fr: "PROGRAMME INDISPONIBLE",
+    de: "PROGRAMM NICHT VERFÜGBAR",
+    pt: "PROGRAMA INDISPONÍVEL",
+    bg: "ПРОГРАМАТА НЕ Е ДОСТЪПНА",
+  },
+
+  "myProgram.notActive": {
+    en: "THIS PROGRAM IS NOT ACTIVE IN YOUR ACCOUNT.",
+    es: "ESTE PROGRAMA NO ESTÁ ACTIVO EN TU CUENTA.",
+    uk: "ЦЯ ПРОГРАМА НЕ АКТИВНА У ТВОЄМУ АКАУНТІ.",
+    ru: "ЭТА ПРОГРАММА НЕ АКТИВНА В ТВОЁМ АККАУНТЕ.",
+    fr: "CE PROGRAMME N’EST PAS ACTIF SUR TON COMPTE.",
+    de: "DIESES PROGRAMM IST IN DEINEM KONTO NICHT AKTIV.",
+    pt: "ESTE PROGRAMA NÃO ESTÁ ATIVO NA SUA CONTA.",
+    bg: "ТАЗИ ПРОГРАМА НЕ Е АКТИВНА В ПРОФИЛА ТИ.",
+  },
+
+  "myProgram.yourCoach": {
+    en: "YOUR COACH",
+    es: "TU ENTRENADOR",
+    uk: "ТВІЙ ТРЕНЕР",
+    ru: "ТВОЙ ТРЕНЕР",
+    fr: "TON COACH",
+    de: "DEIN COACH",
+    pt: "SEU TREINADOR",
+    bg: "ТВОЯТ ТРЕНЬОР",
+  },
+
+  "myProgram.programAccess": {
+    en: "PROGRAM ACCESS",
+    es: "ACCESO AL PROGRAMA",
+    uk: "ДОСТУП ДО ПРОГРАМИ",
+    ru: "ДОСТУП К ПРОГРАММЕ",
+    fr: "ACCÈS AU PROGRAMME",
+    de: "PROGRAMMZUGRIFF",
+    pt: "ACESSO AO PROGRAMA",
+    bg: "ДОСТЪП ДО ПРОГРАМАТА",
+  },
+
+  "myProgram.ironageCoach": {
+    en: "IRONAGE COACH",
+    es: "ENTRENADOR IRONAGE",
+    uk: "ТРЕНЕР IRONAGE",
+    ru: "ТРЕНЕР IRONAGE",
+    fr: "COACH IRONAGE",
+    de: "IRONAGE COACH",
+    pt: "TREINADOR IRONAGE",
+    bg: "ТРЕНЬОР IRONAGE",
+  },
+
+  "myProgram.ironageProgram": {
+    en: "IRONAGE PROGRAM",
+    es: "PROGRAMA IRONAGE",
+    uk: "ПРОГРАМА IRONAGE",
+    ru: "ПРОГРАММА IRONAGE",
+    fr: "PROGRAMME IRONAGE",
+    de: "IRONAGE PROGRAMM",
+    pt: "PROGRAMA IRONAGE",
+    bg: "ПРОГРАМА IRONAGE",
+  },
+
+  "myProgram.personalCoaching": {
+    en: "PERSONAL COACHING",
+    es: "COACHING PERSONAL",
+    uk: "ПЕРСОНАЛЬНИЙ СУПРОВІД",
+    ru: "ПЕРСОНАЛЬНОЕ СОПРОВОЖДЕНИЕ",
+    fr: "COACHING PERSONNEL",
+    de: "PERSÖNLICHES COACHING",
+    pt: "COACHING PESSOAL",
+    bg: "ПЕРСОНАЛЕН КОУЧИНГ",
+  },
+
+  "myProgram.selfServiceProgram": {
+    en: "SELF-SERVICE TRAINING PROGRAM",
+    es: "PROGRAMA DE ENTRENAMIENTO AUTÓNOMO",
+    uk: "ПРОГРАМА ДЛЯ САМОСТІЙНИХ ТРЕНУВАНЬ",
+    ru: "ПРОГРАММА ДЛЯ САМОСТОЯТЕЛЬНЫХ ТРЕНИРОВОК",
+    fr: "PROGRAMME D’ENTRAÎNEMENT AUTONOME",
+    de: "SELBSTSTÄNDIGES TRAININGSPROGRAMM",
+    pt: "PROGRAMA DE TREINO AUTÔNOMO",
+    bg: "ПРОГРАМА ЗА САМОСТОЯТЕЛНИ ТРЕНИРОВКИ",
+  },
+
+  "myProgram.activeProgram": {
+    en: "ACTIVE PROGRAM",
+    es: "PROGRAMA ACTIVO",
+    uk: "АКТИВНА ПРОГРАМА",
+    ru: "АКТИВНАЯ ПРОГРАММА",
+    fr: "PROGRAMME ACTIF",
+    de: "AKTIVES PROGRAMM",
+    pt: "PROGRAMA ATIVO",
+    bg: "АКТИВНА ПРОГРАМА",
+  },
+
+  "myProgram.trainingSchedule": {
+    en: "TRAINING SCHEDULE",
+    es: "PLAN DE ENTRENAMIENTO",
+    uk: "РОЗКЛАД ТРЕНУВАНЬ",
+    ru: "РАСПИСАНИЕ ТРЕНИРОВОК",
+    fr: "PLANNING D’ENTRAÎNEMENT",
+    de: "TRAININGSPLAN",
+    pt: "CRONOGRAMA DE TREINO",
+    bg: "ТРЕНИРОВЪЧЕН ГРАФИК",
+  },
+
+  "myProgram.week": {
+    en: "WEEK",
+    es: "SEMANA",
+    uk: "ТИЖДЕНЬ",
+    ru: "НЕДЕЛЯ",
+    fr: "SEMAINE",
+    de: "WOCHE",
+    pt: "SEMANA",
+    bg: "СЕДМИЦА",
+  },
+
+  "myProgram.day": {
+    en: "DAY",
+    es: "DÍA",
+    uk: "ДЕНЬ",
+    ru: "ДЕНЬ",
+    fr: "JOUR",
+    de: "TAG",
+    pt: "DIA",
+    bg: "ДЕН",
+  },
+
+  "myProgram.exercises": {
+    en: "EXERCISES",
+    es: "EJERCICIOS",
+    uk: "ВПРАВИ",
+    ru: "УПРАЖНЕНИЯ",
+    fr: "EXERCICES",
+    de: "ÜBUNGEN",
+    pt: "EXERCÍCIOS",
+    bg: "УПРАЖНЕНИЯ",
+  },
+
+  "myProgram.sets": {
+    en: "SETS",
+    es: "SERIES",
+    uk: "ПІДХОДИ",
+    ru: "ПОДХОДЫ",
+    fr: "SÉRIES",
+    de: "SÄTZE",
+    pt: "SÉRIES",
+    bg: "СЕРИИ",
+  },
+
+  "myProgram.reps": {
+    en: "REPS",
+    es: "REPETICIONES",
+    uk: "ПОВТОРИ",
+    ru: "ПОВТОРЫ",
+    fr: "RÉPÉTITIONS",
+    de: "WIEDERHOLUNGEN",
+    pt: "REPETIÇÕES",
+    bg: "ПОВТОРЕНИЯ",
+  },
+
+  "myProgram.min": {
+    en: "MIN",
+    es: "MIN",
+    uk: "ХВ",
+    ru: "МИН",
+    fr: "MIN",
+    de: "MIN",
+    pt: "MIN",
+    bg: "МИН",
+  },
+
+  "myProgram.sec": {
+    en: "SEC",
+    es: "SEG",
+    uk: "СЕК",
+    ru: "СЕК",
+    fr: "SEC",
+    de: "SEK",
+    pt: "SEG",
+    bg: "СЕК",
+  },
+
+  "myProgram.asPrescribed": {
+    en: "AS PRESCRIBED",
+    es: "SEGÚN INDICACIÓN",
+    uk: "ЗА ПРИЗНАЧЕННЯМ",
+    ru: "ПО НАЗНАЧЕНИЮ",
+    fr: "SELON PRESCRIPTION",
+    de: "WIE VORGEGEBEN",
+    pt: "CONFORME PRESCRITO",
+    bg: "СПОРЕД УКАЗАНИЯТА",
+  },
+
+  "myProgram.startWorkout": {
+    en: "START WORKOUT",
+    es: "INICIAR ENTRENAMIENTO",
+    uk: "ПОЧАТИ ТРЕНУВАННЯ",
+    ru: "НАЧАТЬ ТРЕНИРОВКУ",
+    fr: "COMMENCER L’ENTRAÎNEMENT",
+    de: "TRAINING STARTEN",
+    pt: "INICIAR TREINO",
+    bg: "ЗАПОЧНИ ТРЕНИРОВКА",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 
