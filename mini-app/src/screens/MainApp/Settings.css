@@ -1,0 +1,212 @@
+.settings-screen {
+  min-height: 100dvh;
+  padding: 24px 18px 70px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(212, 175, 55, 0.08),
+      transparent 34%
+    ),
+    #050505;
+  color: #ffffff;
+}
+
+.settings-screen__shell {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.settings-screen__header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.settings-screen__back {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 14px;
+  background: #0a0a0a;
+  color: #d4af37;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.settings-screen__header span,
+.settings-screen__hero > span {
+  display: block;
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.settings-screen__header h1 {
+  margin: 6px 0 0;
+  font-size: clamp(30px, 8vw, 46px);
+  line-height: 1;
+}
+
+.settings-screen__header p {
+  margin: 10px 0 0;
+  color: #8e8e8e;
+  font-size: 13px;
+}
+
+.settings-screen__hero {
+  margin-bottom: 22px;
+  padding: 22px;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 22px;
+  background: #0a0a0a;
+}
+
+.settings-screen__hero h2 {
+  margin: 12px 0 8px;
+  font-size: 25px;
+}
+
+.settings-screen__hero h2 strong {
+  color: #d4af37;
+}
+
+.settings-screen__hero p {
+  margin: 0;
+  color: #999999;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.settings-screen__section {
+  display: grid;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.settings-screen__section-title {
+  margin-bottom: 3px;
+  color: #777777;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.settings-screen__languages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.settings-screen__language {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: 32px 1fr 24px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid #232323;
+  border-radius: 14px;
+  background: #0a0a0a;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-screen__language--active {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.settings-screen__language > span {
+  font-size: 20px;
+}
+
+.settings-screen__language strong {
+  font-size: 13px;
+}
+
+.settings-screen__language b {
+  color: #d4af37;
+  text-align: right;
+}
+
+.settings-screen__toggle,
+.settings-screen__link {
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #202020;
+  border-radius: 16px;
+  background: #0a0a0a;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-screen__toggle > div,
+.settings-screen__link > div {
+  display: grid;
+  gap: 5px;
+}
+
+.settings-screen__toggle strong,
+.settings-screen__link strong {
+  font-size: 13px;
+}
+
+.settings-screen__toggle > div > span,
+.settings-screen__link > div > span {
+  color: #858585;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.settings-screen__link > b {
+  color: #d4af37;
+  font-size: 18px;
+}
+
+.settings-screen__switch {
+  width: 48px;
+  height: 28px;
+  flex: 0 0 48px;
+  position: relative;
+  border-radius: 999px;
+  background: #262626;
+  transition: 0.2s ease;
+}
+
+.settings-screen__switch i {
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  background: #777777;
+  transition: 0.2s ease;
+}
+
+.settings-screen__switch--on {
+  background: #d4af37;
+}
+
+.settings-screen__switch--on i {
+  left: 23px;
+  background: #050505;
+}
+
+@media (max-width: 520px) {
+  .settings-screen__languages {
+    grid-template-columns: 1fr;
+  }
+}

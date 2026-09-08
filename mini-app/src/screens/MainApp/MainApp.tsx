@@ -13,6 +13,7 @@ import Progress from "./Progress";
 import Profile from "./Profile";
 import ProfileFeature from "./ProfileFeature";
 import EditProfile from "./EditProfile";
+import Settings from "./Settings";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
 import TabBar from "./TabBar";
@@ -63,6 +64,7 @@ type AppScreen =
   | "admin-programs"
   | "profile-feature"
   | "edit-profile"
+  | "settings"
   | "programs"
   | "program-details"
   | "privacy"
@@ -731,9 +733,8 @@ export default function MainApp() {
             }}
 
             onOpenSettings={() => {
-              openProfileFeature(
-                "SETTINGS",
-                "Language, privacy, security and account preferences."
+              setScreen(
+                "settings"
               );
             }}
 
@@ -949,6 +950,42 @@ export default function MainApp() {
           <TermsPage
             onBack={() => {
               setScreen("profile");
+            }}
+          />
+        )}
+
+
+        {screen === "settings" && (
+          <Settings
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
+            }}
+
+            onOpenEditProfile={() => {
+              setScreen(
+                "edit-profile"
+              );
+            }}
+
+            onOpenNotifications={() => {
+              openProfileFeature(
+                "NOTIFICATIONS",
+                "Manage workout, coach, progress and account alerts."
+              );
+            }}
+
+            onOpenPrivacy={() => {
+              setScreen(
+                "privacy"
+              );
+            }}
+
+            onOpenTerms={() => {
+              setScreen(
+                "terms"
+              );
             }}
           />
         )}
