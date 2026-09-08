@@ -960,9 +960,22 @@ router.post(
       const now =
         new Date();
 
-      const result =
-        await prisma.$transaction(
-          async (tx) => {
+      let result: {
+        purchaseId: number;
+        entitlementId: number;
+        assignmentId: number;
+      } | null =
+        null;
+
+      for (
+        let attempt = 1;
+        attempt <= 3;
+        attempt += 1
+      ) {
+        try {
+          result =
+            await prisma.$transaction(
+              async (tx) => {
             /*
              * A StoreKit transaction can belong
              * to exactly one IRONAGE account.
@@ -1163,8 +1176,63 @@ router.post(
           {
             isolationLevel:
               "Serializable",
+            }
+          );
+
+          break;
+        } catch (transactionError) {
+          const code =
+            typeof transactionError ===
+              "object" &&
+            transactionError !== null &&
+            "code" in transactionError
+              ? String(
+                  (
+                    transactionError as {
+                      code?: unknown;
+                    }
+                  ).code
+                )
+              : null;
+
+          const retryable =
+            code === "P2002" ||
+            code === "P2034";
+
+          if (
+            !retryable ||
+            attempt === 3
+          ) {
+            throw transactionError;
           }
+
+          console.warn(
+            "IRONAGE APPLE PROGRAM PURCHASE RETRY:",
+            {
+              attempt,
+              code,
+              transactionId:
+                verified.transactionId,
+            }
+          );
+
+          await new Promise<void>(
+            resolve => {
+              setTimeout(
+                resolve,
+                50 * attempt
+              );
+            }
+          );
+        }
+      }
+
+      if (!result) {
+        throw new Error(
+          "Apple purchase transaction failed"
         );
+      }
+
 
       return res.status(201).json({
         success: true,
