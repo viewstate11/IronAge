@@ -12,6 +12,7 @@ import Nutrition from "./Nutrition";
 import Progress from "./Progress";
 import Profile from "./Profile";
 import ProfileFeature from "./ProfileFeature";
+import EditProfile from "./EditProfile";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
 import TabBar from "./TabBar";
@@ -61,6 +62,7 @@ type AppScreen =
   | "admin-coaches"
   | "admin-programs"
   | "profile-feature"
+  | "edit-profile"
   | "programs"
   | "program-details"
   | "privacy"
@@ -736,9 +738,8 @@ export default function MainApp() {
             }}
 
             onOpenEditProfile={() => {
-              openProfileFeature(
-                "EDIT PROFILE",
-                "Update your personal information, fitness data and profile settings."
+              setScreen(
+                "edit-profile"
               );
             }}
 
@@ -948,6 +949,17 @@ export default function MainApp() {
           <TermsPage
             onBack={() => {
               setScreen("profile");
+            }}
+          />
+        )}
+
+
+        {screen === "edit-profile" && (
+          <EditProfile
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
             }}
           />
         )}

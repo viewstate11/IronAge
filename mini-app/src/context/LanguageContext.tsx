@@ -3809,6 +3809,307 @@ const translations:
   },
 
   /* =====================================================
+     EDIT PROFILE
+  ===================================================== */
+
+  "editProfile.title": {
+    en: "EDIT PROFILE",
+    es: "EDITAR PERFIL",
+    uk: "РЕДАГУВАТИ ПРОФІЛЬ",
+    ru: "РЕДАКТИРОВАТЬ ПРОФИЛЬ",
+    fr: "MODIFIER LE PROFIL",
+    de: "PROFIL BEARBEITEN",
+    pt: "EDITAR PERFIL",
+    bg: "РЕДАКТИРАНЕ НА ПРОФИЛ",
+  },
+
+  "editProfile.subtitle": {
+    en: "UPDATE YOUR BODY, GOAL AND PERSONAL DATA",
+    es: "ACTUALIZA TUS DATOS, CUERPO Y OBJETIVO",
+    uk: "ОНОВИ СВОЇ ДАНІ, ПАРАМЕТРИ ТА ЦІЛЬ",
+    ru: "ОБНОВИ СВОИ ДАННЫЕ, ПАРАМЕТРЫ И ЦЕЛЬ",
+    fr: "METTEZ À JOUR VOS DONNÉES ET VOTRE OBJECTIF",
+    de: "AKTUALISIERE DEINE DATEN UND DEIN ZIEL",
+    pt: "ATUALIZE SEUS DADOS, CORPO E OBJETIVO",
+    bg: "АКТУАЛИЗИРАЙ ДАННИТЕ, ТЯЛОТО И ЦЕЛТА СИ",
+  },
+
+  "editProfile.name": {
+    en: "NAME",
+    es: "NOMBRE",
+    uk: "ІМ’Я",
+    ru: "ИМЯ",
+    fr: "NOM",
+    de: "NAME",
+    pt: "NOME",
+    bg: "ИМЕ",
+  },
+
+  "editProfile.age": {
+    en: "AGE",
+    es: "EDAD",
+    uk: "ВІК",
+    ru: "ВОЗРАСТ",
+    fr: "ÂGE",
+    de: "ALTER",
+    pt: "IDADE",
+    bg: "ВЪЗРАСТ",
+  },
+
+  "editProfile.gender": {
+    en: "GENDER",
+    es: "GÉNERO",
+    uk: "СТАТЬ",
+    ru: "ПОЛ",
+    fr: "SEXE",
+    de: "GESCHLECHT",
+    pt: "GÊNERO",
+    bg: "ПОЛ",
+  },
+
+  "editProfile.genderMale": {
+    en: "MALE",
+    es: "HOMBRE",
+    uk: "ЧОЛОВІК",
+    ru: "МУЖЧИНА",
+    fr: "HOMME",
+    de: "MÄNNLICH",
+    pt: "HOMEM",
+    bg: "МЪЖ",
+  },
+
+  "editProfile.genderFemale": {
+    en: "FEMALE",
+    es: "MUJER",
+    uk: "ЖІНКА",
+    ru: "ЖЕНЩИНА",
+    fr: "FEMME",
+    de: "WEIBLICH",
+    pt: "MULHER",
+    bg: "ЖЕНА",
+  },
+
+  "editProfile.genderOther": {
+    en: "OTHER",
+    es: "OTRO",
+    uk: "ІНШЕ",
+    ru: "ДРУГОЕ",
+    fr: "AUTRE",
+    de: "ANDERE",
+    pt: "OUTRO",
+    bg: "ДРУГО",
+  },
+
+  "editProfile.height": {
+    en: "HEIGHT",
+    es: "ALTURA",
+    uk: "ЗРІСТ",
+    ru: "РОСТ",
+    fr: "TAILLE",
+    de: "GRÖSSE",
+    pt: "ALTURA",
+    bg: "РЪСТ",
+  },
+
+  "editProfile.weight": {
+    en: "WEIGHT",
+    es: "PESO",
+    uk: "ВАГА",
+    ru: "ВЕС",
+    fr: "POIDS",
+    de: "GEWICHT",
+    pt: "PESO",
+    bg: "ТЕГЛО",
+  },
+
+  "editProfile.goal": {
+    en: "CURRENT GOAL",
+    es: "OBJETIVO ACTUAL",
+    uk: "ПОТОЧНА ЦІЛЬ",
+    ru: "ТЕКУЩАЯ ЦЕЛЬ",
+    fr: "OBJECTIF ACTUEL",
+    de: "AKTUELLES ZIEL",
+    pt: "OBJETIVO ATUAL",
+    bg: "ТЕКУЩА ЦЕЛ",
+  },
+
+  "editProfile.goalMuscle": {
+    en: "BUILD MUSCLE",
+    es: "GANAR MÚSCULO",
+    uk: "НАБРАТИ М’ЯЗИ",
+    ru: "НАБРАТЬ МЫШЦЫ",
+    fr: "PRENDRE DU MUSCLE",
+    de: "MUSKELAUFBAU",
+    pt: "GANHAR MÚSCULO",
+    bg: "МУСКУЛНА МАСА",
+  },
+
+  "editProfile.goalLoseWeight": {
+    en: "LOSE WEIGHT",
+    es: "PERDER PESO",
+    uk: "СХУДНУТИ",
+    ru: "ПОХУДЕТЬ",
+    fr: "PERDRE DU POIDS",
+    de: "ABNEHMEN",
+    pt: "PERDER PESO",
+    bg: "ОТСЛАБВАНЕ",
+  },
+
+  "editProfile.goalMaintain": {
+    en: "MAINTAIN",
+    es: "MANTENER",
+    uk: "ПІДТРИМУВАТИ ФОРМУ",
+    ru: "ПОДДЕРЖИВАТЬ ФОРМУ",
+    fr: "MAINTENIR",
+    de: "HALTEN",
+    pt: "MANTER",
+    bg: "ПОДДЪРЖАНЕ",
+  },
+
+  "editProfile.goalEndurance": {
+    en: "ENDURANCE",
+    es: "RESISTENCIA",
+    uk: "ВИТРИВАЛІСТЬ",
+    ru: "ВЫНОСЛИВОСТЬ",
+    fr: "ENDURANCE",
+    de: "AUSDAUER",
+    pt: "RESISTÊNCIA",
+    bg: "ИЗДРЪЖЛИВОСТ",
+  },
+
+  "editProfile.goalStrength": {
+    en: "STRENGTH",
+    es: "FUERZA",
+    uk: "СИЛА",
+    ru: "СИЛА",
+    fr: "FORCE",
+    de: "KRAFT",
+    pt: "FORÇA",
+    bg: "СИЛА",
+  },
+
+  "editProfile.goalFitness": {
+    en: "FITNESS",
+    es: "FITNESS",
+    uk: "ФІТНЕС",
+    ru: "ФИТНЕС",
+    fr: "FITNESS",
+    de: "FITNESS",
+    pt: "FITNESS",
+    bg: "ФИТНЕС",
+  },
+
+  "editProfile.save": {
+    en: "SAVE CHANGES",
+    es: "GUARDAR CAMBIOS",
+    uk: "ЗБЕРЕГТИ ЗМІНИ",
+    ru: "СОХРАНИТЬ ИЗМЕНЕНИЯ",
+    fr: "ENREGISTRER",
+    de: "ÄNDERUNGEN SPEICHERN",
+    pt: "SALVAR ALTERAÇÕES",
+    bg: "ЗАПАЗИ ПРОМЕНИТЕ",
+  },
+
+  "editProfile.saving": {
+    en: "SAVING...",
+    es: "GUARDANDO...",
+    uk: "ЗБЕРЕЖЕННЯ...",
+    ru: "СОХРАНЕНИЕ...",
+    fr: "ENREGISTREMENT...",
+    de: "WIRD GESPEICHERT...",
+    pt: "SALVANDO...",
+    bg: "ЗАПАЗВАНЕ...",
+  },
+
+  "editProfile.saved": {
+    en: "PROFILE UPDATED",
+    es: "PERFIL ACTUALIZADO",
+    uk: "ПРОФІЛЬ ОНОВЛЕНО",
+    ru: "ПРОФИЛЬ ОБНОВЛЁН",
+    fr: "PROFIL MIS À JOUR",
+    de: "PROFIL AKTUALISIERT",
+    pt: "PERFIL ATUALIZADO",
+    bg: "ПРОФИЛЪТ Е АКТУАЛИЗИРАН",
+  },
+
+  "editProfile.errorName": {
+    en: "Enter your name.",
+    es: "Introduce tu nombre.",
+    uk: "Введи своє ім’я.",
+    ru: "Введите имя.",
+    fr: "Saisissez votre nom.",
+    de: "Gib deinen Namen ein.",
+    pt: "Digite seu nome.",
+    bg: "Въведи името си.",
+  },
+
+  "editProfile.errorAge": {
+    en: "Enter a valid age.",
+    es: "Introduce una edad válida.",
+    uk: "Введи коректний вік.",
+    ru: "Введите корректный возраст.",
+    fr: "Saisissez un âge valide.",
+    de: "Gib ein gültiges Alter ein.",
+    pt: "Digite uma idade válida.",
+    bg: "Въведи валидна възраст.",
+  },
+
+  "editProfile.errorGender": {
+    en: "Select your gender.",
+    es: "Selecciona tu género.",
+    uk: "Обери стать.",
+    ru: "Выберите пол.",
+    fr: "Sélectionnez votre sexe.",
+    de: "Wähle dein Geschlecht.",
+    pt: "Selecione seu gênero.",
+    bg: "Избери пол.",
+  },
+
+  "editProfile.errorHeight": {
+    en: "Height must be between 100 and 250 cm.",
+    es: "La altura debe estar entre 100 y 250 cm.",
+    uk: "Зріст має бути від 100 до 250 см.",
+    ru: "Рост должен быть от 100 до 250 см.",
+    fr: "La taille doit être comprise entre 100 et 250 cm.",
+    de: "Die Größe muss zwischen 100 und 250 cm liegen.",
+    pt: "A altura deve estar entre 100 e 250 cm.",
+    bg: "Ръстът трябва да е между 100 и 250 см.",
+  },
+
+  "editProfile.errorWeight": {
+    en: "Weight must be between 30 and 300 kg.",
+    es: "El peso debe estar entre 30 y 300 kg.",
+    uk: "Вага має бути від 30 до 300 кг.",
+    ru: "Вес должен быть от 30 до 300 кг.",
+    fr: "Le poids doit être compris entre 30 et 300 kg.",
+    de: "Das Gewicht muss zwischen 30 und 300 kg liegen.",
+    pt: "O peso deve estar entre 30 e 300 kg.",
+    bg: "Теглото трябва да е между 30 и 300 кг.",
+  },
+
+  "editProfile.errorGoal": {
+    en: "Select your goal.",
+    es: "Selecciona tu objetivo.",
+    uk: "Обери свою ціль.",
+    ru: "Выберите цель.",
+    fr: "Sélectionnez votre objectif.",
+    de: "Wähle dein Ziel.",
+    pt: "Selecione seu objetivo.",
+    bg: "Избери своята цел.",
+  },
+
+  "editProfile.errorSave": {
+    en: "Failed to save profile.",
+    es: "No se pudo guardar el perfil.",
+    uk: "Не вдалося зберегти профіль.",
+    ru: "Не удалось сохранить профиль.",
+    fr: "Impossible d’enregistrer le profil.",
+    de: "Profil konnte nicht gespeichert werden.",
+    pt: "Não foi possível salvar o perfil.",
+    bg: "Профилът не можа да бъде запазен.",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 
