@@ -8,6 +8,8 @@ import {
   telegramAuthOptions,
 } from "../../api/client";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./MyCoach.css";
 
 type CoachProfileData = {
@@ -45,6 +47,8 @@ export default function MyCoach({
   onFindCoach,
   onOpenProgram,
 }: Props) {
+  const { language, t } = useLanguage();
+
   const [
     loading,
     setLoading,
@@ -98,7 +102,7 @@ export default function MyCoach({
       setError(
         loadError instanceof Error
           ? loadError.message
-          : "Failed to load coach"
+          : t("myCoach.failedToLoad")
       );
     } finally {
       setLoading(false);
@@ -121,13 +125,24 @@ export default function MyCoach({
     ]
       .filter(Boolean)
       .join(" ") ||
-    "IRONAGE COACH";
+    t("myCoach.defaultCoach");
 
   const assignedDate =
     assignedAt
       ? new Date(
           assignedAt
-        ).toLocaleDateString()
+        ).toLocaleDateString(
+          {
+            en: "en-GB",
+            es: "es-ES",
+            uk: "uk-UA",
+            ru: "ru-RU",
+            fr: "fr-FR",
+            de: "de-DE",
+            pt: "pt-PT",
+            bg: "bg-BG",
+          }[language]
+        )
       : null;
 
   return (
@@ -138,22 +153,22 @@ export default function MyCoach({
             type="button"
             className="my-coach-back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
 
           <div>
             <span>
-              IRONAGE COACHING
+              {t("myCoach.coaching")}
             </span>
 
             <h1>
-              MY COACH
+              {t("myCoach.title")}
             </h1>
 
             <p>
-              YOUR COACH · YOUR PLAN · YOUR RESULTS
+              {t("myCoach.subtitle")}
             </p>
           </div>
         </header>
@@ -161,7 +176,7 @@ export default function MyCoach({
         {loading && (
           <section className="my-coach-state">
             <strong>
-              LOADING COACH...
+              {t("myCoach.loading")}
             </strong>
           </section>
         )}
@@ -170,7 +185,7 @@ export default function MyCoach({
           error && (
             <section className="my-coach-state my-coach-state--error">
               <strong>
-                COACH LOAD ERROR
+                {t("myCoach.loadError")}
               </strong>
 
               <p>
@@ -183,7 +198,7 @@ export default function MyCoach({
                   void loadCoach()
                 }
               >
-                RETRY
+                {t("common.retry")}
               </button>
             </section>
           )}
@@ -198,15 +213,15 @@ export default function MyCoach({
                 </div>
 
                 <span>
-                  NO COACH YET
+                  {t("myCoach.noCoach")}
                 </span>
 
                 <h2>
-                  FIND YOUR COACH
+                  {t("myCoach.findYourCoach")}
                 </h2>
 
                 <p>
-                  Choose an IRONAGE coach who can create your training plan and monitor your progress.
+                  {t("myCoach.emptyDescription")}
                 </p>
               </section>
 
@@ -218,7 +233,7 @@ export default function MyCoach({
                 }
               >
                 <span>
-                  FIND A COACH
+                  {t("myCoach.findCoach")}
                 </span>
 
                 <b>
@@ -258,7 +273,7 @@ export default function MyCoach({
 
                 <div className="my-coach-info">
                   <span>
-                    YOUR COACH
+                    {t("myCoach.yourCoach")}
                   </span>
 
                   <div className="my-coach-name">
@@ -275,7 +290,7 @@ export default function MyCoach({
 
                   <p>
                     {profile.specialization ||
-                      "IRONAGE COACH"}
+                      t("myCoach.defaultCoach")}
                   </p>
                 </div>
               </section>
@@ -283,7 +298,7 @@ export default function MyCoach({
               {profile.bio && (
                 <section className="my-coach-about">
                   <span>
-                    ABOUT
+                    {t("myCoach.about")}
                   </span>
 
                   <p>
@@ -295,13 +310,13 @@ export default function MyCoach({
               <section className="my-coach-status">
                 <div>
                   <span>
-                    COACH STATUS
+                    {t("myCoach.coachStatus")}
                   </span>
 
                   <strong>
                     {profile.isActive
-                      ? "ACTIVE"
-                      : "INACTIVE"}
+                      ? t("myCoach.active")
+                      : t("myCoach.inactive")}
                   </strong>
                 </div>
 
@@ -311,7 +326,7 @@ export default function MyCoach({
               {assignedDate && (
                 <section className="my-coach-meta">
                   <span>
-                    COACHING STARTED
+                    {t("myCoach.started")}
                   </span>
 
                   <strong>
@@ -323,7 +338,7 @@ export default function MyCoach({
               {coach.username && (
                 <section className="my-coach-meta">
                   <span>
-                    USERNAME
+                    {t("myCoach.username")}
                   </span>
 
                   <strong>
@@ -340,7 +355,7 @@ export default function MyCoach({
                 }
               >
                 <span>
-                  OPEN MY PROGRAM
+                  {t("myCoach.openProgram")}
                 </span>
 
                 <b>

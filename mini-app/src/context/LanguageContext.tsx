@@ -1549,6 +1549,219 @@ const translations:
   },
 
   /* =====================================================
+     MY COACH
+  ===================================================== */
+
+  "myCoach.coaching": {
+    en: "IRONAGE COACHING",
+    es: "COACHING IRONAGE",
+    uk: "ТРЕНЕРСЬКИЙ СУПРОВІД IRONAGE",
+    ru: "ТРЕНЕРСКОЕ СОПРОВОЖДЕНИЕ IRONAGE",
+    fr: "COACHING IRONAGE",
+    de: "IRONAGE COACHING",
+    pt: "COACHING IRONAGE",
+    bg: "ТРЕНЬОРСКО СЪПРОВОЖДАНЕ IRONAGE",
+  },
+
+  "myCoach.title": {
+    en: "MY COACH",
+    es: "MI ENTRENADOR",
+    uk: "МІЙ ТРЕНЕР",
+    ru: "МОЙ ТРЕНЕР",
+    fr: "MON COACH",
+    de: "MEIN COACH",
+    pt: "MEU TREINADOR",
+    bg: "МОЯТ ТРЕНЬОР",
+  },
+
+  "myCoach.subtitle": {
+    en: "YOUR COACH · YOUR PLAN · YOUR RESULTS",
+    es: "TU ENTRENADOR · TU PLAN · TUS RESULTADOS",
+    uk: "ТВІЙ ТРЕНЕР · ТВІЙ ПЛАН · ТВОЇ РЕЗУЛЬТАТИ",
+    ru: "ТВОЙ ТРЕНЕР · ТВОЙ ПЛАН · ТВОИ РЕЗУЛЬТАТЫ",
+    fr: "TON COACH · TON PLAN · TES RÉSULTATS",
+    de: "DEIN COACH · DEIN PLAN · DEINE ERGEBNISSE",
+    pt: "SEU TREINADOR · SEU PLANO · SEUS RESULTADOS",
+    bg: "ТВОЯТ ТРЕНЬОР · ТВОЯТ ПЛАН · ТВОИТЕ РЕЗУЛТАТИ",
+  },
+
+  "myCoach.loading": {
+    en: "LOADING COACH...",
+    es: "CARGANDO ENTRENADOR...",
+    uk: "ЗАВАНТАЖЕННЯ ТРЕНЕРА...",
+    ru: "ЗАГРУЗКА ТРЕНЕРА...",
+    fr: "CHARGEMENT DU COACH...",
+    de: "COACH WIRD GELADEN...",
+    pt: "CARREGANDO TREINADOR...",
+    bg: "ЗАРЕЖДАНЕ НА ТРЕНЬОРА...",
+  },
+
+  "myCoach.loadError": {
+    en: "COACH LOAD ERROR",
+    es: "ERROR AL CARGAR EL ENTRENADOR",
+    uk: "ПОМИЛКА ЗАВАНТАЖЕННЯ ТРЕНЕРА",
+    ru: "ОШИБКА ЗАГРУЗКИ ТРЕНЕРА",
+    fr: "ERREUR DE CHARGEMENT DU COACH",
+    de: "FEHLER BEIM LADEN DES COACHS",
+    pt: "ERRO AO CARREGAR O TREINADOR",
+    bg: "ГРЕШКА ПРИ ЗАРЕЖДАНЕ НА ТРЕНЬОРА",
+  },
+
+  "myCoach.failedToLoad": {
+    en: "Failed to load coach",
+    es: "No se pudo cargar el entrenador",
+    uk: "Не вдалося завантажити тренера",
+    ru: "Не удалось загрузить тренера",
+    fr: "Impossible de charger le coach",
+    de: "Coach konnte nicht geladen werden",
+    pt: "Não foi possível carregar o treinador",
+    bg: "Треньорът не можа да бъде зареден",
+  },
+
+  "myCoach.noCoach": {
+    en: "NO COACH YET",
+    es: "AÚN NO TIENES ENTRENADOR",
+    uk: "ТРЕНЕРА ЩЕ НЕМАЄ",
+    ru: "ТРЕНЕРА ПОКА НЕТ",
+    fr: "PAS ENCORE DE COACH",
+    de: "NOCH KEIN COACH",
+    pt: "AINDA SEM TREINADOR",
+    bg: "ВСЕ ОЩЕ НЯМАШ ТРЕНЬОР",
+  },
+
+  "myCoach.findYourCoach": {
+    en: "FIND YOUR COACH",
+    es: "ENCUENTRA TU ENTRENADOR",
+    uk: "ЗНАЙДИ СВОГО ТРЕНЕРА",
+    ru: "НАЙДИ СВОЕГО ТРЕНЕРА",
+    fr: "TROUVE TON COACH",
+    de: "FINDE DEINEN COACH",
+    pt: "ENCONTRE SEU TREINADOR",
+    bg: "НАМЕРИ СВОЯ ТРЕНЬОР",
+  },
+
+  "myCoach.emptyDescription": {
+    en: "Choose an IRONAGE coach who can create your training plan and monitor your progress.",
+    es: "Elige un entrenador IRONAGE que pueda crear tu plan de entrenamiento y seguir tu progreso.",
+    uk: "Обери тренера IRONAGE, який створить твій тренувальний план і контролюватиме прогрес.",
+    ru: "Выбери тренера IRONAGE, который создаст твой тренировочный план и будет следить за прогрессом.",
+    fr: "Choisis un coach IRONAGE qui créera ton plan d’entraînement et suivra ta progression.",
+    de: "Wähle einen IRONAGE-Coach, der deinen Trainingsplan erstellt und deinen Fortschritt überwacht.",
+    pt: "Escolha um treinador IRONAGE que crie seu plano de treino e acompanhe seu progresso.",
+    bg: "Избери треньор на IRONAGE, който да създаде тренировъчния ти план и да следи напредъка ти.",
+  },
+
+  "myCoach.findCoach": {
+    en: "FIND A COACH",
+    es: "BUSCAR ENTRENADOR",
+    uk: "ЗНАЙТИ ТРЕНЕРА",
+    ru: "НАЙТИ ТРЕНЕРА",
+    fr: "TROUVER UN COACH",
+    de: "COACH FINDEN",
+    pt: "ENCONTRAR TREINADOR",
+    bg: "НАМЕРИ ТРЕНЬОР",
+  },
+
+  "myCoach.yourCoach": {
+    en: "YOUR COACH",
+    es: "TU ENTRENADOR",
+    uk: "ТВІЙ ТРЕНЕР",
+    ru: "ТВОЙ ТРЕНЕР",
+    fr: "TON COACH",
+    de: "DEIN COACH",
+    pt: "SEU TREINADOR",
+    bg: "ТВОЯТ ТРЕНЬОР",
+  },
+
+  "myCoach.defaultCoach": {
+    en: "IRONAGE COACH",
+    es: "ENTRENADOR IRONAGE",
+    uk: "ТРЕНЕР IRONAGE",
+    ru: "ТРЕНЕР IRONAGE",
+    fr: "COACH IRONAGE",
+    de: "IRONAGE COACH",
+    pt: "TREINADOR IRONAGE",
+    bg: "ТРЕНЬОР IRONAGE",
+  },
+
+  "myCoach.about": {
+    en: "ABOUT",
+    es: "SOBRE",
+    uk: "ПРО ТРЕНЕРА",
+    ru: "О ТРЕНЕРЕ",
+    fr: "À PROPOS",
+    de: "ÜBER",
+    pt: "SOBRE",
+    bg: "ЗА ТРЕНЬОРА",
+  },
+
+  "myCoach.coachStatus": {
+    en: "COACH STATUS",
+    es: "ESTADO DEL ENTRENADOR",
+    uk: "СТАТУС ТРЕНЕРА",
+    ru: "СТАТУС ТРЕНЕРА",
+    fr: "STATUT DU COACH",
+    de: "COACH-STATUS",
+    pt: "STATUS DO TREINADOR",
+    bg: "СТАТУС НА ТРЕНЬОРА",
+  },
+
+  "myCoach.active": {
+    en: "ACTIVE",
+    es: "ACTIVO",
+    uk: "АКТИВНИЙ",
+    ru: "АКТИВЕН",
+    fr: "ACTIF",
+    de: "AKTIV",
+    pt: "ATIVO",
+    bg: "АКТИВЕН",
+  },
+
+  "myCoach.inactive": {
+    en: "INACTIVE",
+    es: "INACTIVO",
+    uk: "НЕАКТИВНИЙ",
+    ru: "НЕАКТИВЕН",
+    fr: "INACTIF",
+    de: "INAKTIV",
+    pt: "INATIVO",
+    bg: "НЕАКТИВЕН",
+  },
+
+  "myCoach.started": {
+    en: "COACHING STARTED",
+    es: "COACHING INICIADO",
+    uk: "ПОЧАТОК СУПРОВОДУ",
+    ru: "НАЧАЛО СОПРОВОЖДЕНИЯ",
+    fr: "DÉBUT DU COACHING",
+    de: "COACHING GESTARTET",
+    pt: "COACHING INICIADO",
+    bg: "НАЧАЛО НА КОУЧИНГА",
+  },
+
+  "myCoach.username": {
+    en: "USERNAME",
+    es: "USUARIO",
+    uk: "ІМ’Я КОРИСТУВАЧА",
+    ru: "ИМЯ ПОЛЬЗОВАТЕЛЯ",
+    fr: "NOM D’UTILISATEUR",
+    de: "BENUTZERNAME",
+    pt: "NOME DE USUÁRIO",
+    bg: "ПОТРЕБИТЕЛСКО ИМЕ",
+  },
+
+  "myCoach.openProgram": {
+    en: "OPEN MY PROGRAM",
+    es: "ABRIR MI PROGRAMA",
+    uk: "ВІДКРИТИ МОЮ ПРОГРАМУ",
+    ru: "ОТКРЫТЬ МОЮ ПРОГРАММУ",
+    fr: "OUVRIR MON PROGRAMME",
+    de: "MEIN PROGRAMM ÖFFNEN",
+    pt: "ABRIR MEU PROGRAMA",
+    bg: "ОТВОРИ МОЯТА ПРОГРАМА",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 
