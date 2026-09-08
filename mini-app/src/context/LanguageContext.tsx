@@ -3009,6 +3009,417 @@ const translations:
   },
 
   /* =====================================================
+     CREATE WORKOUT
+  ===================================================== */
+
+  "createWorkout.back": {
+    en: "Back to workouts",
+    es: "Volver a entrenamientos",
+    uk: "Назад до тренувань",
+    ru: "Назад к тренировкам",
+    fr: "Retour aux entraînements",
+    de: "Zurück zu Trainings",
+    pt: "Voltar aos treinos",
+    bg: "Назад към тренировките",
+  },
+
+  "createWorkout.coach": {
+    en: "IRONAGE COACH",
+    es: "ENTRENADOR IRONAGE",
+    uk: "ТРЕНЕР IRONAGE",
+    ru: "ТРЕНЕР IRONAGE",
+    fr: "COACH IRONAGE",
+    de: "IRONAGE COACH",
+    pt: "TREINADOR IRONAGE",
+    bg: "ТРЕНЬОР IRONAGE",
+  },
+
+  "createWorkout.title": {
+    en: "CREATE WORKOUT",
+    es: "CREAR ENTRENAMIENTO",
+    uk: "СТВОРИТИ ТРЕНУВАННЯ",
+    ru: "СОЗДАТЬ ТРЕНИРОВКУ",
+    fr: "CRÉER UN ENTRAÎNEMENT",
+    de: "TRAINING ERSTELLEN",
+    pt: "CRIAR TREINO",
+    bg: "СЪЗДАЙ ТРЕНИРОВКА",
+  },
+
+  "createWorkout.subtitle": {
+    en: "BUILD THE SESSION",
+    es: "CREA LA SESIÓN",
+    uk: "ПОБУДУЙ ТРЕНУВАННЯ",
+    ru: "СОЗДАЙ ТРЕНИРОВКУ",
+    fr: "CRÉE LA SÉANCE",
+    de: "TRAINING AUFBAUEN",
+    pt: "MONTE A SESSÃO",
+    bg: "ИЗГРАДИ ТРЕНИРОВКАТА",
+  },
+
+  "createWorkout.details": {
+    en: "WORKOUT DETAILS",
+    es: "DETALLES DEL ENTRENAMIENTO",
+    uk: "ДЕТАЛІ ТРЕНУВАННЯ",
+    ru: "ДЕТАЛИ ТРЕНИРОВКИ",
+    fr: "DÉTAILS DE L’ENTRAÎNEMENT",
+    de: "TRAININGSDETAILS",
+    pt: "DETALHES DO TREINO",
+    bg: "ДЕТАЙЛИ ЗА ТРЕНИРОВКАТА",
+  },
+
+  "createWorkout.defineSession": {
+    en: "DEFINE THE SESSION",
+    es: "DEFINE LA SESIÓN",
+    uk: "НАЛАШТУЙ СЕСІЮ",
+    ru: "НАСТРОЙ СЕССИЮ",
+    fr: "DÉFINIS LA SÉANCE",
+    de: "SESSION DEFINIEREN",
+    pt: "DEFINA A SESSÃO",
+    bg: "ОПРЕДЕЛИ СЕСИЯТА",
+  },
+
+  "createWorkout.name": {
+    en: "WORKOUT NAME",
+    es: "NOMBRE DEL ENTRENAMIENTO",
+    uk: "НАЗВА ТРЕНУВАННЯ",
+    ru: "НАЗВАНИЕ ТРЕНИРОВКИ",
+    fr: "NOM DE L’ENTRAÎNEMENT",
+    de: "TRAININGSNAME",
+    pt: "NOME DO TREINO",
+    bg: "ИМЕ НА ТРЕНИРОВКАТА",
+  },
+
+  "createWorkout.namePlaceholder": {
+    en: "PUSH DAY",
+    es: "DÍA DE EMPUJE",
+    uk: "ДЕНЬ ЖИМІВ",
+    ru: "ДЕНЬ ЖИМОВ",
+    fr: "JOUR PUSH",
+    de: "PUSH-TAG",
+    pt: "DIA DE PUSH",
+    bg: "ДЕН ЗА ИЗБУТВАНЕ",
+  },
+
+  "createWorkout.description": {
+    en: "DESCRIPTION",
+    es: "DESCRIPCIÓN",
+    uk: "ОПИС",
+    ru: "ОПИСАНИЕ",
+    fr: "DESCRIPTION",
+    de: "BESCHREIBUNG",
+    pt: "DESCRIÇÃO",
+    bg: "ОПИСАНИЕ",
+  },
+
+  "createWorkout.descriptionPlaceholder": {
+    en: "Chest, shoulders and triceps...",
+    es: "Pecho, hombros y tríceps...",
+    uk: "Груди, плечі та трицепс...",
+    ru: "Грудь, плечи и трицепс...",
+    fr: "Pectoraux, épaules et triceps...",
+    de: "Brust, Schultern und Trizeps...",
+    pt: "Peito, ombros e tríceps...",
+    bg: "Гърди, рамене и трицепс...",
+  },
+
+  "createWorkout.duration": {
+    en: "DURATION / MIN",
+    es: "DURACIÓN / MIN",
+    uk: "ТРИВАЛІСТЬ / ХВ",
+    ru: "ДЛИТЕЛЬНОСТЬ / МИН",
+    fr: "DURÉE / MIN",
+    de: "DAUER / MIN",
+    pt: "DURAÇÃO / MIN",
+    bg: "ПРОДЪЛЖИТЕЛНОСТ / МИН",
+  },
+
+  "createWorkout.difficulty": {
+    en: "DIFFICULTY",
+    es: "DIFICULTAD",
+    uk: "СКЛАДНІСТЬ",
+    ru: "СЛОЖНОСТЬ",
+    fr: "DIFFICULTÉ",
+    de: "SCHWIERIGKEIT",
+    pt: "DIFICULDADE",
+    bg: "ТРУДНОСТ",
+  },
+
+  "createWorkout.beginner": {
+    en: "BEGINNER",
+    es: "PRINCIPIANTE",
+    uk: "ПОЧАТКОВИЙ",
+    ru: "НАЧАЛЬНЫЙ",
+    fr: "DÉBUTANT",
+    de: "ANFÄNGER",
+    pt: "INICIANTE",
+    bg: "НАЧИНАЕЩ",
+  },
+
+  "createWorkout.intermediate": {
+    en: "INTERMEDIATE",
+    es: "INTERMEDIO",
+    uk: "СЕРЕДНІЙ",
+    ru: "СРЕДНИЙ",
+    fr: "INTERMÉDIAIRE",
+    de: "MITTEL",
+    pt: "INTERMEDIÁRIO",
+    bg: "СРЕДНО НИВО",
+  },
+
+  "createWorkout.advanced": {
+    en: "ADVANCED",
+    es: "AVANZADO",
+    uk: "ПРОСУНУТИЙ",
+    ru: "ПРОДВИНУТЫЙ",
+    fr: "AVANCÉ",
+    de: "FORTGESCHRITTEN",
+    pt: "AVANÇADO",
+    bg: "НАПРЕДНАЛ",
+  },
+
+  "createWorkout.exerciseLibrary": {
+    en: "EXERCISE LIBRARY",
+    es: "BIBLIOTECA DE EJERCICIOS",
+    uk: "БІБЛІОТЕКА ВПРАВ",
+    ru: "БИБЛИОТЕКА УПРАЖНЕНИЙ",
+    fr: "BIBLIOTHÈQUE D’EXERCICES",
+    de: "ÜBUNGSBIBLIOTHEK",
+    pt: "BIBLIOTECA DE EXERCÍCIOS",
+    bg: "БИБЛИОТЕКА С УПРАЖНЕНИЯ",
+  },
+
+  "createWorkout.selectMovements": {
+    en: "SELECT MOVEMENTS",
+    es: "SELECCIONA MOVIMIENTOS",
+    uk: "ОБЕРИ ВПРАВИ",
+    ru: "ВЫБЕРИ УПРАЖНЕНИЯ",
+    fr: "SÉLECTIONNE LES MOUVEMENTS",
+    de: "ÜBUNGEN AUSWÄHLEN",
+    pt: "SELECIONE OS MOVIMENTOS",
+    bg: "ИЗБЕРИ УПРАЖНЕНИЯ",
+  },
+
+  "createWorkout.loadingExercises": {
+    en: "LOADING EXERCISES...",
+    es: "CARGANDO EJERCICIOS...",
+    uk: "ЗАВАНТАЖЕННЯ ВПРАВ...",
+    ru: "ЗАГРУЗКА УПРАЖНЕНИЙ...",
+    fr: "CHARGEMENT DES EXERCICES...",
+    de: "ÜBUNGEN WERDEN GELADEN...",
+    pt: "CARREGANDO EXERCÍCIOS...",
+    bg: "ЗАРЕЖДАНЕ НА УПРАЖНЕНИЯ...",
+  },
+
+  "createWorkout.failedLoad": {
+    en: "Failed to load exercises",
+    es: "No se pudieron cargar los ejercicios",
+    uk: "Не вдалося завантажити вправи",
+    ru: "Не удалось загрузить упражнения",
+    fr: "Impossible de charger les exercices",
+    de: "Übungen konnten nicht geladen werden",
+    pt: "Não foi possível carregar os exercícios",
+    bg: "Упражненията не можаха да бъдат заредени",
+  },
+
+  "createWorkout.exercise": {
+    en: "EXERCISE",
+    es: "EJERCICIO",
+    uk: "ВПРАВА",
+    ru: "УПРАЖНЕНИЕ",
+    fr: "EXERCICE",
+    de: "ÜBUNG",
+    pt: "EXERCÍCIO",
+    bg: "УПРАЖНЕНИЕ",
+  },
+
+  "createWorkout.noEquipment": {
+    en: "NO EQUIPMENT",
+    es: "SIN EQUIPO",
+    uk: "БЕЗ ОБЛАДНАННЯ",
+    ru: "БЕЗ ОБОРУДОВАНИЯ",
+    fr: "SANS ÉQUIPEMENT",
+    de: "OHNE AUSRÜSTUNG",
+    pt: "SEM EQUIPAMENTO",
+    bg: "БЕЗ ОБОРУДВАНЕ",
+  },
+
+  "createWorkout.plan": {
+    en: "WORKOUT PLAN",
+    es: "PLAN DE ENTRENAMIENTO",
+    uk: "ПЛАН ТРЕНУВАННЯ",
+    ru: "ПЛАН ТРЕНИРОВКИ",
+    fr: "PLAN D’ENTRAÎNEMENT",
+    de: "TRAININGSPLAN",
+    pt: "PLANO DE TREINO",
+    bg: "ПЛАН НА ТРЕНИРОВКАТА",
+  },
+
+  "createWorkout.targets": {
+    en: "SET TRAINING TARGETS",
+    es: "DEFINE LOS OBJETIVOS",
+    uk: "ВСТАНОВИ ПАРАМЕТРИ",
+    ru: "ЗАДАЙ ПАРАМЕТРЫ",
+    fr: "DÉFINIS LES OBJECTIFS",
+    de: "TRAININGSZIELE FESTLEGEN",
+    pt: "DEFINA OS OBJETIVOS",
+    bg: "ЗАДАЙ ТРЕНИРОВЪЧНИ ЦЕЛИ",
+  },
+
+  "createWorkout.sets": {
+    en: "SETS",
+    es: "SERIES",
+    uk: "ПІДХОДИ",
+    ru: "ПОДХОДЫ",
+    fr: "SÉRIES",
+    de: "SÄTZE",
+    pt: "SÉRIES",
+    bg: "СЕРИИ",
+  },
+
+  "createWorkout.reps": {
+    en: "REPS",
+    es: "REPS",
+    uk: "ПОВТОРИ",
+    ru: "ПОВТОРЫ",
+    fr: "RÉP.",
+    de: "WDH.",
+    pt: "REPS",
+    bg: "ПОВТ.",
+  },
+
+  "createWorkout.rest": {
+    en: "REST / SEC",
+    es: "DESCANSO / SEG",
+    uk: "ВІДПОЧИНОК / СЕК",
+    ru: "ОТДЫХ / СЕК",
+    fr: "REPOS / SEC",
+    de: "PAUSE / SEK",
+    pt: "DESCANSO / SEG",
+    bg: "ПОЧИВКА / СЕК",
+  },
+
+  "createWorkout.targetWeight": {
+    en: "TARGET WEIGHT / KG",
+    es: "PESO OBJETIVO / KG",
+    uk: "ЦІЛЬОВА ВАГА / КГ",
+    ru: "ЦЕЛЕВОЙ ВЕС / КГ",
+    fr: "POIDS CIBLE / KG",
+    de: "ZIELGEWICHT / KG",
+    pt: "PESO ALVO / KG",
+    bg: "ЦЕЛЕВО ТЕГЛО / КГ",
+  },
+
+  "createWorkout.optional": {
+    en: "OPTIONAL",
+    es: "OPCIONAL",
+    uk: "НЕОБОВ’ЯЗКОВО",
+    ru: "НЕОБЯЗАТЕЛЬНО",
+    fr: "FACULTATIF",
+    de: "OPTIONAL",
+    pt: "OPCIONAL",
+    bg: "ПО ЖЕЛАНИЕ",
+  },
+
+  "createWorkout.coachNotes": {
+    en: "COACH NOTES",
+    es: "NOTAS DEL ENTRENADOR",
+    uk: "НОТАТКИ ТРЕНЕРА",
+    ru: "ЗАМЕТКИ ТРЕНЕРА",
+    fr: "NOTES DU COACH",
+    de: "COACH-NOTIZEN",
+    pt: "NOTAS DO TREINADOR",
+    bg: "БЕЛЕЖКИ НА ТРЕНЬОРА",
+  },
+
+  "createWorkout.notesPlaceholder": {
+    en: "Technique, tempo, intensity...",
+    es: "Técnica, tempo, intensidad...",
+    uk: "Техніка, темп, інтенсивність...",
+    ru: "Техника, темп, интенсивность...",
+    fr: "Technique, tempo, intensité...",
+    de: "Technik, Tempo, Intensität...",
+    pt: "Técnica, ritmo, intensidade...",
+    bg: "Техника, темпо, интензивност...",
+  },
+
+  "createWorkout.remove": {
+    en: "Remove",
+    es: "Eliminar",
+    uk: "Видалити",
+    ru: "Удалить",
+    fr: "Supprimer",
+    de: "Entfernen",
+    pt: "Remover",
+    bg: "Премахни",
+  },
+
+  "createWorkout.nameRequired": {
+    en: "Workout name is required.",
+    es: "El nombre del entrenamiento es obligatorio.",
+    uk: "Назва тренування обов’язкова.",
+    ru: "Название тренировки обязательно.",
+    fr: "Le nom de l’entraînement est obligatoire.",
+    de: "Der Trainingsname ist erforderlich.",
+    pt: "O nome do treino é obrigatório.",
+    bg: "Името на тренировката е задължително.",
+  },
+
+  "createWorkout.addExercise": {
+    en: "Add at least one exercise.",
+    es: "Añade al menos un ejercicio.",
+    uk: "Додай хоча б одну вправу.",
+    ru: "Добавь хотя бы одно упражнение.",
+    fr: "Ajoute au moins un exercice.",
+    de: "Füge mindestens eine Übung hinzu.",
+    pt: "Adicione pelo menos um exercício.",
+    bg: "Добави поне едно упражнение.",
+  },
+
+  "createWorkout.notCreated": {
+    en: "Workout was not created",
+    es: "El entrenamiento no fue creado",
+    uk: "Тренування не було створено",
+    ru: "Тренировка не была создана",
+    fr: "L’entraînement n’a pas été créé",
+    de: "Training wurde nicht erstellt",
+    pt: "O treino não foi criado",
+    bg: "Тренировката не беше създадена",
+  },
+
+  "createWorkout.failedCreate": {
+    en: "Failed to create workout",
+    es: "No se pudo crear el entrenamiento",
+    uk: "Не вдалося створити тренування",
+    ru: "Не удалось создать тренировку",
+    fr: "Impossible de créer l’entraînement",
+    de: "Training konnte nicht erstellt werden",
+    pt: "Não foi possível criar o treino",
+    bg: "Тренировката не можа да бъде създадена",
+  },
+
+  "createWorkout.saving": {
+    en: "SAVING...",
+    es: "GUARDANDO...",
+    uk: "ЗБЕРЕЖЕННЯ...",
+    ru: "СОХРАНЕНИЕ...",
+    fr: "ENREGISTREMENT...",
+    de: "WIRD GESPEICHERT...",
+    pt: "SALVANDO...",
+    bg: "ЗАПАЗВАНЕ...",
+  },
+
+  "createWorkout.save": {
+    en: "SAVE WORKOUT",
+    es: "GUARDAR ENTRENAMIENTO",
+    uk: "ЗБЕРЕГТИ ТРЕНУВАННЯ",
+    ru: "СОХРАНИТЬ ТРЕНИРОВКУ",
+    fr: "ENREGISTRER L’ENTRAÎNEMENT",
+    de: "TRAINING SPEICHERN",
+    pt: "SALVAR TREINO",
+    bg: "ЗАПАЗИ ТРЕНИРОВКАТА",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 

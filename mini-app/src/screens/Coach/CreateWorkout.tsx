@@ -8,6 +8,8 @@ import api, {
   telegramAuthOptions,
 } from "../../api/client";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./CreateWorkout.css";
 
 type Props = {
@@ -54,6 +56,8 @@ export default function CreateWorkout({
   onBack,
   onCreated,
 }: Props) {
+  const { t } = useLanguage();
+
   const [name, setName] =
     useState("");
 
@@ -129,7 +133,7 @@ export default function CreateWorkout({
       setLibraryError(
         error instanceof Error
           ? error.message
-          : "Failed to load exercises"
+          : t("createWorkout.failedLoad")
       );
     } finally {
       setLoadingLibrary(false);
@@ -210,7 +214,7 @@ export default function CreateWorkout({
 
     if (!normalizedName) {
       setSaveError(
-        "Workout name is required."
+        t("createWorkout.nameRequired")
       );
       return;
     }
@@ -219,7 +223,7 @@ export default function CreateWorkout({
       selected.length === 0
     ) {
       setSaveError(
-        "Add at least one exercise."
+        t("createWorkout.addExercise")
       );
       return;
     }
@@ -296,7 +300,7 @@ export default function CreateWorkout({
       ) {
         throw new Error(
           response?.message ||
-            "Workout was not created"
+            t("createWorkout.notCreated")
         );
       }
 
@@ -310,7 +314,7 @@ export default function CreateWorkout({
       setSaveError(
         error instanceof Error
           ? error.message
-          : "Failed to create workout"
+          : t("createWorkout.failedCreate")
       );
     } finally {
       setSaving(false);
@@ -326,22 +330,22 @@ export default function CreateWorkout({
             type="button"
             className="create-workout__back"
             onClick={onBack}
-            aria-label="Back to workouts"
+            aria-label={t("createWorkout.back")}
           >
             ←
           </button>
 
           <div>
             <span>
-              IRONAGE COACH
+              {t("createWorkout.coach")}
             </span>
 
             <h1>
-              CREATE WORKOUT
+              {t("createWorkout.title")}
             </h1>
 
             <p>
-              BUILD THE SESSION
+              {t("createWorkout.subtitle")}
             </p>
           </div>
         </header>
@@ -352,18 +356,18 @@ export default function CreateWorkout({
 
             <div>
               <strong>
-                WORKOUT DETAILS
+                {t("createWorkout.details")}
               </strong>
 
               <small>
-                DEFINE THE SESSION
+                {t("createWorkout.defineSession")}
               </small>
             </div>
           </div>
 
           <label className="create-workout__field">
             <span>
-              WORKOUT NAME
+              {t("createWorkout.name")}
             </span>
 
             <input
@@ -373,13 +377,13 @@ export default function CreateWorkout({
                   event.target.value
                 )
               }
-              placeholder="PUSH DAY"
+              placeholder={t("createWorkout.namePlaceholder")}
             />
           </label>
 
           <label className="create-workout__field">
             <span>
-              DESCRIPTION
+              {t("createWorkout.description")}
             </span>
 
             <textarea
@@ -389,7 +393,7 @@ export default function CreateWorkout({
                   event.target.value
                 )
               }
-              placeholder="Chest, shoulders and triceps..."
+              placeholder={t("createWorkout.descriptionPlaceholder")}
               rows={3}
             />
           </label>
@@ -397,7 +401,7 @@ export default function CreateWorkout({
           <div className="create-workout__grid">
             <label className="create-workout__field">
               <span>
-                DURATION / MIN
+                {t("createWorkout.duration")}
               </span>
 
               <input
@@ -416,7 +420,7 @@ export default function CreateWorkout({
 
             <label className="create-workout__field">
               <span>
-                DIFFICULTY
+                {t("createWorkout.difficulty")}
               </span>
 
               <select
@@ -428,15 +432,15 @@ export default function CreateWorkout({
                 }
               >
                 <option value="BEGINNER">
-                  BEGINNER
+                  {t("createWorkout.beginner")}
                 </option>
 
                 <option value="INTERMEDIATE">
-                  INTERMEDIATE
+                  {t("createWorkout.intermediate")}
                 </option>
 
                 <option value="ADVANCED">
-                  ADVANCED
+                  {t("createWorkout.advanced")}
                 </option>
               </select>
             </label>
@@ -449,18 +453,18 @@ export default function CreateWorkout({
 
             <div>
               <strong>
-                EXERCISE LIBRARY
+                {t("createWorkout.exerciseLibrary")}
               </strong>
 
               <small>
-                SELECT MOVEMENTS
+                {t("createWorkout.selectMovements")}
               </small>
             </div>
           </div>
 
           {loadingLibrary && (
             <div className="create-workout__state">
-              LOADING EXERCISES...
+              {t("createWorkout.loadingExercises")}
             </div>
           )}
 
@@ -477,7 +481,7 @@ export default function CreateWorkout({
                     void loadLibrary()
                   }
                 >
-                  RETRY
+                  {t("common.retry")}
                 </button>
               </div>
             )}
@@ -515,7 +519,7 @@ export default function CreateWorkout({
                         <div>
                           <span>
                             {exercise.muscleGroup ||
-                              "EXERCISE"}
+                              t("createWorkout.exercise")}
                           </span>
 
                           <strong>
@@ -524,7 +528,7 @@ export default function CreateWorkout({
 
                           <small>
                             {exercise.equipment ||
-                              "NO EQUIPMENT"}
+                              t("createWorkout.noEquipment")}
                           </small>
                         </div>
 
@@ -548,11 +552,11 @@ export default function CreateWorkout({
 
               <div>
                 <strong>
-                  WORKOUT PLAN
+                  {t("createWorkout.plan")}
                 </strong>
 
                 <small>
-                  SET TRAINING TARGETS
+                  {t("createWorkout.targets")}
                 </small>
               </div>
             </div>
@@ -569,7 +573,7 @@ export default function CreateWorkout({
                     <div className="create-workout__selected-header">
                       <div>
                         <span>
-                          EXERCISE{" "}
+                          {t("createWorkout.exercise")}{" "}
                           {String(
                             index + 1
                           ).padStart(
@@ -590,7 +594,7 @@ export default function CreateWorkout({
                             item.exercise.id
                           )
                         }
-                        aria-label={`Remove ${item.exercise.name}`}
+                        aria-label={`${t("createWorkout.remove")} ${item.exercise.name}`}
                       >
                         ×
                       </button>
@@ -599,7 +603,7 @@ export default function CreateWorkout({
                     <div className="create-workout__metrics">
                       <label>
                         <span>
-                          SETS
+                          {t("createWorkout.sets")}
                         </span>
 
                         <input
@@ -623,7 +627,7 @@ export default function CreateWorkout({
 
                       <label>
                         <span>
-                          REPS
+                          {t("createWorkout.reps")}
                         </span>
 
                         <input
@@ -647,7 +651,7 @@ export default function CreateWorkout({
 
                       <label>
                         <span>
-                          REST / SEC
+                          {t("createWorkout.rest")}
                         </span>
 
                         <input
@@ -672,7 +676,7 @@ export default function CreateWorkout({
 
                     <label className="create-workout__field">
                       <span>
-                        TARGET WEIGHT / KG
+                        {t("createWorkout.targetWeight")}
                       </span>
 
                       <input
@@ -692,13 +696,13 @@ export default function CreateWorkout({
                             event.target.value
                           )
                         }
-                        placeholder="OPTIONAL"
+                        placeholder={t("createWorkout.optional")}
                       />
                     </label>
 
                     <label className="create-workout__field">
                       <span>
-                        COACH NOTES
+                        {t("createWorkout.coachNotes")}
                       </span>
 
                       <textarea
@@ -715,7 +719,7 @@ export default function CreateWorkout({
                             event.target.value
                           )
                         }
-                        placeholder="Technique, tempo, intensity..."
+                        placeholder={t("createWorkout.notesPlaceholder")}
                       />
                     </label>
                   </article>
@@ -741,8 +745,8 @@ export default function CreateWorkout({
         >
           <span>
             {saving
-              ? "SAVING..."
-              : "SAVE WORKOUT"}
+              ? t("createWorkout.saving")
+              : t("createWorkout.save")}
           </span>
 
           <b>→</b>
