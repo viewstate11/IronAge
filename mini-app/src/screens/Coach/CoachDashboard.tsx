@@ -10,6 +10,8 @@ import api, {
 import CreateWorkout from "./CreateWorkout";
 import CreateProgram from "./CreateProgram";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./CoachDashboard.css";
 
 type Props = {
@@ -206,10 +208,11 @@ type CoachProgramsResponse = {
 };
 
 function formatGoal(
-  goal: string | null
+  goal: string | null,
+  noGoalLabel: string
 ): string {
   if (!goal) {
-    return "NO GOAL";
+    return noGoalLabel;
   }
 
   return goal
@@ -217,7 +220,8 @@ function formatGoal(
 }
 
 function getClientName(
-  client: CoachClient["client"]
+  client: CoachClient["client"],
+  athleteLabel: string
 ): string {
   const name = [
     client.firstName,
@@ -235,13 +239,50 @@ function getClientName(
     return `@${client.username}`;
   }
 
-  return `ATHLETE #${client.id}`;
+  return `${athleteLabel} #${client.id}`;
 }
 
 export default function CoachDashboard({
   onBack,
   onEditProfile,
-}: Props) {
+ }: Props) {
+  const { language, t } = useLanguage();
+
+  const locale = {
+    en: "en-GB",
+    es: "es-ES",
+    uk: "uk-UA",
+    ru: "ru-RU",
+    fr: "fr-FR",
+    de: "de-DE",
+    pt: "pt-PT",
+    bg: "bg-BG",
+  }[language];
+
+  const programStatusLabel = (
+    status: CoachProgramStatus
+  ) => {
+    switch (status) {
+      case "DRAFT":
+        return t("coachDashboard.draft");
+      case "REVIEW":
+        return t("coachDashboard.review");
+      case "APPROVED":
+        return t("coachDashboard.approved");
+      case "PUBLISHED":
+        return t("coachDashboard.published");
+      case "ARCHIVED":
+        return t("coachDashboard.archived");
+    }
+  };
+
+  const adherenceStatusLabel = (
+    status: "COMPLETED" | "PENDING"
+  ) =>
+    status === "COMPLETED"
+      ? t("coachDashboard.completed")
+      : t("coachDashboard.pending");
+
   const [view, setView] =
     useState<CoachView>(
       "dashboard"
@@ -386,7 +427,7 @@ export default function CoachDashboard({
         message:
           error instanceof Error
             ? error.message
-            : "Failed to submit program",
+            : t("coachDashboard.failedSubmit"),
       });
     } finally {
       setSubmittingProgramId(
@@ -429,7 +470,8 @@ export default function CoachDashboard({
 
       setAssignSuccess(
         `${selectedProgram.name} assigned to ${getClientName(
-          client.client
+          client.client,
+          t("coachDashboard.athlete")
         )}`
       );
     } catch (error) {
@@ -441,7 +483,7 @@ export default function CoachDashboard({
       setAssignError(
         error instanceof Error
           ? error.message
-          : "Failed to assign program"
+          : t("coachDashboard.failedAssign")
       );
     } finally {
       setAssigningClientId(null);
@@ -482,7 +524,7 @@ export default function CoachDashboard({
       setClientsError(
         error instanceof Error
           ? error.message
-          : "Failed to load clients"
+          : t("coachDashboard.failedClients")
       );
     } finally {
       setLoadingClients(false);
@@ -537,7 +579,7 @@ export default function CoachDashboard({
       setClientResultsError(
         error instanceof Error
           ? error.message
-          : "Failed to load client results"
+          : t("coachDashboard.failedResults")
       );
     } finally {
       setLoadingClientResults(false);
@@ -578,7 +620,7 @@ export default function CoachDashboard({
       setWorkoutsError(
         error instanceof Error
           ? error.message
-          : "Failed to load workouts"
+          : t("coachDashboard.failedWorkouts")
       );
     } finally {
       setLoadingWorkouts(false);
@@ -615,7 +657,7 @@ export default function CoachDashboard({
       setProgramsError(
         error instanceof Error
           ? error.message
-          : "Failed to load programs"
+          : t("coachDashboard.failedPrograms")
       );
     } finally {
       setLoadingPrograms(false);
@@ -662,39 +704,39 @@ export default function CoachDashboard({
                 setClientResultsError(null);
                 setView("clients");
               }}
-              aria-label="Back to clients"
+              aria-label={t("coachDashboard.backClients")}
             >
               ←
             </button>
 
             <div>
               <span>
-                ATHLETE PERFORMANCE
+                {t("coachDashboard.athletePerformance")}
               </span>
 
               <h1>
-                CLIENT RESULTS
+                {t("coachDashboard.clientResults")}
               </h1>
 
               <p>
-                WORKOUT HISTORY
+                {t("coachDashboard.workoutHistory")}
               </p>
             </div>
           </header>
 
           <section className="coach-client-results__athlete">
             <span>
-              ATHLETE #{client.id}
+              {t("coachDashboard.athlete")} #{client.id}
             </span>
 
             <h2>
-              {getClientName(client)}
+              {getClientName(client, t("coachDashboard.athlete"))}
             </h2>
 
             <p>
-              {formatGoal(client.goal)}
+              {formatGoal(client.goal, t("coachDashboard.noGoal"))}
               {" · "}
-              LEVEL {client.level}
+              {t("coachDashboard.level")} {client.level}
             </p>
 
             <div>
@@ -703,7 +745,7 @@ export default function CoachDashboard({
                   {client.workouts}
                 </strong>
                 <span>
-                  WORKOUTS
+                  {t("coachDashboard.workouts")}
                 </span>
               </section>
 
@@ -718,7 +760,7 @@ export default function CoachDashboard({
                 <strong>
                   {client.streak}
                 </strong>
-                <span>STREAK</span>
+                <span>{t("coachDashboard.streak")}</span>
               </section>
             </div>
           </section>
@@ -730,7 +772,7 @@ export default function CoachDashboard({
               </span>
 
               <strong>
-                LOADING RESULTS...
+                {t("coachDashboard.loadingResults")}
               </strong>
             </section>
           )}
@@ -739,7 +781,7 @@ export default function CoachDashboard({
             clientResultsError && (
               <section className="coach-clients-state coach-clients-state--error">
                 <span>
-                  RESULTS ERROR
+                  {t("coachDashboard.resultsError")}
                 </span>
 
                 <strong>
@@ -766,13 +808,13 @@ export default function CoachDashboard({
                 <div className="coach-progress-card__header">
                   <div>
                     <span>
-                      CURRENT PROGRESS
+                      {t("coachDashboard.currentProgress")}
                     </span>
 
                     <strong>
                       {new Date(
                         clientProgress[0].createdAt
-                      ).toLocaleDateString()}
+                      ).toLocaleDateString(locale)}
                     </strong>
                   </div>
                 </div>
@@ -782,21 +824,21 @@ export default function CoachDashboard({
                     <strong>
                       {clientProgress[0].weight ?? "—"}
                     </strong>
-                    <span>KG · WEIGHT</span>
+                    <span>{t("coachDashboard.weight")}</span>
                   </div>
 
                   <div>
                     <strong>
                       {clientProgress[0].bodyFat ?? "—"}
                     </strong>
-                    <span>% · BODY FAT</span>
+                    <span>{t("coachDashboard.bodyFat")}</span>
                   </div>
 
                   <div>
                     <strong>
                       {clientProgress[0].muscleMass ?? "—"}
                     </strong>
-                    <span>KG · MUSCLE MASS</span>
+                    <span>{t("coachDashboard.muscleMass")}</span>
                   </div>
                 </div>
 
@@ -815,7 +857,7 @@ export default function CoachDashboard({
                 <div className="coach-adherence-card__header">
                   <div>
                     <span>
-                      PROGRAM ADHERENCE
+                      {t("coachDashboard.programAdherence")}
                     </span>
 
                     <strong>
@@ -836,7 +878,7 @@ export default function CoachDashboard({
                   </strong>
 
                   <span>
-                    WORKOUTS COMPLETED
+                    {t("coachDashboard.workoutsCompleted")}
                   </span>
                 </div>
 
@@ -867,10 +909,10 @@ export default function CoachDashboard({
                         <div>
                           <span>
                             {item.week
-                              ? `WEEK ${item.week}`
-                              : "PROGRAM"}
+                              ? `${t("coachDashboard.week")} ${item.week}`
+                              : t("coachDashboard.program")}
                             {item.day
-                              ? ` · DAY ${item.day}`
+                              ? ` · ${t("coachDashboard.day")} ${item.day}`
                               : ""}
                           </span>
 
@@ -880,7 +922,7 @@ export default function CoachDashboard({
                         </div>
 
                         <b>
-                          {item.status}
+                          {adherenceStatusLabel(item.status)}
                         </b>
                       </article>
                     )
@@ -889,7 +931,7 @@ export default function CoachDashboard({
 
                 <footer className="coach-adherence-card__footer">
                   <span>
-                    LAST COMPLETED
+                    {t("coachDashboard.lastCompleted")}
                   </span>
 
                   <strong>
@@ -908,16 +950,15 @@ export default function CoachDashboard({
             clientResults.length === 0 && (
               <section className="coach-clients-state">
                 <span>
-                  WORKOUT HISTORY
+                  {t("coachDashboard.workoutHistory")}
                 </span>
 
                 <strong>
-                  NO RESULTS YET
+                  {t("coachDashboard.noResults")}
                 </strong>
 
                 <p>
-                  Completed client workouts
-                  will appear here.
+                  {t("coachDashboard.resultsEmpty")}
                 </p>
               </section>
             )}
@@ -946,7 +987,7 @@ export default function CoachDashboard({
                             {new Date(
                               workout.completedAt ||
                                 workout.createdAt
-                            ).toLocaleString()}
+                            ).toLocaleString(locale)}
                           </small>
                         </div>
 
@@ -960,11 +1001,11 @@ export default function CoachDashboard({
 
                       <div className="coach-client-result__meta">
                         <span>
-                          {workout.duration} SEC
+                          {workout.duration} {t("coachDashboard.sec")}
                         </span>
 
                         <span>
-                          {workout.sets.length} SETS
+                          {workout.sets.length} {t("coachDashboard.sets")}
                         </span>
                       </div>
 
@@ -978,7 +1019,7 @@ export default function CoachDashboard({
                                 </strong>
 
                                 <small>
-                                  SET {set.setNumber}
+                                  {t("coachDashboard.set")} {set.setNumber}
                                 </small>
                               </section>
 
@@ -988,7 +1029,7 @@ export default function CoachDashboard({
                                     "—"}
                                 </b>
                                 <span>
-                                  REPS
+                                  {t("coachDashboard.reps")}
                                 </span>
                               </section>
 
@@ -1032,29 +1073,29 @@ export default function CoachDashboard({
                 setAssignSuccess(null);
                 setView("programs");
               }}
-              aria-label="Back to programs"
+              aria-label={t("coachDashboard.backPrograms")}
             >
               ←
             </button>
 
             <div>
               <span>
-                PROGRAM ASSIGNMENT
+                {t("coachDashboard.assignment")}
               </span>
 
               <h1>
-                ASSIGN PROGRAM
+                {t("coachDashboard.assignProgram")}
               </h1>
 
               <p>
-                SELECT ATHLETE
+                {t("coachDashboard.selectAthlete")}
               </p>
             </div>
           </header>
 
           <section className="coach-assign-program__program">
             <span>
-              SELECTED PROGRAM
+              {t("coachDashboard.selectedProgram")}
             </span>
 
             <strong>
@@ -1063,10 +1104,10 @@ export default function CoachDashboard({
 
             <small>
               {selectedProgram.durationWeeks
-                ? `${selectedProgram.durationWeeks} WEEKS`
-                : "CUSTOM DURATION"}
+                ? `${selectedProgram.durationWeeks} ${t("coachDashboard.weeks")}`
+                : t("coachDashboard.customDuration")}
               {" · "}
-              {selectedProgram.workouts.length} WORKOUTS
+              {selectedProgram.workouts.length} {t("coachDashboard.workouts")}
             </small>
           </section>
 
@@ -1077,7 +1118,7 @@ export default function CoachDashboard({
               </span>
 
               <strong>
-                LOADING CLIENTS...
+                {t("coachDashboard.loadingClients")}
               </strong>
             </section>
           )}
@@ -1086,7 +1127,7 @@ export default function CoachDashboard({
             clientsError && (
               <section className="coach-clients-state coach-clients-state--error">
                 <span>
-                  CONNECTION ERROR
+                  {t("coachDashboard.connectionError")}
                 </span>
 
                 <strong>
@@ -1109,15 +1150,15 @@ export default function CoachDashboard({
             clients.length === 0 && (
               <section className="coach-clients-state">
                 <span>
-                  CLIENT ROSTER
+                  {t("coachDashboard.clientRoster")}
                 </span>
 
                 <strong>
-                  NO CLIENTS YET
+                  {t("coachDashboard.noClients")}
                 </strong>
 
                 <p>
-                  Invite a client before assigning a program.
+                  {t("coachDashboard.inviteBeforeAssign")}
                 </p>
               </section>
             )}
@@ -1131,7 +1172,7 @@ export default function CoachDashboard({
           {assignSuccess && (
             <section className="coach-assign-program__message coach-assign-program__message--success">
               <strong>
-                PROGRAM ASSIGNED
+                {t("coachDashboard.programAssigned")}
               </strong>
 
               <span>
@@ -1145,7 +1186,7 @@ export default function CoachDashboard({
                   setView("programs");
                 }}
               >
-                BACK TO PROGRAMS
+                {t("coachDashboard.backPrograms")}
               </button>
             </section>
           )}
@@ -1172,21 +1213,23 @@ export default function CoachDashboard({
                     >
                       <div>
                         <span>
-                          ATHLETE #{client.client.id}
+                          {t("coachDashboard.athlete")} #{client.client.id}
                         </span>
 
                         <strong>
                           {getClientName(
-                            client.client
+                            client.client,
+                            t("coachDashboard.athlete")
                           )}
                         </strong>
 
                         <small>
                           {formatGoal(
-                            client.client.goal
+                            client.client.goal,
+                            t("coachDashboard.noGoal")
                           )}
                           {" · "}
-                          LEVEL {client.client.level}
+                          {t("coachDashboard.level")} {client.client.level}
                         </small>
                       </div>
 
@@ -1194,7 +1237,7 @@ export default function CoachDashboard({
                         {assigningClientId ===
                         client.client.id
                           ? "..."
-                          : "ASSIGN →"}
+                          : `${t("coachDashboard.assign")} →`}
                       </b>
                     </button>
                   )
@@ -1232,22 +1275,22 @@ export default function CoachDashboard({
               onClick={() =>
                 setView("dashboard")
               }
-              aria-label="Back to coach dashboard"
+              aria-label={t("common.back")}
             >
               ←
             </button>
 
             <div>
               <span>
-                COACH CONTROL CENTER
+                {t("coachDashboard.controlCenter")}
               </span>
 
               <h1>
-                MY PROGRAMS
+                {t("coachDashboard.myPrograms")}
               </h1>
 
               <p>
-                TRAINING SYSTEMS
+                {t("coachDashboard.trainingSystems")}
               </p>
             </div>
           </header>
@@ -1260,7 +1303,7 @@ export default function CoachDashboard({
             }
           >
             <span>
-              + CREATE PROGRAM
+              {t("coachDashboard.createProgram")}
             </span>
 
             <b>→</b>
@@ -1269,7 +1312,7 @@ export default function CoachDashboard({
           <section className="coach-clients-summary">
             <div>
               <span>
-                ACTIVE PROGRAMS
+                {t("coachDashboard.activePrograms")}
               </span>
 
               <strong>
@@ -1279,7 +1322,7 @@ export default function CoachDashboard({
 
             <div>
               <span>
-                WORKOUTS USED
+                {t("coachDashboard.workoutsUsed")}
               </span>
 
               <strong>
@@ -1300,7 +1343,7 @@ export default function CoachDashboard({
               </span>
 
               <strong>
-                LOADING PROGRAMS...
+                {t("coachDashboard.loadingPrograms")}
               </strong>
             </section>
           )}
@@ -1309,7 +1352,7 @@ export default function CoachDashboard({
             programsError && (
               <section className="coach-clients-state coach-clients-state--error">
                 <span>
-                  CONNECTION ERROR
+                  {t("coachDashboard.connectionError")}
                 </span>
 
                 <strong>
@@ -1332,16 +1375,15 @@ export default function CoachDashboard({
             programs.length === 0 && (
               <section className="coach-clients-state">
                 <span>
-                  PROGRAM LIBRARY
+                  {t("coachDashboard.programLibrary")}
                 </span>
 
                 <strong>
-                  NO PROGRAMS YET
+                  {t("coachDashboard.noPrograms")}
                 </strong>
 
                 <p>
-                  Your training programs will
-                  appear here.
+                  {t("coachDashboard.programsEmpty")}
                 </p>
               </section>
             )}
@@ -1359,7 +1401,7 @@ export default function CoachDashboard({
                       <div className="coach-program-card__header">
                         <div>
                           <span>
-                            PROGRAM #{program.id}
+                            {t("coachDashboard.programNumber")} #{program.id}
                           </span>
 
                           <strong>
@@ -1369,7 +1411,7 @@ export default function CoachDashboard({
 
                         <b>
                           {program.durationWeeks
-                            ? `${program.durationWeeks} WEEKS`
+                            ? `${program.durationWeeks} ${t("coachDashboard.weeks")}`
                             : "—"}
                         </b>
                       </div>
@@ -1382,7 +1424,7 @@ export default function CoachDashboard({
 
                       <div className="coach-program-card__meta">
                         <span>
-                          {program.workouts.length} WORKOUTS
+                          {program.workouts.length} {t("coachDashboard.workouts")}
                         </span>
                       </div>
 
@@ -1397,14 +1439,14 @@ export default function CoachDashboard({
                                 <div>
                                   <span>
                                     {item.week
-                                      ? `WEEK ${item.week}`
-                                      : "WEEK —"}
+                                      ? `${t("coachDashboard.week")} ${item.week}`
+                                      : `${t("coachDashboard.week")} —`}
 
                                     {" · "}
 
                                     {item.day
-                                      ? `DAY ${item.day}`
-                                      : "DAY —"}
+                                      ? `${t("coachDashboard.day")} ${item.day}`
+                                      : `${t("coachDashboard.day")} —`}
                                   </span>
 
                                   <strong>
@@ -1420,13 +1462,13 @@ export default function CoachDashboard({
                       <div className="coach-program-review">
                         <div className="coach-program-review__status">
                           <span>
-                            IRONAGE STATUS
+                            {t("coachDashboard.ironageStatus")}
                           </span>
 
                           <strong
                             className={`coach-program-review__badge coach-program-review__badge--${program.status.toLowerCase()}`}
                           >
-                            {program.status}
+                            {programStatusLabel(program.status)}
                           </strong>
                         </div>
 
@@ -1457,8 +1499,8 @@ export default function CoachDashboard({
                             <span>
                               {submittingProgramId ===
                               program.id
-                                ? "SUBMITTING..."
-                                : "SUBMIT FOR REVIEW"}
+                                ? t("coachDashboard.submitting")
+                                : t("coachDashboard.submitReview")}
                             </span>
 
                             <b>→</b>
@@ -1468,28 +1510,28 @@ export default function CoachDashboard({
                         {program.status ===
                           "REVIEW" && (
                           <div className="coach-program-review__message">
-                            WAITING FOR IRONAGE APPROVAL
+                            {t("coachDashboard.waitApproval")}
                           </div>
                         )}
 
                         {program.status ===
                           "APPROVED" && (
                           <div className="coach-program-review__message">
-                            APPROVED BY IRONAGE · WAITING FOR PUBLICATION
+                            {t("coachDashboard.waitPublication")}
                           </div>
                         )}
 
                         {program.status ===
                           "PUBLISHED" && (
                           <div className="coach-program-review__message coach-program-review__message--live">
-                            LIVE IN IRONAGE MARKETPLACE
+                            {t("coachDashboard.liveMarketplace")}
                           </div>
                         )}
 
                         {program.status ===
                           "ARCHIVED" && (
                           <div className="coach-program-review__message">
-                            PROGRAM ARCHIVED
+                            {t("coachDashboard.programArchived")}
                           </div>
                         )}
                       </div>
@@ -1516,7 +1558,7 @@ export default function CoachDashboard({
                           }}
                         >
                           <span>
-                            ASSIGN PROGRAM
+                            {t("coachDashboard.assignProgram")}
                           </span>
 
                           <b>→</b>
@@ -1558,22 +1600,22 @@ export default function CoachDashboard({
               onClick={() =>
                 setView("dashboard")
               }
-              aria-label="Back to coach dashboard"
+              aria-label={t("common.back")}
             >
               ←
             </button>
 
             <div>
               <span>
-                COACH CONTROL CENTER
+                {t("coachDashboard.controlCenter")}
               </span>
 
               <h1>
-                MY WORKOUTS
+                {t("coachDashboard.myWorkouts")}
               </h1>
 
               <p>
-                TRAINING LIBRARY
+                {t("coachDashboard.trainingLibrary")}
               </p>
             </div>
           </header>
@@ -1586,7 +1628,7 @@ export default function CoachDashboard({
             }
           >
             <span>
-              + CREATE WORKOUT
+              {t("coachDashboard.createWorkout")}
             </span>
 
             <b>→</b>
@@ -1595,7 +1637,7 @@ export default function CoachDashboard({
           <section className="coach-clients-summary">
             <div>
               <span>
-                ACTIVE WORKOUTS
+                {t("coachDashboard.activeWorkouts")}
               </span>
 
               <strong>
@@ -1605,7 +1647,7 @@ export default function CoachDashboard({
 
             <div>
               <span>
-                EXERCISES USED
+                {t("coachDashboard.exercisesUsed")}
               </span>
 
               <strong>
@@ -1626,7 +1668,7 @@ export default function CoachDashboard({
               </span>
 
               <strong>
-                LOADING WORKOUTS...
+                {t("coachDashboard.loadingWorkouts")}
               </strong>
             </section>
           )}
@@ -1635,7 +1677,7 @@ export default function CoachDashboard({
             workoutsError && (
               <section className="coach-clients-state coach-clients-state--error">
                 <span>
-                  CONNECTION ERROR
+                  {t("coachDashboard.connectionError")}
                 </span>
 
                 <strong>
@@ -1658,16 +1700,15 @@ export default function CoachDashboard({
             workouts.length === 0 && (
               <section className="coach-clients-state">
                 <span>
-                  TRAINING LIBRARY
+                  {t("coachDashboard.trainingLibrary")}
                 </span>
 
                 <strong>
-                  NO WORKOUTS YET
+                  {t("coachDashboard.noWorkouts")}
                 </strong>
 
                 <p>
-                  Your coach workouts will
-                  appear here.
+                  {t("coachDashboard.workoutsEmpty")}
                 </p>
               </section>
             )}
@@ -1685,7 +1726,7 @@ export default function CoachDashboard({
                       <div className="coach-workout-card__header">
                         <div>
                           <span>
-                            WORKOUT #{workout.id}
+                            {t("coachDashboard.workoutNumber")} #{workout.id}
                           </span>
 
                           <strong>
@@ -1694,13 +1735,13 @@ export default function CoachDashboard({
 
                           <small>
                             {workout.difficulty ||
-                              "STANDARD"}
+                              t("coachDashboard.standard")}
                           </small>
                         </div>
 
                         <b>
                           {workout.duration
-                            ? `${workout.duration} MIN`
+                            ? `${workout.duration} ${t("coachDashboard.min")}`
                             : "—"}
                         </b>
                       </div>
@@ -1734,23 +1775,23 @@ export default function CoachDashboard({
 
                                 <small>
                                   {item.sets
-                                    ? `${item.sets} SETS`
-                                    : "SETS —"}
+                                    ? `${item.sets} ${t("coachDashboard.sets")}`
+                                    : `${t("coachDashboard.sets")} —`}
 
                                   {" · "}
 
                                   {item.repetitions
-                                    ? `${item.repetitions} REPS`
+                                    ? `${item.repetitions} ${t("coachDashboard.reps")}`
                                     : item.minRepetitions &&
                                         item.maxRepetitions
-                                      ? `${item.minRepetitions}-${item.maxRepetitions} REPS`
-                                      : "REPS —"}
+                                      ? `${item.minRepetitions}-${item.maxRepetitions} ${t("coachDashboard.reps")}`
+                                      : `${t("coachDashboard.reps")} —`}
 
                                   {" · "}
 
                                   {item.restSeconds
-                                    ? `${item.restSeconds}S REST`
-                                    : "REST —"}
+                                    ? `${item.restSeconds}S ${t("coachDashboard.rest")}`
+                                    : `${t("coachDashboard.rest")} —`}
                                 </small>
                               </div>
                             </div>
@@ -1782,22 +1823,22 @@ export default function CoachDashboard({
                   "dashboard"
                 )
               }
-              aria-label="Back to coach dashboard"
+              aria-label={t("common.back")}
             >
               ←
             </button>
 
             <div>
               <span>
-                COACH CONTROL CENTER
+                {t("coachDashboard.controlCenter")}
               </span>
 
               <h1>
-                MY CLIENTS
+                {t("coachDashboard.myClients")}
               </h1>
 
               <p>
-                ATHLETES UNDER YOUR COACHING
+                {t("coachDashboard.athletesUnder")}
               </p>
             </div>
           </header>
@@ -1805,7 +1846,7 @@ export default function CoachDashboard({
           <section className="coach-clients-summary">
             <div>
               <span>
-                ACTIVE ATHLETES
+                {t("coachDashboard.activeAthletes")}
               </span>
 
               <strong>
@@ -1815,7 +1856,7 @@ export default function CoachDashboard({
 
             <div>
               <span>
-                TOTAL WORKOUTS
+                {t("coachDashboard.totalWorkouts")}
               </span>
 
               <strong>
@@ -1844,7 +1885,7 @@ export default function CoachDashboard({
               </span>
 
               <strong>
-                LOADING ATHLETES...
+                {t("coachDashboard.loadingAthletes")}
               </strong>
             </section>
           )}
@@ -1853,7 +1894,7 @@ export default function CoachDashboard({
             clientsError && (
               <section className="coach-clients-state coach-clients-state--error">
                 <span>
-                  CONNECTION ERROR
+                  {t("coachDashboard.connectionError")}
                 </span>
 
                 <strong>
@@ -1876,16 +1917,15 @@ export default function CoachDashboard({
             clients.length === 0 && (
               <section className="coach-clients-state">
                 <span>
-                  ATHLETE ROSTER
+                  {t("coachDashboard.athleteRoster")}
                 </span>
 
                 <strong>
-                  NO CLIENTS YET
+                  {t("coachDashboard.noClients")}
                 </strong>
 
                 <p>
-                  Assigned athletes will
-                  appear here.
+                  {t("coachDashboard.athletesEmpty")}
                 </p>
               </section>
             )}
@@ -1919,18 +1959,20 @@ export default function CoachDashboard({
 
                           <div className="coach-client-card__identity">
                             <span>
-                              ATHLETE #{client.id}
+                              {t("coachDashboard.athlete")} #{client.id}
                             </span>
 
                             <strong>
                               {getClientName(
-                                client
+                                client,
+                                t("coachDashboard.athlete")
                               )}
                             </strong>
 
                             <small>
                               {formatGoal(
-                                client.goal
+                                client.goal,
+                                t("coachDashboard.noGoal")
                               )}
                             </small>
                           </div>
@@ -1949,7 +1991,7 @@ export default function CoachDashboard({
                         <div className="coach-client-card__body">
                           <div>
                             <span>
-                              WORKOUTS
+                              {t("coachDashboard.workouts")}
                             </span>
 
                             <strong>
@@ -1959,7 +2001,7 @@ export default function CoachDashboard({
 
                           <div>
                             <span>
-                              STREAK
+                              {t("coachDashboard.streak")}
                             </span>
 
                             <strong>
@@ -1982,19 +2024,19 @@ export default function CoachDashboard({
                           <span>
                             {client.age
                               ? `${client.age} Y`
-                              : "AGE —"}
+                              : `${t("coachDashboard.age")} —`}
                           </span>
 
                           <span>
                             {client.weight
                               ? `${client.weight} KG`
-                              : "WEIGHT —"}
+                              : `${t("coachDashboard.weight").replace("KG · ", "")} —`}
                           </span>
 
                           <span>
                             {client.height
                               ? `${client.height} CM`
-                              : "HEIGHT —"}
+                              : `${t("coachDashboard.height")} —`}
                           </span>
                         </div>
                       <button
@@ -2011,7 +2053,7 @@ export default function CoachDashboard({
                     }
                   >
                     <span>
-                      VIEW RESULTS
+                      {t("coachDashboard.viewResults")}
                     </span>
 
                     <b>→</b>
@@ -2038,22 +2080,22 @@ export default function CoachDashboard({
             type="button"
             className="coach-dashboard__back"
             onClick={onBack}
-            aria-label="Back to profile"
+            aria-label={t("common.back")}
           >
             ←
           </button>
 
           <div>
             <span>
-              IRONAGE PROFESSIONAL
+              {t("coachDashboard.professional")}
             </span>
 
             <h1>
-              COACH SYSTEM
+              {t("coachDashboard.system")}
             </h1>
 
             <p>
-              BUILD ATHLETES. TRACK RESULTS.
+              {t("coachDashboard.buildAthletes")}
             </p>
           </div>
         </header>
@@ -2065,22 +2107,21 @@ export default function CoachDashboard({
 
           <div>
             <span>
-              COACH CONTROL CENTER
+              {t("coachDashboard.controlCenter")}
             </span>
 
             <h2>
-              LEAD.
+              {t("coachDashboard.lead")}
               <br />
-              PROGRAM.
+              {t("coachDashboard.programVerb")}
               <br />
               <strong>
-                TRANSFORM.
+                {t("coachDashboard.transform")}
               </strong>
             </h2>
 
             <p>
-              Manage your athletes, create workouts
-              and build complete training programs.
+              {t("coachDashboard.heroDescription")}
             </p>
           </div>
         </section>
@@ -2088,7 +2129,7 @@ export default function CoachDashboard({
         <div className="coach-dashboard__section-title">
           <span />
           <strong>
-            COACH TOOLS
+            {t("coachDashboard.tools")}
           </strong>
           <span />
         </div>
@@ -2110,15 +2151,15 @@ export default function CoachDashboard({
 
             <div className="coach-dashboard__card-content">
               <span>
-                ATHLETES
+                {t("coachDashboard.athletes")}
               </span>
 
               <strong>
-                MY CLIENTS
+                {t("coachDashboard.myClients")}
               </strong>
 
               <small>
-                Manage assigned athletes and monitor progress.
+                {t("coachDashboard.clientsDescription")}
               </small>
             </div>
 
@@ -2138,15 +2179,15 @@ export default function CoachDashboard({
 
             <div className="coach-dashboard__card-content">
               <span>
-                TRAINING
+                {t("coachDashboard.training")}
               </span>
 
               <strong>
-                MY WORKOUTS
+                {t("coachDashboard.myWorkouts")}
               </strong>
 
               <small>
-                Build workouts from the IRONAGE exercise library.
+                {t("coachDashboard.workoutsDescription")}
               </small>
             </div>
 
@@ -2166,15 +2207,15 @@ export default function CoachDashboard({
 
             <div className="coach-dashboard__card-content">
               <span>
-                PROGRAMMING
+                {t("coachDashboard.programming")}
               </span>
 
               <strong>
-                MY PROGRAMS
+                {t("coachDashboard.myPrograms")}
               </strong>
 
               <small>
-                Create programs and assign them to your clients.
+                {t("coachDashboard.programsDescription")}
               </small>
             </div>
 
@@ -2195,15 +2236,15 @@ export default function CoachDashboard({
 
             <div className="coach-dashboard__card-content">
               <span>
-                PROFILE
+                {t("coachDashboard.profile")}
               </span>
 
               <strong>
-                EDIT PROFILE
+                EDIT {t("coachDashboard.profile")}
               </strong>
 
               <small>
-                Update your coach name, specialization, bio and photo.
+                {t("coachDashboard.profileDescription")}
               </small>
             </div>
 
@@ -2214,11 +2255,11 @@ export default function CoachDashboard({
         <section className="coach-dashboard__status">
           <div>
             <span>
-              COACH STATUS
+              {t("coachDashboard.coachStatus")}
             </span>
 
             <strong>
-              ACTIVE
+              {t("coachDashboard.active")}
             </strong>
           </div>
 
