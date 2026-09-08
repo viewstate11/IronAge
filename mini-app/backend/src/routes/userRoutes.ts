@@ -826,26 +826,24 @@ router.patch(
 
 router.delete(
   "/me",
-  requireTelegramAuth,
+  requireAppAuth,
   async (
     req,
     res
   ) => {
     try {
-      const telegramUser =
-        getAuthenticatedTelegramUser(
-          req
-        );
-
-      const telegramId =
-        BigInt(
-          telegramUser.id
-        );
+      const authenticatedRequest =
+        req as AppAuthenticatedRequest;
 
       const user =
         await prisma.user.findUnique({
           where: {
-            telegramId,
+            id:
+              authenticatedRequest.appUserId,
+          },
+
+          select: {
+            id: true,
           },
         });
 
@@ -860,11 +858,12 @@ router.delete(
 
       await prisma.user.delete({
         where: {
-          telegramId,
+          id:
+            authenticatedRequest.appUserId,
         },
       });
 
-      return res.json({
+      return res.status(200).json({
         success: true,
 
         message:

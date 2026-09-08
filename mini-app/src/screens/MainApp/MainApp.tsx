@@ -1,5 +1,9 @@
 import { useCallback, useState } from "react";
 
+import api, {
+  telegramAuthOptions,
+} from "../../api/client";
+
 import "./MainApp.css";
 
 import Dashboard from "./Dashboard";
@@ -25,6 +29,11 @@ import AdminCoaches from "../Admin/AdminCoaches";
 import AdminPrograms from "../Admin/AdminPrograms";
 import Programs from "../Programs/Programs";
 import ProgramDetails from "../Programs/ProgramDetails";
+
+import {
+  PrivacyPage,
+  TermsPage,
+} from "../Legal/LegalPages";
 
 import type { Tab } from "../../navigation/tabs";
 
@@ -54,6 +63,8 @@ type AppScreen =
   | "profile-feature"
   | "programs"
   | "program-details"
+  | "privacy"
+  | "terms"
   | "session"
   | "complete";
 
@@ -66,6 +77,7 @@ export default function MainApp() {
 
   const {
     completeWorkout,
+    logout,
   } = useUser();
 
   const {
@@ -723,6 +735,88 @@ export default function MainApp() {
               );
             }}
 
+            onOpenEditProfile={() => {
+              openProfileFeature(
+                "EDIT PROFILE",
+                "Update your personal information, fitness data and profile settings."
+              );
+            }}
+
+            onOpenHelpSupport={() => {
+              openProfileFeature(
+                "HELP & SUPPORT",
+                "Get help with your account, training, coaching, purchases and IRONAGE features."
+              );
+            }}
+
+            onOpenPrivacyPolicy={() => {
+              setScreen("privacy");
+            }}
+
+            onOpenTermsConditions={() => {
+              setScreen("terms");
+            }}
+
+            onDeleteAccount={() => {
+              void (async () => {
+                const confirmed =
+                  window.confirm(
+                    "Delete your IRONAGE account permanently? This action cannot be undone."
+                  );
+
+                if (!confirmed) {
+                  return;
+                }
+
+                const confirmedAgain =
+                  window.confirm(
+                    "Are you absolutely sure? Your IRONAGE account and associated data will be deleted."
+                  );
+
+                if (!confirmedAgain) {
+                  return;
+                }
+
+                try {
+                  const response =
+                    await api.delete<{
+                      success: boolean;
+                      message?: string;
+                    }>(
+                      "/users/me",
+                      telegramAuthOptions()
+                    );
+
+                  if (
+                    !response ||
+                    response.success !== true
+                  ) {
+                    throw new Error(
+                      response?.message ||
+                        "Account deletion failed"
+                    );
+                  }
+
+                  await logout();
+                } catch (error) {
+                  console.error(
+                    "IRONAGE DELETE ACCOUNT UI ERROR:",
+                    error
+                  );
+
+                  window.alert(
+                    error instanceof Error
+                      ? error.message
+                      : "Failed to delete account"
+                  );
+                }
+              })();
+            }}
+
+            onLogout={() => {
+              void logout();
+            }}
+
             onOpenCoachPrograms={() => {
               openProfileFeature(
                 "MY COACH PROGRAMS",
@@ -839,6 +933,23 @@ export default function MainApp() {
             }}
           />
 
+        )}
+
+
+        {screen === "privacy" && (
+          <PrivacyPage
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+        )}
+
+        {screen === "terms" && (
+          <TermsPage
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
         )}
 
 

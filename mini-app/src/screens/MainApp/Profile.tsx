@@ -44,6 +44,11 @@ type ProfileProps = {
   onOpenSettings?: () => void;
   onOpenEditProfile?: () => void;
 
+  onOpenHelpSupport?: () => void;
+  onOpenPrivacyPolicy?: () => void;
+  onOpenTermsConditions?: () => void;
+  onDeleteAccount?: () => void;
+
   onLogout?: () => void;
 
   [key: string]: any;
@@ -168,6 +173,11 @@ export default function Profile(
     onOpenNotifications,
     onOpenSettings,
     onOpenEditProfile,
+
+    onOpenHelpSupport,
+    onOpenPrivacyPolicy,
+    onOpenTermsConditions,
+    onDeleteAccount,
 
     onLogout,
   } = props;
@@ -652,24 +662,36 @@ export default function Profile(
             number="21"
             title={t("profile.helpSupport")}
             subtitle={t("profile.helpSupportSubtitle")}
+            onClick={
+              onOpenHelpSupport
+            }
           />
 
           <MenuItem
             number="22"
             title={t("profile.privacyPolicy")}
             subtitle={t("profile.privacyPolicySubtitle")}
+            onClick={
+              onOpenPrivacyPolicy
+            }
           />
 
           <MenuItem
             number="23"
             title={t("profile.termsConditions")}
             subtitle={t("profile.termsConditionsSubtitle")}
+            onClick={
+              onOpenTermsConditions
+            }
           />
 
           <MenuItem
             number="24"
             title={t("profile.deleteAccount")}
             subtitle={t("profile.deleteAccountSubtitle")}
+            onClick={
+              onDeleteAccount
+            }
             danger
           />
         </section>

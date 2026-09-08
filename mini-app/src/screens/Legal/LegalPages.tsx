@@ -6,12 +6,14 @@ type LegalPageProps = {
   title: string;
   updated: string;
   children: ReactNode;
+  onBack?: () => void;
 };
 
 function LegalPage({
   title,
   updated,
   children,
+  onBack,
 }: LegalPageProps) {
   return (
     <main
@@ -33,6 +35,11 @@ function LegalPage({
         <button
           type="button"
           onClick={() => {
+            if (onBack) {
+              onBack();
+              return;
+            }
+
             window.location.href = "/";
           }}
           style={{
@@ -122,11 +129,16 @@ function Section({
   );
 }
 
-export function TermsPage() {
+export function TermsPage({
+  onBack,
+}: {
+  onBack?: () => void;
+} = {}) {
   return (
     <LegalPage
       title="Terms of Service"
       updated="September 2, 2026"
+      onBack={onBack}
     >
       <Section title="1. Acceptance of Terms">
         <p>
@@ -265,11 +277,16 @@ export function TermsPage() {
   );
 }
 
-export function PrivacyPage() {
+export function PrivacyPage({
+  onBack,
+}: {
+  onBack?: () => void;
+} = {}) {
   return (
     <LegalPage
       title="Privacy Policy"
       updated="September 2, 2026"
+      onBack={onBack}
     >
       <Section title="1. Information We Collect">
         <p>
