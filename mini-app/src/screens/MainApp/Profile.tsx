@@ -7,6 +7,8 @@ import api, {
   telegramAuthOptions,
 } from "../../api/client";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./Profile.css";
 
 type ProfileProps = {
@@ -132,6 +134,8 @@ function SectionTitle({
 export default function Profile(
   props: ProfileProps
 ) {
+  const { t } = useLanguage();
+
   const {
     user,
 
@@ -408,7 +412,7 @@ export default function Profile(
                 onOpenEditProfile
               }
             >
-              EDIT PROFILE
+              {t("profile.editProfile")}
             </button>
           )}
 
@@ -417,13 +421,13 @@ export default function Profile(
 
         <section className="iron-profile__section">
           <SectionTitle>
-            MY TRAINING
+            {t("profile.myTraining")}
           </SectionTitle>
 
           <MenuItem
             number="01"
-            title="MY PROGRAM"
-            subtitle="Current program, week and progress"
+            title={t("profile.myProgram")}
+            subtitle={t("profile.myProgramSubtitle")}
             onClick={
               openMyProgram
             }
@@ -431,8 +435,8 @@ export default function Profile(
 
           <MenuItem
             number="02"
-            title="PROGRESS"
-            subtitle="Weight, measurements, photos and strength"
+            title={t("profile.progress")}
+            subtitle={t("profile.progressSubtitle")}
             onClick={
               onOpenProgress
             }
@@ -440,8 +444,8 @@ export default function Profile(
 
           <MenuItem
             number="03"
-            title="WORKOUT HISTORY"
-            subtitle="Completed workouts and performance"
+            title={t("profile.workoutHistory")}
+            subtitle={t("profile.workoutHistorySubtitle")}
             onClick={
               openHistory
             }
@@ -451,13 +455,13 @@ export default function Profile(
 
         <section className="iron-profile__section">
           <SectionTitle>
-            COACHING
+            {t("profile.coaching")}
           </SectionTitle>
 
           <MenuItem
             number="04"
-            title="MY COACH"
-            subtitle="Your active coach and coaching status"
+            title={t("profile.myCoach")}
+            subtitle={t("profile.myCoachSubtitle")}
             onClick={
               onOpenMyCoach
             }
@@ -465,8 +469,8 @@ export default function Profile(
 
           <MenuItem
             number="05"
-            title="FIND A COACH"
-            subtitle="Browse verified IRONAGE coaches"
+            title={t("profile.findCoach")}
+            subtitle={t("profile.findCoachSubtitle")}
             onClick={
               onOpenFindCoach
             }
@@ -474,8 +478,8 @@ export default function Profile(
 
           <MenuItem
             number="06"
-            title="PROGRAMS"
-            subtitle="Explore professional training programs"
+            title={t("profile.programs")}
+            subtitle={t("profile.programsSubtitle")}
             onClick={
               onOpenPrograms
             }
@@ -485,13 +489,13 @@ export default function Profile(
 
         <section className="iron-profile__section">
           <SectionTitle>
-            ACCOUNT
+            {t("profile.account")}
           </SectionTitle>
 
           <MenuItem
             number="07"
-            title="SUBSCRIPTION"
-            subtitle="Plan, access and renewal"
+            title={t("profile.subscription")}
+            subtitle={t("profile.subscriptionSubtitle")}
             onClick={
               onOpenSubscription
             }
@@ -499,8 +503,8 @@ export default function Profile(
 
           <MenuItem
             number="08"
-            title="PAYMENTS"
-            subtitle="Purchases, payments and receipts"
+            title={t("profile.payments")}
+            subtitle={t("profile.paymentsSubtitle")}
             onClick={
               onOpenPayments
             }
@@ -508,8 +512,8 @@ export default function Profile(
 
           <MenuItem
             number="09"
-            title="NOTIFICATIONS"
-            subtitle="Workout, coach and account alerts"
+            title={t("profile.notifications")}
+            subtitle={t("profile.notificationsSubtitle")}
             onClick={
               onOpenNotifications
             }
@@ -517,8 +521,8 @@ export default function Profile(
 
           <MenuItem
             number="10"
-            title="SETTINGS"
-            subtitle="Language, privacy and account"
+            title={t("profile.settings")}
+            subtitle={t("profile.settingsSubtitle")}
             onClick={
               onOpenSettings
             }
@@ -529,13 +533,13 @@ export default function Profile(
         {isApprovedCoach && (
           <section className="iron-profile__section">
             <SectionTitle>
-              COACH TOOLS
+              {t("profile.coachTools")}
             </SectionTitle>
 
             <MenuItem
               number="11"
-              title="COACH SYSTEM"
-              subtitle="Clients, check-ins and feedback"
+              title={t("profile.coachSystem")}
+              subtitle={t("profile.coachSystemSubtitle")}
               onClick={
                 onOpenCoach
               }
@@ -543,8 +547,8 @@ export default function Profile(
 
             <MenuItem
               number="12"
-              title="MY COACH PROGRAMS"
-              subtitle="Programs connected to your profile"
+              title={t("profile.myCoachPrograms")}
+              subtitle={t("profile.myCoachProgramsSubtitle")}
               onClick={
                 onOpenCoachPrograms
               }
@@ -552,8 +556,8 @@ export default function Profile(
 
             <MenuItem
               number="13"
-              title="VIDEO REVIEWS"
-              subtitle="Review client exercise technique"
+              title={t("profile.videoReviews")}
+              subtitle={t("profile.videoReviewsSubtitle")}
               onClick={
                 onOpenVideoReviews
               }
@@ -561,8 +565,8 @@ export default function Profile(
 
             <MenuItem
               number="14"
-              title="EARNINGS"
-              subtitle="Revenue, commission and payouts"
+              title={t("profile.earnings")}
+              subtitle={t("profile.earningsSubtitle")}
               onClick={
                 onOpenEarnings
               }
@@ -574,13 +578,13 @@ export default function Profile(
         {isAdmin && (
           <section className="iron-profile__section iron-profile__section--admin">
             <SectionTitle>
-              IRONAGE ADMIN
+              {t("profile.ironageAdmin")}
             </SectionTitle>
 
             <MenuItem
               number="15"
-              title="ADMIN PANEL"
-              subtitle="IRONAGE Control Center"
+              title={t("profile.adminPanel")}
+              subtitle={t("profile.adminPanelSubtitle")}
               onClick={
                 onOpenAdmin
               }
@@ -588,8 +592,8 @@ export default function Profile(
 
             <MenuItem
               number="16"
-              title="COACH MANAGEMENT"
-              subtitle="Applications, approval and coach status"
+              title={t("profile.coachManagement")}
+              subtitle={t("profile.coachManagementSubtitle")}
               onClick={
                 onOpenCoachManagement ||
                 onOpenAdmin
@@ -598,8 +602,8 @@ export default function Profile(
 
             <MenuItem
               number="17"
-              title="PROGRAM MANAGEMENT"
-              subtitle="Review, approve and publish programs"
+              title={t("profile.programManagement")}
+              subtitle={t("profile.programManagementSubtitle")}
               onClick={
                 onOpenProgramManagement ||
                 onOpenAdmin
@@ -608,8 +612,8 @@ export default function Profile(
 
             <MenuItem
               number="18"
-              title="USERS"
-              subtitle="Manage IRONAGE users"
+              title={t("profile.users")}
+              subtitle={t("profile.usersSubtitle")}
               onClick={
                 onOpenUsers ||
                 onOpenAdmin
@@ -618,8 +622,8 @@ export default function Profile(
 
             <MenuItem
               number="19"
-              title="PAYMENTS & SUBSCRIPTIONS"
-              subtitle="Revenue, subscriptions and transactions"
+              title={t("profile.paymentsSubscriptions")}
+              subtitle={t("profile.paymentsSubscriptionsSubtitle")}
               onClick={
                 onOpenPayments ||
                 onOpenAdmin
@@ -628,8 +632,8 @@ export default function Profile(
 
             <MenuItem
               number="20"
-              title="ANALYTICS"
-              subtitle="Users, coaches, growth and revenue"
+              title={t("profile.analytics")}
+              subtitle={t("profile.analyticsSubtitle")}
               onClick={
                 onOpenAnalytics ||
                 onOpenAdmin
@@ -641,31 +645,31 @@ export default function Profile(
 
         <section className="iron-profile__section">
           <SectionTitle>
-            SUPPORT
+            {t("profile.support")}
           </SectionTitle>
 
           <MenuItem
             number="21"
-            title="HELP & SUPPORT"
-            subtitle="IRONAGE assistance"
+            title={t("profile.helpSupport")}
+            subtitle={t("profile.helpSupportSubtitle")}
           />
 
           <MenuItem
             number="22"
-            title="PRIVACY POLICY"
-            subtitle="Your privacy and data"
+            title={t("profile.privacyPolicy")}
+            subtitle={t("profile.privacyPolicySubtitle")}
           />
 
           <MenuItem
             number="23"
-            title="TERMS & CONDITIONS"
-            subtitle="IRONAGE terms of use"
+            title={t("profile.termsConditions")}
+            subtitle={t("profile.termsConditionsSubtitle")}
           />
 
           <MenuItem
             number="24"
-            title="DELETE ACCOUNT"
-            subtitle="Permanently delete your account"
+            title={t("profile.deleteAccount")}
+            subtitle={t("profile.deleteAccountSubtitle")}
             danger
           />
         </section>
@@ -676,7 +680,7 @@ export default function Profile(
           className="iron-profile__logout"
           onClick={onLogout}
         >
-          LOG OUT
+          {t("profile.logout")}
           <span>
             →
           </span>
