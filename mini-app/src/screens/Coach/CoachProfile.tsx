@@ -7,6 +7,8 @@ import api, {
   telegramAuthOptions,
 } from "../../api/client";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./CoachProfile.css";
 
 type Props = {
@@ -60,6 +62,8 @@ export default function CoachProfile({
   onBack,
   onConnected,
 }: Props) {
+  const { t } = useLanguage();
+
   const [coach, setCoach] =
     useState<CoachData | null>(
       null
@@ -104,7 +108,7 @@ export default function CoachProfile({
         !response.coach
       ) {
         throw new Error(
-          "Invalid coach profile response"
+          t("coachProfile.invalidResponse")
         );
       }
 
@@ -120,7 +124,7 @@ export default function CoachProfile({
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to load coach"
+          : t("coachProfile.failedToLoad")
       );
     } finally {
       setLoading(false);
@@ -155,7 +159,7 @@ export default function CoachProfile({
         response.success !== true
       ) {
         throw new Error(
-          "Coach connection failed"
+          t("coachProfile.connectionFailed")
         );
       }
 
@@ -169,7 +173,7 @@ export default function CoachProfile({
       setConnectError(
         err instanceof Error
           ? err.message
-          : "Failed to choose coach"
+          : t("coachProfile.failedToChoose")
       );
     } finally {
       setConnecting(false);
@@ -182,7 +186,7 @@ export default function CoachProfile({
         <div className="coach-profile__content">
           <section className="coach-profile__state">
             <strong>
-              LOADING COACH...
+              {t("coachProfile.loading")}
             </strong>
           </section>
         </div>
@@ -201,7 +205,7 @@ export default function CoachProfile({
             <button
               type="button"
               onClick={onBack}
-              aria-label="Back"
+              aria-label={t("common.back")}
             >
               ←
             </button>
@@ -209,12 +213,12 @@ export default function CoachProfile({
 
           <section className="coach-profile__state">
             <strong>
-              COACH NOT AVAILABLE
+              {t("coachProfile.notAvailable")}
             </strong>
 
             <p>
               {error ??
-                "Coach not found"}
+                t("coachProfile.notFound")}
             </p>
 
             <button
@@ -223,7 +227,7 @@ export default function CoachProfile({
                 void loadCoach()
               }
             >
-              RETRY
+              {t("common.retry")}
             </button>
           </section>
         </div>
@@ -238,13 +242,13 @@ export default function CoachProfile({
           <button
             type="button"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
 
           <span>
-            IRONAGE COACH
+            {t("coachProfile.ironageCoach")}
           </span>
         </header>
 
@@ -281,7 +285,7 @@ export default function CoachProfile({
 
             <p>
               {coach.specialization ??
-                "IRONAGE COACH"}
+                t("coachProfile.ironageCoach")}
             </p>
           </div>
         </section>
@@ -292,7 +296,7 @@ export default function CoachProfile({
               {coach.stats.clients}
             </strong>
             <span>
-              CLIENTS
+              {t("coachProfile.clients")}
             </span>
           </div>
 
@@ -301,7 +305,7 @@ export default function CoachProfile({
               {coach.stats.programs}
             </strong>
             <span>
-              PROGRAMS
+              {t("coachProfile.programs")}
             </span>
           </div>
 
@@ -310,26 +314,26 @@ export default function CoachProfile({
               {coach.stats.workouts}
             </strong>
             <span>
-              WORKOUTS
+              {t("coachProfile.workouts")}
             </span>
           </div>
         </section>
 
         <section className="coach-profile__about">
           <span>
-            ABOUT COACH
+            {t("coachProfile.about")}
           </span>
 
           <p>
             {coach.bio ??
-              "Professional IRONAGE coach ready to build your training plan."}
+              t("coachProfile.defaultBio")}
           </p>
         </section>
 
         {coach.user.username && (
           <section className="coach-profile__meta">
             <span>
-              USERNAME
+              {t("coachProfile.username")}
             </span>
 
             <strong>
@@ -355,8 +359,8 @@ export default function CoachProfile({
           >
             <span>
               {connecting
-                ? "CONNECTING..."
-                : "CHOOSE THIS COACH"}
+                ? t("coachProfile.connecting")
+                : t("coachProfile.choose")}
             </span>
 
             <b>→</b>
@@ -369,11 +373,11 @@ export default function CoachProfile({
 
             <div>
               <strong>
-                COACH SELECTED
+                {t("coachProfile.selected")}
               </strong>
 
               <p>
-                {coach.displayName} is now your coach.
+                {coach.displayName} {t("coachProfile.nowYourCoach")}
               </p>
             </div>
 
@@ -383,7 +387,7 @@ export default function CoachProfile({
                 onConnected
               }
             >
-              CONTINUE →
+              {t("coachProfile.continue")} →
             </button>
           </section>
         )}

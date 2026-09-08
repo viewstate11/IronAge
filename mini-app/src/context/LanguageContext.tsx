@@ -1336,6 +1336,219 @@ const translations:
   },
 
   /* =====================================================
+     COACH PROFILE
+  ===================================================== */
+
+  "coachProfile.loading": {
+    en: "LOADING COACH...",
+    es: "CARGANDO ENTRENADOR...",
+    uk: "ЗАВАНТАЖЕННЯ ТРЕНЕРА...",
+    ru: "ЗАГРУЗКА ТРЕНЕРА...",
+    fr: "CHARGEMENT DU COACH...",
+    de: "COACH WIRD GELADEN...",
+    pt: "CARREGANDO TREINADOR...",
+    bg: "ЗАРЕЖДАНЕ НА ТРЕНЬОРА...",
+  },
+
+  "coachProfile.notAvailable": {
+    en: "COACH NOT AVAILABLE",
+    es: "ENTRENADOR NO DISPONIBLE",
+    uk: "ТРЕНЕР НЕДОСТУПНИЙ",
+    ru: "ТРЕНЕР НЕДОСТУПЕН",
+    fr: "COACH INDISPONIBLE",
+    de: "COACH NICHT VERFÜGBAR",
+    pt: "TREINADOR INDISPONÍVEL",
+    bg: "ТРЕНЬОРЪТ НЕ Е ДОСТЪПЕН",
+  },
+
+  "coachProfile.notFound": {
+    en: "Coach not found",
+    es: "Entrenador no encontrado",
+    uk: "Тренера не знайдено",
+    ru: "Тренер не найден",
+    fr: "Coach introuvable",
+    de: "Coach nicht gefunden",
+    pt: "Treinador não encontrado",
+    bg: "Треньорът не е намерен",
+  },
+
+  "coachProfile.ironageCoach": {
+    en: "IRONAGE COACH",
+    es: "ENTRENADOR IRONAGE",
+    uk: "ТРЕНЕР IRONAGE",
+    ru: "ТРЕНЕР IRONAGE",
+    fr: "COACH IRONAGE",
+    de: "IRONAGE COACH",
+    pt: "TREINADOR IRONAGE",
+    bg: "ТРЕНЬОР IRONAGE",
+  },
+
+  "coachProfile.clients": {
+    en: "CLIENTS",
+    es: "CLIENTES",
+    uk: "КЛІЄНТИ",
+    ru: "КЛИЕНТЫ",
+    fr: "CLIENTS",
+    de: "KUNDEN",
+    pt: "CLIENTES",
+    bg: "КЛИЕНТИ",
+  },
+
+  "coachProfile.programs": {
+    en: "PROGRAMS",
+    es: "PROGRAMAS",
+    uk: "ПРОГРАМИ",
+    ru: "ПРОГРАММЫ",
+    fr: "PROGRAMMES",
+    de: "PROGRAMME",
+    pt: "PROGRAMAS",
+    bg: "ПРОГРАМИ",
+  },
+
+  "coachProfile.workouts": {
+    en: "WORKOUTS",
+    es: "ENTRENAMIENTOS",
+    uk: "ТРЕНУВАННЯ",
+    ru: "ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENTS",
+    de: "TRAININGS",
+    pt: "TREINOS",
+    bg: "ТРЕНИРОВКИ",
+  },
+
+  "coachProfile.about": {
+    en: "ABOUT COACH",
+    es: "SOBRE EL ENTRENADOR",
+    uk: "ПРО ТРЕНЕРА",
+    ru: "О ТРЕНЕРЕ",
+    fr: "À PROPOS DU COACH",
+    de: "ÜBER DEN COACH",
+    pt: "SOBRE O TREINADOR",
+    bg: "ЗА ТРЕНЬОРА",
+  },
+
+  "coachProfile.defaultBio": {
+    en: "Professional IRONAGE coach ready to build your training plan.",
+    es: "Entrenador profesional de IRONAGE listo para crear tu plan de entrenamiento.",
+    uk: "Професійний тренер IRONAGE, готовий створити твій тренувальний план.",
+    ru: "Профессиональный тренер IRONAGE, готовый создать твой тренировочный план.",
+    fr: "Coach professionnel IRONAGE prêt à créer ton plan d’entraînement.",
+    de: "Professioneller IRONAGE-Coach, bereit deinen Trainingsplan zu erstellen.",
+    pt: "Treinador profissional IRONAGE pronto para criar seu plano de treino.",
+    bg: "Професионален треньор на IRONAGE, готов да създаде тренировъчния ти план.",
+  },
+
+  "coachProfile.username": {
+    en: "USERNAME",
+    es: "USUARIO",
+    uk: "ІМ’Я КОРИСТУВАЧА",
+    ru: "ИМЯ ПОЛЬЗОВАТЕЛЯ",
+    fr: "NOM D’UTILISATEUR",
+    de: "BENUTZERNAME",
+    pt: "NOME DE USUÁRIO",
+    bg: "ПОТРЕБИТЕЛСКО ИМЕ",
+  },
+
+  "coachProfile.connecting": {
+    en: "CONNECTING...",
+    es: "CONECTANDO...",
+    uk: "ПІДКЛЮЧЕННЯ...",
+    ru: "ПОДКЛЮЧЕНИЕ...",
+    fr: "CONNEXION...",
+    de: "VERBINDUNG...",
+    pt: "CONECTANDO...",
+    bg: "СВЪРЗВАНЕ...",
+  },
+
+  "coachProfile.choose": {
+    en: "CHOOSE THIS COACH",
+    es: "ELEGIR ESTE ENTRENADOR",
+    uk: "ОБРАТИ ЦЬОГО ТРЕНЕРА",
+    ru: "ВЫБРАТЬ ЭТОГО ТРЕНЕРА",
+    fr: "CHOISIR CE COACH",
+    de: "DIESEN COACH WÄHLEN",
+    pt: "ESCOLHER ESTE TREINADOR",
+    bg: "ИЗБЕРИ ТОЗИ ТРЕНЬОР",
+  },
+
+  "coachProfile.selected": {
+    en: "COACH SELECTED",
+    es: "ENTRENADOR SELECCIONADO",
+    uk: "ТРЕНЕРА ОБРАНО",
+    ru: "ТРЕНЕР ВЫБРАН",
+    fr: "COACH SÉLECTIONNÉ",
+    de: "COACH AUSGEWÄHLT",
+    pt: "TREINADOR SELECIONADO",
+    bg: "ТРЕНЬОРЪТ Е ИЗБРАН",
+  },
+
+  "coachProfile.nowYourCoach": {
+    en: "is now your coach.",
+    es: "ahora es tu entrenador.",
+    uk: "тепер твій тренер.",
+    ru: "теперь твой тренер.",
+    fr: "est maintenant ton coach.",
+    de: "ist jetzt dein Coach.",
+    pt: "agora é seu treinador.",
+    bg: "вече е твоят треньор.",
+  },
+
+  "coachProfile.continue": {
+    en: "CONTINUE",
+    es: "CONTINUAR",
+    uk: "ПРОДОВЖИТИ",
+    ru: "ПРОДОЛЖИТЬ",
+    fr: "CONTINUER",
+    de: "WEITER",
+    pt: "CONTINUAR",
+    bg: "ПРОДЪЛЖИ",
+  },
+
+  "coachProfile.invalidResponse": {
+    en: "Invalid coach profile response",
+    es: "Respuesta de perfil de entrenador no válida",
+    uk: "Некоректна відповідь профілю тренера",
+    ru: "Некорректный ответ профиля тренера",
+    fr: "Réponse de profil coach invalide",
+    de: "Ungültige Coach-Profil-Antwort",
+    pt: "Resposta inválida do perfil do treinador",
+    bg: "Невалиден отговор за профила на треньора",
+  },
+
+  "coachProfile.failedToLoad": {
+    en: "Failed to load coach",
+    es: "No se pudo cargar el entrenador",
+    uk: "Не вдалося завантажити тренера",
+    ru: "Не удалось загрузить тренера",
+    fr: "Impossible de charger le coach",
+    de: "Coach konnte nicht geladen werden",
+    pt: "Não foi possível carregar o treinador",
+    bg: "Треньорът не можа да бъде зареден",
+  },
+
+  "coachProfile.connectionFailed": {
+    en: "Coach connection failed",
+    es: "No se pudo conectar con el entrenador",
+    uk: "Не вдалося підключити тренера",
+    ru: "Не удалось подключить тренера",
+    fr: "Échec de la connexion avec le coach",
+    de: "Coach-Verbindung fehlgeschlagen",
+    pt: "Falha ao conectar treinador",
+    bg: "Свързването с треньора беше неуспешно",
+  },
+
+  "coachProfile.failedToChoose": {
+    en: "Failed to choose coach",
+    es: "No se pudo elegir al entrenador",
+    uk: "Не вдалося обрати тренера",
+    ru: "Не удалось выбрать тренера",
+    fr: "Impossible de choisir le coach",
+    de: "Coach konnte nicht ausgewählt werden",
+    pt: "Não foi possível escolher o treinador",
+    bg: "Треньорът не можа да бъде избран",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 
