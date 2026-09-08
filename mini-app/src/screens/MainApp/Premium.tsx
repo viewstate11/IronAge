@@ -123,6 +123,24 @@ export default function Premium({ onBack }: Props) {
           purchase.signedTransaction
         );
 
+      if (!purchase.transactionId) {
+        throw new Error(
+          "Apple transaction ID is missing"
+        );
+      }
+
+      const finished =
+        await IronAgeStoreKit.finishTransaction({
+          transactionId:
+            purchase.transactionId,
+        });
+
+      if (!finished.success) {
+        throw new Error(
+          "Failed to finish Apple transaction"
+        );
+      }
+
       setSelectedPlan(
         verification.premiumPlan
       );
