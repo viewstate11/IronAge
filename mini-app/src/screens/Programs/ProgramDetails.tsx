@@ -189,6 +189,18 @@ export default function ProgramDetails({
     null
   );
 
+  const [
+    restoring,
+    setRestoring,
+  ] = useState(false);
+
+  const [
+    restoreError,
+    setRestoreError,
+  ] = useState<string | null>(
+    null
+  );
+
   const isNativeIOS =
     Capacitor.isNativePlatform() &&
     Capacitor.getPlatform() === "ios";
@@ -278,6 +290,103 @@ export default function ProgramDetails({
     }
   }
 
+  async function restoreAppleProgram() {
+    if (
+      restoring ||
+      hasAccess ||
+      !program ||
+      program.priceCents === null ||
+      program.priceCents <= 0
+    ) {
+      return;
+    }
+
+    if (!isNativeIOS) {
+      setRestoreError(
+        "Restore purchases is available in the IRONAGE iOS app."
+      );
+      return;
+    }
+
+    if (!program.appleProductId) {
+      setRestoreError(
+        "This program is not configured for App Store purchase yet."
+      );
+      return;
+    }
+
+    try {
+      setRestoring(true);
+      setRestoreError(null);
+
+      const restored =
+        await IronAgeStoreKit.restorePurchases();
+
+      const matchingTransaction =
+        restored.transactions.find(
+          transaction =>
+            transaction.productId ===
+            program.appleProductId
+        );
+
+      if (!matchingTransaction) {
+        throw new Error(
+          "No previous App Store purchase was found for this program"
+        );
+      }
+
+      const response =
+        await api.post<PurchaseResponse>(
+          `/programs/${program.id}/purchase/apple`,
+          {
+            signedTransaction:
+              matchingTransaction.signedTransaction,
+          },
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        response.hasAccess !== true
+      ) {
+        throw new Error(
+          "Program restore verification failed"
+        );
+      }
+
+      const finish =
+        await IronAgeStoreKit.finishTransaction({
+          transactionId:
+            matchingTransaction.transactionId,
+        });
+
+      if (
+        !finish ||
+        finish.success !== true
+      ) {
+        throw new Error(
+          "StoreKit restored transaction finish failed"
+        );
+      }
+
+      setHasAccess(true);
+    } catch (err) {
+      console.error(
+        "IRONAGE APPLE PROGRAM RESTORE UI ERROR:",
+        err
+      );
+
+      setRestoreError(
+        err instanceof Error
+          ? err.message
+          : "Program restore failed"
+      );
+    } finally {
+      setRestoring(false);
+    }
+  }
+
   async function purchaseAppleProgram() {
     if (
       purchasing ||
@@ -358,6 +467,21 @@ export default function ProgramDetails({
       ) {
         throw new Error(
           "Program purchase verification failed"
+        );
+      }
+
+      const finish =
+        await IronAgeStoreKit.finishTransaction({
+          transactionId:
+            purchase.transactionId,
+        });
+
+      if (
+        !finish ||
+        finish.success !== true
+      ) {
+        throw new Error(
+          "StoreKit transaction finish failed"
         );
       }
 
@@ -630,11 +754,21 @@ export default function ProgramDetails({
             </p>
           )}
 
+          {restoreError && (
+            <p
+              role="alert"
+              className="program-detail__access-error"
+            >
+              {restoreError}
+            </p>
+          )}
+
           <button
             type="button"
             disabled={
               claiming ||
               purchasing ||
+              restoring ||
               (
                 !hasAccess &&
                 program.priceCents === null
@@ -689,6 +823,28 @@ export default function ProgramDetails({
                           ? "PURCHASE"
                           : "AVAILABLE IN IOS APP"}
           </button>
+
+          {!hasAccess &&
+            isNativeIOS &&
+            program.priceCents !== null &&
+            program.priceCents > 0 &&
+            program.appleProductId && (
+              <button
+                type="button"
+                className="program-detail__restore"
+                disabled={
+                  restoring ||
+                  purchasing
+                }
+                onClick={() =>
+                  void restoreAppleProgram()
+                }
+              >
+                {restoring
+                  ? "RESTORING..."
+                  : "RESTORE PURCHASES"}
+              </button>
+            )}
         </section>
 
       </div>

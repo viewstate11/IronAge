@@ -29,6 +29,24 @@ export type StoreKitPurchaseResponse =
       signedTransaction?: undefined;
     };
 
+export type StoreKitRestoredTransaction = {
+  productId: string;
+  transactionId: string;
+  originalTransactionId: string;
+  signedTransaction: string;
+};
+
+export type StoreKitRestoreResponse = {
+  transactions:
+    StoreKitRestoredTransaction[];
+};
+
+export type StoreKitFinishResponse = {
+  success: boolean;
+  transactionId: string;
+  alreadyFinished?: boolean;
+};
+
 type IronAgeStoreKitPlugin = {
   getProducts(options?: {
     productIds?: string[];
@@ -40,6 +58,16 @@ type IronAgeStoreKitPlugin = {
     productId: string;
   }): Promise<
     StoreKitPurchaseResponse
+  >;
+
+  restorePurchases(): Promise<
+    StoreKitRestoreResponse
+  >;
+
+  finishTransaction(options: {
+    transactionId: string;
+  }): Promise<
+    StoreKitFinishResponse
   >;
 };
 

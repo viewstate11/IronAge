@@ -21,6 +21,14 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(
             name: "purchase",
             returnType: CAPPluginReturnPromise
+        ),
+        CAPPluginMethod(
+            name: "restorePurchases",
+            returnType: CAPPluginReturnPromise
+        ),
+        CAPPluginMethod(
+            name: "finishTransaction",
+            returnType: CAPPluginReturnPromise
         )
     ]
 
@@ -174,13 +182,14 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
                                 .jwsRepresentation
 
                         /*
-                         * Backend verifies the signed
-                         * transaction again before
-                         * granting Premium or program
-                         * ownership.
+                         * IMPORTANT:
+                         * Do NOT finish here.
+                         *
+                         * Backend must verify the signed
+                         * transaction and grant access
+                         * first. The frontend will then
+                         * call finishTransaction().
                          */
-                        await transaction.finish()
-
                         await MainActor.run {
                             call.resolve([
                                 "productId":
@@ -247,6 +256,189 @@ public class IronAgeStoreKitPlugin: CAPPlugin, CAPBridgedPlugin {
                         error
                     )
                 }
+            }
+        }
+    }
+
+    @objc func restorePurchases(
+        _ call: CAPPluginCall
+    ) {
+        Task {
+            do {
+                /*
+                 * Ask App Store to synchronize
+                 * the customer's purchases.
+                 */
+                try await AppStore.sync()
+
+                var restored: [
+                    [String: Any]
+                ] = []
+
+                for await result
+                    in Transaction.currentEntitlements
+                {
+                    switch result {
+
+                    case .verified(
+                        let transaction
+                    ):
+                        guard
+                            isSupportedProductID(
+                                transaction.productID
+                            )
+                        else {
+                            continue
+                        }
+
+                        /*
+                         * Revoked transactions must not
+                         * restore access.
+                         */
+                        if transaction.revocationDate
+                            != nil
+                        {
+                            continue
+                        }
+
+                        restored.append([
+                            "productId":
+                                transaction
+                                    .productID,
+
+                            "transactionId":
+                                String(
+                                    transaction.id
+                                ),
+
+                            "originalTransactionId":
+                                String(
+                                    transaction
+                                        .originalID
+                                ),
+
+                            "signedTransaction":
+                                result
+                                    .jwsRepresentation
+                        ])
+
+                    case .unverified:
+                        /*
+                         * Never grant anything from an
+                         * unverified StoreKit result.
+                         */
+                        continue
+                    }
+                }
+
+                await MainActor.run {
+                    call.resolve([
+                        "transactions":
+                            restored
+                    ])
+                }
+            } catch {
+                await MainActor.run {
+                    call.reject(
+                        "Failed to restore StoreKit purchases",
+                        nil,
+                        error
+                    )
+                }
+            }
+        }
+    }
+
+    @objc func finishTransaction(
+        _ call: CAPPluginCall
+    ) {
+        guard
+            let rawTransactionId =
+                call.getString(
+                    "transactionId"
+                ),
+            let transactionId =
+                UInt64(
+                    rawTransactionId
+                )
+        else {
+            call.reject(
+                "Invalid transactionId"
+            )
+            return
+        }
+
+        Task {
+            /*
+             * Look through unfinished transactions.
+             * Only finish the exact transaction
+             * acknowledged by our backend.
+             */
+            for await result
+                in Transaction.unfinished
+            {
+                switch result {
+
+                case .verified(
+                    let transaction
+                ):
+                    guard
+                        transaction.id ==
+                            transactionId
+                    else {
+                        continue
+                    }
+
+                    guard
+                        isSupportedProductID(
+                            transaction.productID
+                        )
+                    else {
+                        await MainActor.run {
+                            call.reject(
+                                "Unsupported StoreKit transaction"
+                            )
+                        }
+                        return
+                    }
+
+                    await transaction.finish()
+
+                    await MainActor.run {
+                        call.resolve([
+                            "success":
+                                true,
+
+                            "transactionId":
+                                String(
+                                    transaction.id
+                                )
+                        ])
+                    }
+
+                    return
+
+                case .unverified:
+                    continue
+                }
+            }
+
+            /*
+             * Idempotent behavior:
+             * if StoreKit no longer reports it as
+             * unfinished, it may already be finished.
+             */
+            await MainActor.run {
+                call.resolve([
+                    "success":
+                        true,
+
+                    "transactionId":
+                        rawTransactionId,
+
+                    "alreadyFinished":
+                        true
+                ])
             }
         }
     }

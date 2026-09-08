@@ -419,3 +419,30 @@
 
   font-weight: 900;
 }
+
+
+/* PROGRAM RESTORE */
+
+.program-detail__restore {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 12px;
+
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 14px;
+
+  background: transparent;
+  color: #d4af37;
+
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  cursor: pointer;
+}
+
+.program-detail__restore:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
