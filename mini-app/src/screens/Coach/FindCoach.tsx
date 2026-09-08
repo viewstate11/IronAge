@@ -8,6 +8,8 @@ import api, {
   telegramAuthOptions,
 } from "../../api/client";
 
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./FindCoach.css";
 
 type Props = {
@@ -59,6 +61,8 @@ export default function FindCoach({
   onBack,
   onOpenCoach,
 }: Props) {
+  const { t } = useLanguage();
+
   const [coaches, setCoaches] =
     useState<MarketplaceCoach[]>([]);
 
@@ -131,7 +135,7 @@ export default function FindCoach({
         )
       ) {
         throw new Error(
-          "Invalid marketplace response"
+          t("findCoach.invalidResponse")
         );
       }
 
@@ -162,7 +166,7 @@ export default function FindCoach({
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to load coaches"
+          : t("findCoach.failedToLoad")
       );
     } finally {
       setLoading(false);
@@ -194,22 +198,22 @@ export default function FindCoach({
             type="button"
             className="find-coach__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
 
           <div>
             <span>
-              IRONAGE COACHES
+              {t("findCoach.ironageCoaches")}
             </span>
 
             <h1>
-              FIND A COACH
+              {t("findCoach.title")}
             </h1>
 
             <p>
-              {total} COACHES
+              {total} {t("findCoach.coaches")}
             </p>
           </div>
         </header>
@@ -225,14 +229,14 @@ export default function FindCoach({
                   .value
               )
             }
-            placeholder="Search coach or specialization"
+            placeholder={t("findCoach.searchPlaceholder")}
           />
         </section>
 
         {loading && (
           <section className="find-coach__state">
             <strong>
-              LOADING COACHES...
+              {t("findCoach.loading")}
             </strong>
           </section>
         )}
@@ -241,7 +245,7 @@ export default function FindCoach({
           error && (
             <section className="find-coach__state find-coach__state--error">
               <strong>
-                CONNECTION ERROR
+                {t("findCoach.connectionError")}
               </strong>
 
               <p>
@@ -256,7 +260,7 @@ export default function FindCoach({
                   )
                 }
               >
-                RETRY
+                {t("common.retry")}
               </button>
             </section>
           )}
@@ -267,12 +271,11 @@ export default function FindCoach({
             0 && (
             <section className="find-coach__state">
               <strong>
-                NO COACHES FOUND
+                {t("findCoach.noCoaches")}
               </strong>
 
               <p>
-                Try another
-                search.
+                {t("findCoach.tryAnother")}
               </p>
             </section>
           )}
@@ -335,7 +338,7 @@ export default function FindCoach({
 
                       <p>
                         {coach.specialization ??
-                          "IRONAGE COACH"}
+                          t("findCoach.defaultCoach")}
                       </p>
 
                       {coach.bio && (
@@ -355,7 +358,7 @@ export default function FindCoach({
                                 .clients
                             }
                           </b>
-                          CLIENTS
+                          {t("findCoach.clients")}
                         </span>
 
                         <span>
@@ -366,7 +369,7 @@ export default function FindCoach({
                                 .programs
                             }
                           </b>
-                          PROGRAMS
+                          {t("findCoach.programs")}
                         </span>
 
                         <span>
@@ -377,7 +380,7 @@ export default function FindCoach({
                                 .workouts
                             }
                           </b>
-                          WORKOUTS
+                          {t("findCoach.workouts")}
                         </span>
                       </div>
                     </div>

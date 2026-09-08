@@ -1178,6 +1178,164 @@ const translations:
   },
 
   /* =====================================================
+     FIND COACH
+  ===================================================== */
+
+  "findCoach.ironageCoaches": {
+    en: "IRONAGE COACHES",
+    es: "ENTRENADORES IRONAGE",
+    uk: "ТРЕНЕРИ IRONAGE",
+    ru: "ТРЕНЕРЫ IRONAGE",
+    fr: "COACHS IRONAGE",
+    de: "IRONAGE COACHES",
+    pt: "TREINADORES IRONAGE",
+    bg: "ТРЕНЬОРИ IRONAGE",
+  },
+
+  "findCoach.title": {
+    en: "FIND A COACH",
+    es: "BUSCAR ENTRENADOR",
+    uk: "ЗНАЙТИ ТРЕНЕРА",
+    ru: "НАЙТИ ТРЕНЕРА",
+    fr: "TROUVER UN COACH",
+    de: "COACH FINDEN",
+    pt: "ENCONTRAR TREINADOR",
+    bg: "НАМЕРИ ТРЕНЬОР",
+  },
+
+  "findCoach.coaches": {
+    en: "COACHES",
+    es: "ENTRENADORES",
+    uk: "ТРЕНЕРІВ",
+    ru: "ТРЕНЕРОВ",
+    fr: "COACHS",
+    de: "COACHES",
+    pt: "TREINADORES",
+    bg: "ТРЕНЬОРИ",
+  },
+
+  "findCoach.searchPlaceholder": {
+    en: "Search coach or specialization",
+    es: "Buscar entrenador o especialización",
+    uk: "Пошук тренера або спеціалізації",
+    ru: "Поиск тренера или специализации",
+    fr: "Rechercher un coach ou une spécialisation",
+    de: "Coach oder Spezialisierung suchen",
+    pt: "Buscar treinador ou especialização",
+    bg: "Търси треньор или специализация",
+  },
+
+  "findCoach.loading": {
+    en: "LOADING COACHES...",
+    es: "CARGANDO ENTRENADORES...",
+    uk: "ЗАВАНТАЖЕННЯ ТРЕНЕРІВ...",
+    ru: "ЗАГРУЗКА ТРЕНЕРОВ...",
+    fr: "CHARGEMENT DES COACHS...",
+    de: "COACHES WERDEN GELADEN...",
+    pt: "CARREGANDO TREINADORES...",
+    bg: "ЗАРЕЖДАНЕ НА ТРЕНЬОРИ...",
+  },
+
+  "findCoach.connectionError": {
+    en: "CONNECTION ERROR",
+    es: "ERROR DE CONEXIÓN",
+    uk: "ПОМИЛКА З’ЄДНАННЯ",
+    ru: "ОШИБКА СОЕДИНЕНИЯ",
+    fr: "ERREUR DE CONNEXION",
+    de: "VERBINDUNGSFEHLER",
+    pt: "ERRO DE CONEXÃO",
+    bg: "ГРЕШКА ПРИ СВЪРЗВАНЕ",
+  },
+
+  "findCoach.noCoaches": {
+    en: "NO COACHES FOUND",
+    es: "NO SE ENCONTRARON ENTRENADORES",
+    uk: "ТРЕНЕРІВ НЕ ЗНАЙДЕНО",
+    ru: "ТРЕНЕРЫ НЕ НАЙДЕНЫ",
+    fr: "AUCUN COACH TROUVÉ",
+    de: "KEINE COACHES GEFUNDEN",
+    pt: "NENHUM TREINADOR ENCONTRADO",
+    bg: "НЕ СА НАМЕРЕНИ ТРЕНЬОРИ",
+  },
+
+  "findCoach.tryAnother": {
+    en: "Try another search.",
+    es: "Prueba otra búsqueda.",
+    uk: "Спробуйте інший пошук.",
+    ru: "Попробуйте другой поиск.",
+    fr: "Essayez une autre recherche.",
+    de: "Versuche eine andere Suche.",
+    pt: "Tente outra busca.",
+    bg: "Опитайте друго търсене.",
+  },
+
+  "findCoach.defaultCoach": {
+    en: "IRONAGE COACH",
+    es: "ENTRENADOR IRONAGE",
+    uk: "ТРЕНЕР IRONAGE",
+    ru: "ТРЕНЕР IRONAGE",
+    fr: "COACH IRONAGE",
+    de: "IRONAGE COACH",
+    pt: "TREINADOR IRONAGE",
+    bg: "ТРЕНЬОР IRONAGE",
+  },
+
+  "findCoach.clients": {
+    en: "CLIENTS",
+    es: "CLIENTES",
+    uk: "КЛІЄНТИ",
+    ru: "КЛИЕНТЫ",
+    fr: "CLIENTS",
+    de: "KUNDEN",
+    pt: "CLIENTES",
+    bg: "КЛИЕНТИ",
+  },
+
+  "findCoach.programs": {
+    en: "PROGRAMS",
+    es: "PROGRAMAS",
+    uk: "ПРОГРАМИ",
+    ru: "ПРОГРАММЫ",
+    fr: "PROGRAMMES",
+    de: "PROGRAMME",
+    pt: "PROGRAMAS",
+    bg: "ПРОГРАМИ",
+  },
+
+  "findCoach.workouts": {
+    en: "WORKOUTS",
+    es: "ENTRENAMIENTOS",
+    uk: "ТРЕНУВАННЯ",
+    ru: "ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENTS",
+    de: "TRAININGS",
+    pt: "TREINOS",
+    bg: "ТРЕНИРОВКИ",
+  },
+
+  "findCoach.invalidResponse": {
+    en: "Invalid marketplace response",
+    es: "Respuesta del marketplace no válida",
+    uk: "Некоректна відповідь маркетплейсу",
+    ru: "Некорректный ответ маркетплейса",
+    fr: "Réponse marketplace invalide",
+    de: "Ungültige Marketplace-Antwort",
+    pt: "Resposta inválida do marketplace",
+    bg: "Невалиден отговор от маркетплейса",
+  },
+
+  "findCoach.failedToLoad": {
+    en: "Failed to load coaches",
+    es: "No se pudieron cargar los entrenadores",
+    uk: "Не вдалося завантажити тренерів",
+    ru: "Не удалось загрузить тренеров",
+    fr: "Impossible de charger les coachs",
+    de: "Coaches konnten nicht geladen werden",
+    pt: "Não foi possível carregar os treinadores",
+    bg: "Треньорите не можаха да бъдат заредени",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 
