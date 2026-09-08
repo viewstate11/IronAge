@@ -1,3 +1,5 @@
+import { useLanguage } from "../../context/LanguageContext";
+
 import "./ProfileFeature.css";
 
 type Props = {
@@ -11,6 +13,8 @@ export default function ProfileFeature({
   subtitle,
   onBack,
 }: Props) {
+  const { t } = useLanguage();
+
   return (
     <main className="profile-feature">
       <div className="profile-feature__shell">
@@ -18,7 +22,7 @@ export default function ProfileFeature({
           <button
             type="button"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
@@ -35,19 +39,19 @@ export default function ProfileFeature({
           </div>
 
           <span className="profile-feature__eyebrow">
-            IRONAGE SYSTEM
+            {t("profileFeature.system")}
           </span>
 
           <h2>{title}</h2>
 
           <p>
             {subtitle ||
-              "This IRONAGE module is being connected to the platform."}
+              t("profileFeature.moduleConnecting")}
           </p>
 
           <div className="profile-feature__status">
-            <span>STATUS</span>
-            <strong>IN DEVELOPMENT</strong>
+            <span>{t("profileFeature.status")}</span>
+            <strong>{t("profileFeature.inDevelopment")}</strong>
           </div>
 
           <button
@@ -55,7 +59,7 @@ export default function ProfileFeature({
             className="profile-feature__back"
             onClick={onBack}
           >
-            <span>BACK TO PROFILE</span>
+            <span>{t("profileFeature.backToProfile")}</span>
             <b>→</b>
           </button>
         </section>

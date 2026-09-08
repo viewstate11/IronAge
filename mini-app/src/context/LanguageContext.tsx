@@ -689,6 +689,61 @@ const translations:
     bg: "ИЗХОД",
   },
 
+  "profileFeature.system": {
+    en: "IRONAGE SYSTEM",
+    es: "SISTEMA IRONAGE",
+    uk: "СИСТЕМА IRONAGE",
+    ru: "СИСТЕМА IRONAGE",
+    fr: "SYSTÈME IRONAGE",
+    de: "IRONAGE SYSTEM",
+    pt: "SISTEMA IRONAGE",
+    bg: "СИСТЕМА IRONAGE",
+  },
+
+  "profileFeature.moduleConnecting": {
+    en: "This IRONAGE module is being connected to the platform.",
+    es: "Este módulo de IRONAGE se está conectando a la plataforma.",
+    uk: "Цей модуль IRONAGE зараз підключається до платформи.",
+    ru: "Этот модуль IRONAGE сейчас подключается к платформе.",
+    fr: "Ce module IRONAGE est en cours de connexion à la plateforme.",
+    de: "Dieses IRONAGE-Modul wird gerade mit der Plattform verbunden.",
+    pt: "Este módulo IRONAGE está sendo conectado à plataforma.",
+    bg: "Този модул на IRONAGE в момента се свързва с платформата.",
+  },
+
+  "profileFeature.status": {
+    en: "STATUS",
+    es: "ESTADO",
+    uk: "СТАТУС",
+    ru: "СТАТУС",
+    fr: "STATUT",
+    de: "STATUS",
+    pt: "STATUS",
+    bg: "СТАТУС",
+  },
+
+  "profileFeature.inDevelopment": {
+    en: "IN DEVELOPMENT",
+    es: "EN DESARROLLO",
+    uk: "У РОЗРОБЦІ",
+    ru: "В РАЗРАБОТКЕ",
+    fr: "EN DÉVELOPPEMENT",
+    de: "IN ENTWICKLUNG",
+    pt: "EM DESENVOLVIMENTO",
+    bg: "В РАЗРАБОТКА",
+  },
+
+  "profileFeature.backToProfile": {
+    en: "BACK TO PROFILE",
+    es: "VOLVER AL PERFIL",
+    uk: "НАЗАД ДО ПРОФІЛЮ",
+    ru: "НАЗАД В ПРОФИЛЬ",
+    fr: "RETOUR AU PROFIL",
+    de: "ZURÜCK ZUM PROFIL",
+    pt: "VOLTAR AO PERFIL",
+    bg: "НАЗАД КЪМ ПРОФИЛА",
+  },
+
   /* =====================================================
      APP
   ===================================================== */
