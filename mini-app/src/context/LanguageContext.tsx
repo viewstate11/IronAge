@@ -4411,6 +4411,76 @@ const translations:
   },
 
   /* =====================================================
+     PREMIUM EXTRA
+  ===================================================== */
+
+  "premium.profile": {
+    en: "PROFILE",
+    es: "PERFIL",
+    uk: "ПРОФІЛЬ",
+    ru: "ПРОФИЛЬ",
+    fr: "PROFIL",
+    de: "PROFIL",
+    pt: "PERFIL",
+    bg: "ПРОФИЛ",
+  },
+
+  "premium.eyebrow": {
+    en: "IRONAGE PREMIUM",
+    es: "IRONAGE PREMIUM",
+    uk: "IRONAGE PREMIUM",
+    ru: "IRONAGE PREMIUM",
+    fr: "IRONAGE PREMIUM",
+    de: "IRONAGE PREMIUM",
+    pt: "IRONAGE PREMIUM",
+    bg: "IRONAGE PREMIUM",
+  },
+
+  "premium.description": {
+    en: "Unlock the complete IRONAGE experience.",
+    es: "Desbloquea toda la experiencia IRONAGE.",
+    uk: "Відкрий повний досвід IRONAGE.",
+    ru: "Открой полный функционал IRONAGE.",
+    fr: "Débloquez toute l’expérience IRONAGE.",
+    de: "Schalte das vollständige IRONAGE-Erlebnis frei.",
+    pt: "Desbloqueie toda a experiência IRONAGE.",
+    bg: "Отключи пълното изживяване IRONAGE.",
+  },
+
+  "premium.included": {
+    en: "INCLUDED",
+    es: "INCLUIDO",
+    uk: "ВКЛЮЧЕНО",
+    ru: "ВКЛЮЧЕНО",
+    fr: "INCLUS",
+    de: "ENTHALTEN",
+    pt: "INCLUÍDO",
+    bg: "ВКЛЮЧЕНО",
+  },
+
+  "premium.transactionMissing": {
+    en: "Apple transaction ID is missing",
+    es: "Falta el ID de la transacción de Apple",
+    uk: "Відсутній ID транзакції Apple",
+    ru: "Отсутствует ID транзакции Apple",
+    fr: "L’identifiant de transaction Apple est manquant",
+    de: "Apple-Transaktions-ID fehlt",
+    pt: "O ID da transação Apple está ausente",
+    bg: "Липсва ID на Apple транзакцията",
+  },
+
+  "premium.finishFailed": {
+    en: "Failed to finish Apple transaction",
+    es: "No se pudo finalizar la transacción de Apple",
+    uk: "Не вдалося завершити транзакцію Apple",
+    ru: "Не удалось завершить транзакцию Apple",
+    fr: "Impossible de finaliser la transaction Apple",
+    de: "Apple-Transaktion konnte nicht abgeschlossen werden",
+    pt: "Não foi possível finalizar a transação Apple",
+    bg: "Apple транзакцията не можа да бъде завършена",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 
@@ -7787,16 +7857,6 @@ const translations:
     bg: "← ПРОФИЛ",
   },
 
-  "premium.eyebrow": {
-    en: "IRONAGE PREMIUM",
-    es: "IRONAGE PREMIUM",
-    uk: "IRONAGE PREMIUM",
-    ru: "IRONAGE PREMIUM",
-    fr: "IRONAGE PREMIUM",
-    de: "IRONAGE PREMIUM",
-    pt: "IRONAGE PREMIUM",
-    bg: "IRONAGE PREMIUM",
-  },
 
   "premium.break": {
     en: "BREAK",
@@ -7889,10 +7949,6 @@ const translations:
     fr: "MEILLEUR CHOIX", de: "BESTER WERT", pt: "MELHOR VALOR", bg: "НАЙ-ДОБРА СТОЙНОСТ",
   },
 
-  "premium.included": {
-    en: "INCLUDED", es: "INCLUIDO", uk: "ВКЛЮЧЕНО", ru: "ВКЛЮЧЕНО",
-    fr: "INCLUS", de: "ENTHALTEN", pt: "INCLUÍDO", bg: "ВКЛЮЧЕНО",
-  },
 
   "premium.featureWorkouts": {
     en: "FULL WORKOUT ACCESS", es: "ACCESO COMPLETO A ENTRENAMIENTOS", uk: "ПОВНИЙ ДОСТУП ДО ТРЕНУВАНЬ", ru: "ПОЛНЫЙ ДОСТУП К ТРЕНИРОВКАМ",

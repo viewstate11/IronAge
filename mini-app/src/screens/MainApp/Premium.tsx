@@ -125,7 +125,7 @@ export default function Premium({ onBack }: Props) {
 
       if (!purchase.transactionId) {
         throw new Error(
-          "Apple transaction ID is missing"
+          t("premium.transactionMissing")
         );
       }
 
@@ -137,7 +137,7 @@ export default function Premium({ onBack }: Props) {
 
       if (!finished.success) {
         throw new Error(
-          "Failed to finish Apple transaction"
+          t("premium.finishFailed")
         );
       }
 
@@ -181,7 +181,7 @@ export default function Premium({ onBack }: Props) {
             className="premium-back"
             onClick={onBack}
           >
-            ← PROFILE
+            ← {t("premium.profile")}
           </button>
 
           <span>IRONAGE</span>
@@ -189,7 +189,7 @@ export default function Premium({ onBack }: Props) {
 
         <section className="premium-hero">
           <span className="premium-eyebrow">
-            IRONAGE PREMIUM
+            {t("premium.eyebrow")}
           </span>
 
           <h1>
@@ -199,7 +199,7 @@ export default function Premium({ onBack }: Props) {
           </h1>
 
           <p>
-            Unlock the complete IRONAGE experience.
+            {t("premium.description")}
           </p>
         </section>
 
@@ -257,7 +257,7 @@ export default function Premium({ onBack }: Props) {
 
         <section className="premium-features">
           <span className="premium-section-title">
-            INCLUDED
+            {t("premium.included")}
           </span>
 
           {PLAN_FEATURE_KEYS.map((feature) => (
@@ -266,7 +266,7 @@ export default function Premium({ onBack }: Props) {
               className="premium-feature"
             >
               <span>✓</span>
-              <strong>{feature}</strong>
+              <strong>{t(feature)}</strong>
             </div>
           ))}
         </section>

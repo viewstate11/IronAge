@@ -714,9 +714,8 @@ export default function MainApp() {
             }}
 
             onOpenSubscription={() => {
-              openProfileFeature(
-                "SUBSCRIPTION",
-                "Manage your IRONAGE plan, access and renewal."
+              setScreen(
+                "premium"
               );
             }}
 
