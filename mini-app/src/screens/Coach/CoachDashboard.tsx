@@ -17,6 +17,7 @@ import "./CoachDashboard.css";
 type Props = {
   onBack: () => void;
   onEditProfile?: () => void;
+  initialView?: CoachView;
 };
 
 type CoachView =
@@ -245,7 +246,8 @@ function getClientName(
 export default function CoachDashboard({
   onBack,
   onEditProfile,
- }: Props) {
+  initialView = "dashboard",
+}: Props) {
   const { language, t } = useLanguage();
 
   const locale = {
@@ -285,7 +287,7 @@ export default function CoachDashboard({
 
   const [view, setView] =
     useState<CoachView>(
-      "dashboard"
+      initialView
     );
 
   const [clients, setClients] =

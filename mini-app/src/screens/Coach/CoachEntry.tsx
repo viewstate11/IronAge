@@ -19,6 +19,15 @@ import "./CoachEntry.css";
 
 type Props = {
   onBack: () => void;
+  initialDashboardView?:
+    | "dashboard"
+    | "clients"
+    | "workouts"
+    | "create-workout"
+    | "programs"
+    | "create-program"
+    | "assign-program"
+    | "client-results";
 };
 
 type CoachProfile = {
@@ -567,6 +576,7 @@ const EDIT_COPY: Record<AppLanguage, EditCopy> = {
 
 export default function CoachEntry({
   onBack,
+  initialDashboardView = "dashboard",
 }: Props) {
   const {
     language,
@@ -1032,6 +1042,9 @@ export default function CoachEntry({
     return (
       <CoachDashboard
         onBack={onBack}
+        initialView={
+          initialDashboardView
+        }
         onEditProfile={() => {
           setDisplayName(
             coach.displayName ?? ""

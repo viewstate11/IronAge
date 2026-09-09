@@ -59,6 +59,7 @@ type AppScreen =
   | Tab
   | "premium"
   | "coach"
+  | "coach-programs"
   | "find-coach"
   | "coach-profile"
   | "my-coach"
@@ -822,9 +823,8 @@ export default function MainApp() {
             }}
 
             onOpenCoachPrograms={() => {
-              openProfileFeature(
-                "MY COACH PROGRAMS",
-                "Programs published for your coach profile."
+              setScreen(
+                "coach-programs"
               );
             }}
 
@@ -1138,6 +1138,19 @@ export default function MainApp() {
           />
 
         )}
+
+        {screen === "coach-programs" && (
+
+          <CoachEntry
+            initialDashboardView="programs"
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
+
 
         {screen === "my-coach" && (
 
