@@ -87,6 +87,28 @@ type ViewUrlResponse = {
   viewUrl: string;
 };
 
+type AssignedCoach = {
+  id: number;
+  firstName: string | null;
+  lastName: string | null;
+  username: string | null;
+
+  coachProfile: {
+    id: number;
+    displayName: string;
+    specialization: string | null;
+    photoUrl: string | null;
+    isVerified: boolean;
+    isActive: boolean;
+  } | null;
+};
+
+type MyCoachResponse = {
+  success: boolean;
+  coach: AssignedCoach | null;
+  assignedAt: string | null;
+};
+
 type Copy = {
   eyebrow: string;
   title: string;
@@ -112,6 +134,74 @@ type Copy = {
   coachFeedback: string;
   noFeedback: string;
   openVideo: string;
+};
+
+const COACH_RECIPIENT_COPY: Record<
+  AppLanguage,
+  {
+    assignedCoach: string;
+    sentTo: string;
+    noCoach: string;
+    coachUnavailable: string;
+    verified: string;
+  }
+> = {
+  en: {
+    assignedCoach: "ASSIGNED COACH",
+    sentTo: "Your video will be sent directly to this coach.",
+    noCoach: "No coach is currently assigned to you.",
+    coachUnavailable: "Your assigned coach is currently unavailable.",
+    verified: "VERIFIED COACH",
+  },
+  uk: {
+    assignedCoach: "ПРИЗНАЧЕНИЙ ТРЕНЕР",
+    sentTo: "Ваше відео буде надіслано безпосередньо цьому тренеру.",
+    noCoach: "Зараз у вас немає призначеного тренера.",
+    coachUnavailable: "Ваш призначений тренер зараз недоступний.",
+    verified: "ПІДТВЕРДЖЕНИЙ ТРЕНЕР",
+  },
+  ru: {
+    assignedCoach: "НАЗНАЧЕННЫЙ ТРЕНЕР",
+    sentTo: "Ваше видео будет отправлено напрямую этому тренеру.",
+    noCoach: "Сейчас у вас нет назначенного тренера.",
+    coachUnavailable: "Ваш назначенный тренер сейчас недоступен.",
+    verified: "ПОДТВЕРЖДЁННЫЙ ТРЕНЕР",
+  },
+  bg: {
+    assignedCoach: "НАЗНАЧЕН ТРЕНЬОР",
+    sentTo: "Видеото ви ще бъде изпратено директно на този треньор.",
+    noCoach: "В момента нямате назначен треньор.",
+    coachUnavailable: "Назначеният ви треньор в момента не е достъпен.",
+    verified: "ПОТВЪРДЕН ТРЕНЬОР",
+  },
+  es: {
+    assignedCoach: "ENTRENADOR ASIGNADO",
+    sentTo: "Tu vídeo se enviará directamente a este entrenador.",
+    noCoach: "Actualmente no tienes un entrenador asignado.",
+    coachUnavailable: "Tu entrenador asignado no está disponible actualmente.",
+    verified: "ENTRENADOR VERIFICADO",
+  },
+  fr: {
+    assignedCoach: "COACH ASSIGNÉ",
+    sentTo: "Votre vidéo sera envoyée directement à ce coach.",
+    noCoach: "Aucun coach ne vous est actuellement assigné.",
+    coachUnavailable: "Votre coach assigné est actuellement indisponible.",
+    verified: "COACH VÉRIFIÉ",
+  },
+  de: {
+    assignedCoach: "ZUGEWIESENER COACH",
+    sentTo: "Dein Video wird direkt an diesen Coach gesendet.",
+    noCoach: "Dir ist derzeit kein Coach zugewiesen.",
+    coachUnavailable: "Dein zugewiesener Coach ist derzeit nicht verfügbar.",
+    verified: "VERIFIZIERTER COACH",
+  },
+  pt: {
+    assignedCoach: "TREINADOR ATRIBUÍDO",
+    sentTo: "O teu vídeo será enviado diretamente para este treinador.",
+    noCoach: "Atualmente não tens um treinador atribuído.",
+    coachUnavailable: "O teu treinador atribuído está atualmente indisponível.",
+    verified: "TREINADOR VERIFICADO",
+  },
 };
 
 const COPY: Record<AppLanguage, Copy> = {
@@ -401,6 +491,8 @@ export default function SubmitVideoReview({
 }: Props) {
   const { language } = useLanguage();
   const copy = COPY[language];
+  const recipientCopy =
+    COACH_RECIPIENT_COPY[language];
 
   const [
     exerciseName,
@@ -433,6 +525,18 @@ export default function SubmitVideoReview({
   ] = useState<MyVideoReview[]>([]);
 
   const [
+    assignedCoach,
+    setAssignedCoach,
+  ] = useState<AssignedCoach | null>(
+    null
+  );
+
+  const [
+    coachLoading,
+    setCoachLoading,
+  ] = useState(true);
+
+  const [
     loading,
     setLoading,
   ] = useState(true);
@@ -455,6 +559,31 @@ export default function SubmitVideoReview({
   ] = useState<string | null>(
     null
   );
+
+  async function loadAssignedCoach() {
+    try {
+      setCoachLoading(true);
+
+      const response =
+        await api.get<MyCoachResponse>(
+          "/coaches/my-coach",
+          telegramAuthOptions()
+        );
+
+      setAssignedCoach(
+        response?.coach ?? null
+      );
+    } catch (loadCoachError) {
+      console.error(
+        "IRONAGE ASSIGNED COACH LOAD ERROR:",
+        loadCoachError
+      );
+
+      setAssignedCoach(null);
+    } finally {
+      setCoachLoading(false);
+    }
+  }
 
   async function loadReviews() {
     try {
@@ -490,6 +619,7 @@ export default function SubmitVideoReview({
 
   useEffect(() => {
     void loadReviews();
+    void loadAssignedCoach();
   }, []);
 
   function uploadVideo(
@@ -629,6 +759,18 @@ export default function SubmitVideoReview({
 
     if (!exercise || !file) {
       setError(copy.required);
+      return;
+    }
+
+    if (
+      !assignedCoach ||
+      !assignedCoach.coachProfile ||
+      assignedCoach.coachProfile.isActive !== true ||
+      assignedCoach.coachProfile.isVerified !== true
+    ) {
+      setError(
+        recipientCopy.coachUnavailable
+      );
       return;
     }
 
@@ -773,6 +915,84 @@ export default function SubmitVideoReview({
             <p>{copy.subtitle}</p>
           </div>
         </header>
+
+        <section className="submit-video-review__recipient">
+          <span className="submit-video-review__recipient-label">
+            {recipientCopy.assignedCoach}
+          </span>
+
+          {coachLoading ? (
+            <div className="submit-video-review__recipient-loading">
+              {copy.loading}
+            </div>
+          ) : assignedCoach &&
+            assignedCoach.coachProfile ? (
+            <div className="submit-video-review__recipient-card">
+              <div className="submit-video-review__recipient-avatar">
+                {assignedCoach.coachProfile.photoUrl ? (
+                  <img
+                    src={
+                      assignedCoach
+                        .coachProfile
+                        .photoUrl
+                    }
+                    alt={
+                      assignedCoach
+                        .coachProfile
+                        .displayName
+                    }
+                  />
+                ) : (
+                  <span>
+                    {assignedCoach
+                      .coachProfile
+                      .displayName
+                      .slice(0, 1)
+                      .toUpperCase()}
+                  </span>
+                )}
+              </div>
+
+              <div className="submit-video-review__recipient-info">
+                <strong>
+                  {
+                    assignedCoach
+                      .coachProfile
+                      .displayName
+                  }
+                </strong>
+
+                {assignedCoach
+                  .coachProfile
+                  .specialization && (
+                  <small>
+                    {
+                      assignedCoach
+                        .coachProfile
+                        .specialization
+                    }
+                  </small>
+                )}
+
+                {assignedCoach
+                  .coachProfile
+                  .isVerified && (
+                  <em>
+                    ✓ {recipientCopy.verified}
+                  </em>
+                )}
+
+                <p>
+                  {recipientCopy.sentTo}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="submit-video-review__recipient-empty">
+              {recipientCopy.noCoach}
+            </div>
+          )}
+        </section>
 
         <section className="submit-video-review__form">
           <label>
