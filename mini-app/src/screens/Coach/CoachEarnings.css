@@ -1,0 +1,241 @@
+.coach-earnings {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(212, 175, 55, 0.1),
+      transparent 34%
+    ),
+    #050505;
+  color: #fff;
+}
+
+.coach-earnings__shell {
+  width: min(100%, 860px);
+  margin: 0 auto;
+  padding:
+    max(24px, env(safe-area-inset-top))
+    18px
+    120px;
+}
+
+.coach-earnings__header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 26px;
+}
+
+.coach-earnings__back {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 1px solid
+    rgba(212, 175, 55, 0.3);
+  border-radius: 14px;
+  background: #0a0a0a;
+  color: #d4af37;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.coach-earnings__header span,
+.coach-earnings__hero span,
+.coach-earnings__stats span {
+  color: #d4af37;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.coach-earnings__header h1 {
+  margin: 5px 0 5px;
+  font-size: clamp(
+    28px,
+    8vw,
+    44px
+  );
+  line-height: 1;
+}
+
+.coach-earnings__header p {
+  margin: 0;
+  max-width: 620px;
+  color:
+    rgba(255, 255, 255, 0.58);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.coach-earnings__hero {
+  padding: 26px;
+  border: 1px solid
+    rgba(212, 175, 55, 0.3);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(212, 175, 55, 0.11),
+      rgba(255, 255, 255, 0.018)
+    );
+}
+
+.coach-earnings__hero strong {
+  display: block;
+  margin-top: 10px;
+  color: #fff;
+  font-size: clamp(
+    36px,
+    11vw,
+    62px
+  );
+  line-height: 1;
+}
+
+.coach-earnings__hero small {
+  display: block;
+  margin-top: 12px;
+  color:
+    rgba(255, 255, 255, 0.55);
+}
+
+.coach-earnings__stats {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.coach-earnings__stats article {
+  padding: 18px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: #0a0a0a;
+}
+
+.coach-earnings__stats strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 23px;
+}
+
+.coach-earnings__commission {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 16px 18px;
+  border: 1px solid
+    rgba(212, 175, 55, 0.17);
+  border-radius: 16px;
+  background:
+    rgba(212, 175, 55, 0.04);
+  color:
+    rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+}
+
+.coach-earnings__commission strong {
+  color: #d4af37;
+}
+
+.coach-earnings__currencies {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.coach-earnings__currencies article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  border-radius: 14px;
+  background: #0a0a0a;
+}
+
+.coach-earnings__history {
+  margin-top: 30px;
+}
+
+.coach-earnings__history h2 {
+  margin: 0 0 14px;
+  color: #d4af37;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.coach-earnings__transaction {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+  padding: 17px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+  border-radius: 17px;
+  background: #0a0a0a;
+}
+
+.coach-earnings__transaction span,
+.coach-earnings__transaction small {
+  display: block;
+  color:
+    rgba(255, 255, 255, 0.48);
+  font-size: 10px;
+}
+
+.coach-earnings__transaction strong {
+  display: block;
+  margin: 4px 0;
+}
+
+.coach-earnings__transaction-money {
+  text-align: right;
+}
+
+.coach-earnings__transaction-money strong {
+  color: #d4af37;
+}
+
+.coach-earnings__empty,
+.coach-earnings__state {
+  padding: 30px 20px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: #0a0a0a;
+  text-align: center;
+  color:
+    rgba(255, 255, 255, 0.65);
+}
+
+.coach-earnings__empty strong {
+  color: #fff;
+}
+
+.coach-earnings__empty p {
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.coach-earnings__state button {
+  margin-top: 14px;
+  padding: 11px 18px;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  background: transparent;
+  color: #d4af37;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (min-width: 700px) {
+  .coach-earnings__stats {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+}

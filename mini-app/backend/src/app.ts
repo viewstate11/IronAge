@@ -14,6 +14,7 @@ import coachRoutes from "./routes/coachRoutes.js";
 import exerciseRoutes from "./routes/exerciseRoutes.js";
 import coachWorkoutRoutes from "./routes/coachWorkoutRoutes.js";
 import videoReviewRoutes from "./routes/videoReviewRoutes.js";
+import coachEarningsRoutes from "./routes/coachEarningsRoutes.js";
 import coachProgramRoutes from "./routes/coachProgramRoutes.js";
 import coachInviteRoutes from "./routes/coachInviteRoutes.js";
 import myProgramRoutes from "./routes/myProgramRoutes.js";
@@ -146,6 +147,7 @@ app.use("/api/exercises", exerciseRoutes);
 
 app.use("/api/coach-workouts", coachWorkoutRoutes);
 app.use("/api/video-reviews", videoReviewRoutes);
+app.use("/api/coach-earnings", coachEarningsRoutes);
 
 app.use("/api/coach-programs", coachProgramRoutes);
 
