@@ -1761,6 +1761,17 @@ const translations:
     bg: "ОТВОРИ МОЯТА ПРОГРАМА",
   },
 
+  "myCoach.videoReview": {
+    en: "SEND VIDEO FOR REVIEW",
+    es: "ENVIAR VÍDEO PARA REVISIÓN",
+    uk: "НАДІСЛАТИ ВІДЕО НА РОЗБІР",
+    ru: "ОТПРАВИТЬ ВИДЕО НА РАЗБОР",
+    fr: "ENVOYER UNE VIDÉO À ANALYSER",
+    de: "VIDEO ZUR PRÜFUNG SENDEN",
+    pt: "ENVIAR VÍDEO PARA ANÁLISE",
+    bg: "ИЗПРАТИ ВИДЕО ЗА ПРЕГЛЕД",
+  },
+
   /* =====================================================
      COACH DASHBOARD
   ===================================================== */

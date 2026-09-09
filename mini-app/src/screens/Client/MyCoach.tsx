@@ -40,12 +40,14 @@ type Props = {
   onBack: () => void;
   onFindCoach: () => void;
   onOpenProgram: () => void;
+  onOpenVideoReview: () => void;
 };
 
 export default function MyCoach({
   onBack,
   onFindCoach,
   onOpenProgram,
+  onOpenVideoReview,
 }: Props) {
   const { language, t } = useLanguage();
 
@@ -356,6 +358,22 @@ export default function MyCoach({
               >
                 <span>
                   {t("myCoach.openProgram")}
+                </span>
+
+                <b>
+                  →
+                </b>
+              </button>
+
+              <button
+                type="button"
+                className="my-coach-primary"
+                onClick={
+                  onOpenVideoReview
+                }
+              >
+                <span>
+                  {t("myCoach.videoReview")}
                 </span>
 
                 <b>

@@ -31,6 +31,7 @@ import FindCoach from "../Coach/FindCoach";
 import CoachProfile from "../Coach/CoachProfile";
 import MyProgram from "../Client/MyProgram";
 import MyCoach from "../Client/MyCoach";
+import SubmitVideoReview from "../Client/SubmitVideoReview";
 import AdminCoaches from "../Admin/AdminCoaches";
 import AdminPrograms from "../Admin/AdminPrograms";
 import Programs from "../Programs/Programs";
@@ -65,6 +66,7 @@ type AppScreen =
   | "find-coach"
   | "coach-profile"
   | "my-coach"
+  | "submit-video-review"
   | "my-program"
   | "admin-coaches"
   | "admin-programs"
@@ -1184,6 +1186,22 @@ export default function MainApp() {
               setScreen(
                 "my-program"
               );
+            }}
+            onOpenVideoReview={() => {
+              setScreen(
+                "submit-video-review"
+              );
+            }}
+          />
+
+        )}
+
+
+        {screen === "submit-video-review" && (
+
+          <SubmitVideoReview
+            onBack={() => {
+              setScreen("my-coach");
             }}
           />
 
