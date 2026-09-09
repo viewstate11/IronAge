@@ -26,6 +26,7 @@ import TelegramBackButton from "../../components/TelegramBackButton";
 import WorkoutSession from "../WorkoutSession/WorkoutSession";
 import WorkoutComplete from "../WorkoutComplete/WorkoutComplete";
 import CoachEntry from "../Coach/CoachEntry";
+import VideoReviews from "../Coach/VideoReviews";
 import FindCoach from "../Coach/FindCoach";
 import CoachProfile from "../Coach/CoachProfile";
 import MyProgram from "../Client/MyProgram";
@@ -60,6 +61,7 @@ type AppScreen =
   | "premium"
   | "coach"
   | "coach-programs"
+  | "video-reviews"
   | "find-coach"
   | "coach-profile"
   | "my-coach"
@@ -829,9 +831,8 @@ export default function MainApp() {
             }}
 
             onOpenVideoReviews={() => {
-              openProfileFeature(
-                "VIDEO REVIEWS",
-                "Review athlete exercise technique and provide feedback."
+              setScreen(
+                "video-reviews"
               );
             }}
 
@@ -1149,6 +1150,18 @@ export default function MainApp() {
           />
 
         )}
+
+        {screen === "video-reviews" && (
+
+          <VideoReviews
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
+
 
 
 
