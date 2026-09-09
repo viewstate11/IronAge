@@ -4672,6 +4672,112 @@ const translations:
   },
 
   /* =====================================================
+     WORKOUT HISTORY
+  ===================================================== */
+
+  "workoutHistory.title": {
+    en: "WORKOUT HISTORY",
+    es: "HISTORIAL DE ENTRENAMIENTOS",
+    uk: "ІСТОРІЯ ТРЕНУВАНЬ",
+    ru: "ИСТОРИЯ ТРЕНИРОВОК",
+    fr: "HISTORIQUE DES ENTRAÎNEMENTS",
+    de: "TRAININGSVERLAUF",
+    pt: "HISTÓRICO DE TREINOS",
+    bg: "ИСТОРИЯ НА ТРЕНИРОВКИТЕ",
+  },
+
+  "workoutHistory.subtitle": {
+    en: "SESSIONS · SETS · PERFORMANCE",
+    es: "SESIONES · SERIES · RENDIMIENTO",
+    uk: "ТРЕНУВАННЯ · ПІДХОДИ · РЕЗУЛЬТАТ",
+    ru: "ТРЕНИРОВКИ · ПОДХОДЫ · РЕЗУЛЬТАТ",
+    fr: "SÉANCES · SÉRIES · PERFORMANCE",
+    de: "EINHEITEN · SÄTZE · LEISTUNG",
+    pt: "SESSÕES · SÉRIES · DESEMPENHO",
+    bg: "СЕСИИ · СЕРИИ · РЕЗУЛТАТИ",
+  },
+
+  "workoutHistory.workouts": {
+    en: "WORKOUTS", es: "ENTRENAMIENTOS", uk: "ТРЕНУВАННЯ", ru: "ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENTS", de: "TRAININGS", pt: "TREINOS", bg: "ТРЕНИРОВКИ",
+  },
+
+  "workoutHistory.totalSets": {
+    en: "TOTAL SETS", es: "SERIES TOTALES", uk: "УСЬОГО ПІДХОДІВ", ru: "ВСЕГО ПОДХОДОВ",
+    fr: "SÉRIES TOTALES", de: "SÄTZE GESAMT", pt: "TOTAL DE SÉRIES", bg: "ОБЩО СЕРИИ",
+  },
+
+  "workoutHistory.totalXp": {
+    en: "TOTAL XP", es: "XP TOTAL", uk: "УСЬОГО XP", ru: "ВСЕГО XP",
+    fr: "XP TOTAL", de: "XP GESAMT", pt: "XP TOTAL", bg: "ОБЩО XP",
+  },
+
+  "workoutHistory.minutes": {
+    en: "MINUTES", es: "MINUTOS", uk: "ХВИЛИНИ", ru: "МИНУТЫ",
+    fr: "MINUTES", de: "MINUTEN", pt: "MINUTOS", bg: "МИНУТИ",
+  },
+
+  "workoutHistory.history": {
+    en: "COMPLETED WORKOUTS", es: "ENTRENAMIENTOS COMPLETADOS", uk: "ЗАВЕРШЕНІ ТРЕНУВАННЯ", ru: "ЗАВЕРШЁННЫЕ ТРЕНИРОВКИ",
+    fr: "ENTRAÎNEMENTS TERMINÉS", de: "ABGESCHLOSSENE TRAININGS", pt: "TREINOS CONCLUÍDOS", bg: "ЗАВЪРШЕНИ ТРЕНИРОВКИ",
+  },
+
+  "workoutHistory.emptyTitle": {
+    en: "NO WORKOUTS YET", es: "AÚN NO HAY ENTRENAMIENTOS", uk: "ТРЕНУВАНЬ ЩЕ НЕМАЄ", ru: "ТРЕНИРОВОК ПОКА НЕТ",
+    fr: "AUCUN ENTRAÎNEMENT", de: "NOCH KEINE TRAININGS", pt: "AINDA NÃO HÁ TREINOS", bg: "ВСЕ ОЩЕ НЯМА ТРЕНИРОВКИ",
+  },
+
+  "workoutHistory.emptyDescription": {
+    en: "Complete your first workout and it will appear here.",
+    es: "Completa tu primer entrenamiento y aparecerá aquí.",
+    uk: "Заверши перше тренування, і воно з’явиться тут.",
+    ru: "Заверши первую тренировку, и она появится здесь.",
+    fr: "Terminez votre premier entraînement et il apparaîtra ici.",
+    de: "Schließe dein erstes Training ab und es erscheint hier.",
+    pt: "Conclua seu primeiro treino e ele aparecerá aqui.",
+    bg: "Завърши първата си тренировка и тя ще се появи тук.",
+  },
+
+  "workoutHistory.min": {
+    en: "MIN", es: "MIN", uk: "ХВ", ru: "МИН", fr: "MIN", de: "MIN", pt: "MIN", bg: "МИН",
+  },
+
+  "workoutHistory.sets": {
+    en: "SETS", es: "SERIES", uk: "ПІДХОДІВ", ru: "ПОДХОДОВ", fr: "SÉRIES", de: "SÄTZE", pt: "SÉRIES", bg: "СЕРИИ",
+  },
+
+  "workoutHistory.completed": {
+    en: "COMPLETED", es: "COMPLETADO", uk: "ЗАВЕРШЕНО", ru: "ЗАВЕРШЕНО", fr: "TERMINÉ", de: "ABGESCHLOSSEN", pt: "CONCLUÍDO", bg: "ЗАВЪРШЕНО",
+  },
+
+  "workoutHistory.incomplete": {
+    en: "INCOMPLETE", es: "INCOMPLETO", uk: "НЕ ЗАВЕРШЕНО", ru: "НЕ ЗАВЕРШЕНО", fr: "INCOMPLET", de: "UNVOLLSTÄNDIG", pt: "INCOMPLETO", bg: "НЕЗАВЪРШЕНО",
+  },
+
+  "workoutHistory.calories": {
+    en: "CALORIES", es: "CALORÍAS", uk: "КАЛОРІЇ", ru: "КАЛОРИИ", fr: "CALORIES", de: "KALORIEN", pt: "CALORIAS", bg: "КАЛОРИИ",
+  },
+
+  "workoutHistory.volume": {
+    en: "VOLUME", es: "VOLUMEN", uk: "ОБʼЄМ", ru: "ОБЪЁМ", fr: "VOLUME", de: "VOLUMEN", pt: "VOLUME", bg: "ОБЕМ",
+  },
+
+  "workoutHistory.noSets": {
+    en: "No set details were recorded for this workout.",
+    es: "No se registraron detalles de series para este entrenamiento.",
+    uk: "Для цього тренування деталі підходів не записані.",
+    ru: "Для этой тренировки детали подходов не записаны.",
+    fr: "Aucun détail de série n’a été enregistré pour cet entraînement.",
+    de: "Für dieses Training wurden keine Satzdetails gespeichert.",
+    pt: "Nenhum detalhe de série foi registrado para este treino.",
+    bg: "Няма записани подробности за сериите в тази тренировка.",
+  },
+
+  "workoutHistory.reps": {
+    en: "REPS", es: "REP", uk: "ПОВТ.", ru: "ПОВТ.", fr: "RÉP.", de: "WDH.", pt: "REP.", bg: "ПОВТ.",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 

@@ -16,6 +16,7 @@ import EditProfile from "./EditProfile";
 import Settings from "./Settings";
 import Notifications from "./Notifications";
 import Payments from "./Payments";
+import WorkoutHistory from "./WorkoutHistory";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
 import TabBar from "./TabBar";
@@ -69,6 +70,7 @@ type AppScreen =
   | "settings"
   | "notifications"
   | "payments"
+  | "workout-history"
   | "programs"
   | "program-details"
   | "privacy"
@@ -684,9 +686,8 @@ export default function MainApp() {
             }}
 
             onOpenHistory={() => {
-              openProfileFeature(
-                "WORKOUT HISTORY",
-                "Your completed workouts, statistics and performance history."
+              setScreen(
+                "workout-history"
               );
             }}
 
@@ -951,6 +952,17 @@ export default function MainApp() {
           <TermsPage
             onBack={() => {
               setScreen("profile");
+            }}
+          />
+        )}
+
+
+        {screen === "workout-history" && (
+          <WorkoutHistory
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
             }}
           />
         )}
