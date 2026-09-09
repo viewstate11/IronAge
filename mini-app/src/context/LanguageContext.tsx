@@ -4110,6 +4110,307 @@ const translations:
   },
 
   /* =====================================================
+     NOTIFICATIONS
+  ===================================================== */
+
+  "notifications.title": {
+    en: "NOTIFICATIONS",
+    es: "NOTIFICACIONES",
+    uk: "СПОВІЩЕННЯ",
+    ru: "УВЕДОМЛЕНИЯ",
+    fr: "NOTIFICATIONS",
+    de: "BENACHRICHTIGUNGEN",
+    pt: "NOTIFICAÇÕES",
+    bg: "ИЗВЕСТИЯ",
+  },
+
+  "notifications.subtitle": {
+    en: "REMINDERS · PROGRESS · MOTIVATION",
+    es: "RECORDATORIOS · PROGRESO · MOTIVACIÓN",
+    uk: "НАГАДУВАННЯ · ПРОГРЕС · МОТИВАЦІЯ",
+    ru: "НАПОМИНАНИЯ · ПРОГРЕСС · МОТИВАЦИЯ",
+    fr: "RAPPELS · PROGRÈS · MOTIVATION",
+    de: "ERINNERUNGEN · FORTSCHRITT · MOTIVATION",
+    pt: "LEMBRETES · PROGRESSO · MOTIVAÇÃO",
+    bg: "НАПОМНЯНИЯ · ПРОГРЕС · МОТИВАЦИЯ",
+  },
+
+  "notifications.permission": {
+    en: "NOTIFICATION STATUS",
+    es: "ESTADO DE NOTIFICACIONES",
+    uk: "СТАТУС СПОВІЩЕНЬ",
+    ru: "СТАТУС УВЕДОМЛЕНИЙ",
+    fr: "STATUT DES NOTIFICATIONS",
+    de: "BENACHRICHTIGUNGSSTATUS",
+    pt: "STATUS DAS NOTIFICAÇÕES",
+    bg: "СТАТУС НА ИЗВЕСТИЯТА",
+  },
+
+  "notifications.permissionGranted": {
+    en: "ALLOWED",
+    es: "PERMITIDAS",
+    uk: "ДОЗВОЛЕНО",
+    ru: "РАЗРЕШЕНО",
+    fr: "AUTORISÉES",
+    de: "ERLAUBT",
+    pt: "PERMITIDAS",
+    bg: "РАЗРЕШЕНИ",
+  },
+
+  "notifications.permissionDenied": {
+    en: "BLOCKED",
+    es: "BLOQUEADAS",
+    uk: "ЗАБЛОКОВАНО",
+    ru: "ЗАБЛОКИРОВАНО",
+    fr: "BLOQUÉES",
+    de: "BLOCKIERT",
+    pt: "BLOQUEADAS",
+    bg: "БЛОКИРАНИ",
+  },
+
+  "notifications.permissionPrompt": {
+    en: "PERMISSION REQUIRED",
+    es: "SE REQUIERE PERMISO",
+    uk: "ПОТРІБЕН ДОЗВІЛ",
+    ru: "ТРЕБУЕТСЯ РАЗРЕШЕНИЕ",
+    fr: "AUTORISATION REQUISE",
+    de: "BERECHTIGUNG ERFORDERLICH",
+    pt: "PERMISSÃO NECESSÁRIA",
+    bg: "НЕОБХОДИМО Е РАЗРЕШЕНИЕ",
+  },
+
+  "notifications.permissionWeb": {
+    en: "NATIVE APP REQUIRED",
+    es: "SE REQUIERE LA APP NATIVA",
+    uk: "ПОТРІБЕН МОБІЛЬНИЙ ДОДАТОК",
+    ru: "ТРЕБУЕТСЯ МОБИЛЬНОЕ ПРИЛОЖЕНИЕ",
+    fr: "APP NATIVE REQUISE",
+    de: "NATIVE APP ERFORDERLICH",
+    pt: "APP NATIVO NECESSÁRIO",
+    bg: "НЕОБХОДИМО Е МОБИЛНОТО ПРИЛОЖЕНИЕ",
+  },
+
+  "notifications.permissionUnknown": {
+    en: "UNKNOWN",
+    es: "DESCONOCIDO",
+    uk: "НЕВІДОМО",
+    ru: "НЕИЗВЕСТНО",
+    fr: "INCONNU",
+    de: "UNBEKANNT",
+    pt: "DESCONHECIDO",
+    bg: "НЕИЗВЕСТНО",
+  },
+
+  "notifications.allow": {
+    en: "ALLOW",
+    es: "PERMITIR",
+    uk: "ДОЗВОЛИТИ",
+    ru: "РАЗРЕШИТЬ",
+    fr: "AUTORISER",
+    de: "ERLAUBEN",
+    pt: "PERMITIR",
+    bg: "РАЗРЕШИ",
+  },
+
+  "notifications.reminders": {
+    en: "REMINDERS",
+    es: "RECORDATORIOS",
+    uk: "НАГАДУВАННЯ",
+    ru: "НАПОМИНАНИЯ",
+    fr: "RAPPELS",
+    de: "ERINNERUNGEN",
+    pt: "LEMBRETES",
+    bg: "НАПОМНЯНИЯ",
+  },
+
+  "notifications.workout": {
+    en: "WORKOUT REMINDER",
+    es: "RECORDATORIO DE ENTRENAMIENTO",
+    uk: "НАГАДУВАННЯ ПРО ТРЕНУВАННЯ",
+    ru: "НАПОМИНАНИЕ О ТРЕНИРОВКЕ",
+    fr: "RAPPEL D’ENTRAÎNEMENT",
+    de: "TRAININGSERINNERUNG",
+    pt: "LEMBRETE DE TREINO",
+    bg: "НАПОМНЯНЕ ЗА ТРЕНИРОВКА",
+  },
+
+  "notifications.workoutDescription": {
+    en: "Daily reminder to complete your workout",
+    es: "Recordatorio diario para completar tu entrenamiento",
+    uk: "Щоденне нагадування виконати тренування",
+    ru: "Ежедневное напоминание выполнить тренировку",
+    fr: "Rappel quotidien pour effectuer votre entraînement",
+    de: "Tägliche Erinnerung für dein Training",
+    pt: "Lembrete diário para concluir seu treino",
+    bg: "Ежедневно напомняне да направиш тренировката си",
+  },
+
+  "notifications.nutrition": {
+    en: "NUTRITION REMINDERS",
+    es: "RECORDATORIOS DE NUTRICIÓN",
+    uk: "НАГАДУВАННЯ ПРО ХАРЧУВАННЯ",
+    ru: "НАПОМИНАНИЯ О ПИТАНИИ",
+    fr: "RAPPELS NUTRITION",
+    de: "ERNÄHRUNGSERINNERUNGEN",
+    pt: "LEMBRETES DE NUTRIÇÃO",
+    bg: "НАПОМНЯНИЯ ЗА ХРАНЕНЕ",
+  },
+
+  "notifications.nutritionDescription": {
+    en: "Morning, afternoon and evening nutrition reminders",
+    es: "Recordatorios de nutrición por la mañana, tarde y noche",
+    uk: "Нагадування про харчування вранці, вдень і ввечері",
+    ru: "Напоминания о питании утром, днём и вечером",
+    fr: "Rappels nutrition matin, midi et soir",
+    de: "Ernährungserinnerungen morgens, mittags und abends",
+    pt: "Lembretes de nutrição de manhã, tarde e noite",
+    bg: "Напомняния за хранене сутрин, следобед и вечер",
+  },
+
+  "notifications.motivation": {
+    en: "MOTIVATION",
+    es: "MOTIVACIÓN",
+    uk: "МОТИВАЦІЯ",
+    ru: "МОТИВАЦИЯ",
+    fr: "MOTIVATION",
+    de: "MOTIVATION",
+    pt: "MOTIVAÇÃO",
+    bg: "МОТИВАЦИЯ",
+  },
+
+  "notifications.motivationDescription": {
+    en: "Daily discipline and motivation reminder",
+    es: "Recordatorio diario de disciplina y motivación",
+    uk: "Щоденне нагадування про дисципліну та мотивацію",
+    ru: "Ежедневное напоминание о дисциплине и мотивации",
+    fr: "Rappel quotidien de discipline et motivation",
+    de: "Tägliche Erinnerung für Disziplin und Motivation",
+    pt: "Lembrete diário de disciplina e motivação",
+    bg: "Ежедневно напомняне за дисциплина и мотивация",
+  },
+
+  "notifications.progress": {
+    en: "PROGRESS UPDATES",
+    es: "ACTUALIZACIONES DE PROGRESO",
+    uk: "ОНОВЛЕННЯ ПРОГРЕСУ",
+    ru: "ОБНОВЛЕНИЯ ПРОГРЕССА",
+    fr: "MISES À JOUR DE PROGRÈS",
+    de: "FORTSCHRITTS-UPDATES",
+    pt: "ATUALIZAÇÕES DE PROGRESSO",
+    bg: "АКТУАЛИЗАЦИИ ЗА ПРОГРЕСА",
+  },
+
+  "notifications.progressDescription": {
+    en: "Level, XP and streak notifications after workouts",
+    es: "Notificaciones de nivel, XP y racha después de entrenar",
+    uk: "Сповіщення про рівень, XP і серію після тренувань",
+    ru: "Уведомления об уровне, XP и серии после тренировок",
+    fr: "Notifications de niveau, XP et série après l’entraînement",
+    de: "Level-, XP- und Streak-Benachrichtigungen nach Trainings",
+    pt: "Notificações de nível, XP e sequência após os treinos",
+    bg: "Известия за ниво, XP и серия след тренировка",
+  },
+
+  "notifications.test": {
+    en: "TEST",
+    es: "PRUEBA",
+    uk: "ТЕСТ",
+    ru: "ТЕСТ",
+    fr: "TEST",
+    de: "TEST",
+    pt: "TESTE",
+    bg: "ТЕСТ",
+  },
+
+  "notifications.testButton": {
+    en: "SEND TEST NOTIFICATION",
+    es: "ENVIAR NOTIFICACIÓN DE PRUEBA",
+    uk: "НАДІСЛАТИ ТЕСТОВЕ СПОВІЩЕННЯ",
+    ru: "ОТПРАВИТЬ ТЕСТОВОЕ УВЕДОМЛЕНИЕ",
+    fr: "ENVOYER UNE NOTIFICATION TEST",
+    de: "TESTBENACHRICHTIGUNG SENDEN",
+    pt: "ENVIAR NOTIFICAÇÃO DE TESTE",
+    bg: "ИЗПРАТИ ТЕСТОВО ИЗВЕСТИЕ",
+  },
+
+  "notifications.testing": {
+    en: "SENDING...",
+    es: "ENVIANDO...",
+    uk: "НАДСИЛАННЯ...",
+    ru: "ОТПРАВКА...",
+    fr: "ENVOI...",
+    de: "WIRD GESENDET...",
+    pt: "ENVIANDO...",
+    bg: "ИЗПРАЩАНЕ...",
+  },
+
+  "notifications.testScheduled": {
+    en: "Test notification scheduled. Wait 5 seconds.",
+    es: "Notificación de prueba programada. Espera 5 segundos.",
+    uk: "Тестове сповіщення заплановано. Зачекай 5 секунд.",
+    ru: "Тестовое уведомление запланировано. Подождите 5 секунд.",
+    fr: "Notification test programmée. Attendez 5 secondes.",
+    de: "Testbenachrichtigung geplant. Warte 5 Sekunden.",
+    pt: "Notificação de teste agendada. Aguarde 5 segundos.",
+    bg: "Тестовото известие е насрочено. Изчакай 5 секунди.",
+  },
+
+  "notifications.testFailed": {
+    en: "Could not schedule notification.",
+    es: "No se pudo programar la notificación.",
+    uk: "Не вдалося запланувати сповіщення.",
+    ru: "Не удалось запланировать уведомление.",
+    fr: "Impossible de programmer la notification.",
+    de: "Benachrichtigung konnte nicht geplant werden.",
+    pt: "Não foi possível agendar a notificação.",
+    bg: "Известието не можа да бъде насрочено.",
+  },
+
+  "notifications.scheduleFailed": {
+    en: "Could not update notification reminder.",
+    es: "No se pudo actualizar el recordatorio.",
+    uk: "Не вдалося оновити нагадування.",
+    ru: "Не удалось обновить напоминание.",
+    fr: "Impossible de mettre à jour le rappel.",
+    de: "Erinnerung konnte nicht aktualisiert werden.",
+    pt: "Não foi possível atualizar o lembrete.",
+    bg: "Напомнянето не можа да бъде актуализирано.",
+  },
+
+  "notifications.permissionRequired": {
+    en: "Notification permission is required.",
+    es: "Se requiere permiso para las notificaciones.",
+    uk: "Потрібен дозвіл на сповіщення.",
+    ru: "Требуется разрешение на уведомления.",
+    fr: "L’autorisation des notifications est requise.",
+    de: "Benachrichtigungsberechtigung ist erforderlich.",
+    pt: "É necessária permissão para notificações.",
+    bg: "Необходимо е разрешение за известия.",
+  },
+
+  "notifications.permissionError": {
+    en: "Could not request notification permission.",
+    es: "No se pudo solicitar permiso para notificaciones.",
+    uk: "Не вдалося запросити дозвіл на сповіщення.",
+    ru: "Не удалось запросить разрешение на уведомления.",
+    fr: "Impossible de demander l’autorisation des notifications.",
+    de: "Benachrichtigungsberechtigung konnte nicht angefordert werden.",
+    pt: "Não foi possível solicitar permissão para notificações.",
+    bg: "Разрешението за известия не можа да бъде поискано.",
+  },
+
+  "notifications.nativeOnly": {
+    en: "Notifications are available in the IRONAGE mobile app.",
+    es: "Las notificaciones están disponibles en la app móvil IRONAGE.",
+    uk: "Сповіщення доступні в мобільному додатку IRONAGE.",
+    ru: "Уведомления доступны в мобильном приложении IRONAGE.",
+    fr: "Les notifications sont disponibles dans l’application mobile IRONAGE.",
+    de: "Benachrichtigungen sind in der mobilen IRONAGE-App verfügbar.",
+    pt: "As notificações estão disponíveis no app móvel IRONAGE.",
+    bg: "Известията са достъпни в мобилното приложение IRONAGE.",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 

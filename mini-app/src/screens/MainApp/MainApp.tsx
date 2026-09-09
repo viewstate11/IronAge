@@ -14,6 +14,7 @@ import Profile from "./Profile";
 import ProfileFeature from "./ProfileFeature";
 import EditProfile from "./EditProfile";
 import Settings from "./Settings";
+import Notifications from "./Notifications";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
 import TabBar from "./TabBar";
@@ -65,6 +66,7 @@ type AppScreen =
   | "profile-feature"
   | "edit-profile"
   | "settings"
+  | "notifications"
   | "programs"
   | "program-details"
   | "privacy"
@@ -726,9 +728,8 @@ export default function MainApp() {
             }}
 
             onOpenNotifications={() => {
-              openProfileFeature(
-                "NOTIFICATIONS",
-                "Manage workout, coach, progress and account alerts."
+              setScreen(
+                "notifications"
               );
             }}
 
@@ -955,6 +956,17 @@ export default function MainApp() {
         )}
 
 
+        {screen === "notifications" && (
+          <Notifications
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
+            }}
+          />
+        )}
+
+
         {screen === "settings" && (
           <Settings
             onBack={() => {
@@ -970,9 +982,8 @@ export default function MainApp() {
             }}
 
             onOpenNotifications={() => {
-              openProfileFeature(
-                "NOTIFICATIONS",
-                "Manage workout, coach, progress and account alerts."
+              setScreen(
+                "notifications"
               );
             }}
 
