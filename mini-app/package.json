@@ -13,6 +13,7 @@
   "dependencies": {
     "@aparajita/capacitor-secure-storage": "^8.0.0",
     "@apple/app-store-server-library": "^3.1.0",
+    "@capacitor/android": "^8.5.1",
     "@capacitor/core": "^8.5.0",
     "@capacitor/ios": "^8.5.0",
     "@capacitor/local-notifications": "^8.3.1",
@@ -25,6 +26,7 @@
     "@twa-dev/sdk": "^8.0.2",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.3",
+    "@vercel/blob": "^2.8.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -49,7 +51,7 @@
     "prisma": "^7.9.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "vercel": "^59.1.4",
+    "vercel": "^59.13.1",
     "vite": "^8.1.5"
   },
   "overrides": {

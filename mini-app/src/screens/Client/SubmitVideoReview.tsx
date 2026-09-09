@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -59,6 +60,33 @@ type CreateReviewResponse = {
   };
 };
 
+type UploadUrlResponse = {
+  success: boolean;
+
+  upload: {
+    presignedUrl: string;
+    pathname: string;
+    contentType: string;
+    fileSize: number;
+    maximumSizeInBytes: number;
+    validUntil: number;
+  };
+};
+
+type BlobPutResult = {
+  url: string;
+  downloadUrl: string;
+  pathname: string;
+  contentType: string;
+  contentDisposition: string;
+  etag: string;
+};
+
+type ViewUrlResponse = {
+  success: boolean;
+  viewUrl: string;
+};
+
 type Copy = {
   eyebrow: string;
   title: string;
@@ -94,8 +122,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Send your exercise video to your coach and receive technique feedback.",
     exercise: "EXERCISE",
     exercisePlaceholder: "e.g. Squat",
-    videoUrl: "VIDEO LINK",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "VIDEO",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "NOTE FOR COACH",
     notePlaceholder:
       "What should your coach check?",
@@ -106,7 +134,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Failed to send video review.",
     required:
-      "Exercise and video link are required.",
+      "Exercise and video are required.",
     myReviews: "MY VIDEO REVIEWS",
     loading: "Loading reviews...",
     loadFailed:
@@ -129,8 +157,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Надішли відео вправи своєму тренеру та отримай розбір техніки.",
     exercise: "ВПРАВА",
     exercisePlaceholder: "Наприклад: Присідання",
-    videoUrl: "ПОСИЛАННЯ НА ВІДЕО",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "ВІДЕО",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "НОТАТКА ДЛЯ ТРЕНЕРА",
     notePlaceholder:
       "Що саме тренеру перевірити?",
@@ -141,7 +169,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Не вдалося надіслати відео.",
     required:
-      "Вкажи вправу та посилання на відео.",
+      "Вкажи вправу та обери відео.",
     myReviews: "МОЇ ВІДЕОРОЗБОРИ",
     loading: "Завантаження...",
     loadFailed:
@@ -164,8 +192,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Отправь видео упражнения тренеру и получи разбор техники.",
     exercise: "УПРАЖНЕНИЕ",
     exercisePlaceholder: "Например: Приседания",
-    videoUrl: "ССЫЛКА НА ВИДЕО",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "ВИДЕО",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "ЗАМЕТКА ДЛЯ ТРЕНЕРА",
     notePlaceholder:
       "Что именно проверить?",
@@ -176,7 +204,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Не удалось отправить видео.",
     required:
-      "Укажи упражнение и ссылку на видео.",
+      "Укажи упражнение и выбери видео.",
     myReviews: "МОИ ВИДЕОРАЗБОРЫ",
     loading: "Загрузка...",
     loadFailed:
@@ -199,8 +227,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Изпрати видео на упражнение и получи обратна връзка за техниката.",
     exercise: "УПРАЖНЕНИЕ",
     exercisePlaceholder: "Например: Клек",
-    videoUrl: "ЛИНК КЪМ ВИДЕО",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "ВИДЕО",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "БЕЛЕЖКА ЗА ТРЕНЬОРА",
     notePlaceholder:
       "Какво да провери треньорът?",
@@ -211,7 +239,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Видеото не можа да бъде изпратено.",
     required:
-      "Въведи упражнение и видео линк.",
+      "Въведи упражнение и избери видео.",
     myReviews: "МОИТЕ ВИДЕО ПРЕГЛЕДИ",
     loading: "Зареждане...",
     loadFailed:
@@ -234,8 +262,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Envía tu ejercicio al entrenador y recibe comentarios sobre tu técnica.",
     exercise: "EJERCICIO",
     exercisePlaceholder: "Ej.: Sentadilla",
-    videoUrl: "ENLACE DEL VÍDEO",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "VÍDEO",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "NOTA PARA EL ENTRENADOR",
     notePlaceholder:
       "¿Qué quieres que revise?",
@@ -246,7 +274,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "No se pudo enviar el vídeo.",
     required:
-      "El ejercicio y el enlace son obligatorios.",
+      "El ejercicio y el vídeo son obligatorios.",
     myReviews: "MIS REVISIONES",
     loading: "Cargando...",
     loadFailed:
@@ -269,8 +297,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Envoie ton exercice au coach et reçois un retour sur ta technique.",
     exercise: "EXERCICE",
     exercisePlaceholder: "Ex. : Squat",
-    videoUrl: "LIEN VIDÉO",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "VIDÉO",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "NOTE POUR LE COACH",
     notePlaceholder:
       "Que doit vérifier ton coach ?",
@@ -281,7 +309,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Impossible d’envoyer la vidéo.",
     required:
-      "L’exercice et le lien vidéo sont obligatoires.",
+      "L’exercice et la vidéo sont obligatoires.",
     myReviews: "MES ANALYSES VIDÉO",
     loading: "Chargement...",
     loadFailed:
@@ -304,8 +332,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Sende deine Übung an deinen Coach und erhalte Technik-Feedback.",
     exercise: "ÜBUNG",
     exercisePlaceholder: "z. B. Kniebeuge",
-    videoUrl: "VIDEO-LINK",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "VIDEO",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "NOTIZ FÜR DEN COACH",
     notePlaceholder:
       "Was soll dein Coach prüfen?",
@@ -316,7 +344,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Video konnte nicht gesendet werden.",
     required:
-      "Übung und Video-Link sind erforderlich.",
+      "Übung und Video sind erforderlich.",
     myReviews: "MEINE VIDEO-REVIEWS",
     loading: "Wird geladen...",
     loadFailed:
@@ -339,8 +367,8 @@ const COPY: Record<AppLanguage, Copy> = {
       "Envia o exercício ao treinador e recebe feedback sobre a técnica.",
     exercise: "EXERCÍCIO",
     exercisePlaceholder: "Ex.: Agachamento",
-    videoUrl: "LINK DO VÍDEO",
-    videoUrlPlaceholder: "https://...",
+    videoUrl: "VÍDEO",
+    videoUrlPlaceholder: "CHOOSE A VIDEO",
     note: "NOTA PARA O TREINADOR",
     notePlaceholder:
       "O que deve o treinador verificar?",
@@ -351,7 +379,7 @@ const COPY: Record<AppLanguage, Copy> = {
     submitFailed:
       "Não foi possível enviar o vídeo.",
     required:
-      "Exercício e link do vídeo são obrigatórios.",
+      "Exercício e vídeo são obrigatórios.",
     myReviews: "MINHAS ANÁLISES",
     loading: "A carregar...",
     loadFailed:
@@ -380,9 +408,19 @@ export default function SubmitVideoReview({
   ] = useState("");
 
   const [
-    videoUrl,
-    setVideoUrl,
-  ] = useState("");
+    selectedVideo,
+    setSelectedVideo,
+  ] = useState<File | null>(null);
+
+  const [
+    uploadProgress,
+    setUploadProgress,
+  ] = useState(0);
+
+  const videoInputRef =
+    useRef<HTMLInputElement | null>(
+      null
+    );
 
   const [
     athleteNote,
@@ -454,31 +492,216 @@ export default function SubmitVideoReview({
     void loadReviews();
   }, []);
 
+  function uploadVideo(
+    file: File,
+    presignedUrl: string
+  ): Promise<BlobPutResult> {
+    return new Promise(
+      (resolve, reject) => {
+        const request =
+          new XMLHttpRequest();
+
+        request.open(
+          "PUT",
+          presignedUrl
+        );
+
+        request.setRequestHeader(
+          "Content-Type",
+          file.type
+        );
+
+        request.upload.onprogress =
+          event => {
+            if (!event.lengthComputable) {
+              return;
+            }
+
+            const percentage =
+              Math.round(
+                (
+                  event.loaded /
+                  event.total
+                ) * 100
+              );
+
+            setUploadProgress(
+              percentage
+            );
+          };
+
+        request.onerror = () => {
+          reject(
+            new Error(
+              "Video upload failed"
+            )
+          );
+        };
+
+        request.onload = () => {
+          if (
+            request.status < 200 ||
+            request.status >= 300
+          ) {
+            reject(
+              new Error(
+                `Video upload failed (${request.status})`
+              )
+            );
+
+            return;
+          }
+
+          try {
+            const result =
+              JSON.parse(
+                request.responseText
+              ) as BlobPutResult;
+
+            if (
+              !result ||
+              typeof result.url !==
+                "string" ||
+              !result.url
+            ) {
+              throw new Error(
+                "Invalid video upload response"
+              );
+            }
+
+            setUploadProgress(100);
+            resolve(result);
+          } catch (parseError) {
+            reject(parseError);
+          }
+        };
+
+        request.send(file);
+      }
+    );
+  }
+
+  async function openReviewVideo(
+    reviewId: number
+  ) {
+    try {
+      setError(null);
+
+      const response =
+        await api.get<ViewUrlResponse>(
+          `/video-reviews/${reviewId}/view-url`,
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        typeof response.viewUrl !==
+          "string" ||
+        !response.viewUrl
+      ) {
+        throw new Error(
+          "Invalid video view response"
+        );
+      }
+
+      window.open(
+        response.viewUrl,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } catch (openError) {
+      console.error(
+        "IRONAGE CLIENT VIDEO OPEN ERROR:",
+        openError
+      );
+
+      setError(copy.loadFailed);
+    }
+  }
+
   async function submit() {
     const exercise =
       exerciseName.trim();
 
-    const url =
-      videoUrl.trim();
+    const file =
+      selectedVideo;
 
-    if (!exercise || !url) {
+    if (!exercise || !file) {
       setError(copy.required);
+      return;
+    }
+
+    if (
+      !file.type ||
+      !file.type.startsWith(
+        "video/"
+      )
+    ) {
+      setError(copy.submitFailed);
+      return;
+    }
+
+    if (
+      file.size >
+      250 * 1024 * 1024
+    ) {
+      setError(copy.submitFailed);
       return;
     }
 
     try {
       setSubmitting(true);
+      setUploadProgress(0);
       setError(null);
       setMessage(null);
+
+      const uploadResponse =
+        await api.post<UploadUrlResponse>(
+          "/video-reviews/upload-url",
+          {
+            fileName:
+              file.name,
+            contentType:
+              file.type,
+            fileSize:
+              file.size,
+          },
+          telegramAuthOptions()
+        );
+
+      if (
+        !uploadResponse ||
+        uploadResponse.success !== true ||
+        !uploadResponse.upload ||
+        typeof uploadResponse.upload
+          .presignedUrl !== "string"
+      ) {
+        throw new Error(
+          "Invalid video upload URL response"
+        );
+      }
+
+      const uploaded =
+        await uploadVideo(
+          file,
+          uploadResponse.upload
+            .presignedUrl
+        );
 
       const response =
         await api.post<CreateReviewResponse>(
           "/video-reviews",
           {
-            exerciseName: exercise,
-            videoUrl: url,
+            exerciseName:
+              exercise,
+
+            videoUrl:
+              `ironage-blob:${uploaded.pathname}`,
+
             athleteNote:
-              athleteNote.trim() || null,
+              athleteNote.trim() ||
+              null,
           },
           telegramAuthOptions()
         );
@@ -493,8 +716,15 @@ export default function SubmitVideoReview({
       }
 
       setExerciseName("");
-      setVideoUrl("");
+      setSelectedVideo(null);
       setAthleteNote("");
+      setUploadProgress(0);
+
+      if (videoInputRef.current) {
+        videoInputRef.current.value =
+          "";
+      }
+
       setMessage(copy.success);
 
       await loadReviews();
@@ -565,18 +795,45 @@ export default function SubmitVideoReview({
             <span>{copy.videoUrl}</span>
 
             <input
-              value={videoUrl}
-              inputMode="url"
-              placeholder={
-                copy.videoUrlPlaceholder
-              }
-              onChange={event =>
-                setVideoUrl(
-                  event.target.value
-                )
-              }
+              ref={videoInputRef}
+              type="file"
+              accept="video/*"
+              disabled={submitting}
+              onChange={event => {
+                const file =
+                  event.target.files?.[0] ??
+                  null;
+
+                setSelectedVideo(file);
+                setUploadProgress(0);
+                setError(null);
+                setMessage(null);
+              }}
             />
+
+            {selectedVideo && (
+              <small className="submit-video-review__file-name">
+                {selectedVideo.name}
+              </small>
+            )}
           </label>
+
+          {submitting &&
+            uploadProgress > 0 && (
+              <div className="submit-video-review__progress">
+                <div
+                  className="submit-video-review__progress-bar"
+                  style={{
+                    width:
+                      `${uploadProgress}%`,
+                  }}
+                />
+
+                <span>
+                  {uploadProgress}%
+                </span>
+              </div>
+            )}
 
           <label>
             <span>{copy.note}</span>
@@ -658,13 +915,17 @@ export default function SubmitVideoReview({
                   </span>
                 </div>
 
-                <a
-                  href={review.videoUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  className="submit-video-review__open-video"
+                  onClick={() => {
+                    void openReviewVideo(
+                      review.id
+                    );
+                  }}
                 >
-                  {copy.openVideo}
-                </a>
+                  ▶ {copy.openVideo}
+                </button>
 
                 <div className="submit-video-review__feedback">
                   <span>

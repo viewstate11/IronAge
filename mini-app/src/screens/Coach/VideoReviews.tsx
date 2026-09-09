@@ -54,6 +54,11 @@ type ReviewResponse = {
   review: VideoReview;
 };
 
+type ViewUrlResponse = {
+  success: boolean;
+  viewUrl: string;
+};
+
 type Copy = {
   eyebrow: string;
   title: string;
@@ -545,6 +550,52 @@ export default function VideoReviews({
     };
   }, [reviews]);
 
+  async function openVideo(
+    reviewId: number
+  ) {
+    try {
+      setActionError(current => ({
+        ...current,
+        [reviewId]: "",
+      }));
+
+      const response =
+        await api.get<ViewUrlResponse>(
+          `/video-reviews/${reviewId}/view-url`,
+          telegramAuthOptions()
+        );
+
+      if (
+        !response ||
+        response.success !== true ||
+        typeof response.viewUrl !==
+          "string" ||
+        !response.viewUrl
+      ) {
+        throw new Error(
+          "Invalid video view response"
+        );
+      }
+
+      window.open(
+        response.viewUrl,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } catch (openError) {
+      console.error(
+        "IRONAGE COACH VIDEO OPEN ERROR:",
+        openError
+      );
+
+      setActionError(current => ({
+        ...current,
+        [reviewId]:
+          copy.failed,
+      }));
+    }
+  }
+
   async function submitReview(
     reviewId: number,
     status:
@@ -800,14 +851,17 @@ export default function VideoReviews({
                     </p>
                   </div>
 
-                  <a
+                  <button
+                    type="button"
                     className="video-review-card__video"
-                    href={review.videoUrl}
-                    target="_blank"
-                    rel="noreferrer"
+                    onClick={() => {
+                      void openVideo(
+                        review.id
+                      );
+                    }}
                   >
                     ▶ {copy.openVideo}
-                  </a>
+                  </button>
 
                   <label className="video-review-card__feedback">
                     <span>

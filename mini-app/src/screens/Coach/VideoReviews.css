@@ -220,6 +220,12 @@
 }
 
 .video-review-card__video {
+  padding-left: 0;
+  padding-right: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
