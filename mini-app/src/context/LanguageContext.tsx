@@ -4481,6 +4481,197 @@ const translations:
   },
 
   /* =====================================================
+     PAYMENTS
+  ===================================================== */
+
+  "payments.title": {
+    en: "PAYMENTS",
+    es: "PAGOS",
+    uk: "ПЛАТЕЖІ",
+    ru: "ПЛАТЕЖИ",
+    fr: "PAIEMENTS",
+    de: "ZAHLUNGEN",
+    pt: "PAGAMENTOS",
+    bg: "ПЛАЩАНИЯ",
+  },
+
+  "payments.subtitle": {
+    en: "PURCHASES · SUBSCRIPTIONS · TRANSACTIONS",
+    es: "COMPRAS · SUSCRIPCIONES · TRANSACCIONES",
+    uk: "ПОКУПКИ · ПІДПИСКИ · ТРАНЗАКЦІЇ",
+    ru: "ПОКУПКИ · ПОДПИСКИ · ТРАНЗАКЦИИ",
+    fr: "ACHATS · ABONNEMENTS · TRANSACTIONS",
+    de: "KÄUFE · ABOS · TRANSAKTIONEN",
+    pt: "COMPRAS · ASSINATURAS · TRANSAÇÕES",
+    bg: "ПОКУПКИ · АБОНАМЕНТИ · ТРАНЗАКЦИИ",
+  },
+
+  "payments.transactions": {
+    en: "TRANSACTIONS",
+    es: "TRANSACCIONES",
+    uk: "ТРАНЗАКЦІЇ",
+    ru: "ТРАНЗАКЦИИ",
+    fr: "TRANSACTIONS",
+    de: "TRANSAKTIONEN",
+    pt: "TRANSAÇÕES",
+    bg: "ТРАНЗАКЦИИ",
+  },
+
+  "payments.activeSubscriptions": {
+    en: "ACTIVE SUBSCRIPTIONS",
+    es: "SUSCRIPCIONES ACTIVAS",
+    uk: "АКТИВНІ ПІДПИСКИ",
+    ru: "АКТИВНЫЕ ПОДПИСКИ",
+    fr: "ABONNEMENTS ACTIFS",
+    de: "AKTIVE ABOS",
+    pt: "ASSINATURAS ATIVAS",
+    bg: "АКТИВНИ АБОНАМЕНТИ",
+  },
+
+  "payments.programPurchases": {
+    en: "PROGRAM PURCHASES",
+    es: "COMPRAS DE PROGRAMAS",
+    uk: "ПОКУПКИ ПРОГРАМ",
+    ru: "ПОКУПКИ ПРОГРАММ",
+    fr: "ACHATS DE PROGRAMMES",
+    de: "PROGRAMMKÄUFE",
+    pt: "COMPRAS DE PROGRAMAS",
+    bg: "ПОКУПКИ НА ПРОГРАМИ",
+  },
+
+  "payments.history": {
+    en: "PAYMENT HISTORY",
+    es: "HISTORIAL DE PAGOS",
+    uk: "ІСТОРІЯ ПЛАТЕЖІВ",
+    ru: "ИСТОРИЯ ПЛАТЕЖЕЙ",
+    fr: "HISTORIQUE DES PAIEMENTS",
+    de: "ZAHLUNGSVERLAUF",
+    pt: "HISTÓRICO DE PAGAMENTOS",
+    bg: "ИСТОРИЯ НА ПЛАЩАНИЯТА",
+  },
+
+  "payments.subscription": {
+    en: "PREMIUM SUBSCRIPTION",
+    es: "SUSCRIPCIÓN PREMIUM",
+    uk: "PREMIUM ПІДПИСКА",
+    ru: "PREMIUM ПОДПИСКА",
+    fr: "ABONNEMENT PREMIUM",
+    de: "PREMIUM-ABO",
+    pt: "ASSINATURA PREMIUM",
+    bg: "PREMIUM АБОНАМЕНТ",
+  },
+
+  "payments.program": {
+    en: "PROGRAM PURCHASE",
+    es: "COMPRA DE PROGRAMA",
+    uk: "ПОКУПКА ПРОГРАМИ",
+    ru: "ПОКУПКА ПРОГРАММЫ",
+    fr: "ACHAT DE PROGRAMME",
+    de: "PROGRAMMKAUF",
+    pt: "COMPRA DE PROGRAMA",
+    bg: "ПОКУПКА НА ПРОГРАМА",
+  },
+
+  "payments.date": {
+    en: "DATE",
+    es: "FECHA",
+    uk: "ДАТА",
+    ru: "ДАТА",
+    fr: "DATE",
+    de: "DATUM",
+    pt: "DATA",
+    bg: "ДАТА",
+  },
+
+  "payments.expires": {
+    en: "EXPIRES",
+    es: "VENCE",
+    uk: "ДІЄ ДО",
+    ru: "ДЕЙСТВУЕТ ДО",
+    fr: "EXPIRE",
+    de: "LÄUFT AB",
+    pt: "EXPIRA",
+    bg: "ИЗТИЧА",
+  },
+
+  "payments.provider": {
+    en: "PROVIDER",
+    es: "PROVEEDOR",
+    uk: "ПРОВАЙДЕР",
+    ru: "ПРОВАЙДЕР",
+    fr: "FOURNISSEUR",
+    de: "ANBIETER",
+    pt: "PROVEDOR",
+    bg: "ДОСТАВЧИК",
+  },
+
+  "payments.platform": {
+    en: "PLATFORM",
+    es: "PLATAFORMA",
+    uk: "ПЛАТФОРМА",
+    ru: "ПЛАТФОРМА",
+    fr: "PLATEFORME",
+    de: "PLATTFORM",
+    pt: "PLATAFORMA",
+    bg: "ПЛАТФОРМА",
+  },
+
+  "payments.currency": {
+    en: "CURRENCY",
+    es: "MONEDA",
+    uk: "ВАЛЮТА",
+    ru: "ВАЛЮТА",
+    fr: "DEVISE",
+    de: "WÄHRUNG",
+    pt: "MOEDA",
+    bg: "ВАЛУТА",
+  },
+
+  "payments.transaction": {
+    en: "TRANSACTION ID",
+    es: "ID DE TRANSACCIÓN",
+    uk: "ID ТРАНЗАКЦІЇ",
+    ru: "ID ТРАНЗАКЦИИ",
+    fr: "ID DE TRANSACTION",
+    de: "TRANSAKTIONS-ID",
+    pt: "ID DA TRANSAÇÃO",
+    bg: "ID НА ТРАНЗАКЦИЯТА",
+  },
+
+  "payments.emptyTitle": {
+    en: "NO PAYMENTS YET",
+    es: "AÚN NO HAY PAGOS",
+    uk: "ПЛАТЕЖІВ ЩЕ НЕМАЄ",
+    ru: "ПЛАТЕЖЕЙ ПОКА НЕТ",
+    fr: "AUCUN PAIEMENT",
+    de: "NOCH KEINE ZAHLUNGEN",
+    pt: "AINDA NÃO HÁ PAGAMENTOS",
+    bg: "ВСЕ ОЩЕ НЯМА ПЛАЩАНИЯ",
+  },
+
+  "payments.emptyDescription": {
+    en: "Your subscriptions and program purchases will appear here.",
+    es: "Tus suscripciones y compras de programas aparecerán aquí.",
+    uk: "Твої підписки та покупки програм з’являться тут.",
+    ru: "Твои подписки и покупки программ появятся здесь.",
+    fr: "Vos abonnements et achats de programmes apparaîtront ici.",
+    de: "Deine Abos und Programmkäufe erscheinen hier.",
+    pt: "Suas assinaturas e compras de programas aparecerão aqui.",
+    bg: "Абонаментите и покупките на програми ще се появят тук.",
+  },
+
+  "payments.loadFailed": {
+    en: "Could not load payment history.",
+    es: "No se pudo cargar el historial de pagos.",
+    uk: "Не вдалося завантажити історію платежів.",
+    ru: "Не удалось загрузить историю платежей.",
+    fr: "Impossible de charger l’historique des paiements.",
+    de: "Zahlungsverlauf konnte nicht geladen werden.",
+    pt: "Não foi possível carregar o histórico de pagamentos.",
+    bg: "Историята на плащанията не можа да бъде заредена.",
+  },
+
+  /* =====================================================
      APP
   ===================================================== */
 

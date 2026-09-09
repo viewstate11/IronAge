@@ -15,6 +15,7 @@ import ProfileFeature from "./ProfileFeature";
 import EditProfile from "./EditProfile";
 import Settings from "./Settings";
 import Notifications from "./Notifications";
+import Payments from "./Payments";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
 import TabBar from "./TabBar";
@@ -67,6 +68,7 @@ type AppScreen =
   | "edit-profile"
   | "settings"
   | "notifications"
+  | "payments"
   | "programs"
   | "program-details"
   | "privacy"
@@ -720,9 +722,8 @@ export default function MainApp() {
             }}
 
             onOpenPayments={() => {
-              openProfileFeature(
-                "PAYMENTS",
-                "Purchases, subscriptions, receipts and payment history."
+              setScreen(
+                "payments"
               );
             }}
 
@@ -950,6 +951,17 @@ export default function MainApp() {
           <TermsPage
             onBack={() => {
               setScreen("profile");
+            }}
+          />
+        )}
+
+
+        {screen === "payments" && (
+          <Payments
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
             }}
           />
         )}

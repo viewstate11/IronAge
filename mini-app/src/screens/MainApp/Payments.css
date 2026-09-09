@@ -1,0 +1,227 @@
+.payments-screen {
+  min-height: 100dvh;
+  padding: 24px 18px 70px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(212, 175, 55, 0.08),
+      transparent 34%
+    ),
+    #050505;
+  color: #ffffff;
+}
+
+.payments-screen__shell {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.payments-screen__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.payments-screen__back {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 14px;
+  background: #0a0a0a;
+  color: #d4af37;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.payments-screen__header span {
+  display: block;
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.payments-screen__header h1 {
+  margin: 6px 0 0;
+  font-size: clamp(30px, 8vw, 46px);
+  line-height: 1;
+}
+
+.payments-screen__header p {
+  margin: 10px 0 0;
+  color: #8f8f8f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.payments-screen__stats {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.payments-screen__stats article {
+  min-height: 92px;
+  padding: 14px;
+  box-sizing: border-box;
+  border: 1px solid #202020;
+  border-radius: 16px;
+  background: #0a0a0a;
+}
+
+.payments-screen__stats span {
+  display: block;
+  min-height: 30px;
+  color: #777777;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+}
+
+.payments-screen__stats strong {
+  display: block;
+  margin-top: 8px;
+  color: #d4af37;
+  font-size: 24px;
+}
+
+.payments-screen__section {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.payments-screen__section-title {
+  margin-bottom: 2px;
+  color: #777777;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.payments-screen__state {
+  display: grid;
+  gap: 7px;
+  padding: 22px 18px;
+  border: 1px solid #202020;
+  border-radius: 16px;
+  background: #0a0a0a;
+  color: #8f8f8f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.payments-screen__state strong {
+  color: #ffffff;
+}
+
+.payments-screen__state--error {
+  border-color:
+    rgba(255, 90, 90, 0.3);
+}
+
+.payments-screen__card {
+  padding: 18px;
+  border: 1px solid #202020;
+  border-radius: 18px;
+  background: #0a0a0a;
+}
+
+.payments-screen__card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.payments-screen__type {
+  display: block;
+  margin-bottom: 5px;
+  color: #d4af37;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+}
+
+.payments-screen__card h2 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.payments-screen__status,
+.payments-screen__amount {
+  flex: 0 0 auto;
+  color: #8f8f8f;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.payments-screen__status--active,
+.payments-screen__amount {
+  color: #d4af37;
+}
+
+.payments-screen__details {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #1d1d1d;
+}
+
+.payments-screen__details div {
+  display: grid;
+  gap: 4px;
+}
+
+.payments-screen__details span,
+.payments-screen__transaction span {
+  color: #686868;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.payments-screen__details strong {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.payments-screen__transaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #1d1d1d;
+}
+
+.payments-screen__transaction strong {
+  overflow-wrap: anywhere;
+  color: #a8a8a8;
+  font-size: 10px;
+}
+
+@media (max-width: 520px) {
+  .payments-screen__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .payments-screen__stats article {
+    min-height: 0;
+  }
+
+  .payments-screen__stats span {
+    min-height: 0;
+  }
+}

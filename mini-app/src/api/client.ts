@@ -148,6 +148,77 @@ export type AuthMode =
   | "telegram"
   | "web";
 
+
+/* =========================================================
+   PAYMENTS API
+========================================================= */
+
+export type PaymentSubscription = {
+  id: number;
+  provider: string;
+  platform: string;
+  productId: string;
+  plan: string;
+  status: string;
+  transactionId: string | null;
+  originalTransactionId: string | null;
+  purchasedAt: string | null;
+  expiresAt: string | null;
+  lastVerifiedAt: string | null;
+  createdAt: string;
+};
+
+export type ProgramPayment = {
+  id: number;
+  provider: string;
+  platform: string;
+  productId: string;
+  transactionId: string;
+  originalTransactionId: string | null;
+  amountCents: number | null;
+  currency: string | null;
+  purchasedAt: string;
+  verifiedAt: string;
+  createdAt: string;
+
+  program: {
+    id: number;
+    name: string;
+  };
+};
+
+export type MyPaymentsResponse = {
+  success: boolean;
+  subscriptions: PaymentSubscription[];
+  programPurchases: ProgramPayment[];
+};
+
+export async function getMyPayments():
+  Promise<MyPaymentsResponse> {
+  const response =
+    await api.get<MyPaymentsResponse>(
+      "/payments/me",
+      telegramAuthOptions()
+    );
+
+  if (
+    !response ||
+    response.success !== true ||
+    !Array.isArray(
+      response.subscriptions
+    ) ||
+    !Array.isArray(
+      response.programPurchases
+    )
+  ) {
+    throw new Error(
+      "Invalid payments response from API"
+    );
+  }
+
+  return response;
+}
+
 /* =========================================================
    PREMIUM API
 ========================================================= */
