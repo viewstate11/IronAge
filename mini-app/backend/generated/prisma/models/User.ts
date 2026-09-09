@@ -386,6 +386,8 @@ export type UserWhereInput = {
   authIdentities?: Prisma.AuthIdentityListRelationFilter
   authSessions?: Prisma.AuthSessionListRelationFilter
   emailVerificationTokens?: Prisma.EmailVerificationTokenListRelationFilter
+  videoReviewsAsClient?: Prisma.VideoReviewListRelationFilter
+  videoReviewsAsCoach?: Prisma.VideoReviewListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -427,6 +429,8 @@ export type UserOrderByWithRelationInput = {
   authIdentities?: Prisma.AuthIdentityOrderByRelationAggregateInput
   authSessions?: Prisma.AuthSessionOrderByRelationAggregateInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenOrderByRelationAggregateInput
+  videoReviewsAsClient?: Prisma.VideoReviewOrderByRelationAggregateInput
+  videoReviewsAsCoach?: Prisma.VideoReviewOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -471,6 +475,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   authIdentities?: Prisma.AuthIdentityListRelationFilter
   authSessions?: Prisma.AuthSessionListRelationFilter
   emailVerificationTokens?: Prisma.EmailVerificationTokenListRelationFilter
+  videoReviewsAsClient?: Prisma.VideoReviewListRelationFilter
+  videoReviewsAsCoach?: Prisma.VideoReviewListRelationFilter
 }, "id" | "telegramId" | "webId">
 
 export type UserOrderByWithAggregationInput = {
@@ -565,6 +571,8 @@ export type UserCreateInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -606,6 +614,8 @@ export type UserUncheckedCreateInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserUpdateInput = {
@@ -646,6 +656,8 @@ export type UserUpdateInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -687,6 +699,8 @@ export type UserUncheckedUpdateInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -1014,6 +1028,34 @@ export type UserUpdateOneRequiredWithoutWorkoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkoutSessionsInput, Prisma.UserUpdateWithoutWorkoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutWorkoutSessionsInput>
 }
 
+export type UserCreateNestedOneWithoutVideoReviewsAsClientInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsClientInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsClientInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVideoReviewsAsClientInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutVideoReviewsAsCoachInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsCoachInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsCoachInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVideoReviewsAsCoachInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVideoReviewsAsClientNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsClientInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsClientInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVideoReviewsAsClientInput
+  upsert?: Prisma.UserUpsertWithoutVideoReviewsAsClientInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVideoReviewsAsClientInput, Prisma.UserUpdateWithoutVideoReviewsAsClientInput>, Prisma.UserUncheckedUpdateWithoutVideoReviewsAsClientInput>
+}
+
+export type UserUpdateOneRequiredWithoutVideoReviewsAsCoachNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsCoachInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsCoachInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVideoReviewsAsCoachInput
+  upsert?: Prisma.UserUpsertWithoutVideoReviewsAsCoachInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVideoReviewsAsCoachInput, Prisma.UserUpdateWithoutVideoReviewsAsCoachInput>, Prisma.UserUncheckedUpdateWithoutVideoReviewsAsCoachInput>
+}
+
 export type UserCreateNestedOneWithoutProgressInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutProgressInput, Prisma.UserUncheckedCreateWithoutProgressInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutProgressInput
@@ -1209,6 +1251,8 @@ export type UserCreateWithoutCoachProfileInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutCoachProfileInput = {
@@ -1249,6 +1293,8 @@ export type UserUncheckedCreateWithoutCoachProfileInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutCoachProfileInput = {
@@ -1304,6 +1350,8 @@ export type UserUpdateWithoutCoachProfileInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoachProfileInput = {
@@ -1344,6 +1392,8 @@ export type UserUncheckedUpdateWithoutCoachProfileInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutCoachRelationshipsInput = {
@@ -1383,6 +1433,8 @@ export type UserCreateWithoutCoachRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutCoachRelationshipsInput = {
@@ -1423,6 +1475,8 @@ export type UserUncheckedCreateWithoutCoachRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutCoachRelationshipsInput = {
@@ -1467,6 +1521,8 @@ export type UserCreateWithoutClientRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutClientRelationshipsInput = {
@@ -1507,6 +1563,8 @@ export type UserUncheckedCreateWithoutClientRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutClientRelationshipsInput = {
@@ -1562,6 +1620,8 @@ export type UserUpdateWithoutCoachRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoachRelationshipsInput = {
@@ -1602,6 +1662,8 @@ export type UserUncheckedUpdateWithoutCoachRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUpsertWithoutClientRelationshipsInput = {
@@ -1652,6 +1714,8 @@ export type UserUpdateWithoutClientRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutClientRelationshipsInput = {
@@ -1692,6 +1756,8 @@ export type UserUncheckedUpdateWithoutClientRelationshipsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutAuthIdentitiesInput = {
@@ -1731,6 +1797,8 @@ export type UserCreateWithoutAuthIdentitiesInput = {
   programPurchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutAuthIdentitiesInput = {
@@ -1771,6 +1839,8 @@ export type UserUncheckedCreateWithoutAuthIdentitiesInput = {
   programPurchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutAuthIdentitiesInput = {
@@ -1826,6 +1896,8 @@ export type UserUpdateWithoutAuthIdentitiesInput = {
   programPurchases?: Prisma.ProgramPurchaseUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthIdentitiesInput = {
@@ -1866,6 +1938,8 @@ export type UserUncheckedUpdateWithoutAuthIdentitiesInput = {
   programPurchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutEmailVerificationTokensInput = {
@@ -1905,6 +1979,8 @@ export type UserCreateWithoutEmailVerificationTokensInput = {
   programPurchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutUserInput
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutEmailVerificationTokensInput = {
@@ -1945,6 +2021,8 @@ export type UserUncheckedCreateWithoutEmailVerificationTokensInput = {
   programPurchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutUserInput
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutEmailVerificationTokensInput = {
@@ -2000,6 +2078,8 @@ export type UserUpdateWithoutEmailVerificationTokensInput = {
   programPurchases?: Prisma.ProgramPurchaseUpdateManyWithoutUserNestedInput
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmailVerificationTokensInput = {
@@ -2040,6 +2120,8 @@ export type UserUncheckedUpdateWithoutEmailVerificationTokensInput = {
   programPurchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutUserNestedInput
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutAuthSessionsInput = {
@@ -2079,6 +2161,8 @@ export type UserCreateWithoutAuthSessionsInput = {
   programPurchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutUserInput
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutAuthSessionsInput = {
@@ -2119,6 +2203,8 @@ export type UserUncheckedCreateWithoutAuthSessionsInput = {
   programPurchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutUserInput
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutAuthSessionsInput = {
@@ -2174,6 +2260,8 @@ export type UserUpdateWithoutAuthSessionsInput = {
   programPurchases?: Prisma.ProgramPurchaseUpdateManyWithoutUserNestedInput
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthSessionsInput = {
@@ -2214,6 +2302,8 @@ export type UserUncheckedUpdateWithoutAuthSessionsInput = {
   programPurchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutUserNestedInput
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutWorkoutSessionsInput = {
@@ -2253,6 +2343,8 @@ export type UserCreateWithoutWorkoutSessionsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutWorkoutSessionsInput = {
@@ -2293,6 +2385,8 @@ export type UserUncheckedCreateWithoutWorkoutSessionsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutWorkoutSessionsInput = {
@@ -2348,6 +2442,8 @@ export type UserUpdateWithoutWorkoutSessionsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkoutSessionsInput = {
@@ -2388,6 +2484,372 @@ export type UserUncheckedUpdateWithoutWorkoutSessionsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
+}
+
+export type UserCreateWithoutVideoReviewsAsClientInput = {
+  telegramId?: bigint | number | null
+  username?: string | null
+  firstName: string
+  lastName?: string | null
+  languageCode?: string | null
+  age?: number | null
+  gender?: $Enums.Gender | null
+  weight?: number | null
+  height?: number | null
+  goal?: $Enums.Goal | null
+  onboardingCompleted?: boolean
+  level?: number
+  xp?: number
+  workouts?: number
+  streak?: number
+  premiumPlan?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  webId?: string | null
+  nutritionDays?: Prisma.NutritionDayCreateNestedManyWithoutUserInput
+  progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionCreateNestedManyWithoutUserInput
+  coachProfile?: Prisma.CoachProfileCreateNestedOneWithoutUserInput
+  coachRelationships?: Prisma.CoachClientCreateNestedManyWithoutCoachInput
+  coachInvites?: Prisma.CoachInviteCreateNestedManyWithoutCoachInput
+  clientRelationships?: Prisma.CoachClientCreateNestedManyWithoutClientInput
+  trainingWorkouts?: Prisma.TrainingWorkoutCreateNestedManyWithoutCoachInput
+  trainingPrograms?: Prisma.TrainingProgramCreateNestedManyWithoutCoachInput
+  approvedPrograms?: Prisma.TrainingProgramCreateNestedManyWithoutApprovedByUserInput
+  programAssignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutClientInput
+  assignedPrograms?: Prisma.ProgramAssignmentCreateNestedManyWithoutCoachInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  programEntitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutUserInput
+  programPurchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
+  authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
+}
+
+export type UserUncheckedCreateWithoutVideoReviewsAsClientInput = {
+  id?: number
+  telegramId?: bigint | number | null
+  username?: string | null
+  firstName: string
+  lastName?: string | null
+  languageCode?: string | null
+  age?: number | null
+  gender?: $Enums.Gender | null
+  weight?: number | null
+  height?: number | null
+  goal?: $Enums.Goal | null
+  onboardingCompleted?: boolean
+  level?: number
+  xp?: number
+  workouts?: number
+  streak?: number
+  premiumPlan?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  webId?: string | null
+  nutritionDays?: Prisma.NutritionDayUncheckedCreateNestedManyWithoutUserInput
+  progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedCreateNestedManyWithoutUserInput
+  coachProfile?: Prisma.CoachProfileUncheckedCreateNestedOneWithoutUserInput
+  coachRelationships?: Prisma.CoachClientUncheckedCreateNestedManyWithoutCoachInput
+  coachInvites?: Prisma.CoachInviteUncheckedCreateNestedManyWithoutCoachInput
+  clientRelationships?: Prisma.CoachClientUncheckedCreateNestedManyWithoutClientInput
+  trainingWorkouts?: Prisma.TrainingWorkoutUncheckedCreateNestedManyWithoutCoachInput
+  trainingPrograms?: Prisma.TrainingProgramUncheckedCreateNestedManyWithoutCoachInput
+  approvedPrograms?: Prisma.TrainingProgramUncheckedCreateNestedManyWithoutApprovedByUserInput
+  programAssignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutClientInput
+  assignedPrograms?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutCoachInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  programEntitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutUserInput
+  programPurchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
+  authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
+}
+
+export type UserCreateOrConnectWithoutVideoReviewsAsClientInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsClientInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsClientInput>
+}
+
+export type UserCreateWithoutVideoReviewsAsCoachInput = {
+  telegramId?: bigint | number | null
+  username?: string | null
+  firstName: string
+  lastName?: string | null
+  languageCode?: string | null
+  age?: number | null
+  gender?: $Enums.Gender | null
+  weight?: number | null
+  height?: number | null
+  goal?: $Enums.Goal | null
+  onboardingCompleted?: boolean
+  level?: number
+  xp?: number
+  workouts?: number
+  streak?: number
+  premiumPlan?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  webId?: string | null
+  nutritionDays?: Prisma.NutritionDayCreateNestedManyWithoutUserInput
+  progress?: Prisma.ProgressCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionCreateNestedManyWithoutUserInput
+  coachProfile?: Prisma.CoachProfileCreateNestedOneWithoutUserInput
+  coachRelationships?: Prisma.CoachClientCreateNestedManyWithoutCoachInput
+  coachInvites?: Prisma.CoachInviteCreateNestedManyWithoutCoachInput
+  clientRelationships?: Prisma.CoachClientCreateNestedManyWithoutClientInput
+  trainingWorkouts?: Prisma.TrainingWorkoutCreateNestedManyWithoutCoachInput
+  trainingPrograms?: Prisma.TrainingProgramCreateNestedManyWithoutCoachInput
+  approvedPrograms?: Prisma.TrainingProgramCreateNestedManyWithoutApprovedByUserInput
+  programAssignments?: Prisma.ProgramAssignmentCreateNestedManyWithoutClientInput
+  assignedPrograms?: Prisma.ProgramAssignmentCreateNestedManyWithoutCoachInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  programEntitlements?: Prisma.ProgramEntitlementCreateNestedManyWithoutUserInput
+  programPurchases?: Prisma.ProgramPurchaseCreateNestedManyWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
+  authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+}
+
+export type UserUncheckedCreateWithoutVideoReviewsAsCoachInput = {
+  id?: number
+  telegramId?: bigint | number | null
+  username?: string | null
+  firstName: string
+  lastName?: string | null
+  languageCode?: string | null
+  age?: number | null
+  gender?: $Enums.Gender | null
+  weight?: number | null
+  height?: number | null
+  goal?: $Enums.Goal | null
+  onboardingCompleted?: boolean
+  level?: number
+  xp?: number
+  workouts?: number
+  streak?: number
+  premiumPlan?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  webId?: string | null
+  nutritionDays?: Prisma.NutritionDayUncheckedCreateNestedManyWithoutUserInput
+  progress?: Prisma.ProgressUncheckedCreateNestedManyWithoutUserInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedCreateNestedManyWithoutUserInput
+  coachProfile?: Prisma.CoachProfileUncheckedCreateNestedOneWithoutUserInput
+  coachRelationships?: Prisma.CoachClientUncheckedCreateNestedManyWithoutCoachInput
+  coachInvites?: Prisma.CoachInviteUncheckedCreateNestedManyWithoutCoachInput
+  clientRelationships?: Prisma.CoachClientUncheckedCreateNestedManyWithoutClientInput
+  trainingWorkouts?: Prisma.TrainingWorkoutUncheckedCreateNestedManyWithoutCoachInput
+  trainingPrograms?: Prisma.TrainingProgramUncheckedCreateNestedManyWithoutCoachInput
+  approvedPrograms?: Prisma.TrainingProgramUncheckedCreateNestedManyWithoutApprovedByUserInput
+  programAssignments?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutClientInput
+  assignedPrograms?: Prisma.ProgramAssignmentUncheckedCreateNestedManyWithoutCoachInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  programEntitlements?: Prisma.ProgramEntitlementUncheckedCreateNestedManyWithoutUserInput
+  programPurchases?: Prisma.ProgramPurchaseUncheckedCreateNestedManyWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
+  authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+}
+
+export type UserCreateOrConnectWithoutVideoReviewsAsCoachInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsCoachInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsCoachInput>
+}
+
+export type UserUpsertWithoutVideoReviewsAsClientInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVideoReviewsAsClientInput, Prisma.UserUncheckedUpdateWithoutVideoReviewsAsClientInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsClientInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsClientInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVideoReviewsAsClientInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVideoReviewsAsClientInput, Prisma.UserUncheckedUpdateWithoutVideoReviewsAsClientInput>
+}
+
+export type UserUpdateWithoutVideoReviewsAsClientInput = {
+  telegramId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  goal?: Prisma.NullableEnumGoalFieldUpdateOperationsInput | $Enums.Goal | null
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  workouts?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  premiumPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  webId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nutritionDays?: Prisma.NutritionDayUpdateManyWithoutUserNestedInput
+  progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUpdateManyWithoutUserNestedInput
+  coachProfile?: Prisma.CoachProfileUpdateOneWithoutUserNestedInput
+  coachRelationships?: Prisma.CoachClientUpdateManyWithoutCoachNestedInput
+  coachInvites?: Prisma.CoachInviteUpdateManyWithoutCoachNestedInput
+  clientRelationships?: Prisma.CoachClientUpdateManyWithoutClientNestedInput
+  trainingWorkouts?: Prisma.TrainingWorkoutUpdateManyWithoutCoachNestedInput
+  trainingPrograms?: Prisma.TrainingProgramUpdateManyWithoutCoachNestedInput
+  approvedPrograms?: Prisma.TrainingProgramUpdateManyWithoutApprovedByUserNestedInput
+  programAssignments?: Prisma.ProgramAssignmentUpdateManyWithoutClientNestedInput
+  assignedPrograms?: Prisma.ProgramAssignmentUpdateManyWithoutCoachNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  programEntitlements?: Prisma.ProgramEntitlementUpdateManyWithoutUserNestedInput
+  programPurchases?: Prisma.ProgramPurchaseUpdateManyWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
+  authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVideoReviewsAsClientInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  telegramId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  goal?: Prisma.NullableEnumGoalFieldUpdateOperationsInput | $Enums.Goal | null
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  workouts?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  premiumPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  webId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nutritionDays?: Prisma.NutritionDayUncheckedUpdateManyWithoutUserNestedInput
+  progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  coachProfile?: Prisma.CoachProfileUncheckedUpdateOneWithoutUserNestedInput
+  coachRelationships?: Prisma.CoachClientUncheckedUpdateManyWithoutCoachNestedInput
+  coachInvites?: Prisma.CoachInviteUncheckedUpdateManyWithoutCoachNestedInput
+  clientRelationships?: Prisma.CoachClientUncheckedUpdateManyWithoutClientNestedInput
+  trainingWorkouts?: Prisma.TrainingWorkoutUncheckedUpdateManyWithoutCoachNestedInput
+  trainingPrograms?: Prisma.TrainingProgramUncheckedUpdateManyWithoutCoachNestedInput
+  approvedPrograms?: Prisma.TrainingProgramUncheckedUpdateManyWithoutApprovedByUserNestedInput
+  programAssignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutClientNestedInput
+  assignedPrograms?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutCoachNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  programEntitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutUserNestedInput
+  programPurchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
+  authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
+}
+
+export type UserUpsertWithoutVideoReviewsAsCoachInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVideoReviewsAsCoachInput, Prisma.UserUncheckedUpdateWithoutVideoReviewsAsCoachInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVideoReviewsAsCoachInput, Prisma.UserUncheckedCreateWithoutVideoReviewsAsCoachInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVideoReviewsAsCoachInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVideoReviewsAsCoachInput, Prisma.UserUncheckedUpdateWithoutVideoReviewsAsCoachInput>
+}
+
+export type UserUpdateWithoutVideoReviewsAsCoachInput = {
+  telegramId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  goal?: Prisma.NullableEnumGoalFieldUpdateOperationsInput | $Enums.Goal | null
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  workouts?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  premiumPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  webId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nutritionDays?: Prisma.NutritionDayUpdateManyWithoutUserNestedInput
+  progress?: Prisma.ProgressUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUpdateManyWithoutUserNestedInput
+  coachProfile?: Prisma.CoachProfileUpdateOneWithoutUserNestedInput
+  coachRelationships?: Prisma.CoachClientUpdateManyWithoutCoachNestedInput
+  coachInvites?: Prisma.CoachInviteUpdateManyWithoutCoachNestedInput
+  clientRelationships?: Prisma.CoachClientUpdateManyWithoutClientNestedInput
+  trainingWorkouts?: Prisma.TrainingWorkoutUpdateManyWithoutCoachNestedInput
+  trainingPrograms?: Prisma.TrainingProgramUpdateManyWithoutCoachNestedInput
+  approvedPrograms?: Prisma.TrainingProgramUpdateManyWithoutApprovedByUserNestedInput
+  programAssignments?: Prisma.ProgramAssignmentUpdateManyWithoutClientNestedInput
+  assignedPrograms?: Prisma.ProgramAssignmentUpdateManyWithoutCoachNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  programEntitlements?: Prisma.ProgramEntitlementUpdateManyWithoutUserNestedInput
+  programPurchases?: Prisma.ProgramPurchaseUpdateManyWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
+  authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVideoReviewsAsCoachInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  telegramId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  languageCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+  weight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  goal?: Prisma.NullableEnumGoalFieldUpdateOperationsInput | $Enums.Goal | null
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  workouts?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  premiumPlan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  webId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nutritionDays?: Prisma.NutritionDayUncheckedUpdateManyWithoutUserNestedInput
+  progress?: Prisma.ProgressUncheckedUpdateManyWithoutUserNestedInput
+  workoutSessions?: Prisma.WorkoutSessionUncheckedUpdateManyWithoutUserNestedInput
+  coachProfile?: Prisma.CoachProfileUncheckedUpdateOneWithoutUserNestedInput
+  coachRelationships?: Prisma.CoachClientUncheckedUpdateManyWithoutCoachNestedInput
+  coachInvites?: Prisma.CoachInviteUncheckedUpdateManyWithoutCoachNestedInput
+  clientRelationships?: Prisma.CoachClientUncheckedUpdateManyWithoutClientNestedInput
+  trainingWorkouts?: Prisma.TrainingWorkoutUncheckedUpdateManyWithoutCoachNestedInput
+  trainingPrograms?: Prisma.TrainingProgramUncheckedUpdateManyWithoutCoachNestedInput
+  approvedPrograms?: Prisma.TrainingProgramUncheckedUpdateManyWithoutApprovedByUserNestedInput
+  programAssignments?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutClientNestedInput
+  assignedPrograms?: Prisma.ProgramAssignmentUncheckedUpdateManyWithoutCoachNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  programEntitlements?: Prisma.ProgramEntitlementUncheckedUpdateManyWithoutUserNestedInput
+  programPurchases?: Prisma.ProgramPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
+  authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
 }
 
 export type UserCreateWithoutProgressInput = {
@@ -2427,6 +2889,8 @@ export type UserCreateWithoutProgressInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutProgressInput = {
@@ -2467,6 +2931,8 @@ export type UserUncheckedCreateWithoutProgressInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutProgressInput = {
@@ -2522,6 +2988,8 @@ export type UserUpdateWithoutProgressInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgressInput = {
@@ -2562,6 +3030,8 @@ export type UserUncheckedUpdateWithoutProgressInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutNutritionDaysInput = {
@@ -2601,6 +3071,8 @@ export type UserCreateWithoutNutritionDaysInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutNutritionDaysInput = {
@@ -2641,6 +3113,8 @@ export type UserUncheckedCreateWithoutNutritionDaysInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutNutritionDaysInput = {
@@ -2696,6 +3170,8 @@ export type UserUpdateWithoutNutritionDaysInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNutritionDaysInput = {
@@ -2736,6 +3212,8 @@ export type UserUncheckedUpdateWithoutNutritionDaysInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutTrainingWorkoutsInput = {
@@ -2775,6 +3253,8 @@ export type UserCreateWithoutTrainingWorkoutsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutTrainingWorkoutsInput = {
@@ -2815,6 +3295,8 @@ export type UserUncheckedCreateWithoutTrainingWorkoutsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutTrainingWorkoutsInput = {
@@ -2870,6 +3352,8 @@ export type UserUpdateWithoutTrainingWorkoutsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTrainingWorkoutsInput = {
@@ -2910,6 +3394,8 @@ export type UserUncheckedUpdateWithoutTrainingWorkoutsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutTrainingProgramsInput = {
@@ -2949,6 +3435,8 @@ export type UserCreateWithoutTrainingProgramsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutTrainingProgramsInput = {
@@ -2989,6 +3477,8 @@ export type UserUncheckedCreateWithoutTrainingProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutTrainingProgramsInput = {
@@ -3033,6 +3523,8 @@ export type UserCreateWithoutApprovedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutApprovedProgramsInput = {
@@ -3073,6 +3565,8 @@ export type UserUncheckedCreateWithoutApprovedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutApprovedProgramsInput = {
@@ -3128,6 +3622,8 @@ export type UserUpdateWithoutTrainingProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTrainingProgramsInput = {
@@ -3168,6 +3664,8 @@ export type UserUncheckedUpdateWithoutTrainingProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUpsertWithoutApprovedProgramsInput = {
@@ -3218,6 +3716,8 @@ export type UserUpdateWithoutApprovedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovedProgramsInput = {
@@ -3258,6 +3758,8 @@ export type UserUncheckedUpdateWithoutApprovedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutProgramPurchasesInput = {
@@ -3297,6 +3799,8 @@ export type UserCreateWithoutProgramPurchasesInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutProgramPurchasesInput = {
@@ -3337,6 +3841,8 @@ export type UserUncheckedCreateWithoutProgramPurchasesInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutProgramPurchasesInput = {
@@ -3392,6 +3898,8 @@ export type UserUpdateWithoutProgramPurchasesInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgramPurchasesInput = {
@@ -3432,6 +3940,8 @@ export type UserUncheckedUpdateWithoutProgramPurchasesInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutProgramEntitlementsInput = {
@@ -3471,6 +3981,8 @@ export type UserCreateWithoutProgramEntitlementsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutProgramEntitlementsInput = {
@@ -3511,6 +4023,8 @@ export type UserUncheckedCreateWithoutProgramEntitlementsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutProgramEntitlementsInput = {
@@ -3566,6 +4080,8 @@ export type UserUpdateWithoutProgramEntitlementsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgramEntitlementsInput = {
@@ -3606,6 +4122,8 @@ export type UserUncheckedUpdateWithoutProgramEntitlementsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutProgramAssignmentsInput = {
@@ -3645,6 +4163,8 @@ export type UserCreateWithoutProgramAssignmentsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutProgramAssignmentsInput = {
@@ -3685,6 +4205,8 @@ export type UserUncheckedCreateWithoutProgramAssignmentsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutProgramAssignmentsInput = {
@@ -3729,6 +4251,8 @@ export type UserCreateWithoutAssignedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutAssignedProgramsInput = {
@@ -3769,6 +4293,8 @@ export type UserUncheckedCreateWithoutAssignedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutAssignedProgramsInput = {
@@ -3824,6 +4350,8 @@ export type UserUpdateWithoutProgramAssignmentsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgramAssignmentsInput = {
@@ -3864,6 +4392,8 @@ export type UserUncheckedUpdateWithoutProgramAssignmentsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUpsertWithoutAssignedProgramsInput = {
@@ -3914,6 +4444,8 @@ export type UserUpdateWithoutAssignedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedProgramsInput = {
@@ -3954,6 +4486,8 @@ export type UserUncheckedUpdateWithoutAssignedProgramsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutCoachInvitesInput = {
@@ -3993,6 +4527,8 @@ export type UserCreateWithoutCoachInvitesInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutCoachInvitesInput = {
@@ -4033,6 +4569,8 @@ export type UserUncheckedCreateWithoutCoachInvitesInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutCoachInvitesInput = {
@@ -4088,6 +4626,8 @@ export type UserUpdateWithoutCoachInvitesInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoachInvitesInput = {
@@ -4128,6 +4668,8 @@ export type UserUncheckedUpdateWithoutCoachInvitesInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 export type UserCreateWithoutSubscriptionsInput = {
@@ -4167,6 +4709,8 @@ export type UserCreateWithoutSubscriptionsInput = {
   authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewCreateNestedManyWithoutCoachInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -4207,6 +4751,8 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   authSessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedCreateNestedManyWithoutUserInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutClientInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutCoachInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -4262,6 +4808,8 @@ export type UserUpdateWithoutSubscriptionsInput = {
   authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUpdateManyWithoutCoachNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -4302,6 +4850,8 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   authSessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
   emailVerificationTokens?: Prisma.EmailVerificationTokenUncheckedUpdateManyWithoutUserNestedInput
+  videoReviewsAsClient?: Prisma.VideoReviewUncheckedUpdateManyWithoutClientNestedInput
+  videoReviewsAsCoach?: Prisma.VideoReviewUncheckedUpdateManyWithoutCoachNestedInput
 }
 
 
@@ -4327,6 +4877,8 @@ export type UserCountOutputType = {
   authIdentities: number
   authSessions: number
   emailVerificationTokens: number
+  videoReviewsAsClient: number
+  videoReviewsAsCoach: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4347,6 +4899,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   authIdentities?: boolean | UserCountOutputTypeCountAuthIdentitiesArgs
   authSessions?: boolean | UserCountOutputTypeCountAuthSessionsArgs
   emailVerificationTokens?: boolean | UserCountOutputTypeCountEmailVerificationTokensArgs
+  videoReviewsAsClient?: boolean | UserCountOutputTypeCountVideoReviewsAsClientArgs
+  videoReviewsAsCoach?: boolean | UserCountOutputTypeCountVideoReviewsAsCoachArgs
 }
 
 /**
@@ -4478,6 +5032,20 @@ export type UserCountOutputTypeCountEmailVerificationTokensArgs<ExtArgs extends 
   where?: Prisma.EmailVerificationTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVideoReviewsAsClientArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VideoReviewWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVideoReviewsAsCoachArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VideoReviewWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4518,6 +5086,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   authIdentities?: boolean | Prisma.User$authIdentitiesArgs<ExtArgs>
   authSessions?: boolean | Prisma.User$authSessionsArgs<ExtArgs>
   emailVerificationTokens?: boolean | Prisma.User$emailVerificationTokensArgs<ExtArgs>
+  videoReviewsAsClient?: boolean | Prisma.User$videoReviewsAsClientArgs<ExtArgs>
+  videoReviewsAsCoach?: boolean | Prisma.User$videoReviewsAsCoachArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4610,6 +5180,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   authIdentities?: boolean | Prisma.User$authIdentitiesArgs<ExtArgs>
   authSessions?: boolean | Prisma.User$authSessionsArgs<ExtArgs>
   emailVerificationTokens?: boolean | Prisma.User$emailVerificationTokensArgs<ExtArgs>
+  videoReviewsAsClient?: boolean | Prisma.User$videoReviewsAsClientArgs<ExtArgs>
+  videoReviewsAsCoach?: boolean | Prisma.User$videoReviewsAsCoachArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4636,6 +5208,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     authIdentities: Prisma.$AuthIdentityPayload<ExtArgs>[]
     authSessions: Prisma.$AuthSessionPayload<ExtArgs>[]
     emailVerificationTokens: Prisma.$EmailVerificationTokenPayload<ExtArgs>[]
+    videoReviewsAsClient: Prisma.$VideoReviewPayload<ExtArgs>[]
+    videoReviewsAsCoach: Prisma.$VideoReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -5070,6 +5644,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   authIdentities<T extends Prisma.User$authIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authSessions<T extends Prisma.User$authSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailVerificationTokens<T extends Prisma.User$emailVerificationTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailVerificationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailVerificationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  videoReviewsAsClient<T extends Prisma.User$videoReviewsAsClientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$videoReviewsAsClientArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VideoReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  videoReviewsAsCoach<T extends Prisma.User$videoReviewsAsCoachArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$videoReviewsAsCoachArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VideoReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5936,6 +6512,54 @@ export type User$emailVerificationTokensArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.EmailVerificationTokenScalarFieldEnum | Prisma.EmailVerificationTokenScalarFieldEnum[]
+}
+
+/**
+ * User.videoReviewsAsClient
+ */
+export type User$videoReviewsAsClientArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VideoReview
+   */
+  select?: Prisma.VideoReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VideoReview
+   */
+  omit?: Prisma.VideoReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VideoReviewInclude<ExtArgs> | null
+  where?: Prisma.VideoReviewWhereInput
+  orderBy?: Prisma.VideoReviewOrderByWithRelationInput | Prisma.VideoReviewOrderByWithRelationInput[]
+  cursor?: Prisma.VideoReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VideoReviewScalarFieldEnum | Prisma.VideoReviewScalarFieldEnum[]
+}
+
+/**
+ * User.videoReviewsAsCoach
+ */
+export type User$videoReviewsAsCoachArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VideoReview
+   */
+  select?: Prisma.VideoReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VideoReview
+   */
+  omit?: Prisma.VideoReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VideoReviewInclude<ExtArgs> | null
+  where?: Prisma.VideoReviewWhereInput
+  orderBy?: Prisma.VideoReviewOrderByWithRelationInput | Prisma.VideoReviewOrderByWithRelationInput[]
+  cursor?: Prisma.VideoReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VideoReviewScalarFieldEnum | Prisma.VideoReviewScalarFieldEnum[]
 }
 
 /**

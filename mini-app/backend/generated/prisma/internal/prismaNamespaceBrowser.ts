@@ -59,6 +59,7 @@ export const ModelName = {
   AuthSession: 'AuthSession',
   WorkoutSession: 'WorkoutSession',
   WorkoutSet: 'WorkoutSet',
+  VideoReview: 'VideoReview',
   Progress: 'Progress',
   NutritionDay: 'NutritionDay',
   FoodEntry: 'FoodEntry',
@@ -213,6 +214,25 @@ export const WorkoutSetScalarFieldEnum = {
 } as const
 
 export type WorkoutSetScalarFieldEnum = (typeof WorkoutSetScalarFieldEnum)[keyof typeof WorkoutSetScalarFieldEnum]
+
+
+export const VideoReviewScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  coachId: 'coachId',
+  workoutSessionId: 'workoutSessionId',
+  exerciseName: 'exerciseName',
+  videoUrl: 'videoUrl',
+  athleteNote: 'athleteNote',
+  coachFeedback: 'coachFeedback',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VideoReviewScalarFieldEnum = (typeof VideoReviewScalarFieldEnum)[keyof typeof VideoReviewScalarFieldEnum]
 
 
 export const ProgressScalarFieldEnum = {

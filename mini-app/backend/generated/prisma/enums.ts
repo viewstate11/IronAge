@@ -31,6 +31,15 @@ export const ProgramStatus = {
 export type ProgramStatus = (typeof ProgramStatus)[keyof typeof ProgramStatus]
 
 
+export const VideoReviewStatus = {
+  PENDING: 'PENDING',
+  REVIEWED: 'REVIEWED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type VideoReviewStatus = (typeof VideoReviewStatus)[keyof typeof VideoReviewStatus]
+
+
 export const AuthProvider = {
   EMAIL: 'EMAIL',
   GOOGLE: 'GOOGLE',

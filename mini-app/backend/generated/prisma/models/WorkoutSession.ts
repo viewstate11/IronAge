@@ -279,6 +279,7 @@ export type WorkoutSessionWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   sets?: Prisma.WorkoutSetListRelationFilter
   programCompletion?: Prisma.XOR<Prisma.ProgramWorkoutCompletionNullableScalarRelationFilter, Prisma.ProgramWorkoutCompletionWhereInput> | null
+  videoReviews?: Prisma.VideoReviewListRelationFilter
 }
 
 export type WorkoutSessionOrderByWithRelationInput = {
@@ -296,6 +297,7 @@ export type WorkoutSessionOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   sets?: Prisma.WorkoutSetOrderByRelationAggregateInput
   programCompletion?: Prisma.ProgramWorkoutCompletionOrderByWithRelationInput
+  videoReviews?: Prisma.VideoReviewOrderByRelationAggregateInput
 }
 
 export type WorkoutSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -316,6 +318,7 @@ export type WorkoutSessionWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   sets?: Prisma.WorkoutSetListRelationFilter
   programCompletion?: Prisma.XOR<Prisma.ProgramWorkoutCompletionNullableScalarRelationFilter, Prisma.ProgramWorkoutCompletionWhereInput> | null
+  videoReviews?: Prisma.VideoReviewListRelationFilter
 }, "id">
 
 export type WorkoutSessionOrderByWithAggregationInput = {
@@ -367,6 +370,7 @@ export type WorkoutSessionCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutWorkoutSessionsInput
   sets?: Prisma.WorkoutSetCreateNestedManyWithoutWorkoutInput
   programCompletion?: Prisma.ProgramWorkoutCompletionCreateNestedOneWithoutWorkoutSessionInput
+  videoReviews?: Prisma.VideoReviewCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionUncheckedCreateInput = {
@@ -383,6 +387,7 @@ export type WorkoutSessionUncheckedCreateInput = {
   updatedAt?: Date | string
   sets?: Prisma.WorkoutSetUncheckedCreateNestedManyWithoutWorkoutInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedOneWithoutWorkoutSessionInput
+  videoReviews?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionUpdateInput = {
@@ -398,6 +403,7 @@ export type WorkoutSessionUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutWorkoutSessionsNestedInput
   sets?: Prisma.WorkoutSetUpdateManyWithoutWorkoutNestedInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUpdateOneWithoutWorkoutSessionNestedInput
+  videoReviews?: Prisma.VideoReviewUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionUncheckedUpdateInput = {
@@ -414,6 +420,7 @@ export type WorkoutSessionUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sets?: Prisma.WorkoutSetUncheckedUpdateManyWithoutWorkoutNestedInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedUpdateOneWithoutWorkoutSessionNestedInput
+  videoReviews?: Prisma.VideoReviewUncheckedUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionCreateManyInput = {
@@ -527,6 +534,11 @@ export type WorkoutSessionScalarRelationFilter = {
   isNot?: Prisma.WorkoutSessionWhereInput
 }
 
+export type WorkoutSessionNullableScalarRelationFilter = {
+  is?: Prisma.WorkoutSessionWhereInput | null
+  isNot?: Prisma.WorkoutSessionWhereInput | null
+}
+
 export type WorkoutSessionCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutUserInput, Prisma.WorkoutSessionUncheckedCreateWithoutUserInput> | Prisma.WorkoutSessionCreateWithoutUserInput[] | Prisma.WorkoutSessionUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.WorkoutSessionCreateOrConnectWithoutUserInput | Prisma.WorkoutSessionCreateOrConnectWithoutUserInput[]
@@ -591,6 +603,22 @@ export type WorkoutSessionUpdateOneRequiredWithoutSetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkoutSessionUpdateToOneWithWhereWithoutSetsInput, Prisma.WorkoutSessionUpdateWithoutSetsInput>, Prisma.WorkoutSessionUncheckedUpdateWithoutSetsInput>
 }
 
+export type WorkoutSessionCreateNestedOneWithoutVideoReviewsInput = {
+  create?: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutVideoReviewsInput, Prisma.WorkoutSessionUncheckedCreateWithoutVideoReviewsInput>
+  connectOrCreate?: Prisma.WorkoutSessionCreateOrConnectWithoutVideoReviewsInput
+  connect?: Prisma.WorkoutSessionWhereUniqueInput
+}
+
+export type WorkoutSessionUpdateOneWithoutVideoReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutVideoReviewsInput, Prisma.WorkoutSessionUncheckedCreateWithoutVideoReviewsInput>
+  connectOrCreate?: Prisma.WorkoutSessionCreateOrConnectWithoutVideoReviewsInput
+  upsert?: Prisma.WorkoutSessionUpsertWithoutVideoReviewsInput
+  disconnect?: Prisma.WorkoutSessionWhereInput | boolean
+  delete?: Prisma.WorkoutSessionWhereInput | boolean
+  connect?: Prisma.WorkoutSessionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkoutSessionUpdateToOneWithWhereWithoutVideoReviewsInput, Prisma.WorkoutSessionUpdateWithoutVideoReviewsInput>, Prisma.WorkoutSessionUncheckedUpdateWithoutVideoReviewsInput>
+}
+
 export type WorkoutSessionCreateNestedOneWithoutProgramCompletionInput = {
   create?: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutProgramCompletionInput, Prisma.WorkoutSessionUncheckedCreateWithoutProgramCompletionInput>
   connectOrCreate?: Prisma.WorkoutSessionCreateOrConnectWithoutProgramCompletionInput
@@ -617,6 +645,7 @@ export type WorkoutSessionCreateWithoutUserInput = {
   updatedAt?: Date | string
   sets?: Prisma.WorkoutSetCreateNestedManyWithoutWorkoutInput
   programCompletion?: Prisma.ProgramWorkoutCompletionCreateNestedOneWithoutWorkoutSessionInput
+  videoReviews?: Prisma.VideoReviewCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionUncheckedCreateWithoutUserInput = {
@@ -632,6 +661,7 @@ export type WorkoutSessionUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   sets?: Prisma.WorkoutSetUncheckedCreateNestedManyWithoutWorkoutInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedOneWithoutWorkoutSessionInput
+  videoReviews?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionCreateOrConnectWithoutUserInput = {
@@ -689,6 +719,7 @@ export type WorkoutSessionCreateWithoutSetsInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWorkoutSessionsInput
   programCompletion?: Prisma.ProgramWorkoutCompletionCreateNestedOneWithoutWorkoutSessionInput
+  videoReviews?: Prisma.VideoReviewCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionUncheckedCreateWithoutSetsInput = {
@@ -704,6 +735,7 @@ export type WorkoutSessionUncheckedCreateWithoutSetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedOneWithoutWorkoutSessionInput
+  videoReviews?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionCreateOrConnectWithoutSetsInput = {
@@ -734,6 +766,7 @@ export type WorkoutSessionUpdateWithoutSetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWorkoutSessionsNestedInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUpdateOneWithoutWorkoutSessionNestedInput
+  videoReviews?: Prisma.VideoReviewUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionUncheckedUpdateWithoutSetsInput = {
@@ -749,6 +782,85 @@ export type WorkoutSessionUncheckedUpdateWithoutSetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedUpdateOneWithoutWorkoutSessionNestedInput
+  videoReviews?: Prisma.VideoReviewUncheckedUpdateManyWithoutWorkoutSessionNestedInput
+}
+
+export type WorkoutSessionCreateWithoutVideoReviewsInput = {
+  workoutId: string
+  workoutName: string
+  duration?: number
+  xp?: number
+  status?: $Enums.WorkoutStatus
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutWorkoutSessionsInput
+  sets?: Prisma.WorkoutSetCreateNestedManyWithoutWorkoutInput
+  programCompletion?: Prisma.ProgramWorkoutCompletionCreateNestedOneWithoutWorkoutSessionInput
+}
+
+export type WorkoutSessionUncheckedCreateWithoutVideoReviewsInput = {
+  id?: number
+  userId: number
+  workoutId: string
+  workoutName: string
+  duration?: number
+  xp?: number
+  status?: $Enums.WorkoutStatus
+  startedAt?: Date | string | null
+  completedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sets?: Prisma.WorkoutSetUncheckedCreateNestedManyWithoutWorkoutInput
+  programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedCreateNestedOneWithoutWorkoutSessionInput
+}
+
+export type WorkoutSessionCreateOrConnectWithoutVideoReviewsInput = {
+  where: Prisma.WorkoutSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutVideoReviewsInput, Prisma.WorkoutSessionUncheckedCreateWithoutVideoReviewsInput>
+}
+
+export type WorkoutSessionUpsertWithoutVideoReviewsInput = {
+  update: Prisma.XOR<Prisma.WorkoutSessionUpdateWithoutVideoReviewsInput, Prisma.WorkoutSessionUncheckedUpdateWithoutVideoReviewsInput>
+  create: Prisma.XOR<Prisma.WorkoutSessionCreateWithoutVideoReviewsInput, Prisma.WorkoutSessionUncheckedCreateWithoutVideoReviewsInput>
+  where?: Prisma.WorkoutSessionWhereInput
+}
+
+export type WorkoutSessionUpdateToOneWithWhereWithoutVideoReviewsInput = {
+  where?: Prisma.WorkoutSessionWhereInput
+  data: Prisma.XOR<Prisma.WorkoutSessionUpdateWithoutVideoReviewsInput, Prisma.WorkoutSessionUncheckedUpdateWithoutVideoReviewsInput>
+}
+
+export type WorkoutSessionUpdateWithoutVideoReviewsInput = {
+  workoutId?: Prisma.StringFieldUpdateOperationsInput | string
+  workoutName?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumWorkoutStatusFieldUpdateOperationsInput | $Enums.WorkoutStatus
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutWorkoutSessionsNestedInput
+  sets?: Prisma.WorkoutSetUpdateManyWithoutWorkoutNestedInput
+  programCompletion?: Prisma.ProgramWorkoutCompletionUpdateOneWithoutWorkoutSessionNestedInput
+}
+
+export type WorkoutSessionUncheckedUpdateWithoutVideoReviewsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  workoutId?: Prisma.StringFieldUpdateOperationsInput | string
+  workoutName?: Prisma.StringFieldUpdateOperationsInput | string
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumWorkoutStatusFieldUpdateOperationsInput | $Enums.WorkoutStatus
+  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sets?: Prisma.WorkoutSetUncheckedUpdateManyWithoutWorkoutNestedInput
+  programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedUpdateOneWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionCreateWithoutProgramCompletionInput = {
@@ -763,6 +875,7 @@ export type WorkoutSessionCreateWithoutProgramCompletionInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWorkoutSessionsInput
   sets?: Prisma.WorkoutSetCreateNestedManyWithoutWorkoutInput
+  videoReviews?: Prisma.VideoReviewCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionUncheckedCreateWithoutProgramCompletionInput = {
@@ -778,6 +891,7 @@ export type WorkoutSessionUncheckedCreateWithoutProgramCompletionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sets?: Prisma.WorkoutSetUncheckedCreateNestedManyWithoutWorkoutInput
+  videoReviews?: Prisma.VideoReviewUncheckedCreateNestedManyWithoutWorkoutSessionInput
 }
 
 export type WorkoutSessionCreateOrConnectWithoutProgramCompletionInput = {
@@ -808,6 +922,7 @@ export type WorkoutSessionUpdateWithoutProgramCompletionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWorkoutSessionsNestedInput
   sets?: Prisma.WorkoutSetUpdateManyWithoutWorkoutNestedInput
+  videoReviews?: Prisma.VideoReviewUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionUncheckedUpdateWithoutProgramCompletionInput = {
@@ -823,6 +938,7 @@ export type WorkoutSessionUncheckedUpdateWithoutProgramCompletionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sets?: Prisma.WorkoutSetUncheckedUpdateManyWithoutWorkoutNestedInput
+  videoReviews?: Prisma.VideoReviewUncheckedUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionCreateManyUserInput = {
@@ -850,6 +966,7 @@ export type WorkoutSessionUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sets?: Prisma.WorkoutSetUpdateManyWithoutWorkoutNestedInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUpdateOneWithoutWorkoutSessionNestedInput
+  videoReviews?: Prisma.VideoReviewUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionUncheckedUpdateWithoutUserInput = {
@@ -865,6 +982,7 @@ export type WorkoutSessionUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sets?: Prisma.WorkoutSetUncheckedUpdateManyWithoutWorkoutNestedInput
   programCompletion?: Prisma.ProgramWorkoutCompletionUncheckedUpdateOneWithoutWorkoutSessionNestedInput
+  videoReviews?: Prisma.VideoReviewUncheckedUpdateManyWithoutWorkoutSessionNestedInput
 }
 
 export type WorkoutSessionUncheckedUpdateManyWithoutUserInput = {
@@ -887,10 +1005,12 @@ export type WorkoutSessionUncheckedUpdateManyWithoutUserInput = {
 
 export type WorkoutSessionCountOutputType = {
   sets: number
+  videoReviews: number
 }
 
 export type WorkoutSessionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sets?: boolean | WorkoutSessionCountOutputTypeCountSetsArgs
+  videoReviews?: boolean | WorkoutSessionCountOutputTypeCountVideoReviewsArgs
 }
 
 /**
@@ -910,6 +1030,13 @@ export type WorkoutSessionCountOutputTypeCountSetsArgs<ExtArgs extends runtime.T
   where?: Prisma.WorkoutSetWhereInput
 }
 
+/**
+ * WorkoutSessionCountOutputType without action
+ */
+export type WorkoutSessionCountOutputTypeCountVideoReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VideoReviewWhereInput
+}
+
 
 export type WorkoutSessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -926,6 +1053,7 @@ export type WorkoutSessionSelect<ExtArgs extends runtime.Types.Extensions.Intern
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   sets?: boolean | Prisma.WorkoutSession$setsArgs<ExtArgs>
   programCompletion?: boolean | Prisma.WorkoutSession$programCompletionArgs<ExtArgs>
+  videoReviews?: boolean | Prisma.WorkoutSession$videoReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkoutSessionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workoutSession"]>
 
@@ -978,6 +1106,7 @@ export type WorkoutSessionInclude<ExtArgs extends runtime.Types.Extensions.Inter
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   sets?: boolean | Prisma.WorkoutSession$setsArgs<ExtArgs>
   programCompletion?: boolean | Prisma.WorkoutSession$programCompletionArgs<ExtArgs>
+  videoReviews?: boolean | Prisma.WorkoutSession$videoReviewsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkoutSessionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkoutSessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -993,6 +1122,7 @@ export type $WorkoutSessionPayload<ExtArgs extends runtime.Types.Extensions.Inte
     user: Prisma.$UserPayload<ExtArgs>
     sets: Prisma.$WorkoutSetPayload<ExtArgs>[]
     programCompletion: Prisma.$ProgramWorkoutCompletionPayload<ExtArgs> | null
+    videoReviews: Prisma.$VideoReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1403,6 +1533,7 @@ export interface Prisma__WorkoutSessionClient<T, Null = never, ExtArgs extends r
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sets<T extends Prisma.WorkoutSession$setsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkoutSession$setsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkoutSetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   programCompletion<T extends Prisma.WorkoutSession$programCompletionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkoutSession$programCompletionArgs<ExtArgs>>): Prisma.Prisma__ProgramWorkoutCompletionClient<runtime.Types.Result.GetResult<Prisma.$ProgramWorkoutCompletionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  videoReviews<T extends Prisma.WorkoutSession$videoReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkoutSession$videoReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VideoReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1884,6 +2015,30 @@ export type WorkoutSession$programCompletionArgs<ExtArgs extends runtime.Types.E
    */
   include?: Prisma.ProgramWorkoutCompletionInclude<ExtArgs> | null
   where?: Prisma.ProgramWorkoutCompletionWhereInput
+}
+
+/**
+ * WorkoutSession.videoReviews
+ */
+export type WorkoutSession$videoReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VideoReview
+   */
+  select?: Prisma.VideoReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VideoReview
+   */
+  omit?: Prisma.VideoReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VideoReviewInclude<ExtArgs> | null
+  where?: Prisma.VideoReviewWhereInput
+  orderBy?: Prisma.VideoReviewOrderByWithRelationInput | Prisma.VideoReviewOrderByWithRelationInput[]
+  cursor?: Prisma.VideoReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VideoReviewScalarFieldEnum | Prisma.VideoReviewScalarFieldEnum[]
 }
 
 /**

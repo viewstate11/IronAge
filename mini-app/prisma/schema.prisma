@@ -46,6 +46,8 @@ model User {
   authIdentities          AuthIdentity[]
   authSessions            AuthSession[]
   emailVerificationTokens EmailVerificationToken[]
+  videoReviewsAsClient    VideoReview[]            @relation("VideoReviewClient")
+  videoReviewsAsCoach     VideoReview[]            @relation("VideoReviewCoach")
 
   @@index([createdAt])
 }
@@ -96,6 +98,12 @@ enum ProgramStatus {
   APPROVED
   PUBLISHED
   ARCHIVED
+}
+
+enum VideoReviewStatus {
+  PENDING
+  REVIEWED
+  REJECTED
 }
 
 enum AuthProvider {
@@ -164,6 +172,7 @@ model WorkoutSession {
   user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   sets              WorkoutSet[]
   programCompletion ProgramWorkoutCompletion?
+  videoReviews      VideoReview[]
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -184,6 +193,37 @@ model WorkoutSet {
   workout      WorkoutSession @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 
   @@index([workoutId])
+}
+
+model VideoReview {
+  id               Int  @id @default(autoincrement())
+  clientId         Int
+  coachId          Int
+  workoutSessionId Int?
+
+  exerciseName String
+  videoUrl     String
+  athleteNote  String?
+
+  coachFeedback String?
+  status        VideoReviewStatus @default(PENDING)
+
+  submittedAt DateTime  @default(now())
+  reviewedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  client User @relation("VideoReviewClient", fields: [clientId], references: [id], onDelete: Cascade)
+  coach  User @relation("VideoReviewCoach", fields: [coachId], references: [id], onDelete: Cascade)
+
+  workoutSession WorkoutSession? @relation(fields: [workoutSessionId], references: [id], onDelete: SetNull)
+
+  @@index([clientId])
+  @@index([coachId])
+  @@index([status])
+  @@index([coachId, status])
+  @@index([submittedAt])
+  @@index([workoutSessionId])
 }
 
 model Progress {

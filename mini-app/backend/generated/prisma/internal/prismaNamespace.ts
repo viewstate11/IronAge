@@ -405,6 +405,7 @@ export const ModelName = {
   AuthSession: 'AuthSession',
   WorkoutSession: 'WorkoutSession',
   WorkoutSet: 'WorkoutSet',
+  VideoReview: 'VideoReview',
   Progress: 'Progress',
   NutritionDay: 'NutritionDay',
   FoodEntry: 'FoodEntry',
@@ -434,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "coachProfile" | "coachClient" | "authIdentity" | "emailVerificationToken" | "authSession" | "workoutSession" | "workoutSet" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programPurchase" | "programEntitlement" | "programAssignment" | "programWorkoutCompletion" | "coachInvite" | "subscription"
+    modelProps: "user" | "coachProfile" | "coachClient" | "authIdentity" | "emailVerificationToken" | "authSession" | "workoutSession" | "workoutSet" | "videoReview" | "progress" | "nutritionDay" | "foodEntry" | "exercise" | "trainingWorkout" | "workoutExercise" | "trainingProgram" | "programWorkout" | "programPurchase" | "programEntitlement" | "programAssignment" | "programWorkoutCompletion" | "coachInvite" | "subscription"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1027,6 +1028,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.WorkoutSetCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.WorkoutSetCountAggregateOutputType> | number
+        }
+      }
+    }
+    VideoReview: {
+      payload: Prisma.$VideoReviewPayload<ExtArgs>
+      fields: Prisma.VideoReviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VideoReviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VideoReviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>
+        }
+        findFirst: {
+          args: Prisma.VideoReviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VideoReviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>
+        }
+        findMany: {
+          args: Prisma.VideoReviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>[]
+        }
+        create: {
+          args: Prisma.VideoReviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>
+        }
+        createMany: {
+          args: Prisma.VideoReviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VideoReviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>[]
+        }
+        delete: {
+          args: Prisma.VideoReviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>
+        }
+        update: {
+          args: Prisma.VideoReviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.VideoReviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VideoReviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VideoReviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.VideoReviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoReviewPayload>
+        }
+        aggregate: {
+          args: Prisma.VideoReviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVideoReview>
+        }
+        groupBy: {
+          args: Prisma.VideoReviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoReviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VideoReviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoReviewCountAggregateOutputType> | number
         }
       }
     }
@@ -2229,6 +2304,25 @@ export const WorkoutSetScalarFieldEnum = {
 export type WorkoutSetScalarFieldEnum = (typeof WorkoutSetScalarFieldEnum)[keyof typeof WorkoutSetScalarFieldEnum]
 
 
+export const VideoReviewScalarFieldEnum = {
+  id: 'id',
+  clientId: 'clientId',
+  coachId: 'coachId',
+  workoutSessionId: 'workoutSessionId',
+  exerciseName: 'exerciseName',
+  videoUrl: 'videoUrl',
+  athleteNote: 'athleteNote',
+  coachFeedback: 'coachFeedback',
+  status: 'status',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VideoReviewScalarFieldEnum = (typeof VideoReviewScalarFieldEnum)[keyof typeof VideoReviewScalarFieldEnum]
+
+
 export const ProgressScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -2620,6 +2714,20 @@ export type ListEnumWorkoutStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'VideoReviewStatus'
+ */
+export type EnumVideoReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoReviewStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VideoReviewStatus[]'
+ */
+export type ListEnumVideoReviewStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoReviewStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'MealType'
  */
 export type EnumMealTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MealType'>
@@ -2819,6 +2927,7 @@ export type GlobalOmitConfig = {
   authSession?: Prisma.AuthSessionOmit
   workoutSession?: Prisma.WorkoutSessionOmit
   workoutSet?: Prisma.WorkoutSetOmit
+  videoReview?: Prisma.VideoReviewOmit
   progress?: Prisma.ProgressOmit
   nutritionDay?: Prisma.NutritionDayOmit
   foodEntry?: Prisma.FoodEntryOmit
