@@ -8,6 +8,7 @@ import api, {
 } from "../../api/client";
 
 import { useLanguage } from "../../context/LanguageContext";
+import { useFeatureAccess } from "../../context/FeatureAccessContext";
 
 import "./Profile.css";
 
@@ -52,20 +53,6 @@ type ProfileProps = {
   onLogout?: () => void;
 
   [key: string]: any;
-};
-
-type CoachStatusResponse = {
-  success?: boolean;
-
-  coach?: {
-    id: number;
-    userId: number;
-
-    displayName: string;
-
-    isVerified: boolean;
-    isActive: boolean;
-  } | null;
 };
 
 type AdminStatusResponse = {
@@ -187,66 +174,32 @@ export default function Profile(
     setIsAdmin,
   ] = useState(false);
 
-  const [
-    isApprovedCoach,
-    setIsApprovedCoach,
-  ] = useState(false);
+  const {
+    isCoach,
+  } = useFeatureAccess();
 
   useEffect(() => {
     let mounted = true;
 
     async function loadAccess() {
       try {
-        const [
-          adminResult,
-          coachResult,
-        ] =
-          await Promise.allSettled([
-            api.get<AdminStatusResponse>(
-              "/admin/coaches/status",
-              telegramAuthOptions()
-            ),
-
-            api.get<CoachStatusResponse>(
-              "/coaches/me",
-              telegramAuthOptions()
-            ),
-          ]);
+        const adminResult =
+          await api.get<AdminStatusResponse>(
+            "/admin/coaches/status",
+            telegramAuthOptions()
+          );
 
         if (!mounted) {
           return;
         }
 
-        if (
-          adminResult.status ===
-          "fulfilled"
-        ) {
-          setIsAdmin(
-            adminResult.value
-              ?.isAdmin === true
-          );
-        }
-
-        if (
-          coachResult.status ===
-          "fulfilled"
-        ) {
-          const coach =
-            coachResult.value
-              ?.coach;
-
-          setIsApprovedCoach(
-            Boolean(
-              coach &&
-              coach.isVerified ===
-                true &&
-              coach.isActive ===
-                true
-            )
-          );
-        }
+        setIsAdmin(
+          adminResult?.isAdmin === true
+        );
       } catch {
-        //
+        if (mounted) {
+          setIsAdmin(false);
+        }
       }
     }
 
@@ -540,7 +493,7 @@ export default function Profile(
         </section>
 
 
-        {isApprovedCoach && (
+        {isCoach && (
           <section className="iron-profile__section">
             <SectionTitle>
               {t("profile.coachTools")}
