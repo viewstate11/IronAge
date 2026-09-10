@@ -1,0 +1,253 @@
+.admin-analytics {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(212, 175, 55, 0.1),
+      transparent 34%
+    ),
+    #050505;
+  color: #fff;
+}
+
+.admin-analytics__shell {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding:
+    max(
+      24px,
+      env(safe-area-inset-top)
+    )
+    18px
+    120px;
+}
+
+.admin-analytics__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-analytics__back {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 1px solid
+    rgba(212, 175, 55, 0.3);
+  border-radius: 14px;
+  background: #0a0a0a;
+  color: #d4af37;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.admin-analytics__header span,
+.admin-analytics__section-title span {
+  color: #d4af37;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+.admin-analytics__header h1 {
+  margin: 5px 0;
+  font-size: clamp(
+    30px,
+    8vw,
+    44px
+  );
+}
+
+.admin-analytics__header p {
+  margin: 0;
+  color:
+    rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+}
+
+.admin-analytics__hero-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.admin-analytics__hero {
+  min-height: 126px;
+  padding: 18px;
+  border: 1px solid
+    rgba(212, 175, 55, 0.22);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(212, 175, 55, 0.09),
+      rgba(255, 255, 255, 0.015)
+    );
+}
+
+.admin-analytics__hero span {
+  display: block;
+  color:
+    rgba(255, 255, 255, 0.52);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.admin-analytics__hero strong {
+  display: block;
+  margin-top: 13px;
+  color: #d4af37;
+  font-size: clamp(
+    30px,
+    9vw,
+    46px
+  );
+}
+
+.admin-analytics__positive {
+  color: #d4af37 !important;
+}
+
+.admin-analytics__negative {
+  color: #ff7777 !important;
+}
+
+.admin-analytics__grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  gap: 10px;
+}
+
+.admin-analytics__grid article {
+  min-height: 110px;
+  padding: 16px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.075);
+  border-radius: 17px;
+  background: #0a0a0a;
+}
+
+.admin-analytics__grid span {
+  display: block;
+  min-height: 24px;
+  color:
+    rgba(255, 255, 255, 0.45);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+}
+
+.admin-analytics__grid strong {
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-size: 25px;
+}
+
+.admin-analytics__grid small {
+  display: block;
+  margin-top: 5px;
+  color: #d4af37;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.admin-analytics__revenue {
+  margin-top: 24px;
+}
+
+.admin-analytics__section-title h2 {
+  margin:
+    5px 0
+    13px;
+  font-size: 20px;
+}
+
+.admin-analytics__revenue-list {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-analytics__revenue-list article {
+  padding: 17px;
+  border: 1px solid
+    rgba(212, 175, 55, 0.18);
+  border-radius: 17px;
+  background: #0a0a0a;
+}
+
+.admin-analytics__revenue-list article > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content:
+    space-between;
+  gap: 15px;
+}
+
+.admin-analytics__revenue-list article > div:first-child span {
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.admin-analytics__revenue-list article > div:first-child strong {
+  color: #d4af37;
+  font-size: 20px;
+}
+
+.admin-analytics__revenue-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 10px;
+  color:
+    rgba(255, 255, 255, 0.45);
+  font-size: 9px;
+}
+
+.admin-analytics__empty,
+.admin-analytics__state {
+  padding: 34px 18px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.075);
+  border-radius: 17px;
+  background: #0a0a0a;
+  text-align: center;
+  color:
+    rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+}
+
+.admin-analytics__state button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: 1px solid #d4af37;
+  border-radius: 11px;
+  background: transparent;
+  color: #d4af37;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+@media (
+  min-width: 760px
+) {
+  .admin-analytics__grid {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+  }
+}

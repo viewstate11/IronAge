@@ -36,6 +36,7 @@ import SubmitVideoReview from "../Client/SubmitVideoReview";
 import AdminCoaches from "../Admin/AdminCoaches";
 import AdminPrograms from "../Admin/AdminPrograms";
 import AdminUsers from "../Admin/AdminUsers";
+import AdminAnalytics from "../Admin/AdminAnalytics";
 import Programs from "../Programs/Programs";
 import ProgramDetails from "../Programs/ProgramDetails";
 
@@ -74,6 +75,7 @@ type AppScreen =
   | "admin-coaches"
   | "admin-programs"
   | "admin-users"
+  | "admin-analytics"
   | "profile-feature"
   | "edit-profile"
   | "settings"
@@ -869,9 +871,8 @@ export default function MainApp() {
             }}
 
             onOpenAnalytics={() => {
-              openProfileFeature(
-                "ANALYTICS",
-                "Users, coaches, subscriptions, growth and platform revenue."
+              setScreen(
+                "admin-analytics"
               );
             }}
           />
@@ -1085,6 +1086,17 @@ export default function MainApp() {
         {screen === "admin-users" && (
 
           <AdminUsers
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
+
+        {screen === "admin-analytics" && (
+
+          <AdminAnalytics
             onBack={() => {
               setScreen("profile");
             }}
