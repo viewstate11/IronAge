@@ -169,13 +169,13 @@ const COPY: Record<
           question:
             "Як змінити дані профілю?",
           answer:
-            "Відкрий Profile → Edit Profile. Там можна змінити доступні дані акаунта та фітнес-профілю.",
+            "Відкрий Профіль → Редагувати профіль. Там можна змінити доступні дані акаунта та фітнес-профілю.",
         },
         {
           question:
             "Як видалити акаунт?",
           answer:
-            "Відкрий Profile → Delete Account. Перед остаточним видаленням застосунок попросить підтвердження.",
+            "Відкрий Профіль → Видалити акаунт. Перед остаточним видаленням застосунок попросить підтвердження.",
         },
       ],
 
@@ -184,7 +184,7 @@ const COPY: Record<
           question:
             "Де знаходиться історія тренувань?",
           answer:
-            "Відкрий Profile → Workout History, щоб переглянути завершені тренування.",
+            "Відкрий Профіль → Історія тренувань, щоб переглянути завершені тренування.",
         },
         {
           question:
@@ -199,7 +199,7 @@ const COPY: Record<
           question:
             "Як знайти тренера?",
           answer:
-            "Відкрий Profile → Find Coach. У списку показуються тільки активні та підтверджені тренери.",
+            "Відкрий Профіль → Знайти тренера. У списку показуються тільки активні та підтверджені тренери.",
         },
         {
           question:
@@ -214,7 +214,7 @@ const COPY: Record<
           question:
             "Де переглянути платежі?",
           answer:
-            "Відкрий Profile → Payments. Там показуються перевірені Premium-підписки та покупки програм.",
+            "Відкрий Профіль → Платежі. Там показуються перевірені Premium-підписки та покупки програм.",
         },
         {
           question:
@@ -257,13 +257,13 @@ const COPY: Record<
           question:
             "Как изменить профиль?",
           answer:
-            "Откройте Profile → Edit Profile. Там можно изменить доступные данные аккаунта и фитнес-профиля.",
+            "Откройте Профиль → Редактировать профиль. Там можно изменить доступные данные аккаунта и фитнес-профиля.",
         },
         {
           question:
             "Как удалить аккаунт?",
           answer:
-            "Откройте Profile → Delete Account. Перед окончательным удалением приложение запросит подтверждение.",
+            "Откройте Профиль → Удалить аккаунт. Перед окончательным удалением приложение запросит подтверждение.",
         },
       ],
 
@@ -272,7 +272,7 @@ const COPY: Record<
           question:
             "Где история тренировок?",
           answer:
-            "Откройте Profile → Workout History для просмотра завершённых тренировок.",
+            "Откройте Профиль → История тренировок для просмотра завершённых тренировок.",
         },
         {
           question:
@@ -287,7 +287,7 @@ const COPY: Record<
           question:
             "Как найти тренера?",
           answer:
-            "Откройте Profile → Find Coach. Показываются только активные и подтверждённые тренеры.",
+            "Откройте Профиль → Найти тренера. Показываются только активные и подтверждённые тренеры.",
         },
         {
           question:
@@ -302,7 +302,7 @@ const COPY: Record<
           question:
             "Где мои платежи?",
           answer:
-            "Откройте Profile → Payments для просмотра подтверждённых подписок Premium и покупок программ.",
+            "Откройте Профиль → Платежи для просмотра подтверждённых подписок Premium и покупок программ.",
         },
         {
           question:
@@ -328,7 +328,7 @@ const COPY: Record<
     reportTitle:
       "СЪОБЩИ ЗА ПРОБЛЕМ",
     reportText:
-      "Ако нещо не работи, копирай техническата информация и я добави при контакт с IRONAGE support.",
+      "Ако нещо не работи, копирай техническата информация и я добави при контакт с поддръжката на IRONAGE.",
     copyInfo:
       "КОПИРАЙ ТЕХНИЧЕСКИТЕ ДАННИ",
     copied:
@@ -345,13 +345,13 @@ const COPY: Record<
           question:
             "Как да редактирам профила си?",
           answer:
-            "Отвори Profile → Edit Profile и промени наличните данни.",
+            "Отвори Профил → Редактиране на профила и промени наличните данни.",
         },
         {
           question:
             "Как да изтрия акаунта си?",
           answer:
-            "Отвори Profile → Delete Account. Приложението ще поиска потвърждение.",
+            "Отвори Профил → Изтриване на акаунта. Приложението ще поиска потвърждение.",
         },
       ],
 
@@ -360,7 +360,7 @@ const COPY: Record<
           question:
             "Къде е историята на тренировките?",
           answer:
-            "Отвори Profile → Workout History.",
+            "Отвори Профил → История на тренировките.",
         },
         {
           question:
@@ -375,7 +375,7 @@ const COPY: Record<
           question:
             "Как да намеря треньор?",
           answer:
-            "Отвори Profile → Find Coach. Показват се активни и потвърдени треньори.",
+            "Отвори Профил → Намери треньор. Показват се активни и потвърдени треньори.",
         },
         {
           question:
@@ -390,7 +390,7 @@ const COPY: Record<
           question:
             "Къде са плащанията ми?",
           answer:
-            "Отвори Profile → Payments за проверените Premium абонаменти и покупки.",
+            "Отвори Профил → Плащания за проверените Premium абонаменти и покупки.",
         },
         {
           question:
@@ -427,19 +427,19 @@ const COPY: Record<
         {
           question: "¿Cómo edito mi perfil?",
           answer:
-            "Abre Profile → Edit Profile para actualizar tus datos.",
+            "Abre Perfil → Editar perfil para actualizar tus datos.",
         },
         {
           question: "¿Cómo elimino mi cuenta?",
           answer:
-            "Abre Profile → Delete Account y confirma la eliminación.",
+            "Abre Perfil → Eliminar cuenta y confirma la eliminación.",
         },
       ],
       training: [
         {
           question: "¿Dónde está mi historial?",
           answer:
-            "Abre Profile → Workout History.",
+            "Abre Perfil → Histórico de treinos.",
         },
         {
           question: "¿Por qué no se actualizó mi progreso?",
@@ -451,7 +451,7 @@ const COPY: Record<
         {
           question: "¿Cómo encuentro un coach?",
           answer:
-            "Abre Profile → Find Coach. Solo aparecen coaches activos y verificados.",
+            "Abre Perfil → Buscar entrenador. Solo aparecen entrenadores activos y verificados.",
         },
         {
           question: "¿A dónde va mi vídeo?",
@@ -463,7 +463,7 @@ const COPY: Record<
         {
           question: "¿Dónde veo mis pagos?",
           answer:
-            "Abre Profile → Payments.",
+            "Abre Perfil → Pagamentos.",
         },
         {
           question: "¿Por qué falta una compra?",
@@ -499,19 +499,19 @@ const COPY: Record<
         {
           question: "Comment modifier mon profil ?",
           answer:
-            "Ouvrez Profile → Edit Profile.",
+            "Ouvrez Profil → Modifier le profil.",
         },
         {
           question: "Comment supprimer mon compte ?",
           answer:
-            "Ouvrez Profile → Delete Account et confirmez.",
+            "Ouvrez Profil → Supprimer le compte et confirmez.",
         },
       ],
       training: [
         {
           question: "Où est mon historique ?",
           answer:
-            "Ouvrez Profile → Workout History.",
+            "Ouvrez Profil → Historique des entraînements.",
         },
         {
           question: "Pourquoi ma progression ne change pas ?",
@@ -523,7 +523,7 @@ const COPY: Record<
         {
           question: "Comment trouver un coach ?",
           answer:
-            "Ouvrez Profile → Find Coach. Seuls les coachs actifs et vérifiés apparaissent.",
+            "Ouvrez Profil → Trouver un coach. Seuls les coachs actifs et vérifiés apparaissent.",
         },
         {
           question: "Où va ma vidéo ?",
@@ -535,7 +535,7 @@ const COPY: Record<
         {
           question: "Où voir mes paiements ?",
           answer:
-            "Ouvrez Profile → Payments.",
+            "Ouvrez Profil → Paiements.",
         },
         {
           question: "Pourquoi un achat manque ?",
@@ -571,19 +571,19 @@ const COPY: Record<
         {
           question: "Wie bearbeite ich mein Profil?",
           answer:
-            "Öffne Profile → Edit Profile.",
+            "Öffne Profil → Profil bearbeiten.",
         },
         {
           question: "Wie lösche ich mein Konto?",
           answer:
-            "Öffne Profile → Delete Account und bestätige.",
+            "Öffne Profil → Konto löschen und bestätige.",
         },
       ],
       training: [
         {
           question: "Wo ist mein Trainingsverlauf?",
           answer:
-            "Öffne Profile → Workout History.",
+            "Öffne Profil → Trainingsverlauf.",
         },
         {
           question: "Warum wurde mein Fortschritt nicht aktualisiert?",
@@ -595,7 +595,7 @@ const COPY: Record<
         {
           question: "Wie finde ich einen Coach?",
           answer:
-            "Öffne Profile → Find Coach. Nur aktive und verifizierte Coaches werden angezeigt.",
+            "Öffne Profil → Coach finden. Nur aktive und verifizierte Coaches werden angezeigt.",
         },
         {
           question: "Wohin wird mein Video gesendet?",
@@ -607,7 +607,7 @@ const COPY: Record<
         {
           question: "Wo sehe ich meine Zahlungen?",
           answer:
-            "Öffne Profile → Payments.",
+            "Öffne Profil → Zahlungen.",
         },
         {
           question: "Warum fehlt ein Kauf?",
@@ -643,19 +643,19 @@ const COPY: Record<
         {
           question: "Como edito o meu perfil?",
           answer:
-            "Abre Profile → Edit Profile.",
+            "Abre Perfil → Editar perfil.",
         },
         {
           question: "Como elimino a minha conta?",
           answer:
-            "Abre Profile → Delete Account e confirma.",
+            "Abre Perfil → Eliminar conta e confirma.",
         },
       ],
       training: [
         {
           question: "Onde está o histórico?",
           answer:
-            "Abre Profile → Workout History.",
+            "Abre Perfil → Histórico de treinos.",
         },
         {
           question: "Porque não atualizou o progresso?",
@@ -667,7 +667,7 @@ const COPY: Record<
         {
           question: "Como encontro um treinador?",
           answer:
-            "Abre Profile → Find Coach. Só aparecem treinadores ativos e verificados.",
+            "Abre Perfil → Encontrar treinador. Só aparecem treinadores ativos e verificados.",
         },
         {
           question: "Para onde vai o vídeo?",
@@ -679,7 +679,7 @@ const COPY: Record<
         {
           question: "Onde vejo os pagamentos?",
           answer:
-            "Abre Profile → Payments.",
+            "Abre Perfil → Pagamentos.",
         },
         {
           question: "Porque falta uma compra?",
@@ -702,6 +702,7 @@ export default function HelpSupport({
 }: Props) {
   const {
     language,
+    t,
   } = useLanguage();
 
   const copy =
@@ -795,7 +796,7 @@ export default function HelpSupport({
             type="button"
             className="help-support__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
