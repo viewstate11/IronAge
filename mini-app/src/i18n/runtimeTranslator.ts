@@ -3413,6 +3413,146 @@ const RAW_TRANSLATIONS: Record<string, Entry> = {
     "pt": "GRÁTIS",
     "bg": "БЕЗПЛАТНО"
   },
+  "UPPER BODY": {
+    "en": "UPPER BODY",
+    "es": "TREN SUPERIOR",
+    "uk": "ВЕРХ ТІЛА",
+    "ru": "ВЕРХ ТЕЛА",
+    "fr": "HAUT DU CORPS",
+    "de": "OBERKÖRPER",
+    "pt": "PARTE SUPERIOR",
+    "bg": "ГОРНА ЧАСТ"
+  },
+  "LOWER BODY": {
+    "en": "LOWER BODY",
+    "es": "TREN INFERIOR",
+    "uk": "НИЗ ТІЛА",
+    "ru": "НИЗ ТЕЛА",
+    "fr": "BAS DU CORPS",
+    "de": "UNTERKÖRPER",
+    "pt": "PARTE INFERIOR",
+    "bg": "ДОЛНА ЧАСТ"
+  },
+  "FULL BODY": {
+    "en": "FULL BODY",
+    "es": "CUERPO COMPLETO",
+    "uk": "ВСЕ ТІЛО",
+    "ru": "ВСЁ ТЕЛО",
+    "fr": "CORPS ENTIER",
+    "de": "GANZKÖRPER",
+    "pt": "CORPO INTEIRO",
+    "bg": "ЦЯЛО ТЯЛО"
+  },
+  "PUSH UPS": {
+    "en": "PUSH UPS",
+    "es": "FLEXIONES",
+    "uk": "ВІДЖИМАННЯ",
+    "ru": "ОТЖИМАНИЯ",
+    "fr": "POMPES",
+    "de": "LIEGESTÜTZE",
+    "pt": "FLEXÕES",
+    "bg": "ЛИЦЕВИ ОПОРИ"
+  },
+  "DIAMOND PUSH UPS": {
+    "en": "DIAMOND PUSH UPS",
+    "es": "FLEXIONES DIAMANTE",
+    "uk": "ДІАМАНТОВІ ВІДЖИМАННЯ",
+    "ru": "АЛМАЗНЫЕ ОТЖИМАНИЯ",
+    "fr": "POMPES DIAMANT",
+    "de": "DIAMANT-LIEGESTÜTZE",
+    "pt": "FLEXÕES DIAMANTE",
+    "bg": "ДИАМАНТЕНИ ЛИЦЕВИ ОПОРИ"
+  },
+  "DIPS": {
+    "en": "DIPS",
+    "es": "FONDOS",
+    "uk": "ВІДЖИМАННЯ НА БРУСАХ",
+    "ru": "ОТЖИМАНИЯ НА БРУСЬЯХ",
+    "fr": "DIPS",
+    "de": "DIPS",
+    "pt": "FUNDOS",
+    "bg": "КОФИЧКИ"
+  },
+  "PIKE PUSH UPS": {
+    "en": "PIKE PUSH UPS",
+    "es": "FLEXIONES PIKE",
+    "uk": "ВІДЖИМАННЯ ПІКОЮ",
+    "ru": "ОТЖИМАНИЯ УГОЛКОМ",
+    "fr": "POMPES PIKE",
+    "de": "PIKE-LIEGESTÜTZE",
+    "pt": "FLEXÕES PIKE",
+    "bg": "PIKE ЛИЦЕВИ ОПОРИ"
+  },
+  "SQUATS": {
+    "en": "SQUATS",
+    "es": "SENTADILLAS",
+    "uk": "ПРИСІДАННЯ",
+    "ru": "ПРИСЕДАНИЯ",
+    "fr": "SQUATS",
+    "de": "KNIEBEUGEN",
+    "pt": "AGACHAMENTOS",
+    "bg": "КЛЕКОВЕ"
+  },
+  "LUNGES": {
+    "en": "LUNGES",
+    "es": "ZANCADAS",
+    "uk": "ВИПАДИ",
+    "ru": "ВЫПАДЫ",
+    "fr": "FENTES",
+    "de": "AUSFALLSCHRITTE",
+    "pt": "AFUNDOS",
+    "bg": "НАПАДИ"
+  },
+  "GLUTE BRIDGE": {
+    "en": "GLUTE BRIDGE",
+    "es": "PUENTE DE GLÚTEOS",
+    "uk": "СІДНИЧНИЙ МІСТОК",
+    "ru": "ЯГОДИЧНЫЙ МОСТ",
+    "fr": "PONT FESSIER",
+    "de": "GLUTE BRIDGE",
+    "pt": "PONTE DE GLÚTEOS",
+    "bg": "ГЛУТЕУС МОСТ"
+  },
+  "CALF RAISES": {
+    "en": "CALF RAISES",
+    "es": "ELEVACIONES DE GEMELOS",
+    "uk": "ПІДЙОМИ НА НОСКИ",
+    "ru": "ПОДЪЁМЫ НА НОСКИ",
+    "fr": "MONTÉES SUR POINTES",
+    "de": "WADENHEBEN",
+    "pt": "ELEVAÇÕES DE GÉMEOS",
+    "bg": "ПОВДИГАНИЯ ЗА ПРАСЦИ"
+  },
+  "BURPEES": {
+    "en": "BURPEES",
+    "es": "BURPEES",
+    "uk": "БЕРПІ",
+    "ru": "БЕРПИ",
+    "fr": "BURPEES",
+    "de": "BURPEES",
+    "pt": "BURPEES",
+    "bg": "БЪРПИТА"
+  },
+  "MOUNTAIN CLIMBERS": {
+    "en": "MOUNTAIN CLIMBERS",
+    "es": "ESCALADORES",
+    "uk": "АЛЬПІНІСТ",
+    "ru": "АЛЬПИНИСТ",
+    "fr": "MOUNTAIN CLIMBERS",
+    "de": "BERGSTEIGER",
+    "pt": "ESCALADORES",
+    "bg": "КАТЕРАЧИ"
+  },
+  "12 / LEG": {
+    "en": "12 / LEG",
+    "es": "12 / PIERNA",
+    "uk": "12 / НОГА",
+    "ru": "12 / НОГА",
+    "fr": "12 / JAMBE",
+    "de": "12 / BEIN",
+    "pt": "12 / PERNA",
+    "bg": "12 / КРАК"
+  },
   "Failed to load programs": {
     "en": "Failed to load programs",
     "es": "No se pudieron cargar los programas",

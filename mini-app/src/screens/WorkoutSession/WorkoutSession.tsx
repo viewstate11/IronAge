@@ -398,7 +398,7 @@ export default function WorkoutSession({
             </span>
 
             <strong>
-              {workout.title}
+              {tr(workout.title)}
             </strong>
 
           </div>
@@ -452,7 +452,7 @@ export default function WorkoutSession({
           </span>
 
           <h1>
-            {exercise.name}
+            {tr(exercise.name)}
           </h1>
 
           <div className="session-main-stat">
@@ -462,7 +462,7 @@ export default function WorkoutSession({
             </span>
 
             <strong>
-              {exercise.reps}
+              {tr(exercise.reps)}
             </strong>
 
           </div>
