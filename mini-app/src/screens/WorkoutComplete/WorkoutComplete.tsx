@@ -2,6 +2,14 @@ import "./WorkoutComplete.css";
 
 import { useUser } from "../../context/UserContext";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
+import {
+  translateRaw,
+} from "../../i18n/runtimeTranslator";
+
 export type WorkoutResult = {
   workoutId: string;
   workoutTitle: string;
@@ -23,8 +31,19 @@ export default function WorkoutComplete({
 }: Props) {
   const { user } = useUser();
 
+  const { language } =
+    useLanguage();
+
+  const tr = (
+    value: string
+  ) =>
+    translateRaw(
+      value,
+      language
+    );
+
   /* =========================================================
-     TIME
+     {tr("TIME")}
   ========================================================= */
 
   const minutes = Math.floor(
@@ -111,7 +130,7 @@ export default function WorkoutComplete({
           </div>
 
           <span className="complete-label">
-            SESSION COMPLETE
+            {tr("SESSION COMPLETE")}
           </span>
 
         </header>
@@ -130,7 +149,7 @@ export default function WorkoutComplete({
 
           <div
             className="complete-check"
-            aria-label="Workout completed"
+            aria-label={tr("Workout completed")}
           >
             ✓
           </div>
@@ -141,7 +160,7 @@ export default function WorkoutComplete({
           ================================================= */}
 
           <span className="complete-eyebrow">
-            WORKOUT FINISHED
+            {tr("WORKOUT FINISHED")}
           </span>
 
 
@@ -150,10 +169,10 @@ export default function WorkoutComplete({
           ================================================= */}
 
           <h1>
-            YOU
+            {tr("YOU")}
             <br />
             <span>
-              DID IT.
+              {tr("DID IT.")}
             </span>
           </h1>
 
@@ -165,7 +184,7 @@ export default function WorkoutComplete({
           <p>
             {result.workoutTitle}
             <br />
-            Another step forward.
+            {tr("Another step forward.")}
           </p>
 
 
@@ -196,7 +215,7 @@ export default function WorkoutComplete({
             <div className="complete-stat">
 
               <span>
-                EXERCISES
+                {tr("EXERCISES")}
               </span>
 
               <strong>
@@ -239,11 +258,11 @@ export default function WorkoutComplete({
               <div>
 
                 <span>
-                  CURRENT LEVEL
+                  {tr("CURRENT LEVEL")}
                 </span>
 
                 <strong>
-                  LEVEL{" "}
+                  {tr("LEVEL")}{" "}
                   {String(
                     user.level
                   ).padStart(2, "0")}
@@ -257,7 +276,7 @@ export default function WorkoutComplete({
               <div className="complete-level">
 
                 <span>
-                  TOTAL XP
+                  {tr("TOTAL XP")}
                 </span>
 
                 <strong>
@@ -298,8 +317,10 @@ export default function WorkoutComplete({
 
               <span>
                 {xpToNextLevel === 1000
-                  ? "LEVEL UP AHEAD"
-                  : `${xpToNextLevel} XP TO NEXT LEVEL`}
+                  ? tr("LEVEL UP AHEAD")
+                  : `${xpToNextLevel} ${tr(
+                      "XP TO NEXT LEVEL"
+                    )}`}
               </span>
 
             </div>
@@ -323,14 +344,14 @@ export default function WorkoutComplete({
             <div>
 
               <span>
-                CURRENT STREAK
+                {tr("CURRENT STREAK")}
               </span>
 
               <strong>
                 {user.streak}{" "}
                 {user.streak === 1
-                  ? "DAY"
-                  : "DAYS"}
+                  ? tr("DAY")
+                  : tr("DAYS")}
               </strong>
 
             </div>
@@ -345,16 +366,16 @@ export default function WorkoutComplete({
           <div className="complete-quote">
 
             <span>
-              IRONAGE MINDSET
+              {tr("IRONAGE MINDSET")}
             </span>
 
             <p>
-              DISCIPLINE
+              {tr("DISCIPLINE")}
               <br />
-              BUILDS
+              {tr("BUILDS")}
               <br />
               <strong>
-                RESULTS.
+                {tr("RESULTS.")}
               </strong>
             </p>
 
@@ -380,7 +401,7 @@ export default function WorkoutComplete({
           >
 
             <span>
-              VIEW PROGRESS
+              {tr("VIEW PROGRESS")}
             </span>
 
             <strong>
@@ -397,7 +418,7 @@ export default function WorkoutComplete({
             className="complete-secondary"
             onClick={openDashboard}
           >
-            BACK TO DASHBOARD
+            {tr("BACK TO DASHBOARD")}
           </button>
 
 

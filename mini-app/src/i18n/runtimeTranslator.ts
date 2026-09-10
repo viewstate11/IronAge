@@ -973,6 +973,16 @@ const RAW_TRANSLATIONS: Record<string, Entry> = {
     "pt": "XP TOTAL",
     "bg": "ОБЩО XP"
   },
+  "XP TO NEXT LEVEL": {
+    "en": "XP TO NEXT LEVEL",
+    "es": "XP PARA EL SIGUIENTE NIVEL",
+    "uk": "XP ДО НАСТУПНОГО РІВНЯ",
+    "ru": "XP ДО СЛЕДУЮЩЕГО УРОВНЯ",
+    "fr": "XP AVANT LE PROCHAIN NIVEAU",
+    "de": "XP BIS ZUM NÄCHSTEN LEVEL",
+    "pt": "XP PARA O PRÓXIMO NÍVEL",
+    "bg": "XP ДО СЛЕДВАЩОТО НИВО"
+  },
   "LEVEL UP AHEAD": {
     "en": "LEVEL UP AHEAD",
     "es": "PRÓXIMO NIVEL CERCA",
@@ -1962,6 +1972,16 @@ const RAW_TRANSLATIONS: Record<string, Entry> = {
     "de": "WOCHE",
     "pt": "SEMANA",
     "bg": "СЕДМИЦА"
+  },
+  "DAYS": {
+    "en": "DAYS",
+    "es": "DÍAS",
+    "uk": "ДНІВ",
+    "ru": "ДНЕЙ",
+    "fr": "JOURS",
+    "de": "TAGE",
+    "pt": "DIAS",
+    "bg": "ДНИ"
   },
   "DAY": {
     "en": "DAY",
