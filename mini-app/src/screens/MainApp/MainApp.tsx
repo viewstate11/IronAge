@@ -35,6 +35,7 @@ import MyCoach from "../Client/MyCoach";
 import SubmitVideoReview from "../Client/SubmitVideoReview";
 import AdminCoaches from "../Admin/AdminCoaches";
 import AdminPrograms from "../Admin/AdminPrograms";
+import AdminUsers from "../Admin/AdminUsers";
 import Programs from "../Programs/Programs";
 import ProgramDetails from "../Programs/ProgramDetails";
 
@@ -72,6 +73,7 @@ type AppScreen =
   | "my-program"
   | "admin-coaches"
   | "admin-programs"
+  | "admin-users"
   | "profile-feature"
   | "edit-profile"
   | "settings"
@@ -861,9 +863,8 @@ export default function MainApp() {
             }}
 
             onOpenUsers={() => {
-              openProfileFeature(
-                "USER MANAGEMENT",
-                "Manage IRONAGE athletes, coaches and account access."
+              setScreen(
+                "admin-users"
               );
             }}
 
@@ -1073,6 +1074,17 @@ export default function MainApp() {
         {screen === "admin-coaches" && (
 
           <AdminCoaches
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
+
+        {screen === "admin-users" && (
+
+          <AdminUsers
             onBack={() => {
               setScreen("profile");
             }}

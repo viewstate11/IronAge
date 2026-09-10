@@ -20,6 +20,7 @@ import coachInviteRoutes from "./routes/coachInviteRoutes.js";
 import myProgramRoutes from "./routes/myProgramRoutes.js";
 import adminCoachRoutes from "./routes/adminCoachRoutes.js";
 import adminProgramRoutes from "./routes/adminProgramRoutes.js";
+import adminUserRoutes from "./routes/adminUserRoutes.js";
 import programMarketplaceRoutes from "./routes/programMarketplaceRoutes.js";
 
 const app = express();
@@ -168,6 +169,11 @@ app.use(
 app.use(
   "/api/admin/programs",
   adminProgramRoutes
+);
+
+app.use(
+  "/api/admin/users",
+  adminUserRoutes
 );
 
 /* =========================================================
