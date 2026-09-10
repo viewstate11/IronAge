@@ -146,6 +146,17 @@ type ProgramDetailsUiCopy = {
   availableIos: string;
   restoring: string;
   restore: string;
+
+  loadFailed: string;
+  claimFailed: string;
+  restoreIosOnly: string;
+  purchaseIosOnly: string;
+  purchaseNotConfigured: string;
+  previousPurchaseNotFound: string;
+  restoreFailed: string;
+  purchaseCancelled: string;
+  purchasePending: string;
+  purchaseFailed: string;
 };
 
 const PROGRAM_DETAILS_UI:
@@ -185,6 +196,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "AVAILABLE IN IOS APP",
     restoring: "RESTORING...",
     restore: "RESTORE PURCHASES",
+
+    loadFailed: "Failed to load program.",
+    claimFailed: "Failed to get program.",
+    restoreIosOnly: "Restore purchases is available in the IRONAGE iOS app.",
+    purchaseIosOnly: "Program purchase is available in the IRONAGE iOS app.",
+    purchaseNotConfigured: "This program is not configured for App Store purchase yet.",
+    previousPurchaseNotFound: "No previous App Store purchase was found for this program.",
+    restoreFailed: "Program restore failed.",
+    purchaseCancelled: "Purchase cancelled.",
+    purchasePending: "Purchase is pending Apple approval.",
+    purchaseFailed: "Program purchase failed.",
   },
 
   es: {
@@ -222,6 +244,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "DISPONIBLE EN IOS",
     restoring: "RESTAURANDO...",
     restore: "RESTAURAR COMPRAS",
+
+    loadFailed: "No se pudo cargar el programa.",
+    claimFailed: "No se pudo obtener el programa.",
+    restoreIosOnly: "La restauración de compras está disponible en la app IRONAGE para iOS.",
+    purchaseIosOnly: "La compra del programa está disponible en la app IRONAGE para iOS.",
+    purchaseNotConfigured: "Este programa aún no está configurado para compras en App Store.",
+    previousPurchaseNotFound: "No se encontró una compra anterior de este programa en App Store.",
+    restoreFailed: "No se pudo restaurar el programa.",
+    purchaseCancelled: "Compra cancelada.",
+    purchasePending: "La compra está pendiente de aprobación de Apple.",
+    purchaseFailed: "No se pudo comprar el programa.",
   },
 
   uk: {
@@ -259,6 +292,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "ДОСТУПНО В IOS-ДОДАТКУ",
     restoring: "ВІДНОВЛЕННЯ...",
     restore: "ВІДНОВИТИ ПОКУПКИ",
+
+    loadFailed: "Не вдалося завантажити програму.",
+    claimFailed: "Не вдалося отримати програму.",
+    restoreIosOnly: "Відновлення покупок доступне в iOS-додатку IRONAGE.",
+    purchaseIosOnly: "Покупка програми доступна в iOS-додатку IRONAGE.",
+    purchaseNotConfigured: "Цю програму ще не налаштовано для покупки через App Store.",
+    previousPurchaseNotFound: "Попередню покупку цієї програми в App Store не знайдено.",
+    restoreFailed: "Не вдалося відновити програму.",
+    purchaseCancelled: "Покупку скасовано.",
+    purchasePending: "Покупка очікує підтвердження Apple.",
+    purchaseFailed: "Не вдалося придбати програму.",
   },
 
   ru: {
@@ -296,6 +340,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "ДОСТУПНО В IOS-ПРИЛОЖЕНИИ",
     restoring: "ВОССТАНОВЛЕНИЕ...",
     restore: "ВОССТАНОВИТЬ ПОКУПКИ",
+
+    loadFailed: "Не удалось загрузить программу.",
+    claimFailed: "Не удалось получить программу.",
+    restoreIosOnly: "Восстановление покупок доступно в iOS-приложении IRONAGE.",
+    purchaseIosOnly: "Покупка программы доступна в iOS-приложении IRONAGE.",
+    purchaseNotConfigured: "Эта программа ещё не настроена для покупки через App Store.",
+    previousPurchaseNotFound: "Предыдущая покупка этой программы в App Store не найдена.",
+    restoreFailed: "Не удалось восстановить программу.",
+    purchaseCancelled: "Покупка отменена.",
+    purchasePending: "Покупка ожидает подтверждения Apple.",
+    purchaseFailed: "Не удалось приобрести программу.",
   },
 
   fr: {
@@ -333,6 +388,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "DISPONIBLE DANS L’APP IOS",
     restoring: "RESTAURATION...",
     restore: "RESTAURER LES ACHATS",
+
+    loadFailed: "Impossible de charger le programme.",
+    claimFailed: "Impossible d’obtenir le programme.",
+    restoreIosOnly: "La restauration des achats est disponible dans l’application iOS IRONAGE.",
+    purchaseIosOnly: "L’achat du programme est disponible dans l’application iOS IRONAGE.",
+    purchaseNotConfigured: "Ce programme n’est pas encore configuré pour un achat via l’App Store.",
+    previousPurchaseNotFound: "Aucun achat App Store précédent n’a été trouvé pour ce programme.",
+    restoreFailed: "Impossible de restaurer le programme.",
+    purchaseCancelled: "Achat annulé.",
+    purchasePending: "L’achat est en attente d’approbation par Apple.",
+    purchaseFailed: "Impossible d’acheter le programme.",
   },
 
   de: {
@@ -370,6 +436,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "IN DER IOS-APP VERFÜGBAR",
     restoring: "WIEDERHERSTELLUNG...",
     restore: "KÄUFE WIEDERHERSTELLEN",
+
+    loadFailed: "Programm konnte nicht geladen werden.",
+    claimFailed: "Programm konnte nicht freigeschaltet werden.",
+    restoreIosOnly: "Die Wiederherstellung von Käufen ist in der IRONAGE iOS-App verfügbar.",
+    purchaseIosOnly: "Der Programmkauf ist in der IRONAGE iOS-App verfügbar.",
+    purchaseNotConfigured: "Dieses Programm ist noch nicht für den App-Store-Kauf eingerichtet.",
+    previousPurchaseNotFound: "Für dieses Programm wurde kein früherer App-Store-Kauf gefunden.",
+    restoreFailed: "Programm konnte nicht wiederhergestellt werden.",
+    purchaseCancelled: "Kauf abgebrochen.",
+    purchasePending: "Der Kauf wartet auf die Bestätigung von Apple.",
+    purchaseFailed: "Programm konnte nicht gekauft werden.",
   },
 
   pt: {
@@ -407,6 +484,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "DISPONÍVEL NO APP IOS",
     restoring: "RESTAURANDO...",
     restore: "RESTAURAR COMPRAS",
+
+    loadFailed: "Não foi possível carregar o programa.",
+    claimFailed: "Não foi possível obter o programa.",
+    restoreIosOnly: "A restauração de compras está disponível no aplicativo IRONAGE para iOS.",
+    purchaseIosOnly: "A compra do programa está disponível no aplicativo IRONAGE para iOS.",
+    purchaseNotConfigured: "Este programa ainda não está configurado para compra pela App Store.",
+    previousPurchaseNotFound: "Nenhuma compra anterior deste programa foi encontrada na App Store.",
+    restoreFailed: "Não foi possível restaurar o programa.",
+    purchaseCancelled: "Compra cancelada.",
+    purchasePending: "A compra aguarda aprovação da Apple.",
+    purchaseFailed: "Não foi possível comprar o programa.",
   },
 
   bg: {
@@ -444,6 +532,17 @@ Record<AppLanguage, ProgramDetailsUiCopy> = {
     availableIos: "ДОСТЪПНО В IOS ПРИЛОЖЕНИЕТО",
     restoring: "ВЪЗСТАНОВЯВАНЕ...",
     restore: "ВЪЗСТАНОВИ ПОКУПКИТЕ",
+
+    loadFailed: "Програмата не можа да бъде заредена.",
+    claimFailed: "Програмата не можа да бъде получена.",
+    restoreIosOnly: "Възстановяването на покупки е достъпно в iOS приложението IRONAGE.",
+    purchaseIosOnly: "Покупката на програмата е достъпна в iOS приложението IRONAGE.",
+    purchaseNotConfigured: "Тази програма все още не е настроена за покупка през App Store.",
+    previousPurchaseNotFound: "Не е намерена предишна App Store покупка за тази програма.",
+    restoreFailed: "Програмата не можа да бъде възстановена.",
+    purchaseCancelled: "Покупката е отменена.",
+    purchasePending: "Покупката очаква потвърждение от Apple.",
+    purchaseFailed: "Програмата не можа да бъде закупена.",
   },
 };
 
@@ -577,10 +676,13 @@ export default function ProgramDetails({
         )
       );
     } catch (err) {
+      console.error(
+        "IRONAGE PROGRAM LOAD UI ERROR:",
+        err
+      );
+
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to load program"
+        copy.loadFailed
       );
     } finally {
       setLoading(false);
@@ -626,9 +728,7 @@ export default function ProgramDetails({
       );
 
       setClaimError(
-        err instanceof Error
-          ? err.message
-          : "Failed to get program"
+        copy.claimFailed
       );
     } finally {
       setClaiming(false);
@@ -648,14 +748,14 @@ export default function ProgramDetails({
 
     if (!isNativeIOS) {
       setRestoreError(
-        "Restore purchases is available in the IRONAGE iOS app."
+        copy.restoreIosOnly
       );
       return;
     }
 
     if (!program.appleProductId) {
       setRestoreError(
-        "This program is not configured for App Store purchase yet."
+        copy.purchaseNotConfigured
       );
       return;
     }
@@ -723,9 +823,7 @@ export default function ProgramDetails({
       );
 
       setRestoreError(
-        err instanceof Error
-          ? err.message
-          : "Program restore failed"
+        copy.restoreFailed
       );
     } finally {
       setRestoring(false);
@@ -745,14 +843,14 @@ export default function ProgramDetails({
 
     if (!isNativeIOS) {
       setPurchaseError(
-        "Program purchase is available in the IRONAGE iOS app."
+        copy.purchaseIosOnly
       );
       return;
     }
 
     if (!program.appleProductId) {
       setPurchaseError(
-        "This program is not configured for App Store purchase yet."
+        copy.purchaseNotConfigured
       );
       return;
     }
@@ -772,7 +870,7 @@ export default function ProgramDetails({
         "CANCELLED"
       ) {
         setPurchaseError(
-          "Purchase cancelled."
+          copy.purchaseCancelled
         );
         return;
       }
@@ -782,7 +880,7 @@ export default function ProgramDetails({
         "PENDING"
       ) {
         setPurchaseError(
-          "Purchase is pending Apple approval."
+          copy.purchasePending
         );
         return;
       }
@@ -838,9 +936,7 @@ export default function ProgramDetails({
       );
 
       setPurchaseError(
-        err instanceof Error
-          ? err.message
-          : "Program purchase failed"
+        copy.purchaseFailed
       );
     } finally {
       setPurchasing(false);
