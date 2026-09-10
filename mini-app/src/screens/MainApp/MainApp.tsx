@@ -37,6 +37,7 @@ import AdminCoaches from "../Admin/AdminCoaches";
 import AdminPrograms from "../Admin/AdminPrograms";
 import AdminUsers from "../Admin/AdminUsers";
 import AdminAnalytics from "../Admin/AdminAnalytics";
+import AdminPayments from "../Admin/AdminPayments";
 import Programs from "../Programs/Programs";
 import ProgramDetails from "../Programs/ProgramDetails";
 
@@ -76,6 +77,7 @@ type AppScreen =
   | "admin-programs"
   | "admin-users"
   | "admin-analytics"
+  | "admin-payments"
   | "profile-feature"
   | "edit-profile"
   | "settings"
@@ -870,6 +872,12 @@ export default function MainApp() {
               );
             }}
 
+            onOpenAdminPayments={() => {
+              setScreen(
+                "admin-payments"
+              );
+            }}
+
             onOpenAnalytics={() => {
               setScreen(
                 "admin-analytics"
@@ -1097,6 +1105,17 @@ export default function MainApp() {
         {screen === "admin-analytics" && (
 
           <AdminAnalytics
+            onBack={() => {
+              setScreen("profile");
+            }}
+          />
+
+        )}
+
+
+        {screen === "admin-payments" && (
+
+          <AdminPayments
             onBack={() => {
               setScreen("profile");
             }}

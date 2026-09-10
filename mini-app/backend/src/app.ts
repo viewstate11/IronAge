@@ -22,6 +22,7 @@ import adminCoachRoutes from "./routes/adminCoachRoutes.js";
 import adminProgramRoutes from "./routes/adminProgramRoutes.js";
 import adminUserRoutes from "./routes/adminUserRoutes.js";
 import adminAnalyticsRoutes from "./routes/adminAnalyticsRoutes.js";
+import adminPaymentRoutes from "./routes/adminPaymentRoutes.js";
 import programMarketplaceRoutes from "./routes/programMarketplaceRoutes.js";
 
 const app = express();
@@ -181,6 +182,12 @@ app.use(
 app.use(
   "/api/admin/analytics",
   adminAnalyticsRoutes
+);
+
+
+app.use(
+  "/api/admin/payments",
+  adminPaymentRoutes
 );
 
 /* =========================================================

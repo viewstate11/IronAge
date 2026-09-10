@@ -38,6 +38,7 @@ type ProfileProps = {
   onOpenProgramManagement?: () => void;
   onOpenUsers?: () => void;
   onOpenPayments?: () => void;
+  onOpenAdminPayments?: () => void;
   onOpenAnalytics?: () => void;
 
   onOpenSubscription?: () => void;
@@ -154,6 +155,7 @@ export default function Profile(
     onOpenProgramManagement,
     onOpenUsers,
     onOpenPayments,
+    onOpenAdminPayments,
     onOpenAnalytics,
 
     onOpenSubscription,
@@ -588,7 +590,7 @@ export default function Profile(
               title={t("profile.paymentsSubscriptions")}
               subtitle={t("profile.paymentsSubscriptionsSubtitle")}
               onClick={
-                onOpenPayments ||
+                onOpenAdminPayments ||
                 onOpenAdmin
               }
             />
