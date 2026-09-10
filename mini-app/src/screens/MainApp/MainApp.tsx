@@ -56,6 +56,9 @@ import type {
 
 import { useUser } from "../../context/UserContext";
 import { useFeatureAccess } from "../../context/FeatureAccessContext";
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
 import type { FeatureKey } from "../../config/featureAccess";
 
 /* =========================================================
@@ -109,6 +112,12 @@ export default function MainApp() {
     canAccess,
     loading: accessLoading,
   } = useFeatureAccess();
+
+
+  const {
+    t,
+  } = useLanguage();
+
 
 
   /* =========================================================
@@ -779,7 +788,9 @@ export default function MainApp() {
               void (async () => {
                 const confirmed =
                   window.confirm(
-                    "Delete your IRONAGE account permanently? This action cannot be undone."
+                    t(
+                      "profile.deleteAccountConfirm"
+                    )
                   );
 
                 if (!confirmed) {
@@ -788,7 +799,9 @@ export default function MainApp() {
 
                 const confirmedAgain =
                   window.confirm(
-                    "Are you absolutely sure? Your IRONAGE account and associated data will be deleted."
+                    t(
+                      "profile.deleteAccountConfirmAgain"
+                    )
                   );
 
                 if (!confirmedAgain) {
@@ -810,8 +823,7 @@ export default function MainApp() {
                     response.success !== true
                   ) {
                     throw new Error(
-                      response?.message ||
-                        "Account deletion failed"
+                      "DELETE_ACCOUNT_FAILED"
                     );
                   }
 
@@ -823,9 +835,9 @@ export default function MainApp() {
                   );
 
                   window.alert(
-                    error instanceof Error
-                      ? error.message
-                      : "Failed to delete account"
+                    t(
+                      "profile.deleteAccountFailed"
+                    )
                   );
                 }
               })();

@@ -678,6 +678,40 @@ const translations:
     bg: "Изтрийте профила си завинаги",
   },
 
+
+  "profile.deleteAccountConfirm": {
+    en: "Delete your IRONAGE account permanently? This action cannot be undone.",
+    es: "¿Eliminar permanentemente tu cuenta de IRONAGE? Esta acción no se puede deshacer.",
+    uk: "Назавжди видалити ваш акаунт IRONAGE? Цю дію неможливо скасувати.",
+    ru: "Навсегда удалить ваш аккаунт IRONAGE? Это действие нельзя отменить.",
+    fr: "Supprimer définitivement votre compte IRONAGE ? Cette action est irréversible.",
+    de: "Dein IRONAGE-Konto dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    pt: "Excluir permanentemente a sua conta IRONAGE? Esta ação não pode ser desfeita.",
+    bg: "Да изтриете ли завинаги своя IRONAGE профил? Това действие не може да бъде отменено.",
+  },
+
+  "profile.deleteAccountConfirmAgain": {
+    en: "Are you absolutely sure? Your IRONAGE account and associated data will be deleted.",
+    es: "¿Estás completamente seguro? Tu cuenta de IRONAGE y los datos asociados serán eliminados.",
+    uk: "Ви точно впевнені? Ваш акаунт IRONAGE і пов’язані з ним дані буде видалено.",
+    ru: "Вы точно уверены? Ваш аккаунт IRONAGE и связанные с ним данные будут удалены.",
+    fr: "Êtes-vous absolument sûr ? Votre compte IRONAGE et les données associées seront supprimés.",
+    de: "Bist du dir wirklich sicher? Dein IRONAGE-Konto und die zugehörigen Daten werden gelöscht.",
+    pt: "Tem a certeza? A sua conta IRONAGE e os dados associados serão eliminados.",
+    bg: "Напълно сигурни ли сте? Вашият IRONAGE профил и свързаните данни ще бъдат изтрити.",
+  },
+
+  "profile.deleteAccountFailed": {
+    en: "Failed to delete account. Please try again.",
+    es: "No se pudo eliminar la cuenta. Inténtalo de nuevo.",
+    uk: "Не вдалося видалити акаунт. Спробуйте ще раз.",
+    ru: "Не удалось удалить аккаунт. Попробуйте ещё раз.",
+    fr: "Impossible de supprimer le compte. Veuillez réessayer.",
+    de: "Das Konto konnte nicht gelöscht werden. Bitte versuche es erneut.",
+    pt: "Não foi possível excluir a conta. Tente novamente.",
+    bg: "Профилът не можа да бъде изтрит. Опитайте отново.",
+  },
+
   "profile.logout": {
     en: "LOG OUT",
     es: "CERRAR SESIÓN",
