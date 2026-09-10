@@ -732,6 +732,37 @@ const RAW_TRANSLATIONS: Record<string, Entry> = {
     "pt": "TOTAL",
     "bg": "ОБЩО"
   },
+  "EXERCISE": {
+    "en": "EXERCISE",
+    "es": "EJERCICIO",
+    "uk": "ВПРАВА",
+    "ru": "УПРАЖНЕНИЕ",
+    "fr": "EXERCICE",
+    "de": "ÜBUNG",
+    "pt": "EXERCÍCIO",
+    "bg": "УПРАЖНЕНИЕ"
+  },
+  "SETS COMPLETED": {
+    "en": "SETS COMPLETED",
+    "es": "SERIES COMPLETADAS",
+    "uk": "ПІДХОДІВ ЗАВЕРШЕНО",
+    "ru": "ПОДХОДОВ ЗАВЕРШЕНО",
+    "fr": "SÉRIES TERMINÉES",
+    "de": "SÄTZE ABGESCHLOSSEN",
+    "pt": "SÉRIES CONCLUÍDAS",
+    "bg": "ЗАВЪРШЕНИ СЕРИИ"
+  },
+  "IRONAGE ATHLETE": {
+    "en": "IRONAGE ATHLETE",
+    "es": "ATLETA IRONAGE",
+    "uk": "АТЛЕТ IRONAGE",
+    "ru": "АТЛЕТ IRONAGE",
+    "fr": "ATHLÈTE IRONAGE",
+    "de": "IRONAGE ATHLET",
+    "pt": "ATLETA IRONAGE",
+    "bg": "АТЛЕТ IRONAGE"
+  },
+
   "COMPLETE SET": {
     "en": "COMPLETE SET",
     "es": "COMPLETAR SERIE",

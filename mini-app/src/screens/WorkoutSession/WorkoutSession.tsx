@@ -7,6 +7,14 @@ import {
 
 import "./WorkoutSession.css";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
+import {
+  translateRaw,
+} from "../../i18n/runtimeTranslator";
+
 import vasylPhoto from "../../assets/vasyl-ua.jpg";
 
 import {
@@ -50,6 +58,17 @@ export default function WorkoutSession({
   workoutProgram,
   onComplete,
 }: Props) {
+  const { language } =
+    useLanguage();
+
+  const tr = (
+    value: string
+  ) =>
+    translateRaw(
+      value,
+      language
+    );
+
   const workout =
     workoutProgram ??
     getWorkoutProgram(workoutId);
@@ -353,7 +372,7 @@ export default function WorkoutSession({
 
       <img
         src={vasylPhoto}
-        alt="IRONAGE athlete"
+        alt={tr("IRONAGE ATHLETE")}
         className="session-background"
       />
 
@@ -367,6 +386,7 @@ export default function WorkoutSession({
             type="button"
             className="session-close"
             onClick={closeSession}
+            aria-label={tr("EXIT WORKOUT")}
           >
             ×
           </button>
@@ -374,7 +394,7 @@ export default function WorkoutSession({
           <div className="session-header-center">
 
             <span>
-              IRONAGE SESSION
+              {tr("IRONAGE SESSION")}
             </span>
 
             <strong>
@@ -394,7 +414,7 @@ export default function WorkoutSession({
           <div className="session-progress-top">
 
             <span>
-              EXERCISE{" "}
+              {tr("EXERCISE")}{" "}
               {exerciseIndex + 1}
               {" / "}
               {totalExercises}
@@ -428,7 +448,7 @@ export default function WorkoutSession({
         <section className="session-exercise">
 
           <span className="session-eyebrow">
-            CURRENT EXERCISE
+            {tr("CURRENT EXERCISE")}
           </span>
 
           <h1>
@@ -438,7 +458,7 @@ export default function WorkoutSession({
           <div className="session-main-stat">
 
             <span>
-              REPS
+              {tr("REPS")}
             </span>
 
             <strong>
@@ -452,7 +472,7 @@ export default function WorkoutSession({
             <div>
 
               <span>
-                SET
+                {tr("SET")}
               </span>
 
               <strong>
@@ -471,7 +491,7 @@ export default function WorkoutSession({
             <div>
 
               <span>
-                TOTAL
+                {tr("TOTAL")}
               </span>
 
               <strong>
@@ -497,8 +517,8 @@ export default function WorkoutSession({
             }}
           >
             {completedCount} /{" "}
-            {totalSets} SETS
-            COMPLETED
+            {totalSets}{" "}
+            {tr("SETS COMPLETED")}
           </div>
 
         </section>
@@ -508,14 +528,15 @@ export default function WorkoutSession({
           <div className="session-motivation">
 
             <span>
-              IRONAGE MINDSET
+              {tr("IRONAGE MINDSET")}
             </span>
 
             <p>
-              One more set.
+              {tr("One more set.")}
               <br />
-              One stronger
-              version of you.
+              {tr(
+                "One stronger version of you."
+              )}
             </p>
 
           </div>
@@ -534,11 +555,11 @@ export default function WorkoutSession({
             <span>
               {currentSet <
               exercise.sets
-                ? "COMPLETE SET"
+                ? tr("COMPLETE SET")
                 : exerciseIndex <
                     totalExercises - 1
-                  ? "NEXT EXERCISE"
-                  : "FINISH WORKOUT"}
+                  ? tr("NEXT EXERCISE")
+                  : tr("FINISH WORKOUT")}
             </span>
 
             <strong>
@@ -563,16 +584,17 @@ export default function WorkoutSession({
             aria-labelledby="session-exit-title"
           >
             <span className="session-exit-eyebrow">
-              IRONAGE SESSION
+              {tr("IRONAGE SESSION")}
             </span>
 
             <h2 id="session-exit-title">
-              EXIT WORKOUT?
+              {tr("EXIT WORKOUT?")}
             </h2>
 
             <p>
-              Your current workout progress
-              will be lost.
+              {tr(
+                "Your current workout progress will be lost."
+              )}
             </p>
 
             <div className="session-exit-actions">
@@ -581,7 +603,7 @@ export default function WorkoutSession({
                 className="session-exit-continue"
                 onClick={cancelExit}
               >
-                CONTINUE TRAINING
+                {tr("CONTINUE TRAINING")}
               </button>
 
               <button
@@ -589,7 +611,7 @@ export default function WorkoutSession({
                 className="session-exit-confirm"
                 onClick={confirmExit}
               >
-                EXIT WORKOUT
+                {tr("EXIT WORKOUT")}
               </button>
             </div>
           </div>
