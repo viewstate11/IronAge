@@ -16,6 +16,7 @@ import EditProfile from "./EditProfile";
 import Settings from "./Settings";
 import Notifications from "./Notifications";
 import Payments from "./Payments";
+import HelpSupport from "./HelpSupport";
 import WorkoutHistory from "./WorkoutHistory";
 import Premium from "./Premium";
 import AITrainer from "./AITrainer";
@@ -83,6 +84,7 @@ type AppScreen =
   | "settings"
   | "notifications"
   | "payments"
+  | "help-support"
   | "workout-history"
   | "programs"
   | "program-details"
@@ -760,9 +762,8 @@ export default function MainApp() {
             }}
 
             onOpenHelpSupport={() => {
-              openProfileFeature(
-                "HELP & SUPPORT",
-                "Get help with your account, training, coaching, purchases and IRONAGE features."
+              setScreen(
+                "help-support"
               );
             }}
 
@@ -984,6 +985,17 @@ export default function MainApp() {
 
         {screen === "payments" && (
           <Payments
+            onBack={() => {
+              setScreen(
+                "profile"
+              );
+            }}
+          />
+        )}
+
+
+        {screen === "help-support" && (
+          <HelpSupport
             onBack={() => {
               setScreen(
                 "profile"
