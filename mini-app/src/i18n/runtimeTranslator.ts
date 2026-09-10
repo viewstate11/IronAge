@@ -3293,6 +3293,126 @@ const RAW_TRANSLATIONS: Record<string, Entry> = {
     "pt": "Não foi possível carregar treinos",
     "bg": "Тренировките не можаха да бъдат заредени"
   },
+  "PROGRAMS": {
+    "en": "PROGRAMS",
+    "es": "PROGRAMAS",
+    "uk": "ПРОГРАМИ",
+    "ru": "ПРОГРАММЫ",
+    "fr": "PROGRAMMES",
+    "de": "PROGRAMME",
+    "pt": "PROGRAMAS",
+    "bg": "ПРОГРАМИ"
+  },
+  "TRAIN WITH VERIFIED COACHES": {
+    "en": "TRAIN WITH VERIFIED COACHES",
+    "es": "ENTRENA CON ENTRENADORES VERIFICADOS",
+    "uk": "ТРЕНУЙСЯ З ПЕРЕВІРЕНИМИ ТРЕНЕРАМИ",
+    "ru": "ТРЕНИРУЙСЯ С ПРОВЕРЕННЫМИ ТРЕНЕРАМИ",
+    "fr": "ENTRAÎNE-TOI AVEC DES COACHS VÉRIFIÉS",
+    "de": "TRAINIERE MIT VERIFIZIERTEN COACHES",
+    "pt": "TREINA COM TREINADORES VERIFICADOS",
+    "bg": "ТРЕНИРАЙ С ПРОВЕРЕНИ ТРЕНЬОРИ"
+  },
+  "IRONAGE MARKETPLACE": {
+    "en": "IRONAGE MARKETPLACE",
+    "es": "MERCADO IRONAGE",
+    "uk": "МАРКЕТПЛЕЙС IRONAGE",
+    "ru": "МАРКЕТПЛЕЙС IRONAGE",
+    "fr": "MARKETPLACE IRONAGE",
+    "de": "IRONAGE MARKTPLATZ",
+    "pt": "MARKETPLACE IRONAGE",
+    "bg": "IRONAGE МАРКЕТПЛЕЙС"
+  },
+  "CHOOSE YOUR PROGRAM": {
+    "en": "CHOOSE YOUR PROGRAM",
+    "es": "ELIGE TU PROGRAMA",
+    "uk": "ОБЕРИ СВОЮ ПРОГРАМУ",
+    "ru": "ВЫБЕРИ СВОЮ ПРОГРАММУ",
+    "fr": "CHOISIS TON PROGRAMME",
+    "de": "WÄHLE DEIN PROGRAMM",
+    "pt": "ESCOLHE O TEU PROGRAMA",
+    "bg": "ИЗБЕРИ СВОЯТА ПРОГРАМА"
+  },
+  "Professional training programs approved and published by IRONAGE.": {
+    "en": "Professional training programs approved and published by IRONAGE.",
+    "es": "Programas de entrenamiento profesionales aprobados y publicados por IRONAGE.",
+    "uk": "Професійні тренувальні програми, перевірені та опубліковані IRONAGE.",
+    "ru": "Профессиональные тренировочные программы, проверенные и опубликованные IRONAGE.",
+    "fr": "Programmes d’entraînement professionnels approuvés et publiés par IRONAGE.",
+    "de": "Professionelle Trainingsprogramme, geprüft und veröffentlicht von IRONAGE.",
+    "pt": "Programas de treino profissionais aprovados e publicados pela IRONAGE.",
+    "bg": "Професионални тренировъчни програми, одобрени и публикувани от IRONAGE."
+  },
+  "PROGRAMS NOT AVAILABLE": {
+    "en": "PROGRAMS NOT AVAILABLE",
+    "es": "PROGRAMAS NO DISPONIBLES",
+    "uk": "ПРОГРАМИ НЕДОСТУПНІ",
+    "ru": "ПРОГРАММЫ НЕДОСТУПНЫ",
+    "fr": "PROGRAMMES INDISPONIBLES",
+    "de": "PROGRAMME NICHT VERFÜGBAR",
+    "pt": "PROGRAMAS INDISPONÍVEIS",
+    "bg": "ПРОГРАМИТЕ НЕ СА ДОСТЪПНИ"
+  },
+  "NO PUBLISHED PROGRAMS YET": {
+    "en": "NO PUBLISHED PROGRAMS YET",
+    "es": "AÚN NO HAY PROGRAMAS PUBLICADOS",
+    "uk": "ОПУБЛІКОВАНИХ ПРОГРАМ ЩЕ НЕМАЄ",
+    "ru": "ОПУБЛИКОВАННЫХ ПРОГРАММ ПОКА НЕТ",
+    "fr": "AUCUN PROGRAMME PUBLIÉ POUR LE MOMENT",
+    "de": "NOCH KEINE PROGRAMME VERÖFFENTLICHT",
+    "pt": "AINDA NÃO HÁ PROGRAMAS PUBLICADOS",
+    "bg": "ВСЕ ОЩЕ НЯМА ПУБЛИКУВАНИ ПРОГРАМИ"
+  },
+  "New IRONAGE programs will appear here after admin approval.": {
+    "en": "New IRONAGE programs will appear here after admin approval.",
+    "es": "Los nuevos programas IRONAGE aparecerán aquí después de la aprobación del administrador.",
+    "uk": "Нові програми IRONAGE з’являться тут після схвалення адміністратором.",
+    "ru": "Новые программы IRONAGE появятся здесь после одобрения администратором.",
+    "fr": "Les nouveaux programmes IRONAGE apparaîtront ici après validation par l’administrateur.",
+    "de": "Neue IRONAGE Programme erscheinen hier nach der Freigabe durch den Administrator.",
+    "pt": "Os novos programas IRONAGE aparecerão aqui após aprovação do administrador.",
+    "bg": "Новите програми IRONAGE ще се появят тук след одобрение от администратор."
+  },
+  "VERIFIED PROGRAM": {
+    "en": "VERIFIED PROGRAM",
+    "es": "PROGRAMA VERIFICADO",
+    "uk": "ПЕРЕВІРЕНА ПРОГРАМА",
+    "ru": "ПРОВЕРЕННАЯ ПРОГРАММА",
+    "fr": "PROGRAMME VÉRIFIÉ",
+    "de": "VERIFIZIERTES PROGRAMM",
+    "pt": "PROGRAMA VERIFICADO",
+    "bg": "ПРОВЕРЕНА ПРОГРАМА"
+  },
+  "Professional IRONAGE training program.": {
+    "en": "Professional IRONAGE training program.",
+    "es": "Programa de entrenamiento profesional IRONAGE.",
+    "uk": "Професійна тренувальна програма IRONAGE.",
+    "ru": "Профессиональная тренировочная программа IRONAGE.",
+    "fr": "Programme d’entraînement professionnel IRONAGE.",
+    "de": "Professionelles IRONAGE Trainingsprogramm.",
+    "pt": "Programa de treino profissional IRONAGE.",
+    "bg": "Професионална тренировъчна програма IRONAGE."
+  },
+  "VIEW PROGRAM": {
+    "en": "VIEW PROGRAM",
+    "es": "VER PROGRAMA",
+    "uk": "ПЕРЕГЛЯНУТИ ПРОГРАМУ",
+    "ru": "ПОСМОТРЕТЬ ПРОГРАММУ",
+    "fr": "VOIR LE PROGRAMME",
+    "de": "PROGRAMM ANZEIGEN",
+    "pt": "VER PROGRAMA",
+    "bg": "ВИЖ ПРОГРАМАТА"
+  },
+  "FREE": {
+    "en": "FREE",
+    "es": "GRATIS",
+    "uk": "БЕЗКОШТОВНО",
+    "ru": "БЕСПЛАТНО",
+    "fr": "GRATUIT",
+    "de": "KOSTENLOS",
+    "pt": "GRÁTIS",
+    "bg": "БЕЗПЛАТНО"
+  },
   "Failed to load programs": {
     "en": "Failed to load programs",
     "es": "No se pudieron cargar los programas",

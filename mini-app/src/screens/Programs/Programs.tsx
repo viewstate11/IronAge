@@ -9,6 +9,14 @@ import api, {
 
 import "./Programs.css";
 
+import {
+  useLanguage,
+} from "../../context/LanguageContext";
+
+import {
+  translateRaw,
+} from "../../i18n/runtimeTranslator";
+
 type ProgramCard = {
   id: number;
   coachId: number;
@@ -56,13 +64,14 @@ type Props = {
 
 function formatPrice(
   priceCents: number | null,
-  currency: string
+  currency: string,
+  tr: (value: string) => string
 ): string {
   if (
     priceCents === null ||
     priceCents <= 0
   ) {
-    return "FREE";
+    return tr("FREE");
   }
 
   try {
@@ -86,6 +95,17 @@ export default function Programs({
   onBack,
   onOpenProgram,
 }: Props) {
+  const { language } =
+    useLanguage();
+
+  const tr = (
+    value: string
+  ) =>
+    translateRaw(
+      value,
+      language
+    );
+
   const [
     programs,
     setPrograms,
@@ -128,9 +148,7 @@ export default function Programs({
       );
 
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to load programs"
+        tr("Failed to load programs")
       );
     } finally {
       setLoading(false);
@@ -149,7 +167,7 @@ export default function Programs({
           <button
             type="button"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={tr("Back")}
           >
             ←
           </button>
@@ -160,11 +178,11 @@ export default function Programs({
             </span>
 
             <h1>
-              PROGRAMS
+              {tr("PROGRAMS")}
             </h1>
 
             <p>
-              TRAIN WITH VERIFIED COACHES
+              {tr("TRAIN WITH VERIFIED COACHES")}
             </p>
           </div>
         </header>
@@ -172,19 +190,17 @@ export default function Programs({
 
         <section className="programs-intro">
           <span>
-            IRONAGE MARKETPLACE
+            {tr("IRONAGE MARKETPLACE")}
           </span>
 
           <h2>
-            CHOOSE YOUR
-            <strong>
-              {" "}PROGRAM
-            </strong>
+            {tr("CHOOSE YOUR PROGRAM")}
           </h2>
 
           <p>
-            Professional training programs
-            approved and published by IRONAGE.
+            {tr(
+              "Professional training programs approved and published by IRONAGE."
+            )}
           </p>
         </section>
 
@@ -192,7 +208,7 @@ export default function Programs({
         {loading && (
           <section className="programs-state">
             <strong>
-              LOADING PROGRAMS...
+              {tr("LOADING PROGRAMS...")}
             </strong>
           </section>
         )}
@@ -201,7 +217,7 @@ export default function Programs({
         {!loading && error && (
           <section className="programs-state">
             <strong>
-              PROGRAMS NOT AVAILABLE
+              {tr("PROGRAMS NOT AVAILABLE")}
             </strong>
 
             <p>
@@ -214,7 +230,7 @@ export default function Programs({
                 void loadPrograms()
               }
             >
-              RETRY
+              {tr("RETRY")}
             </button>
           </section>
         )}
@@ -225,13 +241,13 @@ export default function Programs({
           programs.length === 0 && (
             <section className="programs-state">
               <strong>
-                NO PUBLISHED PROGRAMS YET
+                {tr("NO PUBLISHED PROGRAMS YET")}
               </strong>
 
               <p>
-                New IRONAGE programs
-                will appear here after
-                admin approval.
+                {tr(
+                  "New IRONAGE programs will appear here after admin approval."
+                )}
               </p>
             </section>
           )}
@@ -256,13 +272,14 @@ export default function Programs({
                     >
                       <div className="program-card__top">
                         <span>
-                          VERIFIED PROGRAM
+                          {tr("VERIFIED PROGRAM")}
                         </span>
 
                         <strong>
                           {formatPrice(
                             program.priceCents,
-                            program.currency
+                            program.currency,
+                            tr
                           )}
                         </strong>
                       </div>
@@ -273,7 +290,9 @@ export default function Programs({
 
                       <p className="program-card__description">
                         {program.description ||
-                          "Professional IRONAGE training program."}
+                          tr(
+                            "Professional IRONAGE training program."
+                          )}
                       </p>
 
                       <div className="program-card__coach">
@@ -310,7 +329,7 @@ export default function Programs({
 
                           <span>
                             {coach?.specialization ||
-                              "IRONAGE COACH"}
+                              tr("IRONAGE COACH")}
                           </span>
                         </div>
 
@@ -329,7 +348,7 @@ export default function Programs({
                           </strong>
 
                           <span>
-                            WEEKS
+                            {tr("WEEKS")}
                           </span>
                         </div>
 
@@ -343,7 +362,7 @@ export default function Programs({
                           </strong>
 
                           <span>
-                            WORKOUTS
+                            {tr("WORKOUTS")}
                           </span>
                         </div>
 
@@ -357,7 +376,7 @@ export default function Programs({
                           </strong>
 
                           <span>
-                            ATHLETES
+                            {tr("ATHLETES")}
                           </span>
                         </div>
                       </div>
@@ -372,7 +391,7 @@ export default function Programs({
                         }
                       >
                         <span>
-                          VIEW PROGRAM
+                          {tr("VIEW PROGRAM")}
                         </span>
 
                         <b>
