@@ -12,6 +12,11 @@ import api, {
 } from "../../api/client";
 
 import {
+  useLanguage,
+  type AppLanguage,
+} from "../../context/LanguageContext";
+
+import {
   IronAgeStoreKit,
 } from "../../native/ironAgeStoreKit";
 
@@ -106,16 +111,353 @@ type Props = {
   ) => void;
 };
 
+type ProgramDetailsUiCopy = {
+  priceTba: string;
+  free: string;
+  loading: string;
+  unavailable: string;
+  retry: string;
+  program: string;
+  verified: string;
+  defaultDescription: string;
+  coach: string;
+  defaultCoach: string;
+  weeks: string;
+  workouts: string;
+  athletes: string;
+  content: string;
+  protectedTitle: string;
+  protectedDescription: string;
+  access: string;
+  ready: string;
+  accessGranted: string;
+  accessFree: string;
+  accessUnavailable: string;
+  accessNotConfigured: string;
+  accessPurchase: string;
+  accessIos: string;
+  getting: string;
+  processing: string;
+  openProgram: string;
+  getProgram: string;
+  comingSoon: string;
+  purchaseSoon: string;
+  purchase: string;
+  availableIos: string;
+  restoring: string;
+  restore: string;
+};
+
+const PROGRAM_DETAILS_UI:
+Record<AppLanguage, ProgramDetailsUiCopy> = {
+  en: {
+    priceTba: "PRICE TBA",
+    free: "FREE",
+    loading: "LOADING PROGRAM...",
+    unavailable: "PROGRAM NOT AVAILABLE",
+    retry: "RETRY",
+    program: "IRONAGE PROGRAM",
+    verified: "VERIFIED PROGRAM",
+    defaultDescription: "Professional IRONAGE training program.",
+    coach: "COACH",
+    defaultCoach: "IRONAGE COACH",
+    weeks: "WEEKS",
+    workouts: "WORKOUTS",
+    athletes: "ATHLETES",
+    content: "PROGRAM CONTENT",
+    protectedTitle: "FULL TRAINING PLAN PROTECTED",
+    protectedDescription: "Exercises, sets, repetitions and coach instructions become available only after program access is granted.",
+    access: "PROGRAM ACCESS",
+    ready: "READY TO TRAIN?",
+    accessGranted: "This program is available in your IRONAGE account.",
+    accessFree: "Get this program free and start training.",
+    accessUnavailable: "Program access is not available yet.",
+    accessNotConfigured: "App Store purchase is not configured for this program yet.",
+    accessPurchase: "Purchase securely through the App Store and unlock this program.",
+    accessIos: "Purchase this program in the IRONAGE iOS app.",
+    getting: "GETTING PROGRAM...",
+    processing: "PROCESSING PURCHASE...",
+    openProgram: "OPEN MY PROGRAM",
+    getProgram: "GET PROGRAM",
+    comingSoon: "COMING SOON",
+    purchaseSoon: "PURCHASE COMING SOON",
+    purchase: "PURCHASE",
+    availableIos: "AVAILABLE IN IOS APP",
+    restoring: "RESTORING...",
+    restore: "RESTORE PURCHASES",
+  },
+
+  es: {
+    priceTba: "PRECIO POR DEFINIR",
+    free: "GRATIS",
+    loading: "CARGANDO PROGRAMA...",
+    unavailable: "PROGRAMA NO DISPONIBLE",
+    retry: "REINTENTAR",
+    program: "PROGRAMA IRONAGE",
+    verified: "PROGRAMA VERIFICADO",
+    defaultDescription: "Programa de entrenamiento profesional IRONAGE.",
+    coach: "ENTRENADOR",
+    defaultCoach: "ENTRENADOR IRONAGE",
+    weeks: "SEMANAS",
+    workouts: "ENTRENAMIENTOS",
+    athletes: "ATLETAS",
+    content: "CONTENIDO DEL PROGRAMA",
+    protectedTitle: "PLAN DE ENTRENAMIENTO PROTEGIDO",
+    protectedDescription: "Los ejercicios, series, repeticiones e instrucciones estarán disponibles después de obtener acceso al programa.",
+    access: "ACCESO AL PROGRAMA",
+    ready: "¿LISTO PARA ENTRENAR?",
+    accessGranted: "Este programa está disponible en tu cuenta IRONAGE.",
+    accessFree: "Obtén este programa gratis y empieza a entrenar.",
+    accessUnavailable: "El acceso al programa aún no está disponible.",
+    accessNotConfigured: "La compra en App Store aún no está configurada para este programa.",
+    accessPurchase: "Compra mediante App Store y desbloquea este programa.",
+    accessIos: "Compra este programa en la app IRONAGE para iOS.",
+    getting: "OBTENIENDO PROGRAMA...",
+    processing: "PROCESANDO COMPRA...",
+    openProgram: "ABRIR MI PROGRAMA",
+    getProgram: "OBTENER PROGRAMA",
+    comingSoon: "PRÓXIMAMENTE",
+    purchaseSoon: "COMPRA PRÓXIMAMENTE",
+    purchase: "COMPRAR",
+    availableIos: "DISPONIBLE EN IOS",
+    restoring: "RESTAURANDO...",
+    restore: "RESTAURAR COMPRAS",
+  },
+
+  uk: {
+    priceTba: "ЦІНА УТОЧНЮЄТЬСЯ",
+    free: "БЕЗКОШТОВНО",
+    loading: "ЗАВАНТАЖЕННЯ ПРОГРАМИ...",
+    unavailable: "ПРОГРАМА НЕДОСТУПНА",
+    retry: "ПОВТОРИТИ",
+    program: "ПРОГРАМА IRONAGE",
+    verified: "ПЕРЕВІРЕНА ПРОГРАМА",
+    defaultDescription: "Професійна тренувальна програма IRONAGE.",
+    coach: "ТРЕНЕР",
+    defaultCoach: "ТРЕНЕР IRONAGE",
+    weeks: "ТИЖНІ",
+    workouts: "ТРЕНУВАННЯ",
+    athletes: "АТЛЕТИ",
+    content: "ВМІСТ ПРОГРАМИ",
+    protectedTitle: "ПОВНИЙ ПЛАН ТРЕНУВАНЬ ЗАХИЩЕНО",
+    protectedDescription: "Вправи, підходи, повторення та інструкції тренера стануть доступними після отримання доступу до програми.",
+    access: "ДОСТУП ДО ПРОГРАМИ",
+    ready: "ГОТОВИЙ ТРЕНУВАТИСЯ?",
+    accessGranted: "Ця програма доступна у твоєму акаунті IRONAGE.",
+    accessFree: "Отримай програму безкоштовно та починай тренування.",
+    accessUnavailable: "Доступ до програми поки недоступний.",
+    accessNotConfigured: "Покупку через App Store для цієї програми ще не налаштовано.",
+    accessPurchase: "Придбай програму через App Store та відкрий доступ.",
+    accessIos: "Придбай цю програму в iOS-додатку IRONAGE.",
+    getting: "ОТРИМАННЯ ПРОГРАМИ...",
+    processing: "ОБРОБКА ПОКУПКИ...",
+    openProgram: "ВІДКРИТИ МОЮ ПРОГРАМУ",
+    getProgram: "ОТРИМАТИ ПРОГРАМУ",
+    comingSoon: "НЕЗАБАРОМ",
+    purchaseSoon: "ПОКУПКА НЕЗАБАРОМ",
+    purchase: "ПРИДБАТИ",
+    availableIos: "ДОСТУПНО В IOS-ДОДАТКУ",
+    restoring: "ВІДНОВЛЕННЯ...",
+    restore: "ВІДНОВИТИ ПОКУПКИ",
+  },
+
+  ru: {
+    priceTba: "ЦЕНА УТОЧНЯЕТСЯ",
+    free: "БЕСПЛАТНО",
+    loading: "ЗАГРУЗКА ПРОГРАММЫ...",
+    unavailable: "ПРОГРАММА НЕДОСТУПНА",
+    retry: "ПОВТОРИТЬ",
+    program: "ПРОГРАММА IRONAGE",
+    verified: "ПРОВЕРЕННАЯ ПРОГРАММА",
+    defaultDescription: "Профессиональная тренировочная программа IRONAGE.",
+    coach: "ТРЕНЕР",
+    defaultCoach: "ТРЕНЕР IRONAGE",
+    weeks: "НЕДЕЛИ",
+    workouts: "ТРЕНИРОВКИ",
+    athletes: "АТЛЕТЫ",
+    content: "СОДЕРЖАНИЕ ПРОГРАММЫ",
+    protectedTitle: "ПОЛНЫЙ ПЛАН ТРЕНИРОВОК ЗАЩИЩЁН",
+    protectedDescription: "Упражнения, подходы, повторения и инструкции тренера станут доступны после получения доступа к программе.",
+    access: "ДОСТУП К ПРОГРАММЕ",
+    ready: "ГОТОВ К ТРЕНИРОВКЕ?",
+    accessGranted: "Эта программа доступна в вашем аккаунте IRONAGE.",
+    accessFree: "Получите программу бесплатно и начинайте тренироваться.",
+    accessUnavailable: "Доступ к программе пока недоступен.",
+    accessNotConfigured: "Покупка через App Store для этой программы ещё не настроена.",
+    accessPurchase: "Приобретите программу через App Store и откройте доступ.",
+    accessIos: "Приобретите эту программу в iOS-приложении IRONAGE.",
+    getting: "ПОЛУЧЕНИЕ ПРОГРАММЫ...",
+    processing: "ОБРАБОТКА ПОКУПКИ...",
+    openProgram: "ОТКРЫТЬ МОЮ ПРОГРАММУ",
+    getProgram: "ПОЛУЧИТЬ ПРОГРАММУ",
+    comingSoon: "СКОРО",
+    purchaseSoon: "ПОКУПКА СКОРО",
+    purchase: "КУПИТЬ",
+    availableIos: "ДОСТУПНО В IOS-ПРИЛОЖЕНИИ",
+    restoring: "ВОССТАНОВЛЕНИЕ...",
+    restore: "ВОССТАНОВИТЬ ПОКУПКИ",
+  },
+
+  fr: {
+    priceTba: "PRIX À VENIR",
+    free: "GRATUIT",
+    loading: "CHARGEMENT DU PROGRAMME...",
+    unavailable: "PROGRAMME INDISPONIBLE",
+    retry: "RÉESSAYER",
+    program: "PROGRAMME IRONAGE",
+    verified: "PROGRAMME VÉRIFIÉ",
+    defaultDescription: "Programme d’entraînement professionnel IRONAGE.",
+    coach: "COACH",
+    defaultCoach: "COACH IRONAGE",
+    weeks: "SEMAINES",
+    workouts: "ENTRAÎNEMENTS",
+    athletes: "ATHLÈTES",
+    content: "CONTENU DU PROGRAMME",
+    protectedTitle: "PLAN D’ENTRAÎNEMENT COMPLET PROTÉGÉ",
+    protectedDescription: "Les exercices, séries, répétitions et instructions du coach deviennent disponibles après l’accès au programme.",
+    access: "ACCÈS AU PROGRAMME",
+    ready: "PRÊT À T’ENTRAÎNER ?",
+    accessGranted: "Ce programme est disponible dans ton compte IRONAGE.",
+    accessFree: "Obtiens ce programme gratuitement et commence à t’entraîner.",
+    accessUnavailable: "L’accès au programme n’est pas encore disponible.",
+    accessNotConfigured: "L’achat App Store n’est pas encore configuré pour ce programme.",
+    accessPurchase: "Achète ce programme via l’App Store pour le débloquer.",
+    accessIos: "Achète ce programme dans l’application iOS IRONAGE.",
+    getting: "OBTENTION DU PROGRAMME...",
+    processing: "TRAITEMENT DE L’ACHAT...",
+    openProgram: "OUVRIR MON PROGRAMME",
+    getProgram: "OBTENIR LE PROGRAMME",
+    comingSoon: "BIENTÔT",
+    purchaseSoon: "ACHAT BIENTÔT",
+    purchase: "ACHETER",
+    availableIos: "DISPONIBLE DANS L’APP IOS",
+    restoring: "RESTAURATION...",
+    restore: "RESTAURER LES ACHATS",
+  },
+
+  de: {
+    priceTba: "PREIS FOLGT",
+    free: "KOSTENLOS",
+    loading: "PROGRAMM WIRD GELADEN...",
+    unavailable: "PROGRAMM NICHT VERFÜGBAR",
+    retry: "ERNEUT VERSUCHEN",
+    program: "IRONAGE PROGRAMM",
+    verified: "VERIFIZIERTES PROGRAMM",
+    defaultDescription: "Professionelles IRONAGE-Trainingsprogramm.",
+    coach: "COACH",
+    defaultCoach: "IRONAGE COACH",
+    weeks: "WOCHEN",
+    workouts: "TRAININGS",
+    athletes: "ATHLETEN",
+    content: "PROGRAMMINHALT",
+    protectedTitle: "VOLLSTÄNDIGER TRAININGSPLAN GESCHÜTZT",
+    protectedDescription: "Übungen, Sätze, Wiederholungen und Coach-Anweisungen werden nach Freischaltung des Programms verfügbar.",
+    access: "PROGRAMMZUGANG",
+    ready: "BEREIT ZU TRAINIEREN?",
+    accessGranted: "Dieses Programm ist in deinem IRONAGE-Konto verfügbar.",
+    accessFree: "Hol dir dieses Programm kostenlos und starte dein Training.",
+    accessUnavailable: "Der Programmzugang ist noch nicht verfügbar.",
+    accessNotConfigured: "Der App-Store-Kauf ist für dieses Programm noch nicht eingerichtet.",
+    accessPurchase: "Kaufe über den App Store und schalte dieses Programm frei.",
+    accessIos: "Kaufe dieses Programm in der IRONAGE iOS-App.",
+    getting: "PROGRAMM WIRD FREIGESCHALTET...",
+    processing: "KAUF WIRD VERARBEITET...",
+    openProgram: "MEIN PROGRAMM ÖFFNEN",
+    getProgram: "PROGRAMM HOLEN",
+    comingSoon: "BALD VERFÜGBAR",
+    purchaseSoon: "KAUF BALD VERFÜGBAR",
+    purchase: "KAUFEN",
+    availableIos: "IN DER IOS-APP VERFÜGBAR",
+    restoring: "WIEDERHERSTELLUNG...",
+    restore: "KÄUFE WIEDERHERSTELLEN",
+  },
+
+  pt: {
+    priceTba: "PREÇO A DEFINIR",
+    free: "GRÁTIS",
+    loading: "CARREGANDO PROGRAMA...",
+    unavailable: "PROGRAMA INDISPONÍVEL",
+    retry: "TENTAR NOVAMENTE",
+    program: "PROGRAMA IRONAGE",
+    verified: "PROGRAMA VERIFICADO",
+    defaultDescription: "Programa de treino profissional IRONAGE.",
+    coach: "TREINADOR",
+    defaultCoach: "TREINADOR IRONAGE",
+    weeks: "SEMANAS",
+    workouts: "TREINOS",
+    athletes: "ATLETAS",
+    content: "CONTEÚDO DO PROGRAMA",
+    protectedTitle: "PLANO COMPLETO DE TREINO PROTEGIDO",
+    protectedDescription: "Exercícios, séries, repetições e instruções do treinador ficam disponíveis após o acesso ao programa.",
+    access: "ACESSO AO PROGRAMA",
+    ready: "PRONTO PARA TREINAR?",
+    accessGranted: "Este programa está disponível na sua conta IRONAGE.",
+    accessFree: "Obtenha este programa gratuitamente e comece a treinar.",
+    accessUnavailable: "O acesso ao programa ainda não está disponível.",
+    accessNotConfigured: "A compra pela App Store ainda não está configurada para este programa.",
+    accessPurchase: "Compre pela App Store e desbloqueie este programa.",
+    accessIos: "Compre este programa no aplicativo IRONAGE para iOS.",
+    getting: "OBTENDO PROGRAMA...",
+    processing: "PROCESSANDO COMPRA...",
+    openProgram: "ABRIR MEU PROGRAMA",
+    getProgram: "OBTER PROGRAMA",
+    comingSoon: "EM BREVE",
+    purchaseSoon: "COMPRA EM BREVE",
+    purchase: "COMPRAR",
+    availableIos: "DISPONÍVEL NO APP IOS",
+    restoring: "RESTAURANDO...",
+    restore: "RESTAURAR COMPRAS",
+  },
+
+  bg: {
+    priceTba: "ЦЕНАТА ПРЕДСТОИ",
+    free: "БЕЗПЛАТНО",
+    loading: "ЗАРЕЖДАНЕ НА ПРОГРАМАТА...",
+    unavailable: "ПРОГРАМАТА НЕ Е ДОСТЪПНА",
+    retry: "ОПИТАЙ ОТНОВО",
+    program: "ПРОГРАМА IRONAGE",
+    verified: "ПОТВЪРДЕНА ПРОГРАМА",
+    defaultDescription: "Професионална тренировъчна програма IRONAGE.",
+    coach: "ТРЕНЬОР",
+    defaultCoach: "ТРЕНЬОР IRONAGE",
+    weeks: "СЕДМИЦИ",
+    workouts: "ТРЕНИРОВКИ",
+    athletes: "АТЛЕТИ",
+    content: "СЪДЪРЖАНИЕ НА ПРОГРАМАТА",
+    protectedTitle: "ПЪЛНИЯТ ТРЕНИРОВЪЧЕН ПЛАН Е ЗАЩИТЕН",
+    protectedDescription: "Упражненията, сериите, повторенията и инструкциите стават достъпни след получаване на достъп до програмата.",
+    access: "ДОСТЪП ДО ПРОГРАМАТА",
+    ready: "ГОТОВ ЛИ СИ ЗА ТРЕНИРОВКА?",
+    accessGranted: "Тази програма е достъпна в твоя IRONAGE профил.",
+    accessFree: "Вземи програмата безплатно и започни да тренираш.",
+    accessUnavailable: "Достъпът до програмата все още не е наличен.",
+    accessNotConfigured: "Покупката през App Store още не е настроена за тази програма.",
+    accessPurchase: "Купи чрез App Store и отключи програмата.",
+    accessIos: "Купи тази програма в iOS приложението IRONAGE.",
+    getting: "ПОЛУЧАВАНЕ НА ПРОГРАМАТА...",
+    processing: "ОБРАБОТКА НА ПОКУПКАТА...",
+    openProgram: "ОТВОРИ МОЯТА ПРОГРАМА",
+    getProgram: "ВЗЕМИ ПРОГРАМАТА",
+    comingSoon: "ОЧАКВАЙТЕ СКОРО",
+    purchaseSoon: "ПОКУПКА СКОРО",
+    purchase: "КУПИ",
+    availableIos: "ДОСТЪПНО В IOS ПРИЛОЖЕНИЕТО",
+    restoring: "ВЪЗСТАНОВЯВАНЕ...",
+    restore: "ВЪЗСТАНОВИ ПОКУПКИТЕ",
+  },
+};
+
 function formatPrice(
   priceCents: number | null,
-  currency: string
+  currency: string,
+  copy: ProgramDetailsUiCopy
 ): string {
   if (priceCents === null) {
-    return "PRICE TBA";
+    return copy.priceTba;
   }
 
   if (priceCents === 0) {
-    return "FREE";
+    return copy.free;
   }
 
   try {
@@ -141,6 +483,9 @@ export default function ProgramDetails({
   onOpenCoach,
   onOpenMyProgram,
 }: Props) {
+  const { language } = useLanguage();
+  const copy = PROGRAM_DETAILS_UI[language];
+
   const [
     program,
     setProgram,
@@ -510,7 +855,7 @@ export default function ProgramDetails({
     return (
       <main className="program-detail">
         <div className="program-detail__state">
-          LOADING PROGRAM...
+          {copy.loading}
         </div>
       </main>
     );
@@ -533,7 +878,7 @@ export default function ProgramDetails({
 
           <div className="program-detail__state">
             <strong>
-              PROGRAM NOT AVAILABLE
+              {copy.unavailable}
             </strong>
 
             <p>
@@ -546,7 +891,7 @@ export default function ProgramDetails({
                 void loadProgram()
               }
             >
-              RETRY
+              {copy.retry}
             </button>
           </div>
         </div>
@@ -572,14 +917,14 @@ export default function ProgramDetails({
           </button>
 
           <span>
-            IRONAGE PROGRAM
+            {copy.program}
           </span>
         </header>
 
 
         <section className="program-detail__hero">
           <span>
-            VERIFIED PROGRAM
+            {copy.verified}
           </span>
 
           <h1>
@@ -588,13 +933,14 @@ export default function ProgramDetails({
 
           <p>
             {program.description ||
-              "Professional IRONAGE training program."}
+              copy.defaultDescription}
           </p>
 
           <div className="program-detail__price">
             {formatPrice(
               program.priceCents,
-              program.currency
+              program.currency,
+              copy
             )}
           </div>
         </section>
@@ -631,7 +977,7 @@ export default function ProgramDetails({
 
           <div>
             <span>
-              COACH
+              {copy.coach}
             </span>
 
             <strong>
@@ -645,7 +991,7 @@ export default function ProgramDetails({
 
             <p>
               {coach?.specialization ||
-                "IRONAGE COACH"}
+                copy.defaultCoach}
             </p>
           </div>
 
@@ -663,7 +1009,7 @@ export default function ProgramDetails({
             </strong>
 
             <span>
-              WEEKS
+              {copy.weeks}
             </span>
           </div>
 
@@ -677,7 +1023,7 @@ export default function ProgramDetails({
             </strong>
 
             <span>
-              WORKOUTS
+              {copy.workouts}
             </span>
           </div>
 
@@ -691,7 +1037,7 @@ export default function ProgramDetails({
             </strong>
 
             <span>
-              ATHLETES
+              {copy.athletes}
             </span>
           </div>
         </section>
@@ -699,41 +1045,40 @@ export default function ProgramDetails({
 
         <section className="program-detail__access">
           <span>
-            PROGRAM CONTENT
+            {copy.content}
           </span>
 
           <h2>
-            FULL TRAINING PLAN PROTECTED
+            {copy.protectedTitle}
           </h2>
 
           <p>
-            Exercises, sets, repetitions and coach instructions
-            become available only after program access is granted.
+            {copy.protectedDescription}
           </p>
         </section>
 
 
         <section className="program-detail__access">
           <span>
-            PROGRAM ACCESS
+            {copy.access}
           </span>
 
           <h2>
-            READY TO TRAIN?
+            {copy.ready}
           </h2>
 
           <p>
             {hasAccess
-              ? "This program is available in your IRONAGE account."
+              ? copy.accessGranted
               : program.priceCents === 0
-                ? "Get this program free and start training."
+                ? copy.accessFree
                 : program.priceCents === null
-                  ? "Program access is not available yet."
+                  ? copy.accessUnavailable
                   : !program.appleProductId
-                    ? "App Store purchase is not configured for this program yet."
+                    ? copy.accessNotConfigured
                     : isNativeIOS
-                      ? "Purchase securely through the App Store and unlock this program."
-                      : "Purchase this program in the IRONAGE iOS app."}
+                      ? copy.accessPurchase
+                      : copy.accessIos}
           </p>
 
           {claimError && (
@@ -808,20 +1153,20 @@ export default function ProgramDetails({
             }}
           >
             {claiming
-              ? "GETTING PROGRAM..."
+              ? copy.getting
               : purchasing
-                ? "PROCESSING PURCHASE..."
+                ? copy.processing
                 : hasAccess
-                  ? "OPEN MY PROGRAM"
+                  ? copy.openProgram
                   : program.priceCents === 0
-                    ? "GET PROGRAM"
+                    ? copy.getProgram
                     : program.priceCents === null
-                      ? "COMING SOON"
+                      ? copy.comingSoon
                       : !program.appleProductId
-                        ? "PURCHASE COMING SOON"
+                        ? copy.purchaseSoon
                         : isNativeIOS
-                          ? "PURCHASE"
-                          : "AVAILABLE IN IOS APP"}
+                          ? copy.purchase
+                          : copy.availableIos}
           </button>
 
           {!hasAccess &&
@@ -841,8 +1186,8 @@ export default function ProgramDetails({
                 }
               >
                 {restoring
-                  ? "RESTORING..."
-                  : "RESTORE PURCHASES"}
+                  ? copy.restoring
+                  : copy.restore}
               </button>
             )}
         </section>
