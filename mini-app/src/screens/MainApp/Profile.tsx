@@ -229,7 +229,7 @@ export default function Profile(
     user?.username
       ? `@${user.username}`
       : user?.email ||
-        "IRONAGE ATHLETE";
+        t("profile.defaultAthlete");
 
   const level =
     Number(
@@ -246,13 +246,34 @@ export default function Profile(
       user?.streak ?? 0
     );
 
+  const goalKey =
+    (() => {
+      switch (user?.goal) {
+        case "MUSCLE":
+          return "editProfile.goalMuscle";
+        case "LOSE_WEIGHT":
+          return "editProfile.goalLoseWeight";
+        case "MAINTAIN":
+          return "editProfile.goalMaintain";
+        case "ENDURANCE":
+          return "editProfile.goalEndurance";
+        case "STRENGTH":
+          return "editProfile.goalStrength";
+        case "FITNESS":
+          return "editProfile.goalFitness";
+        default:
+          return null;
+      }
+    })();
+
   const goal =
-    String(
-      user?.goal ||
-      "BUILD YOUR BEST FORM"
-    )
-      .replace(/_/g, " ")
-      .toUpperCase();
+    goalKey
+      ? t(goalKey)
+      : user?.goal
+        ? String(user.goal)
+            .replace(/_/g, " ")
+            .toUpperCase()
+        : t("profile.defaultGoal");
 
   const avatar =
     user?.photoUrl ||
@@ -278,7 +299,7 @@ export default function Profile(
               type="button"
               className="iron-profile__back"
               onClick={onBack}
-              aria-label="Back"
+              aria-label={t("common.back")}
             >
               ←
             </button>
@@ -290,7 +311,7 @@ export default function Profile(
             </span>
 
             <h1>
-              PROFILE
+              {t("profile.title")}
             </h1>
           </div>
         </header>
@@ -315,7 +336,7 @@ export default function Profile(
 
           <div className="iron-profile__identity">
             <span>
-              ATHLETE PROFILE
+              {t("profile.athleteProfile")}
             </span>
 
             <h2>
@@ -334,7 +355,7 @@ export default function Profile(
               </strong>
 
               <span>
-                LEVEL
+                {t("dashboard.level")}
               </span>
             </div>
 
@@ -354,14 +375,14 @@ export default function Profile(
               </strong>
 
               <span>
-                DAY STREAK
+                {t("profile.dayStreak")}
               </span>
             </div>
           </div>
 
           <div className="iron-profile__goal">
             <span>
-              CURRENT GOAL
+              {t("editProfile.goal")}
             </span>
 
             <strong>

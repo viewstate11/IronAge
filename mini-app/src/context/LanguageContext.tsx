@@ -73,6 +73,61 @@ const translations:
      PROFILE
   ===================================================== */
 
+  "profile.title": {
+    en: "PROFILE",
+    es: "PERFIL",
+    uk: "ПРОФІЛЬ",
+    ru: "ПРОФИЛЬ",
+    fr: "PROFIL",
+    de: "PROFIL",
+    pt: "PERFIL",
+    bg: "ПРОФИЛ",
+  },
+
+  "profile.athleteProfile": {
+    en: "ATHLETE PROFILE",
+    es: "PERFIL DE ATLETA",
+    uk: "ПРОФІЛЬ АТЛЕТА",
+    ru: "ПРОФИЛЬ АТЛЕТА",
+    fr: "PROFIL ATHLÈTE",
+    de: "ATHLETENPROFIL",
+    pt: "PERFIL DE ATLETA",
+    bg: "ПРОФИЛ НА АТЛЕТА",
+  },
+
+  "profile.dayStreak": {
+    en: "DAY STREAK",
+    es: "DÍAS DE RACHA",
+    uk: "ДНІВ У СЕРІЇ",
+    ru: "ДНЕЙ В СЕРИИ",
+    fr: "JOURS DE SÉRIE",
+    de: "TAGE IN SERIE",
+    pt: "DIAS DE SEQUÊNCIA",
+    bg: "ДНИ В СЕРИЯ",
+  },
+
+  "profile.defaultAthlete": {
+    en: "IRONAGE ATHLETE",
+    es: "ATLETA IRONAGE",
+    uk: "АТЛЕТ IRONAGE",
+    ru: "АТЛЕТ IRONAGE",
+    fr: "ATHLÈTE IRONAGE",
+    de: "IRONAGE ATHLET",
+    pt: "ATLETA IRONAGE",
+    bg: "АТЛЕТ IRONAGE",
+  },
+
+  "profile.defaultGoal": {
+    en: "BUILD YOUR BEST FORM",
+    es: "CONSTRUYE TU MEJOR FORMA",
+    uk: "СТВОРИ СВОЮ НАЙКРАЩУ ФОРМУ",
+    ru: "СОЗДАЙ СВОЮ ЛУЧШУЮ ФОРМУ",
+    fr: "CONSTRUIS TA MEILLEURE FORME",
+    de: "ERREICHE DEINE BESTE FORM",
+    pt: "CONSTRUA SUA MELHOR FORMA",
+    bg: "ИЗГРАДИ НАЙ-ДОБРАТА СИ ФОРМА",
+  },
+
   "profile.editProfile": {
     en: "EDIT PROFILE",
     es: "EDITAR PERFIL",
