@@ -423,7 +423,7 @@ function formatDate(
 export default function VideoReviews({
   onBack,
 }: Props) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   const copy = COPY[language];
 
@@ -695,7 +695,7 @@ export default function VideoReviews({
             type="button"
             className="video-reviews__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>

@@ -364,7 +364,7 @@ const COPY: Record<
 export default function AdminUsers({
   onBack,
 }: Props) {
-  const { language } =
+  const { language, t } =
     useLanguage();
 
   const copy =
@@ -502,7 +502,7 @@ export default function AdminUsers({
             type="button"
             className="admin-users__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>

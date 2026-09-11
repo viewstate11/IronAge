@@ -614,6 +614,7 @@ export default function AdminPayments({
 }: Props) {
   const {
     language,
+    t,
   } = useLanguage();
 
   const copy =
@@ -721,7 +722,7 @@ export default function AdminPayments({
             type="button"
             className="admin-payments__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>

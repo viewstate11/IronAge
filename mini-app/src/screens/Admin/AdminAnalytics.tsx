@@ -461,6 +461,7 @@ export default function AdminAnalytics({
 }: Props) {
   const {
     language,
+    t,
   } = useLanguage();
 
   const copy =
@@ -540,7 +541,7 @@ export default function AdminAnalytics({
             type="button"
             className="admin-analytics__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>

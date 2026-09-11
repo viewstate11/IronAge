@@ -580,6 +580,7 @@ export default function CoachEntry({
 }: Props) {
   const {
     language,
+    t,
   } = useLanguage();
 
   const copy =
@@ -786,7 +787,7 @@ export default function CoachEntry({
             <button
               type="button"
               onClick={onBack}
-              aria-label="Back"
+              aria-label={t("common.back")}
             >
               ←
             </button>
@@ -828,7 +829,7 @@ export default function CoachEntry({
             <button
               type="button"
               onClick={onBack}
-              aria-label="Back"
+              aria-label={t("common.back")}
             >
               ←
             </button>
@@ -938,7 +939,7 @@ export default function CoachEntry({
             <button
               type="button"
               onClick={onBack}
-              aria-label="Back"
+              aria-label={t("common.back")}
             >
               ←
             </button>
@@ -1084,7 +1085,7 @@ export default function CoachEntry({
 
               onBack();
             }}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>

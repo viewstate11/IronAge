@@ -229,6 +229,7 @@ export default function AdminCoaches({
 }: Props) {
   const {
     language,
+    t,
   } = useLanguage();
 
   const copy =
@@ -356,7 +357,7 @@ export default function AdminCoaches({
           <button
             type="button"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
