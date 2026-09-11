@@ -347,7 +347,7 @@ export default function AITrainer({
 
       <img
         src={vasylPhoto}
-        alt="IRONAGE athlete"
+        alt={t("profile.defaultAthlete")}
         className="ai-background"
       />
 
@@ -360,12 +360,12 @@ export default function AITrainer({
         <div>
 
           <span className="ai-eyebrow">
-            IRONAGE / INTELLIGENCE
+            {t("ai.intelligence")}
           </span>
 
           <h1>
             AI
-            <span> TRAINER.</span>
+            <span>{" "}{t("ai.title")}</span>
           </h1>
 
         </div>
@@ -374,7 +374,7 @@ export default function AITrainer({
 
           <i />
 
-          ONLINE
+          {t("ai.online")}
 
         </div>
 
