@@ -60,6 +60,10 @@ import {
   useLanguage,
 } from "../../context/LanguageContext";
 import type { FeatureKey } from "../../config/featureAccess";
+import {
+  translateRaw,
+  type RuntimeLanguage,
+} from "../../i18n/runtimeTranslator";
 
 /* =========================================================
    TYPES
@@ -116,7 +120,14 @@ export default function MainApp() {
 
   const {
     t,
+    language,
   } = useLanguage();
+
+  const tr = (value: string) =>
+    translateRaw(
+      value,
+      language as RuntimeLanguage
+    );
 
 
 
@@ -1394,9 +1405,9 @@ export default function MainApp() {
               <strong
                 className="mainapp-complete-fallback__title"
               >
-                WORKOUT RESULT
+                {tr("WORKOUT RESULT")}
                 <br />
-                NOT FOUND
+                {tr("NOT FOUND")}
               </strong>
 
 
@@ -1415,7 +1426,7 @@ export default function MainApp() {
                 }}
                   className="mainapp-complete-fallback__button"
               >
-                BACK TO HOME
+                {tr("BACK TO HOME")}
               </button>
 
             </section>
