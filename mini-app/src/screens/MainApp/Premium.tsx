@@ -162,9 +162,7 @@ export default function Premium({ onBack }: Props) {
       );
 
       setError(
-        checkoutError instanceof Error
-          ? checkoutError.message
-          : t("premium.purchaseFailed")
+        t("premium.purchaseFailed")
       );
     } finally {
       setIsPurchasing(false);

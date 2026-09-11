@@ -103,9 +103,7 @@ export default function VerifyEmail() {
         setState("error");
 
         setMessage(
-          error instanceof Error
-            ? error.message.toUpperCase()
-            : t("verify.failed")
+          t("verify.failed")
         );
       }
     }

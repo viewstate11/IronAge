@@ -303,11 +303,9 @@ export default function EditProfile({
       );
 
       setError(
-        err instanceof Error
-          ? err.message
-          : t(
-              "editProfile.errorSave"
-            )
+        t(
+          "editProfile.errorSave"
+        )
       );
     } finally {
       setSaving(false);

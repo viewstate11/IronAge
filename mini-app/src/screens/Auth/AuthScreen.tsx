@@ -166,9 +166,7 @@ export default function AuthScreen({
         );
 
         setMessage(
-          error instanceof Error
-            ? error.message.toUpperCase()
-            : t("auth.failed")
+          t("auth.failed")
         );
       } finally {
         setSubmitting(false);
@@ -199,9 +197,7 @@ export default function AuthScreen({
         );
 
         setMessage(
-          error instanceof Error
-            ? error.message.toUpperCase()
-            : t("auth.googleFailed")
+          t("auth.googleFailed")
         );
       } finally {
         setSubmitting(false);

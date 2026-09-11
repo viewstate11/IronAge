@@ -375,9 +375,7 @@ export default function Onboarding() {
         );
 
         setError(
-          err instanceof Error
-            ? err.message
-            : t("onboarding.error.save")
+          t("onboarding.error.save")
         );
       } finally {
         setSaving(false);
