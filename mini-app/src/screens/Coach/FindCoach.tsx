@@ -164,9 +164,7 @@ export default function FindCoach({
       );
 
       setError(
-        err instanceof Error
-          ? err.message
-          : t("findCoach.failedToLoad")
+        t("findCoach.failedToLoad")
       );
     } finally {
       setLoading(false);

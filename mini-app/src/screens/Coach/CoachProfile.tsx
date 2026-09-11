@@ -122,9 +122,7 @@ export default function CoachProfile({
       );
 
       setError(
-        err instanceof Error
-          ? err.message
-          : t("coachProfile.failedToLoad")
+        t("coachProfile.failedToLoad")
       );
     } finally {
       setLoading(false);
@@ -171,9 +169,7 @@ export default function CoachProfile({
       );
 
       setConnectError(
-        err instanceof Error
-          ? err.message
-          : t("coachProfile.failedToChoose")
+        t("coachProfile.failedToChoose")
       );
     } finally {
       setConnecting(false);

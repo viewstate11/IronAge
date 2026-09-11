@@ -678,9 +678,7 @@ export default function CoachEntry({
       );
 
       setLoadError(
-        error instanceof Error
-          ? error.message
-          : copy.loadError
+        copy.loadError
       );
     } finally {
       setLoading(false);
@@ -756,9 +754,7 @@ export default function CoachEntry({
       );
 
       setSaveError(
-        error instanceof Error
-          ? error.message
-          : copy.saveError
+        copy.saveError
       );
     } finally {
       setSaving(false);

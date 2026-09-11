@@ -427,9 +427,7 @@ export default function CoachDashboard({
       setProgramReviewError({
         programId,
         message:
-          error instanceof Error
-            ? error.message
-            : t("coachDashboard.failedSubmit"),
+          t("coachDashboard.failedSubmit"),
       });
     } finally {
       setSubmittingProgramId(
@@ -466,12 +464,12 @@ export default function CoachDashboard({
 
       if (!response?.success) {
         throw new Error(
-          "Program assignment failed"
+          t("coachDashboard.failedAssign")
         );
       }
 
       setAssignSuccess(
-        `${selectedProgram.name} assigned to ${getClientName(
+        `${t("coachDashboard.programAssigned")}: ${selectedProgram.name} → ${getClientName(
           client.client,
           t("coachDashboard.athlete")
         )}`
@@ -483,9 +481,7 @@ export default function CoachDashboard({
       );
 
       setAssignError(
-        error instanceof Error
-          ? error.message
-          : t("coachDashboard.failedAssign")
+        t("coachDashboard.failedAssign")
       );
     } finally {
       setAssigningClientId(null);
@@ -524,9 +520,7 @@ export default function CoachDashboard({
       );
 
       setClientsError(
-        error instanceof Error
-          ? error.message
-          : t("coachDashboard.failedClients")
+        t("coachDashboard.failedClients")
       );
     } finally {
       setLoadingClients(false);
@@ -579,9 +573,7 @@ export default function CoachDashboard({
       );
 
       setClientResultsError(
-        error instanceof Error
-          ? error.message
-          : t("coachDashboard.failedResults")
+        t("coachDashboard.failedResults")
       );
     } finally {
       setLoadingClientResults(false);
@@ -620,9 +612,7 @@ export default function CoachDashboard({
       );
 
       setWorkoutsError(
-        error instanceof Error
-          ? error.message
-          : t("coachDashboard.failedWorkouts")
+        t("coachDashboard.failedWorkouts")
       );
     } finally {
       setLoadingWorkouts(false);
@@ -657,9 +647,7 @@ export default function CoachDashboard({
       );
 
       setProgramsError(
-        error instanceof Error
-          ? error.message
-          : t("coachDashboard.failedPrograms")
+        t("coachDashboard.failedPrograms")
       );
     } finally {
       setLoadingPrograms(false);

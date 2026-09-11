@@ -541,14 +541,8 @@ export default function MainApp() {
         );
 
 
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Не вдалося зберегти тренування";
-
-
         setSaveError(
-          message
+          tr("WORKOUT SAVE ERROR")
         );
 
 

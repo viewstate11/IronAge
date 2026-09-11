@@ -275,11 +275,9 @@ export default function Notifications({
       );
 
       setMessage(
-        error instanceof Error
-          ? error.message
-          : t(
-              "notifications.scheduleFailed"
-            )
+        t(
+          "notifications.scheduleFailed"
+        )
       );
     } finally {
       setBusy(null);
@@ -335,11 +333,9 @@ export default function Notifications({
       );
 
       setMessage(
-        error instanceof Error
-          ? error.message
-          : t(
-              "notifications.scheduleFailed"
-            )
+        t(
+          "notifications.scheduleFailed"
+        )
       );
     } finally {
       setBusy(null);
@@ -395,11 +391,9 @@ export default function Notifications({
       );
 
       setMessage(
-        error instanceof Error
-          ? error.message
-          : t(
-              "notifications.scheduleFailed"
-            )
+        t(
+          "notifications.scheduleFailed"
+        )
       );
     } finally {
       setBusy(null);
@@ -457,11 +451,9 @@ export default function Notifications({
       );
 
       setMessage(
-        error instanceof Error
-          ? error.message
-          : t(
-              "notifications.testFailed"
-            )
+        t(
+          "notifications.testFailed"
+        )
       );
     } finally {
       setBusy(null);

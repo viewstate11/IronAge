@@ -131,9 +131,7 @@ export default function CreateWorkout({
       );
 
       setLibraryError(
-        error instanceof Error
-          ? error.message
-          : t("createWorkout.failedLoad")
+        t("createWorkout.failedLoad")
       );
     } finally {
       setLoadingLibrary(false);
@@ -299,8 +297,7 @@ export default function CreateWorkout({
         !response.workout
       ) {
         throw new Error(
-          response?.message ||
-            t("createWorkout.notCreated")
+          t("createWorkout.notCreated")
         );
       }
 
@@ -312,9 +309,7 @@ export default function CreateWorkout({
       );
 
       setSaveError(
-        error instanceof Error
-          ? error.message
-          : t("createWorkout.failedCreate")
+        t("createWorkout.failedCreate")
       );
     } finally {
       setSaving(false);

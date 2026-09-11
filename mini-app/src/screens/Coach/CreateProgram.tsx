@@ -119,9 +119,7 @@ export default function CreateProgram({
       );
 
       setLoadError(
-        error instanceof Error
-          ? error.message
-          : t("createProgram.failedLoad")
+        t("createProgram.failedLoad")
       );
     } finally {
       setLoading(false);
@@ -297,8 +295,7 @@ export default function CreateProgram({
         !response.program
       ) {
         throw new Error(
-          response?.message ||
-            t("createProgram.notCreated")
+          t("createProgram.notCreated")
         );
       }
 
@@ -310,9 +307,7 @@ export default function CreateProgram({
       );
 
       setSaveError(
-        error instanceof Error
-          ? error.message
-          : t("createProgram.failedCreate")
+        t("createProgram.failedCreate")
       );
     } finally {
       setSaving(false);
