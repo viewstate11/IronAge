@@ -489,7 +489,7 @@ const COPY: Record<AppLanguage, Copy> = {
 export default function SubmitVideoReview({
   onBack,
 }: Props) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const copy = COPY[language];
   const recipientCopy =
     COACH_RECIPIENT_COPY[language];
@@ -904,7 +904,7 @@ export default function SubmitVideoReview({
             type="button"
             className="submit-video-review__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>

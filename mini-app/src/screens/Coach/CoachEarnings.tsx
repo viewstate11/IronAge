@@ -398,8 +398,7 @@ function money(
 export default function CoachEarnings({
   onBack,
 }: Props) {
-  const { language } =
-    useLanguage();
+  const { language, t } = useLanguage();
 
   const copy =
     COPY[language];
@@ -479,7 +478,7 @@ export default function CoachEarnings({
             type="button"
             className="coach-earnings__back"
             onClick={onBack}
-            aria-label="Back"
+            aria-label={t("common.back")}
           >
             ←
           </button>
