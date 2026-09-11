@@ -161,7 +161,7 @@ const PRIVACY_SECTIONS:
        * the existing runtime dictionary key.
        */
       paragraphs: [
-        "Depending on how you use IRONAGE, we may process account information such as your name, email address,authentication information, profile details, workout activity, progress, nutrition information, and coaching-related data.",
+        "Depending on how you use IRONAGE, we may process account information such as your name, email address, authentication information, profile details, workout activity, progress, nutrition information, and coaching-related data.",
       ],
     },
 
@@ -191,7 +191,7 @@ const PRIVACY_SECTIONS:
        * Matches existing runtime key.
        */
       paragraphs: [
-        "When a user chooses to connect with a coach, information necessary for coaching features may be sharedbetween the connected client and coach according to the features and permissions provided by IRONAGE.",
+        "When a user chooses to connect with a coach, information necessary for coaching features may be shared between the connected client and coach according to the features and permissions provided by IRONAGE.",
       ],
     },
 
@@ -235,7 +235,7 @@ const PRIVACY_SECTIONS:
        * Matches existing runtime key.
        */
       paragraphs: [
-        "IRONAGE is not intended to knowingly collect personal information from children where parental consentor another legal basis is required by applicable law.",
+        "IRONAGE is not intended to knowingly collect personal information from children where parental consent or another legal basis is required by applicable law.",
       ],
     },
 
