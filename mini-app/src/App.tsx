@@ -186,8 +186,7 @@ function AppContent() {
                 marginBottom: 20,
               }}
             >
-              {error ||
-                t("app.authenticationError")}
+              {t("app.authenticationError")}
             </div>
 
             <button
@@ -289,7 +288,7 @@ function AppContent() {
                 wordBreak: "break-word",
               }}
             >
-              {error}
+              {t("app.authenticationError")}
             </div>
 
             <button

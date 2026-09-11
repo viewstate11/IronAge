@@ -306,9 +306,7 @@ export default function GoogleSignInButton({
                   );
 
                   errorRef.current(
-                    error instanceof Error
-                      ? error.message.toUpperCase()
-                      : t("auth.googleFailed")
+                    t("auth.googleFailed")
                   );
                 } finally {
                   button.disabled =
@@ -345,7 +343,7 @@ export default function GoogleSignInButton({
 
                 if (!credential) {
                   errorRef.current(
-                    "GOOGLE AUTHENTICATION FAILED"
+                    t("auth.googleFailed")
                   );
 
                   return;
@@ -381,9 +379,7 @@ export default function GoogleSignInButton({
           );
 
           errorRef.current(
-            error instanceof Error
-              ? error.message.toUpperCase()
-              : t("auth.googleFailed")
+            t("auth.googleFailed")
           );
         }
       };
